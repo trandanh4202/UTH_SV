@@ -1,0 +1,33 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html {
+  font-size: 62.5%;
+  font-family: "Tahoma", sans-serif;
+}
+
+body {
+  background-color: rgb(255, 255, 255);
+}
+.webkit-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+iframe[title="reCAPTCHA"] {
+  width: 100%;
+}
+.rc-anchor-normal .rc-anchor-checkbox-label {
+  width: 120px;
+}
+..rc-anchor-normal {
+  width: 100%;
+}
