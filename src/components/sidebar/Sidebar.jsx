@@ -26,7 +26,7 @@ const Sidebar = () => {
     setExpanded(isExpanded ? panel : false);
   };
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative", display: { xs: "none", lg: "block" } }}>
       <AnimatePresence>
         {isOpen && (
           <motion.div

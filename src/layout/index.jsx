@@ -8,7 +8,7 @@ const Layout = () => {
     <Box sx={{ backgroundColor: "#e8ecf0", height: "100vh" }}>
       <Header />
       <Sidebar />
-      <Box>
+      <Box sx={{ margin: "25px 0" }}>
         <Outlet />
       </Box>
     </Box>

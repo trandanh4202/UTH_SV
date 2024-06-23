@@ -1,9 +1,9 @@
+/* eslint-disable react/jsx-key */
 /* eslint-disable react-hooks/rules-of-hooks */
 import {
   Box,
   Divider,
   FormControl,
-  Grid,
   MenuItem,
   Paper,
   Select,
@@ -15,68 +15,83 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-const data = [
-  { course: "Trí tuệ nhân tạo", credits: 3 },
-  { course: "Khai thác dữ liệu", credits: 3 },
-  { course: "OOP", credits: 3 },
-  { course: "Trí tuệ nhân tạo", credits: 3 },
-  { course: "Khai thác dữ liệu", credits: 3 },
-  { course: "OOP", credits: 3 },
-];
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getCourses } from "../../../../features/profileSlice/ProfileSlice";
 
 const Courses = () => {
   const [semester, setSemester] = useState("");
-
+  const select = useSelector((state) => state.profile.select);
   const handleChange = (event) => {
     setSemester(event.target.value);
   };
+  const courses = useSelector((state) => state.profile.courses);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCourses({ semester }));
+  }, [dispatch, semester]);
+
   return (
     <Box
       component={Paper}
       sx={{
         padding: "10px",
         height: "100%",
+        minHeight: "300px",
+        marginBottom: "40px",
       }}
     >
       <Box>
-        <Box sx={{ textAlign: "left", width: "100%" }}>
-          <Typography
-            sx={{
-              fontSize: "20px",
-              fontWeight: "700",
-              color: "rgb(102, 117, 128)",
-            }}
-          >
-            Lớp học phần
-          </Typography>
-        </Box>
-        <Box>
-          <FormControl variant="outlined" sx={{ minWidth: 200 }}>
-            <Select
-              value={semester}
-              onChange={handleChange}
-              displayEmpty
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "between",
+          }}
+        >
+          <Box sx={{ textAlign: "left", width: "100%" }}>
+            <Typography
               sx={{
-                "& .MuiSelect-select": {
-                  padding: "10px",
-                },
+                fontSize: "20px",
+                fontWeight: "700",
+                color: "rgb(102, 117, 128)",
               }}
             >
-              <MenuItem value="" disabled>
-                Chọn học kỳ
-              </MenuItem>
-              <MenuItem value="semester1" sx={{ fontSize: "13px" }}>
-                Học kỳ 1 năm học 2023 - 2024
-              </MenuItem>
-              <MenuItem value="semester2" sx={{ fontSize: "13px" }}>
-                Học kỳ 2 năm học 2023 - 2024
-              </MenuItem>
-              <MenuItem value="summerSemester" sx={{ fontSize: "13px" }}>
-                Học kỳ hè năm học 2023 - 2024
-              </MenuItem>
-            </Select>
-          </FormControl>
+              Lớp học phần
+            </Typography>
+          </Box>
+          <Box>
+            <FormControl variant="outlined" sx={{ minWidth: 200 }}>
+              <Select
+                value={semester}
+                onChange={handleChange}
+                displayEmpty
+                sx={{
+                  "& .MuiSelect-select": {
+                    padding: "5px 10px",
+                    fontSize: "15px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  },
+                }}
+              >
+                <MenuItem value="" disabled>
+                  Chọn học kỳ
+                </MenuItem>
+
+                {select.map((item, index) => (
+                  <MenuItem
+                    value={item.id}
+                    index={index}
+                    sx={{ fontSize: "13px" }}
+                  >
+                    {item.tenDot}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
         </Box>
         <Divider sx={{ width: "100%", margin: "10px 0 " }} />
         <Box sx={{ height: "100%" }}>
@@ -86,20 +101,28 @@ const Courses = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Khóa học</TableCell>
-                  <TableCell>Tín chỉ</TableCell>
+                  <TableCell sx={{ fontSize: "16px", fontWeight: "700" }}>
+                    Khóa học
+                  </TableCell>
+                  <TableCell sx={{ fontSize: "16px", fontWeight: "700" }}>
+                    Tín chỉ
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((row, index) => (
+                {courses.map((course, index) => (
                   <TableRow
-                    key={row.course}
+                    key={course.id}
                     style={{
                       backgroundColor: index % 2 === 0 ? "#f5f5f5" : "#ffffff",
                     }}
                   >
-                    <TableCell>{row.course}</TableCell>
-                    <TableCell>{row.credits}</TableCell>
+                    <TableCell sx={{ fontSize: "14px", fontWeight: "500" }}>
+                      {course.tenMonHoc}
+                    </TableCell>
+                    <TableCell sx={{ fontSize: "14px", fontWeight: "500" }}>
+                      {course.soTinChi}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

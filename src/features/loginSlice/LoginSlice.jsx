@@ -12,14 +12,14 @@ export const loginPage = createAsyncThunk(
   async (combinedData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `/api/v1/auth/authenticate?g-recaptcha-response=${combinedData.recaptcha}`,
+        `https://uth-api-boot.ut.edu.vn/api/v1/auth/authenticate?g-recaptcha-response=${combinedData.recaptcha}`,
         {
           username: combinedData.username,
           password: combinedData.password,
         }
       );
 
-      const { token } = response.data.body;
+      const { token } = response.data;
       console.log(token);
 
       if (token) {
@@ -50,7 +50,7 @@ const loginSlice = createSlice({
       })
       .addCase(loginPage.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.body;
+        state.token = action.payload;
       })
       .addCase(loginPage.rejected, (state, action) => {
         state.loading = false;

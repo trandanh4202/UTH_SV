@@ -18,6 +18,9 @@ import Courses from "./chart/courses/Courses";
 import LearningProgress from "./chart/learningProgress/LearningProgress";
 import LearningResults from "./chart/learningResults/LearningResults";
 import InforSV from "./inforSV/InforSV";
+import { useDispatch } from "react-redux";
+import { getSelect } from "../../features/profileSlice/ProfileSlice";
+import { useEffect } from "react";
 const data = [
   {
     icon: <ContactEmergency sx={{ fontSize: "25px" }} />,
@@ -68,19 +71,27 @@ const box = [
     color: "rgb(77, 161, 232)",
   },
 ];
+
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const token = localStorage.getItem("account");
+  useEffect(() => {
+    if (token) {
+      dispatch(getSelect());
+    }
+  }, [token, dispatch]);
   return (
     <Container>
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
-        <Grid item xs={7}>
+        <Grid item lg={7} xs={12}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Box component={Paper} sx={{ padding: "5px 10px" }}>
+            <Grid item lg={12} xs={12}>
+              <Box component={Paper} sx={{ padding: "15px 10px" }}>
                 <InforSV />
               </Box>
             </Grid>
             {box.map((item, index) => (
-              <Grid item xs={6}>
+              <Grid item lg={6} xs={12}>
                 <Box
                   component={Paper}
                   sx={{
@@ -99,9 +110,9 @@ const Dashboard = () => {
             ))}
           </Grid>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item lg={5} xs={12}>
           <Grid container sx={{ height: "100%" }}>
-            <Grid item xs={12}>
+            <Grid item lg={12} xs={12}>
               <Box
                 component={Paper}
                 sx={{ padding: "5px 10px", height: "100%" }}
@@ -115,7 +126,7 @@ const Dashboard = () => {
       <Box>
         <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
           {data.map((item, index) => (
-            <Grid item xs={1.5}>
+            <Grid item lg={1.5} xs={6}>
               <Box component={Paper} sx={{}}>
                 <BoxNavigation
                   index={index}
@@ -128,13 +139,13 @@ const Dashboard = () => {
         </Grid>
       </Box>
       <Grid container spacing={2}>
-        <Grid item xs={5}>
+        <Grid item lg={5} xs={12}>
           <LearningResults />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item lg={3} xs={12}>
           <LearningProgress />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item lg={4} xs={12}>
           <Courses />
         </Grid>
       </Grid>

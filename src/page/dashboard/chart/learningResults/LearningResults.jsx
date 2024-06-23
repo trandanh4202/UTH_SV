@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import {
   Box,
   Divider,
@@ -7,16 +8,6 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { Bar } from "react-chartjs-2";
-ChartJS.register(
-  BarElement,
-  CategoryScale,
-  LinearScale,
-  Tooltip,
-  Legend,
-  LineElement,
-  PointElement
-);
 import {
   BarElement,
   CategoryScale,
@@ -27,50 +18,21 @@ import {
   Tooltip,
 } from "chart.js";
 import { Chart as ChartJS } from "chart.js/auto";
+import { Bar } from "react-chartjs-2";
+ChartJS.register(
+  BarElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend,
+  LineElement,
+  PointElement
+);
 
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import { useState } from "react";
-const data = {
-  labels: ["Môn 1", "Môn 2", "Môn 3", "Môn 4", "Môn 5"],
-  datasets: [
-    {
-      type: "line",
-      label: "Điểm tổng trung bình của lớp",
-      data: [10, 7, 8, 8, 6.5],
-      backgroundColor: "rgb(253, 205, 86)",
-      borderColor: "rgb(253, 205, 86)",
-      borderWidth: 2,
-      fill: false,
-      tension: 0.4,
-      datalabels: {
-        display: false,
-        align: "end",
-        anchor: "end",
-        color: "rgb(253, 205, 86)",
-        font: {
-          weight: "bold",
-        },
-      },
-    },
-    {
-      type: "bar",
-      label: "Điểm tổng kết môn của bạn",
-      data: [8, 7.5, 9, 8.5, 7],
-      backgroundColor: "rgb(250, 108, 81)",
-      borderColor: "rgb(250, 108, 81)",
-      borderWidth: 1,
-      barPercentage: 0.5, // Điều chỉnh độ rộng của cột
-      datalabels: {
-        align: "end",
-        anchor: "end",
-        color: "rgb(250, 108, 81)",
-        font: {
-          weight: "bold",
-        },
-      },
-    },
-  ],
-};
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getLearningResults } from "../../../../features/profileSlice/ProfileSlice";
 
 const options = {
   plugins: {
@@ -92,6 +54,12 @@ const options = {
       },
       displayColors: true,
     },
+    legend: {
+      // display: false,
+      lablels: {
+        // padding: 5000,
+      },
+    },
   },
   datalabels: {
     display: true,
@@ -106,26 +74,73 @@ const options = {
     font: {
       weight: "bold",
     },
-    padding: {
-      top: 4,
-    },
   },
 
   scales: {
-    y: {
-      max: 10, // Giới hạn trục y từ 0 đến 12
+    x: {
+      display: false, // Hide X axis labels
     },
   },
-  // height: 400, // Thiết lập chiều cao của biểu đồ (vd: 400 pixel)
+  maintainAspectRatio: false,
 };
 const LearningResults = () => {
   const [semester, setSemester] = useState("");
+  const select = useSelector((state) => state.profile.select);
 
   const handleChange = (event) => {
     setSemester(event.target.value);
   };
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getLearningResults({ semester }));
+  }, [dispatch, semester]);
+  const learningResults = useSelector((state) => state.profile.learningResults);
+  const data = {
+    labels: learningResults.map((result) => result.lopHocPhan),
+    datasets: [
+      {
+        type: "line",
+        label: "Điểm tổng trung bình của lớp",
+        data: learningResults.map((result) => result.classAverage),
+        backgroundColor: "rgb(253, 205, 86)",
+        borderColor: "rgb(253, 205, 86)",
+        borderWidth: 2,
+        fill: false,
+        tension: 0.4,
+        datalabels: {
+          display: false,
+          align: "end",
+          anchor: "end",
+          color: "rgb(253, 205, 86)",
+          font: {
+            weight: "bold",
+          },
+        },
+      },
+      {
+        type: "bar",
+        label: "Điểm tổng kết môn của bạn",
+        data: learningResults.map((result) => result.diemTongKet),
+        backgroundColor: "rgb(250, 108, 81)",
+        borderColor: "rgb(250, 108, 81)",
+        borderWidth: 1,
+        barPercentage: 0.5, // Điều chỉnh độ rộng của cột
+        datalabels: {
+          align: "end",
+          anchor: "end",
+          color: "rgb(250, 108, 81)",
+          font: {
+            weight: "bold",
+          },
+        },
+      },
+    ],
+  };
   return (
-    <Box component={Paper} sx={{ padding: "10px", height: "100%" }}>
+    <Box
+      component={Paper}
+      sx={{ padding: "10px", minHeight: "350px", height: "350px" }}
+    >
       <Box
         sx={{
           display: "flex",
@@ -152,28 +167,34 @@ const LearningResults = () => {
               displayEmpty
               sx={{
                 "& .MuiSelect-select": {
-                  padding: "10px",
+                  padding: "5px 10px",
+                  fontSize: "15px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
                 },
               }}
             >
               <MenuItem value="" disabled>
                 Chọn học kỳ
               </MenuItem>
-              <MenuItem value="semester1" sx={{ fontSize: "13px" }}>
-                Học kỳ 1 năm học 2023 - 2024
-              </MenuItem>
-              <MenuItem value="semester2" sx={{ fontSize: "13px" }}>
-                Học kỳ 2 năm học 2023 - 2024
-              </MenuItem>
-              <MenuItem value="summerSemester" sx={{ fontSize: "13px" }}>
-                Học kỳ hè năm học 2023 - 2024
-              </MenuItem>
+              {select.map((item, index) => (
+                <MenuItem
+                  value={item.id}
+                  index={index}
+                  sx={{ fontSize: "13px" }}
+                >
+                  {item.tenDot}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Box>
       </Box>
-      <Divider />
-      <Bar data={data} plugins={[ChartDataLabels]} options={options} />
+      <Divider sx={{ width: "100%", margin: "10px 0 " }} />
+      <Box sx={{ height: "" }}>
+        <Bar data={data} plugins={[ChartDataLabels]} options={options} />
+      </Box>
     </Box>
   );
 };

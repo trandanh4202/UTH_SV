@@ -23,7 +23,12 @@ const FormLogin2 = () => {
         ...data,
         recaptcha: recaptchaValue,
       };
-      dispatch(loginPage(combinedData));
+      dispatch(loginPage(combinedData)).then(() => {
+        const token = localStorage.getItem("account");
+        if (token) {
+          navigate("/dashboard");
+        }
+      });
     } else {
       console.log("Please complete the reCAPTCHA");
     }
@@ -33,13 +38,14 @@ const FormLogin2 = () => {
     setRecaptchaValue(value);
   };
   const navigate = useNavigate();
-    const token = useSelector((state) => state.login?.token);
-
-    useEffect(() => {
-      if (token) {
-        navigate("/dashboard");
-      }
-    }, [token]);
+  const token = localStorage.getItem("account");
+  useEffect(() => {
+    const token = localStorage.getItem("account");
+    console.log("Token in useEffect:", token); // Log token
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [token, navigate]);
 
   return (
     <Paper

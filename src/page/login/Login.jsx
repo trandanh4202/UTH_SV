@@ -27,8 +27,20 @@ const Login = () => {
       <Container>
         <Box>
           <Box sx={{}}>
-            <Grid container>
-              <Grid item xs={8}>
+            <Grid
+              container
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: {
+                  xs: "column-reverse",
+                  md: "row",
+                  lg: "row",
+                },
+              }}
+            >
+              <Grid item xs={12} md={6} lg={8}>
                 <Swiper
                   cssMode={true}
                   navigation={true}
@@ -39,14 +51,30 @@ const Login = () => {
                   className="mySwiper"
                 >
                   <SwiperSlide>
-                    <img src="./images/slide1.png" alt="" />
+                    <img
+                      src="./images/slide1.png"
+                      alt=""
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
                   </SwiperSlide>
                   <SwiperSlide>
-                    <img src="./images/slide2.png" alt="" />
+                    <img
+                      src="./images/slide2.png"
+                      alt=""
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
                   </SwiperSlide>
                 </Swiper>
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={12} md={6} lg={4}>
                 <FormLogin2 />
               </Grid>
             </Grid>

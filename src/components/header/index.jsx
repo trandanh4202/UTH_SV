@@ -1,193 +1,358 @@
 import {
+  ExpandMore,
   KeyboardArrowDown,
   NotificationImportant,
   Search,
+  ViewHeadlineRounded,
 } from "@mui/icons-material";
 import {
-  AppBar,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Avatar,
   Badge,
   Box,
+  Button,
   Container,
   Divider,
+  Drawer,
+  Grid,
   IconButton,
   InputBase,
   Menu,
   MenuItem,
-  Toolbar,
   Typography,
 } from "@mui/material";
+import { GridMenuIcon } from "@mui/x-data-grid";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+  const toggleDrawer = (newOpen) => () => {
+    setOpenDrawer(newOpen);
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  };
+  const image = useSelector((state) => state.profile?.profile?.body?.image);
   return (
-    <AppBar
-      position="static"
-      sx={{ bgcolor: "white", color: "black", marginBottom: "40px" }}
+    <Box
+      sx={{
+        bgcolor: "white",
+        color: "black",
+        position: "sticky",
+        top: "0",
+        left: "0",
+        right: "0",
+      }}
     >
       <Container>
-        <Toolbar>
-          <Box component={Link} to="#" sx={{ flexGrow: 1 }}>
-            <img src="./images/sv_logo_dashboard.png" alt="" />
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "40px",
-            }}
-          >
-            {/* Thanh search */}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                border: "1px solid #ccc", // Border màu xám nhạt
-                borderRadius: "20px", // Bo tròn viền
-                backgroundColor: "#f0f0f0", // Màu nền hơi xám
-                paddingLeft: "10px", // Khoảng cách từ biểu tượng search đến lề trái
-                paddingRight: "10px", // Khoảng cách từ biểu tượng search đến lề phải
-                "&:focus-within": {
-                  outline: "2px solid #66afe9", // Đường viền màu xanh khi focus
-                },
-              }}
-            >
-              <InputBase
-                placeholder="Tìm kiếm..."
-                style={{
-                  flex: 1,
-                  fontSize: "14px", // Cỡ chữ là 14px
-                  border: "none", // Bỏ border của InputBase
-                  backgroundColor: "transparent", // Nền trong suốt
-                  paddingLeft: "5px", // Lề trái để cách biểu tượng search
-                  outline: "none", // Bỏ outline mặc định của InputBase
-                }}
+        <Grid container sx={{ display: "flex", alignItems: "center" }}>
+          <Grid item lg={3} xs={8}>
+            <Box component={Link} to="#" sx={{ flexGrow: 1 }}>
+              <img
+                src="./images/sv_logo_dashboard.png"
+                alt="sv_logo_dashboard.png"
               />
-              <Divider orientation="vertical" flexItem />
-              <IconButton sx={{ p: "8px" }} aria-label="search">
-                <Search />
-              </IconButton>
             </Box>
-
-            {/* Tin tức - Thông báo */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "10px",
-              }}
-              component={Link}
-              to="#"
-            >
-              <Box>
-                <Badge badgeContent={4} color="error">
-                  <NotificationImportant color="action" fontSize="large" />
-                </Badge>
-              </Box>
-              <Box>
-                <Typography sx={{ fontSize: "14px" }}>
-                  Tin tức - Thông báo
-                </Typography>
-              </Box>
-            </Box>
-
-            {/* Avatar với menu */}
+          </Grid>
+          <Grid item lg={9} xs={4}>
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                "&:hover": {
-                  backgroundColor: "#f0f0f0", // Màu nền xám khi hover
-                  "& .MuiAvatar-root": {
-                    backgroundColor: "#3f51b5", // Màu nền xanh của Avatar khi hover
-                    color: "#ffffff", // Màu chữ của Avatar khi hover
-                  },
-                  "& .MuiTypography-root": {
-                    color: "#3f51b5", // Màu chữ của Typography khi hover
-                  },
-                  "& .MuiSvgIcon-root": {
-                    color: "#3f51b5", // Màu của mũi tên khi hover
-                  },
-                },
+                justifyContent: "flex-end",
+                gap: { xs: "0px", lg: "40px" },
               }}
-              id="user-button"
-              aria-controls={open ? "user-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
             >
-              {/* Avatar */}
-              <Avatar
-                alt="User Avatar"
-                src="./images/avatar.png"
-                sx={{ marginRight: 1 }}
+              {/* Thanh search */}
+              <Box
+                sx={{
+                  display: { lg: "flex", xs: "none" },
+                  alignItems: "center",
+                  border: "1px solid #ccc", // Border màu xám nhạt
+                  borderRadius: "20px", // Bo tròn viền
+                  backgroundColor: "#f0f0f0", // Màu nền hơi xám
+                  paddingLeft: "10px", // Khoảng cách từ biểu tượng search đến lề trái
+                  paddingRight: "10px", // Khoảng cách từ biểu tượng search đến lề phải
+                  "&:focus-within": {
+                    outline: "2px solid #66afe9", // Đường viền màu xanh khi focus
+                  },
+                }}
               >
-                Danh
-              </Avatar>
+                <InputBase
+                  placeholder="Tìm kiếm..."
+                  style={{
+                    flex: 1,
+                    fontSize: "14px", // Cỡ chữ là 14px
+                    border: "none", // Bỏ border của InputBase
+                    backgroundColor: "transparent", // Nền trong suốt
+                    paddingLeft: "5px", // Lề trái để cách biểu tượng search
+                    outline: "none", // Bỏ outline mặc định của InputBase
+                  }}
+                />
+                <Divider orientation="vertical" flexItem />
+                <IconButton sx={{ p: "8px" }} aria-label="search">
+                  <Search />
+                </IconButton>
+              </Box>
 
-              {/* Tên người dùng */}
-              <Typography sx={{ fontSize: "14px" }}>Trần Trọng Danh</Typography>
+              {/* Tin tức - Thông báo */}
+              <Box
+                sx={{
+                  display: { lg: "flex", xs: "none" },
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: "10px",
+                }}
+                component={Link}
+                to="#"
+              >
+                <Box>
+                  <Badge badgeContent={4} color="error">
+                    <NotificationImportant color="action" fontSize="large" />
+                  </Badge>
+                </Box>
+                <Box>
+                  <Typography sx={{ fontSize: "14px" }}>
+                    Tin tức - Thông báo
+                  </Typography>
+                </Box>
+              </Box>
 
-              <KeyboardArrowDown />
+              {/* Avatar với menu */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  "&:hover": {
+                    backgroundColor: "#f0f0f0", // Màu nền xám khi hover
+                    "& .MuiAvatar-root": {
+                      backgroundColor: "#3f51b5", // Màu nền xanh của Avatar khi hover
+                      color: "#ffffff", // Màu chữ của Avatar khi hover
+                    },
+                    "& .MuiTypography-root": {
+                      color: "#3f51b5", // Màu chữ của Typography khi hover
+                    },
+                    "& .MuiSvgIcon-root": {
+                      color: "#3f51b5", // Màu của mũi tên khi hover
+                    },
+                  },
+                }}
+                id="user-button"
+                aria-controls={open ? "user-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+              >
+                {/* Avatar */}
+                <Avatar
+                  alt="User Avatar"
+                  src={image}
+                  sx={{ marginRight: 1, display: { lg: "flex", xs: "none" } }}
+                >
+                  Danh
+                </Avatar>
 
-              {/* Popover Menu */}
+                {/* Tên người dùng */}
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+
+                    display: { lg: "flex", xs: "none" },
+                  }}
+                >
+                  Trần Trọng Danh
+                </Typography>
+
+                <Box sx={{ padding: "15px 10px" }}>
+                  <KeyboardArrowDown sx={{ fontSize: "20px" }} />
+                </Box>
+
+                {/* Popover Menu */}
+              </Box>
+              <Menu
+                id="user-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                MenuListProps={{
+                  "aria-labelledby": "user-button",
+                }}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                PaperProps={{
+                  sx: {
+                    minWidth: "200px", // Độ rộng tối thiểu của menu
+                  },
+                }}
+              >
+                <MenuItem onClick={handleClose}>
+                  <Typography variant="body2" sx={{ fontSize: "14px" }}>
+                    Thông tin cá nhân
+                  </Typography>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleClose}>
+                  <Typography variant="body2" sx={{ fontSize: "14px" }}>
+                    Đổi mật khẩu
+                  </Typography>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleLogout}>
+                  <Typography variant="body2" sx={{ fontSize: "14px" }}>
+                    Đăng xuất
+                  </Typography>
+                </MenuItem>
+              </Menu>
+              <Box sx={{ display: { xs: "block", lg: "none" } }}>
+                <Box onClick={toggleDrawer(true)} sx={{ padding: "15px 10px" }}>
+                  <ViewHeadlineRounded sx={{ fontSize: "20px" }} />
+                </Box>
+                <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
+                  <Box>
+                    {openDrawer && (
+                      <Box
+                        sx={{
+                          backgroundColor: "#ffffff",
+                          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                          padding: "10px",
+                          border: "1px solid #ccc",
+                          borderRadius: "5px",
+                          zIndex: 1000,
+                        }}
+                      >
+                        <Accordion
+                          expanded={expanded === "panel1"}
+                          onChange={handleChange("panel1")}
+                          sx={{
+                            border: "none",
+                            boxShadow: "none",
+                          }}
+                        >
+                          {/* <Divider /> */}
+                          <AccordionSummary
+                            expandIcon={<ExpandMore />}
+                            aria-controls="panel1bh-content"
+                            id="panel1bh-header"
+                          >
+                            <Typography
+                              sx={{ fontWeight: "500", fontSize: "16px" }}
+                            >
+                              Thông tin chung
+                            </Typography>
+                          </AccordionSummary>
+                          <Divider />
+                          <AccordionDetails
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "30px",
+                            }}
+                          >
+                            <Typography
+                              component={Link}
+                              sx={{ fontSize: "14px" }}
+                            >
+                              Thông tin sinh viên
+                            </Typography>
+                            <Typography
+                              component={Link}
+                              sx={{ fontSize: "14px" }}
+                            >
+                              Ghi chú nhắc nhở
+                            </Typography>
+                          </AccordionDetails>
+                        </Accordion>
+                        <Accordion
+                          expanded={expanded === "panel2"}
+                          onChange={handleChange("panel2")}
+                          sx={{
+                            border: "none",
+                            boxShadow: "none",
+                          }}
+                        >
+                          <AccordionSummary
+                            expandIcon={<ExpandMore />}
+                            aria-controls="panel2bh-content"
+                            id="panel2bh-header"
+                            sx={{
+                              "&:hover": {
+                                backgroundColor: "#e0f7fa", // Màu nền khi hover
+                              },
+                            }}
+                          >
+                            <Typography
+                              sx={{ fontWeight: "500", fontSize: "16px" }}
+                            >
+                              Học tập
+                            </Typography>
+                          </AccordionSummary>
+                          <Divider />
+                          <AccordionDetails
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "30px",
+                            }}
+                          >
+                            <Typography
+                              component={Link}
+                              sx={{
+                                fontSize: "14px",
+                                "&:hover": {
+                                  color: "#ff5722", // Màu chữ khi hover
+                                },
+                              }}
+                            >
+                              Kết quả học tập
+                            </Typography>
+                            <Typography
+                              component={Link}
+                              sx={{
+                                fontSize: "14px",
+                                "&:hover": {
+                                  color: "#ff5722", // Màu chữ khi hover
+                                },
+                              }}
+                            >
+                              Lịch theo tuần
+                            </Typography>
+                          </AccordionDetails>
+                        </Accordion>
+                      </Box>
+                    )}
+                  </Box>
+                </Drawer>
+              </Box>
             </Box>
-            <Menu
-              id="user-menu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "user-button",
-              }}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              PaperProps={{
-                sx: {
-                  minWidth: "200px", // Độ rộng tối thiểu của menu
-                },
-              }}
-            >
-              <MenuItem onClick={handleClose}>
-                <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                  Thông tin cá nhân
-                </Typography>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleClose}>
-                <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                  Đổi mật khẩu
-                </Typography>
-              </MenuItem>
-              <Divider />
-              <MenuItem onClick={handleClose}>
-                <Typography variant="body2" sx={{ fontSize: "14px" }}>
-                  Đăng xuất
-                </Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-        </Toolbar>
+          </Grid>
+        </Grid>
       </Container>
-    </AppBar>
+    </Box>
   );
 };
 
