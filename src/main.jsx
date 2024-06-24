@@ -17,6 +17,7 @@ import Transcript from "./page/transcript/Transcript";
 import GeneralReceipts from "./page/tuitionFees/generalReceipts/GeneralReceipts";
 import PaymentTable from "./page/tuitionFees/paymentOnline/PaymentTable";
 import TuitionTable from "./page/tuitionFees/tuitionTable/TuitionTable";
+import Test from "./page/test/Test";
 
 // Function to check for account in localStorage
 const isAuthenticated = () => {
@@ -39,6 +40,16 @@ const router = createBrowserRouter([
     //   </PublicRoutes>
     // ),
     element: <Login />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/test",
+    // element: (
+    //   <PublicRoutes>
+    //     <Login />
+    //   </PublicRoutes>
+    // ),
+    element: <Test />,
     errorElement: <ErrorPage />,
   },
   {

@@ -31,10 +31,6 @@ const InfoField = ({ label, value }) => (
 );
 
 const InforSV = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getProfile());
-  }, [dispatch]);
 
   const profile = useSelector((state) => state.profile.profile.body);
 

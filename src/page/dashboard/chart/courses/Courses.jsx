@@ -38,7 +38,6 @@ const Courses = () => {
         padding: "10px",
         height: "100%",
         minHeight: "300px",
-        marginBottom: "40px",
       }}
     >
       <Box>

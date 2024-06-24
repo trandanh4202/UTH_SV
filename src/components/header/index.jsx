@@ -12,7 +12,6 @@ import {
   Avatar,
   Badge,
   Box,
-  Button,
   Container,
   Divider,
   Drawer,
@@ -23,11 +22,10 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { GridMenuIcon } from "@mui/x-data-grid";
-import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getProfile } from "../../features/profileSlice/ProfileSlice";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,7 +49,12 @@ const Header = () => {
     localStorage.clear();
     window.location.reload();
   };
-  const image = useSelector((state) => state.profile?.profile?.body?.image);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProfile());
+  }, [dispatch]);
+
+  const profile = useSelector((state) => state.profile?.profile?.body);
   return (
     <Box
       sx={{
@@ -61,6 +64,7 @@ const Header = () => {
         top: "0",
         left: "0",
         right: "0",
+        zIndex: "1000",
       }}
     >
       <Container>
@@ -165,13 +169,11 @@ const Header = () => {
                 {/* Avatar */}
                 <Avatar
                   alt="User Avatar"
-                  src={image}
+                  src={profile?.image}
                   sx={{ marginRight: 1, display: { lg: "flex", xs: "none" } }}
                 >
-                  Danh
+                  {profile?.Ten}
                 </Avatar>
-
-                {/* Tên người dùng */}
                 <Typography
                   sx={{
                     fontSize: "14px",
@@ -179,13 +181,11 @@ const Header = () => {
                     display: { lg: "flex", xs: "none" },
                   }}
                 >
-                  Trần Trọng Danh
+                  {profile?.hoDem} {profile?.ten}
                 </Typography>
-
                 <Box sx={{ padding: "15px 10px" }}>
                   <KeyboardArrowDown sx={{ fontSize: "20px" }} />
                 </Box>
-
                 {/* Popover Menu */}
               </Box>
               <Menu

@@ -11,7 +11,9 @@ const LearningProgress = () => {
 
   console.log(learningProgress);
   const dispatch = useDispatch();
-  useEffect(() => dispatch(getLearningProgress()), [dispatch]);
+  useEffect(() => {
+    dispatch(getLearningProgress());
+  }, [dispatch]);
   const innerData = {
     labels: "",
     datasets: [

@@ -12,15 +12,16 @@ import {
   Visibility,
 } from "@mui/icons-material";
 import { Box, Container, Grid, Paper } from "@mui/material";
+import { Link } from "react-router-dom";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
 import BoxNoti from "./boxNoti/BoxNoti";
 import Courses from "./chart/courses/Courses";
 import LearningProgress from "./chart/learningProgress/LearningProgress";
 import LearningResults from "./chart/learningResults/LearningResults";
-import InforSV from "./inforSV/InforSV";
-import { useDispatch } from "react-redux";
 import { getSelect } from "../../features/profileSlice/ProfileSlice";
+import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import InforSV from "./inforSV/InforSV";
 const data = [
   {
     icon: <ContactEmergency sx={{ fontSize: "25px" }} />,
@@ -62,6 +63,7 @@ const box = [
     icon: <NotificationAdd sx={{ fontSize: "20px" }} />,
     backgroundColor: "white",
     color: "rgb(102, 117, 128)",
+    to: "",
   },
   {
     title: "Lịch học trong tuần",
@@ -69,6 +71,7 @@ const box = [
     icon: <Upcoming sx={{ fontSize: "20px" }} />,
     backgroundColor: "rgb(224, 251, 255)",
     color: "rgb(77, 161, 232)",
+    to: "/calendar",
   },
 ];
 
@@ -80,6 +83,7 @@ const Dashboard = () => {
       dispatch(getSelect());
     }
   }, [token, dispatch]);
+
   return (
     <Container>
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
@@ -90,7 +94,7 @@ const Dashboard = () => {
                 <InforSV />
               </Box>
             </Grid>
-            {box.map((item, index) => (
+            {box.map((item) => (
               <Grid item lg={6} xs={12}>
                 <Box
                   component={Paper}
@@ -104,6 +108,7 @@ const Dashboard = () => {
                     count={item.count}
                     icon={item.icon}
                     color={item.color}
+                    to={item.to}
                   />
                 </Box>
               </Grid>

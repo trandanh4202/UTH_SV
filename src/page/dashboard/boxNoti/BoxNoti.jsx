@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { Link } from "react-router-dom";
 
-const BoxNoti = ({ title, count, icon, color }) => {
+const BoxNoti = ({ title, count, icon, color, to }) => {
   return (
     <Box
       sx={{
@@ -28,13 +27,13 @@ const BoxNoti = ({ title, count, icon, color }) => {
             {count}
           </Typography>
         </Box>
-        <Box component={Link}>
+        <Link to="/transcript">
           <Typography sx={{ color: "red", fontSize: "13px" }}>
             Xem chi tiết
           </Typography>
-        </Box>
+        </Link>
       </Box>
-      <Box>{icon}</Box>
+      <Box sx={{ color: color }}>{icon}</Box>
     </Box>
   );
 };
