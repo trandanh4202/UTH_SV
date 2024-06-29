@@ -12,7 +12,7 @@ export const loginPage = createAsyncThunk(
   async (combinedData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://uth-api-boot.ut.edu.vn/api/v1/auth/authenticate?g-recaptcha-response=${combinedData.recaptcha}`,
+        `https://uth-api-boot.ut.edu.vn/api/v1/user/login?g-recaptcha-response=${combinedData.recaptcha}`,
         {
           username: combinedData.username,
           password: combinedData.password,

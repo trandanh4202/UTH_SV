@@ -22,19 +22,24 @@ import { getCourses } from "../../../../features/profileSlice/ProfileSlice";
 const Courses = () => {
   const select = useSelector((state) => state.profile.select);
   const [semester, setSemester] = useState("");
+  const courses = useSelector((state) => state.profile.courses);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (select.length > 0 && !semester) {
+      setSemester(select[0].id);
+    }
+  }, [select, semester]);
+
+  useEffect(() => {
+    if (semester) {
+      dispatch(getCourses({ semester }));
+    }
+  }, [dispatch, semester]);
+
   const handleChange = (event) => {
     setSemester(event.target.value);
   };
-  const courses = useSelector((state) => state.profile.courses);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (select.length > 0 && !semester) {
-      console.log(select[0].id);
-      setSemester(select[0].id);
-    }
-    dispatch(getCourses({ semester }));
-  }, [dispatch, semester, select]);
-
   return (
     <Box
       component={Paper}
@@ -79,12 +84,13 @@ const Courses = () => {
                   },
                 }}
               >
-                <MenuItem value="" disabled>
+                <MenuItem key={semester} value="" disabled>
                   Chọn học kỳ
                 </MenuItem>
 
                 {select.map((item, index) => (
                   <MenuItem
+                    key={item.id}
                     value={item.id}
                     index={index}
                     sx={{ fontSize: "13px" }}

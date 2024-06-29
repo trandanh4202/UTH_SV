@@ -87,16 +87,23 @@ const LearningResults = () => {
   const select = useSelector((state) => state.profile.select);
   const [semester, setSemester] = useState("");
 
-  const handleChange = (event) => {
-    setSemester(event.target.value);
-  };
   const dispatch = useDispatch();
   useEffect(() => {
     if (select.length > 0 && !semester) {
       setSemester(select[0].id);
     }
-    dispatch(getLearningResults({ semester }));
-  }, [dispatch, semester, select]);
+  }, [select, semester]);
+
+  useEffect(() => {
+    if (semester) {
+      dispatch(getLearningResults({ semester }));
+    }
+  }, [dispatch, semester]);
+
+  const handleChange = (event) => {
+    setSemester(event.target.value);
+  };
+
   const learningResults = useSelector((state) => state.profile.learningResults);
   const data = {
     labels: learningResults.map((result) => result.lopHocPhan),
@@ -183,6 +190,7 @@ const LearningResults = () => {
               </MenuItem>
               {select.map((item, index) => (
                 <MenuItem
+                  key={item.id}
                   value={item.id}
                   index={index}
                   sx={{ fontSize: "13px" }}

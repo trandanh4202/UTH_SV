@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getProfile } from "../../features/profileSlice/ProfileSlice";
 
 const Header = () => {
@@ -48,10 +48,19 @@ const Header = () => {
     window.location.reload();
   };
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getProfile());
-  }, [dispatch]);
+    useEffect(() => {
+      dispatch(getProfile());
+    }, [dispatch]);
 
+  const navigate = useNavigate();
+  const token = localStorage.getItem("account");
+  useEffect(() => {
+    const token = localStorage.getItem("account");
+    console.log("Token in useEffect:", token); // Log token
+    if (!token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
   const profile = useSelector((state) => state.profile?.profile?.body);
   return (
     <Box
@@ -319,6 +328,7 @@ const Header = () => {
                           >
                             <Typography
                               component={Link}
+                              to="/transcript"
                               sx={{
                                 fontSize: "14px",
                                 "&:hover": {
@@ -330,6 +340,7 @@ const Header = () => {
                             </Typography>
                             <Typography
                               component={Link}
+                              to="/calendar"
                               sx={{
                                 fontSize: "14px",
                                 "&:hover": {

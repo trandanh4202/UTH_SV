@@ -11,5 +11,4 @@ export const store = configureStore({
     transcript: transcriptReducer,
     calendar: calendarReducer,
   },
-  
 });

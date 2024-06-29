@@ -3,6 +3,7 @@ import { Box, Divider, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../../features/profileSlice/ProfileSlice";
+import { Link } from "react-router-dom";
 
 const InfoField = ({ label, value }) => (
   <Grid item xs={6}>
@@ -82,6 +83,15 @@ const InforSV = () => {
                   }}
                 />
               )}
+            </Box>
+            <Box>
+              <Typography
+                component={Link}
+                to="/inforDetail"
+                sx={{ color: "red", fontSize: "13px" }}
+              >
+                Xem chi tiết
+              </Typography>
             </Box>
           </Box>
         </Grid>

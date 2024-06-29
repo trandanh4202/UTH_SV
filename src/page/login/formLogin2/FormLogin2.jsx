@@ -49,7 +49,7 @@ const FormLogin2 = () => {
 
   return (
     <Paper
-      elevation="4"
+      elevation={4}
       sx={{
         // minHeight: "60vh",
         backgroundColor: "rgba(255,255,255,0.7)",

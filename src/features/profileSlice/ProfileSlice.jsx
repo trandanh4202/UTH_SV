@@ -11,93 +11,9 @@ const initialState = {
   courses: [],
 };
 
-export const getProfile = createAsyncThunk("profile/getProfile", async () => {
-  try {
-    const token = localStorage.getItem("account");
-    if (!token) {
-      throw new Error("No token found");
-    }
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const response = await axios.get(
-      `https://uth-api-boot.ut.edu.vn/api/v1/user/profile`,
-      config
-    );
-
-    // Assuming the new token is in the response data, adjust as needed
-    const newToken = response.data.token;
-    if (newToken) {
-      localStorage.setItem("account", newToken);
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error("Error during authentication:", error);
-    throw error;
-  }
-});
-
-export const getSelect = createAsyncThunk("profile/getSelect", async () => {
-  try {
-    const token = localStorage.getItem("account");
-    if (!token) {
-      throw new Error("No token found");
-    }
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-
-    const response = await axios.get(
-      `https://uth-api-boot.ut.edu.vn/api/v1/user/dashboard/dot`,
-      config
-    );
-    return response.data.body;
-  } catch (error) {
-    console.error("Error during authentication:", error);
-    throw error;
-  }
-});
-
-export const getLearningResults = createAsyncThunk(
-  "profile/getLearningResults",
-  async ({ semester }) => {
-    try {
-      const token = localStorage.getItem("account");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response =
-        semester &
-        ( await axios.get(
-          `https://uth-api-boot.ut.edu.vn/api/v1/user/dashboard/ketquatheodot/${semester}`,
-          config
-        ));
-      return response.data.body;
-    } catch (error) {
-      console.error("Error during authentication:", error);
-      throw error;
-    }
-  }
-);
-
-export const getLearningProgress = createAsyncThunk(
-  "profile/getLearningProgress",
-  async () => {
+export const getProfile = createAsyncThunk(
+  "profile/getProfile",
+  async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -111,20 +27,33 @@ export const getLearningProgress = createAsyncThunk(
       };
 
       const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/user/dashboard/tiendo`,
+        `https://uth-api-boot.ut.edu.vn/api/v1/user/profile`,
         config
       );
-      return response.data.body;
+
+      // Assuming the new token is in the response data, adjust as needed
+      const newToken = response.data.token;
+      if (newToken) {
+        localStorage.setItem("account", newToken);
+      }
+
+      return response.data;
     } catch (error) {
-      console.error("Error during authentication:", error);
-      throw error;
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
     }
   }
 );
 
-export const getCourses = createAsyncThunk(
-  "profile/getCourses",
-  async ({ semester }) => {
+export const getSelect = createAsyncThunk(
+  "profile/getSelect",
+  async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -137,14 +66,119 @@ export const getCourses = createAsyncThunk(
         },
       };
 
-      const response = semester & await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/user/dashboard/monhoctheoky/${semester}`,
+      const response = await axios.get(
+        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/hocky`,
         config
       );
       return response.data.body;
     } catch (error) {
-      console.error("Error during authentication:", error);
-      throw error;
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getLearningResults = createAsyncThunk(
+  "profile/getLearningResults",
+  async ({ semester }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log("learning results", semester);
+      const response = await axios.get(
+        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/kqtheoky/${semester}`,
+        config
+      );
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getLearningProgress = createAsyncThunk(
+  "profile/getLearningProgress",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/tiendo`,
+        config
+      );
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getCourses = createAsyncThunk(
+  "profile/getCourses",
+  async ({ semester }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log("courses", semester);
+      const response = await axios.get(
+        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/montheoky/${semester}`,
+        config
+      );
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
     }
   }
 );

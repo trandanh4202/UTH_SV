@@ -97,8 +97,8 @@ const Dashboard = () => {
                 <InforSV />
               </Box>
             </Grid>
-            {box.map((item) => (
-              <Grid item lg={6} xs={12}>
+            {box.map((item, index) => (
+              <Grid key={index} item lg={6} xs={12}>
                 <Box
                   component={Paper}
                   sx={{
@@ -134,7 +134,7 @@ const Dashboard = () => {
       <Box>
         <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
           {data.map((item, index) => (
-            <Grid item lg={1.5} xs={6}>
+            <Grid key={index} item lg={1.5} xs={6}>
               <Box component={Paper} sx={{}}>
                 <BoxNavigation
                   index={index}
