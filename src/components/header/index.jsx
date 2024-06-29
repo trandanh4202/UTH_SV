@@ -21,47 +21,56 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { getProfile } from "../../features/profileSlice/ProfileSlice";
+import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const [openChangePassword, setOpenChangePassword] = useState(false);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleOpenChangePassword = () => {
+    setOpenChangePassword(true);
+    handleClose();
+  };
+
+  const handleCloseChangePassword = () => {
+    setOpenChangePassword(false);
+  };
+
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
   };
-  const dispatch = useDispatch();
-    useEffect(() => {
-      dispatch(getProfile());
-    }, [dispatch]);
 
   const navigate = useNavigate();
   const token = localStorage.getItem("account");
-  useEffect(() => {
-    const token = localStorage.getItem("account");
-    console.log("Token in useEffect:", token); // Log token
-    if (!token) {
-      navigate("/");
-    }
-  }, [token, navigate]);
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigate("/");
+  //   }
+  // }, [token, navigate]);
+
   const profile = useSelector((state) => state.profile?.profile?.body);
+
   return (
     <Box
       sx={{
@@ -93,18 +102,18 @@ const Header = () => {
                 gap: { xs: "0px", lg: "40px" },
               }}
             >
-              {/* Thanh search */}
+              {/* Search Bar */}
               <Box
                 sx={{
                   display: { lg: "flex", xs: "none" },
                   alignItems: "center",
-                  border: "1px solid #ccc", // Border màu xám nhạt
-                  borderRadius: "20px", // Bo tròn viền
-                  backgroundColor: "#f0f0f0", // Màu nền hơi xám
-                  paddingLeft: "10px", // Khoảng cách từ biểu tượng search đến lề trái
-                  paddingRight: "10px", // Khoảng cách từ biểu tượng search đến lề phải
+                  border: "1px solid #ccc",
+                  borderRadius: "20px",
+                  backgroundColor: "#f0f0f0",
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
                   "&:focus-within": {
-                    outline: "2px solid #66afe9", // Đường viền màu xanh khi focus
+                    outline: "2px solid #66afe9",
                   },
                 }}
               >
@@ -112,11 +121,11 @@ const Header = () => {
                   placeholder="Tìm kiếm..."
                   style={{
                     flex: 1,
-                    fontSize: "14px", // Cỡ chữ là 14px
-                    border: "none", // Bỏ border của InputBase
-                    backgroundColor: "transparent", // Nền trong suốt
-                    paddingLeft: "5px", // Lề trái để cách biểu tượng search
-                    outline: "none", // Bỏ outline mặc định của InputBase
+                    fontSize: "14px",
+                    border: "none",
+                    backgroundColor: "transparent",
+                    paddingLeft: "5px",
+                    outline: "none",
                   }}
                 />
                 <Divider orientation="vertical" flexItem />
@@ -125,45 +134,22 @@ const Header = () => {
                 </IconButton>
               </Box>
 
-              {/* Tin tức - Thông báo */}
-              {/* <Box
-                sx={{
-                  display: { lg: "flex", xs: "none" },
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: "10px",
-                }}
-                component={Link}
-                to="#"
-              >
-                <Box>
-                  <Badge badgeContent={4} color="error">
-                    <NotificationImportant color="action" fontSize="large" />
-                  </Badge>
-                </Box>
-                <Box>
-                  <Typography sx={{ fontSize: "14px" }}>
-                    Tin tức - Thông báo
-                  </Typography>
-                </Box>
-              </Box> */}
-
-              {/* Avatar với menu */}
+              {/* Avatar with Menu */}
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   "&:hover": {
-                    backgroundColor: "#f0f0f0", // Màu nền xám khi hover
+                    backgroundColor: "#f0f0f0",
                     "& .MuiAvatar-root": {
-                      backgroundColor: "#3f51b5", // Màu nền xanh của Avatar khi hover
-                      color: "#ffffff", // Màu chữ của Avatar khi hover
+                      backgroundColor: "#3f51b5",
+                      color: "#ffffff",
                     },
                     "& .MuiTypography-root": {
-                      color: "#3f51b5", // Màu chữ của Typography khi hover
+                      color: "#3f51b5",
                     },
                     "& .MuiSvgIcon-root": {
-                      color: "#3f51b5", // Màu của mũi tên khi hover
+                      color: "#3f51b5",
                     },
                   },
                 }}
@@ -184,7 +170,6 @@ const Header = () => {
                 <Typography
                   sx={{
                     fontSize: "14px",
-
                     display: { lg: "flex", xs: "none" },
                   }}
                 >
@@ -193,8 +178,8 @@ const Header = () => {
                 <Box sx={{ padding: "15px 10px" }}>
                   <KeyboardArrowDown sx={{ fontSize: "20px" }} />
                 </Box>
-                {/* Popover Menu */}
               </Box>
+              {/* User Menu */}
               <Menu
                 id="user-menu"
                 anchorEl={anchorEl}
@@ -213,17 +198,22 @@ const Header = () => {
                 }}
                 PaperProps={{
                   sx: {
-                    minWidth: "200px", // Độ rộng tối thiểu của menu
+                    minWidth: "200px",
                   },
                 }}
               >
                 <MenuItem onClick={handleClose}>
-                  <Typography variant="body2" sx={{ fontSize: "14px" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{ fontSize: "14px" }}
+                    component={Link}
+                    to="/inforDetail"
+                  >
                     Thông tin cá nhân
                   </Typography>
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleOpenChangePassword}>
                   <Typography variant="body2" sx={{ fontSize: "14px" }}>
                     Đổi mật khẩu
                   </Typography>
@@ -235,6 +225,7 @@ const Header = () => {
                   </Typography>
                 </MenuItem>
               </Menu>
+              {/* Responsive Drawer */}
               <Box sx={{ display: { xs: "block", lg: "none" } }}>
                 <Box onClick={toggleDrawer(true)} sx={{ padding: "15px 10px" }}>
                   <ViewHeadlineRounded sx={{ fontSize: "20px" }} />
@@ -265,9 +256,17 @@ const Header = () => {
                             expandIcon={<ExpandMore />}
                             aria-controls="panel1bh-content"
                             id="panel1bh-header"
+                            sx={{
+                              "&:hover": {
+                                backgroundColor: "#e0f7fa", // Màu nền khi hover
+                              },
+                            }}
                           >
                             <Typography
-                              sx={{ fontWeight: "500", fontSize: "16px" }}
+                              sx={{
+                                fontWeight: "500",
+                                fontSize: "16px",
+                              }}
                             >
                               Thông tin chung
                             </Typography>
@@ -282,16 +281,19 @@ const Header = () => {
                           >
                             <Typography
                               component={Link}
-                              sx={{ fontSize: "14px" }}
+                              to="/inforDetail"
+                              sx={{
+                                fontSize: "14px",
+                                "&:hover": {
+                                  color: "#ff5722", // Màu chữ khi hover
+                                },
+                              }}
                             >
                               Thông tin sinh viên
                             </Typography>
-                            <Typography
-                              component={Link}
-                              sx={{ fontSize: "14px" }}
-                            >
-                              Ghi chú nhắc nhở
-                            </Typography>
+                            {/* <Typography component={Link} sx={{ fontSize: "14px" }}>
+                  Ghi chú nhắc nhở
+                </Typography> */}
                           </AccordionDetails>
                         </Accordion>
                         <Accordion
@@ -328,25 +330,25 @@ const Header = () => {
                           >
                             <Typography
                               component={Link}
-                              to="/transcript"
                               sx={{
                                 fontSize: "14px",
                                 "&:hover": {
                                   color: "#ff5722", // Màu chữ khi hover
                                 },
                               }}
+                              to="/transcript"
                             >
                               Kết quả học tập
                             </Typography>
                             <Typography
                               component={Link}
-                              to="/calendar"
                               sx={{
                                 fontSize: "14px",
                                 "&:hover": {
                                   color: "#ff5722", // Màu chữ khi hover
                                 },
                               }}
+                              to="/calendar"
                             >
                               Lịch theo tuần
                             </Typography>
@@ -357,6 +359,11 @@ const Header = () => {
                   </Box>
                 </Drawer>
               </Box>
+              {/* Change Password Modal */}
+              <ChangePasswordPopup
+                open={openChangePassword}
+                onClose={handleCloseChangePassword}
+              />
             </Box>
           </Grid>
         </Grid>

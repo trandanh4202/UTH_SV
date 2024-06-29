@@ -69,6 +69,7 @@ const data = [
     LoaiHocPhi: "Học phí Khác",
   },
 ];
+
 const TuitionTable = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [semester, setSemester] = useState("");
@@ -81,7 +82,7 @@ const TuitionTable = () => {
     setSemester(event.target.value);
   };
 
-  // Tách dữ liệu vào ba mảng dựa trên loại học phí
+  // Filter data into three arrays based on LoaiHocPhi
   const hocPhiNganh = data.filter(
     (item) => item.LoaiHocPhi === "Học phí ngành"
   );

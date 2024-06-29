@@ -7,9 +7,10 @@ export default defineConfig({
     proxy: {
       "/foo": "http://localhost:5173/",
       "/api": {
-        target: "https://uth-api-boot.ut.edu.vn",
+        target: "https://uth-api-boot.ut.edu.vn/api/v1",
         changeOrigin: true,
         secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
   },

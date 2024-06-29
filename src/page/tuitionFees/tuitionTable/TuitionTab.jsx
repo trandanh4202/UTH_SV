@@ -29,7 +29,6 @@ const tableCell = [
   "Không truy cứu công nợ",
 ];
 
-// eslint-disable-next-line react/prop-types
 const TuitionTab = ({ data2 }) => {
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
@@ -73,7 +72,7 @@ const TuitionTab = ({ data2 }) => {
                     sx={{
                       border: "1px solid rgb(221, 221, 221)",
                       fontWeight: "500",
-                      minWidth: "250px", // Độ rộng tối thiểu cho cột Học kỳ
+                      minWidth: "250px",
                       fontSize: "14px",
                       color: "rgb(102, 117, 128)",
                     }}
@@ -84,9 +83,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.MaNhomHP}
@@ -95,10 +94,10 @@ const TuitionTab = ({ data2 }) => {
                     align="left"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
-                      minWidth: "300px", // Độ rộng tối thiểu cho cột Học kỳ
+                      minWidth: "300px",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.TenHP}
@@ -107,9 +106,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.SoTC}
@@ -118,9 +117,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.HocPhi}
@@ -129,9 +128,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.MucNop}
@@ -140,10 +139,10 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
-                      minWidth: "120px", // Độ rộng tối thiểu cho cột Học kỳ
+                      minWidth: "120px",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.TrangThaiDK}
@@ -152,9 +151,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.NgayXuLy}
@@ -163,9 +162,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.SoTienNop}
@@ -174,9 +173,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.KhauTru}
@@ -185,9 +184,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.TruNo}
@@ -196,9 +195,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.CongNo}
@@ -207,9 +206,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.TrangThai ? (
@@ -222,9 +221,9 @@ const TuitionTab = ({ data2 }) => {
                     align="center"
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "rgb(102, 117, 128)",
                       fontWeight: "500",
                       fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
                     }}
                   >
                     {row.KhongTruyCuuCongNo ? (

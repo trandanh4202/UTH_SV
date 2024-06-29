@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect } from "react";
 import {
   Box,
@@ -58,7 +59,6 @@ const InforDetail = () => {
   const family = useSelector(
     (state) => state.profile.profile.body?.quanHeGiaDinhs
   );
-  console.log(family)
   return (
     <Box>
       <Container>
@@ -229,76 +229,75 @@ const InforDetail = () => {
                 lg={12}
                 sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
               >
-                {
-                  family?.map((item, index) => (
-                    <Box key={index}>
-                      <Grid container>
-                        <InfoField
-                          label={`Họ tên ${
-                            item?.quanHe === "Cha" ? "Cha" : "Mẹ"
-                          }: `}
-                          value={item?.hoTen}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Ngày sinh: "
-                          value={formatDate(item?.namSinh)}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Quốc tịch: "
-                          value={item?.quocTich}
-                          column="4"
-                        />
-                      </Grid>
-                      <Grid container>
-                        <InfoField
-                          label="Dân tộc: "
-                          value={item?.danToc}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Tôn giáo: "
-                          value={item?.tonGiao}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Hộ khẩu: "
-                          value={item?.hoKhau}
-                          column="4"
-                        />
-                      </Grid>
-                      <Grid container>
-                        <InfoField
-                          label="Nghề nghiệp: "
-                          value={item?.ngheNghiep}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Số điện thoại: "
-                          value={item?.soDienThoai}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Nơi ở hiện tại: "
-                          value={item?.hienNay}
-                          column="4"
-                        />
-                      </Grid>
-                      <Grid container>
-                        <InfoField
-                          label="Cơ quan công tác: "
-                          value={item?.coQuanCongTac}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Chức vụ: "
-                          value={item?.chucVu}
-                          column="4"
-                        />
-                      </Grid>
-                    </Box>
-                  ))}
+                {family?.map((item, index) => (
+                  <Box key={index}>
+                    <Grid container>
+                      <InfoField
+                        label={`Họ tên ${
+                          item?.quanHe === "Cha" ? "Cha" : "Mẹ"
+                        }: `}
+                        value={item?.hoTen}
+                        column="4"
+                      />
+                      <InfoField
+                        label="Ngày sinh: "
+                        value={formatDate(item?.namSinh)}
+                        column="4"
+                      />
+                      <InfoField
+                        label="Quốc tịch: "
+                        value={item?.quocTich}
+                        column="4"
+                      />
+                    </Grid>
+                    <Grid container>
+                      <InfoField
+                        label="Dân tộc: "
+                        value={item?.danToc}
+                        column="4"
+                      />
+                      <InfoField
+                        label="Tôn giáo: "
+                        value={item?.tonGiao}
+                        column="4"
+                      />
+                      <InfoField
+                        label="Hộ khẩu: "
+                        value={item?.hoKhau}
+                        column="4"
+                      />
+                    </Grid>
+                    <Grid container>
+                      <InfoField
+                        label="Nghề nghiệp: "
+                        value={item?.ngheNghiep}
+                        column="4"
+                      />
+                      <InfoField
+                        label="Số điện thoại: "
+                        value={item?.soDienThoai}
+                        column="4"
+                      />
+                      <InfoField
+                        label="Nơi ở hiện tại: "
+                        value={item?.hienNay}
+                        column="4"
+                      />
+                    </Grid>
+                    <Grid container>
+                      <InfoField
+                        label="Cơ quan công tác: "
+                        value={item?.coQuanCongTac}
+                        column="4"
+                      />
+                      <InfoField
+                        label="Chức vụ: "
+                        value={item?.chucVu}
+                        column="4"
+                      />
+                    </Grid>
+                  </Box>
+                ))}
               </Grid>
             </Grid>
           </Section>

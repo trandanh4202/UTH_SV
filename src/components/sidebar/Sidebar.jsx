@@ -60,8 +60,18 @@ const Sidebar = () => {
                 expandIcon={<ExpandMore />}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "#e0f7fa", // Màu nền khi hover
+                  },
+                }}
               >
-                <Typography sx={{ fontWeight: "500", fontSize: "16px" }}>
+                <Typography
+                  sx={{
+                    fontWeight: "500",
+                    fontSize: "16px",
+                  }}
+                >
                   Thông tin chung
                 </Typography>
               </AccordionSummary>
@@ -69,12 +79,21 @@ const Sidebar = () => {
               <AccordionDetails
                 sx={{ display: "flex", flexDirection: "column", gap: "30px" }}
               >
-                <Typography component={Link} sx={{ fontSize: "14px" }}>
+                <Typography
+                  component={Link}
+                  to="/inforDetail"
+                  sx={{
+                    fontSize: "14px",
+                    "&:hover": {
+                      color: "#ff5722", // Màu chữ khi hover
+                    },
+                  }}
+                >
                   Thông tin sinh viên
                 </Typography>
-                <Typography component={Link} sx={{ fontSize: "14px" }}>
+                {/* <Typography component={Link} sx={{ fontSize: "14px" }}>
                   Ghi chú nhắc nhở
-                </Typography>
+                </Typography> */}
               </AccordionDetails>
             </Accordion>
             <Accordion
@@ -111,6 +130,7 @@ const Sidebar = () => {
                       color: "#ff5722", // Màu chữ khi hover
                     },
                   }}
+                  to="/transcript"
                 >
                   Kết quả học tập
                 </Typography>
@@ -122,6 +142,7 @@ const Sidebar = () => {
                       color: "#ff5722", // Màu chữ khi hover
                     },
                   }}
+                  to="/calendar"
                 >
                   Lịch theo tuần
                 </Typography>

@@ -1,8 +1,6 @@
 /* eslint-disable react/prop-types */
 import { Box, Divider, Grid, Typography } from "@mui/material";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getProfile } from "../../../features/profileSlice/ProfileSlice";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const InfoField = ({ label, value }) => (
@@ -12,19 +10,11 @@ const InfoField = ({ label, value }) => (
         sx={{
           fontSize: { xs: "12px", lg: "13px" },
           color: "rgb(102, 117, 128)",
+          fontWeight: "750",
         }}
         variant="span"
       >
         {label}
-      </Typography>
-      <Typography
-        sx={{
-          fontSize: { xs: "12px", lg: "13px" },
-          fontWeight: "750",
-          color: "rgb(102, 117, 128)",
-        }}
-        variant="span"
-      >
         {value}
       </Typography>
     </Box>
@@ -60,29 +50,16 @@ const InforSV = () => {
             }}
           >
             <Box sx={{ borderRadius: "50%" }}>
-              {profile?.image ? (
-                <img
-                  src={profile?.image}
-                  alt="avatar"
-                  style={{
-                    width: "140px",
-                    height: "140px",
-                    objectFit: "contain",
-                    borderRadius: "50%",
-                  }}
-                />
-              ) : (
-                <img
-                  src="./images/avatarDashboard.png"
-                  alt="avatar"
-                  style={{
-                    width: "140px",
-                    height: "140px",
-                    objectFit: "contain",
-                    borderRadius: "50%",
-                  }}
-                />
-              )}
+              <img
+                src={profile?.image || "./images/avatarDashboard.png"}
+                alt="avatar"
+                style={{
+                  width: "140px",
+                  height: "140px",
+                  objectFit: "contain",
+                  borderRadius: "50%",
+                }}
+              />
             </Box>
             <Box>
               <Typography

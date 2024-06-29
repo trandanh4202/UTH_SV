@@ -49,7 +49,6 @@ const splitIntoSlots = (data) => {
         remainingTiet -= 3;
       }
 
-      // Add the last segment
       const lastItem = { ...item };
       lastItem.tuTiet = currentTuTiet;
       lastItem.denTiet = currentTuTiet + remainingTiet - 1;
@@ -122,6 +121,7 @@ const Calendar = () => {
 
   const dispatch = useDispatch();
   const formattedDate = currentDate.toISOString().substr(0, 10);
+
   useEffect(() => {
     dispatch(getCalendar({ date: formattedDate }));
   }, [dispatch, formattedDate]);
@@ -129,17 +129,9 @@ const Calendar = () => {
   const calendar = useSelector((state) => state.calendar.calendar);
 
   useEffect(() => {
-    console.log("Dữ liệu lịch học:", calendar);
-  }, [calendar]);
-
-  useEffect(() => {
     const updatedData = splitIntoSlots(calendar);
     setSplitData(updatedData);
   }, [calendar]);
-
-  useEffect(() => {
-    console.log("Dữ liệu sau khi tách:", splitData);
-  }, [splitData]);
 
   const dates = generateDatesForCurrentWeek(currentDate);
 
@@ -150,47 +142,32 @@ const Calendar = () => {
           sx={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "end",
+            justifyContent: "space-between",
             gap: "10px",
             marginBottom: "10px",
             flexWrap: "wrap",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
+          <TextField
+            id="date-picker"
+            label="Chọn ngày"
+            type="date"
+            value={currentDate.toISOString().substr(0, 10)}
+            onChange={handleDateChange}
+            InputLabelProps={{
+              shrink: true,
             }}
-          >
-            <TextField
-              id="date-picker"
-              label="Chọn ngày"
-              type="date"
-              value={currentDate.toISOString().substr(0, 10)}
-              onChange={handleDateChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              sx={{
-                "& .MuiInputBase-input": {
-                  borderBottom: "2px solid rgb(51, 181, 229)",
-                  padding: "7px 25px",
-                  fontSize: "15px",
-                  backgroundColor: "white",
-                  color: "black",
-                },
-              }}
-            />
-          </Box>
-          <Box
             sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              gap: "10px",
+              "& .MuiInputBase-input": {
+                borderBottom: "2px solid rgb(51, 181, 229)",
+                padding: "7px 25px",
+                fontSize: "15px",
+                backgroundColor: "white",
+                color: "black",
+              },
             }}
-          >
+          />
+          <Box sx={{ display: "flex", gap: "10px" }}>
             <Button
               variant="outlined"
               onClick={handlePrevWeek}
@@ -271,8 +248,6 @@ const Calendar = () => {
                       width: "12.5%",
                     }}
                   >
-                    {/* {day} */}
-                    {/* <br /> */}
                     {dates[index]}
                   </TableCell>
                 ))}
@@ -317,7 +292,6 @@ const Calendar = () => {
                         return (
                           <TableCell
                             key={dayIndex}
-                            // align="center"
                             sx={{
                               border: "1px solid rgba(224, 224, 224, 1)",
                               padding: "5px",

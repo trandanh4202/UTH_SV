@@ -65,7 +65,15 @@ const FormLogin2 = () => {
           margin: "10px 0",
         }}
       >
-        <img src="./images/eoffice-login.png" alt="" />
+        <img
+          src="./images/logo_uth.png"
+          alt="logo_uth"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "contain",
+          }}
+        />
       </Box>
       <Box>
         <Typography

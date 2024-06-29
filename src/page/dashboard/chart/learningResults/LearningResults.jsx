@@ -54,10 +54,12 @@ const options = {
       },
       displayColors: true,
     },
+
     legend: {
-      // display: false,
-      lablels: {
-        // padding: 5000,
+      position: "bottom",
+      align: "center",
+      labels: {
+        padding: 10,
       },
     },
   },
@@ -75,10 +77,22 @@ const options = {
       weight: "bold",
     },
   },
-
+  layout: {
+    padding: 21,
+  },
   scales: {
     x: {
       display: false, // Hide X axis labels
+    },
+    y: {
+      ticks: {
+        stepSize: 2,
+        callback: (value) => {
+          return value; // Display the ticks as they are (0, 2, 4, 6, 8)
+        },
+      },
+      min: 0,
+      max: 10,
     },
   },
   maintainAspectRatio: false,
@@ -108,25 +122,25 @@ const LearningResults = () => {
   const data = {
     labels: learningResults.map((result) => result.lopHocPhan),
     datasets: [
-      {
-        type: "line",
-        label: "Điểm tổng trung bình của lớp",
-        data: learningResults.map((result) => result.classAverage),
-        backgroundColor: "rgb(253, 205, 86)",
-        borderColor: "rgb(253, 205, 86)",
-        borderWidth: 2,
-        fill: false,
-        tension: 0.4,
-        datalabels: {
-          display: false,
-          align: "end",
-          anchor: "end",
-          color: "rgb(253, 205, 86)",
-          font: {
-            weight: "bold",
-          },
-        },
-      },
+      // {
+      //   type: "line",
+      //   label: "Điểm tổng trung bình của lớp",
+      //   data: learningResults.map((result) => result.classAverage),
+      //   backgroundColor: "rgb(253, 205, 86)",
+      //   borderColor: "rgb(253, 205, 86)",
+      //   borderWidth: 2,
+      //   fill: false,
+      //   tension: 0.4,
+      //   datalabels: {
+      //     display: false,
+      //     align: "end",
+      //     anchor: "end",
+      //     color: "rgb(253, 205, 86)",
+      //     font: {
+      //       weight: "bold",
+      //     },
+      //   },
+      // },
       {
         type: "bar",
         label: "Điểm tổng kết môn của bạn",

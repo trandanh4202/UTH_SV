@@ -19,6 +19,8 @@ import PaymentTable from "./page/tuitionFees/paymentOnline/PaymentTable";
 import TuitionTable from "./page/tuitionFees/tuitionTable/TuitionTable";
 import Test from "./page/test/Test";
 import InforDetail from "./page/inforDetail/InforDetail";
+import Newfeeds from "./page/newfeeds/Newfeeds";
+import SingleNews from "./page/singleNews/SingleNews";
 
 // Function to check for account in localStorage
 const isAuthenticated = () => {
@@ -64,18 +66,18 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <Dashboard />,
           },
-          {
-            path: "generalreceipts",
-            element: <GeneralReceipts />,
-          },
-          {
-            path: "paymentonline",
-            element: <PaymentTable />,
-          },
-          {
-            path: "tuitiontable",
-            element: <TuitionTable />,
-          },
+          // {
+          //   path: "generalreceipts",
+          //   element: <GeneralReceipts />,
+          // },
+          // {
+          //   path: "paymentonline",
+          //   element: <PaymentTable />,
+          // },
+          // {
+          //   path: "tuitiontable",
+          //   element: <TuitionTable />,
+          // },
           {
             path: "transcript",
             element: <Transcript />,
@@ -92,6 +94,23 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "newfeeds",
+    element: <Newfeeds />,
+  },
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: "newfeeds/:id",
+        element: <SingleNews />,
+      },
+    ],
+  },
+  // {
+  //   path: "newfeeds/:id",
+  //   element: <SingleNews />,
+  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

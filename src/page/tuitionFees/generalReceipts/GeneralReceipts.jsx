@@ -14,6 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
+
 const data = [
   {
     STT: 1,
@@ -51,8 +52,9 @@ const data = [
     ChiTiet: false,
     NhatKy: true,
   },
-  // Thêm dữ liệu tương tự cho các dòng khác
+  // Add more data as needed
 ];
+
 const tableCell = [
   "STT",
   "Số phiếu",
@@ -65,6 +67,7 @@ const tableCell = [
   "Chi tiết",
   "Nhật ký",
 ];
+
 const GeneralReceipts = () => {
   const [selectedRow, setSelectedRow] = useState(null);
 
@@ -87,7 +90,6 @@ const GeneralReceipts = () => {
                   marginRight: "5px",
                 }}
               />
-
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
@@ -95,187 +97,183 @@ const GeneralReceipts = () => {
               </Typography>
             </Box>
           </Box>
-          <Box>
-            <TableContainer component={Paper}>
-              <Table
-                sx={{ minWidth: 650, borderCollapse: "collapse" }}
-                aria-label="simple table"
-              >
-                <TableHead>
-                  <TableRow>
-                    {tableCell.map((item) => (
-                      <TableCell
-                        sx={{
-                          border: "2px solid rgb(221, 221, 221)",
-                          textAlign: "center",
-                          fontSize: "15px",
-                          fontWeight: "600",
-                          color: "rgb(29, 161, 242)",
-                        }}
-                      >
-                        {item}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.map((row, index) => (
-                    <TableRow
-                      key={row.STT}
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  {tableCell.map((item) => (
+                    <TableCell
+                      key={item}
+                      align="center"
                       sx={{
-                        // "&:last-child td, &:last-child th": { border: 0 },
-                        cursor: "pointer",
-                        backgroundColor:
-                          selectedRow === index ? "lightblue" : "inherit",
+                        border: "2px solid rgb(221, 221, 221)",
+                        textAlign: "center",
+                        fontSize: "15px",
+                        fontWeight: "600",
+                        color: "rgb(29, 161, 242)",
                       }}
-                      onClick={() => handleRowClick(index)}
                     >
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgb(221, 221, 221)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                        }}
-                      >
-                        {row.STT}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.SoPhieu}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.MaHoaDon}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.NgayThu}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.SoTien}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.DonViThu}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.LoaiHDDT}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.HDDT ? <CloudDownload /> : ""}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.ChiTiet ? <EditNote /> : ""}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          color:
-                            selectedRow === index
-                              ? "rgb(12, 111, 190)"
-                              : "rgb(102, 117, 128)",
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.NhatKy ? <ReceiptLong /> : ""}
-                      </TableCell>
-                    </TableRow>
+                      {item}
+                    </TableCell>
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {data.map((row, index) => (
+                  <TableRow
+                    key={row.STT}
+                    sx={{
+                      cursor: "pointer",
+                      backgroundColor:
+                        selectedRow === index ? "lightblue" : "inherit",
+                    }}
+                    onClick={() => handleRowClick(index)}
+                  >
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgb(221, 221, 221)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.STT}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.SoPhieu}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.MaHoaDon}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.NgayThu}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.SoTien}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.DonViThu}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.LoaiHDDT}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.HDDT ? <CloudDownload /> : ""}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.ChiTiet ? <EditNote /> : ""}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        color:
+                          selectedRow === index
+                            ? "rgb(12, 111, 190)"
+                            : "rgb(102, 117, 128)",
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row.NhatKy ? <ReceiptLong /> : ""}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </Container>
     </Box>

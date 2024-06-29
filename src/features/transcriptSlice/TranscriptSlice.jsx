@@ -21,11 +21,7 @@ export const getTranscript = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log(token, rejectWithValue);
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/bangdiem`,
-        config
-      );
+      const response = await axios.get(`/api/hoctap/bangdiem`, config);
 
       return response.data.body;
     } catch (error) {

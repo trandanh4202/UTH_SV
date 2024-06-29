@@ -6,15 +6,14 @@ const initialState = {
   loading: false,
   error: null,
   newfeeds: [],
+  content: {},
 };
 
 export const getCategoryNoti = createAsyncThunk(
   "noti/getCategoryNoti",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/notification/category`
-      );
+      const response = await axios.get(`/api/notification/category`);
 
       return response.data.body;
     } catch (error) {
@@ -35,8 +34,28 @@ export const getNewfeeds = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/notification?categoryId=${id}&page=1&size=10`
+        `/api/notification?categoryId=${id}&page=1&size=10`
       );
+      console.log(response.data);
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getNewfeedsById = createAsyncThunk(
+  "noti/getNewfeedsById",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`/api/notification/${id}`);
       console.log(response.data);
       return response.data.body;
     } catch (error) {
@@ -79,6 +98,18 @@ const notifitaionSlice = createSlice({
         state.newfeeds = action.payload.content;
       })
       .addCase(getNewfeeds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getNewfeedsById.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getNewfeedsById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.content = action.payload;
+      })
+      .addCase(getNewfeedsById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

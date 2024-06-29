@@ -27,7 +27,7 @@ const Login = () => {
     >
       <Container>
         <Box>
-          <Box sx={{}}>
+          <Box>
             <Grid
               container
               sx={{
@@ -44,11 +44,19 @@ const Login = () => {
               <Grid item xs={12} md={6} lg={8}>
                 <Box
                   sx={{
-                    marginRight: "10px",
+                    marginRight: { xs: "0px", lg: "10px" },
+                    marginTop: { xs: "10px", lg: "0px" },
+                    height: "100%",
                   }}
                 >
                   <Paper
-                    sx={{ width: "100%", height: "100%", minHeight: "500px" }}
+                    sx={{
+                      width: "100%",
+                      // maxHeight: "600px", // Adjust maxHeight as needed
+                      overflow: "hidden",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
                   >
                     <TabsPanel />
                   </Paper>

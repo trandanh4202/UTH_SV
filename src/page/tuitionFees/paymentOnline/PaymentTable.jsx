@@ -11,9 +11,8 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-
 import { useState } from "react";
-import PaymentTab from "./PaymentTab2";
+import PaymentTab from "./PaymentTab";
 
 const data = [
   {
@@ -47,6 +46,7 @@ const data = [
     LoaiHocPhi: "Học phí ngành",
   },
 ];
+
 const PaymentTable = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [semester, setSemester] = useState("");
@@ -59,7 +59,7 @@ const PaymentTable = () => {
     setSemester(event.target.value);
   };
 
-  // Tách dữ liệu vào ba mảng dựa trên loại học phí
+  // Filter data based on fee type
   const hocPhiNganh = data.filter(
     (item) => item.LoaiHocPhi === "Học phí ngành"
   );
@@ -147,8 +147,8 @@ const PaymentTable = () => {
                 fontWeight: "500",
                 "&.Mui-selected": {
                   border: "1px solid #1976d2",
-                  backgroundColor: "#rgb(221, 221, 221)",
-                  color: "#rgb(29, 161, 242)",
+                  backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  color: "#1976d2",
                 },
               }}
               label="Học phí ngành"
@@ -159,8 +159,8 @@ const PaymentTable = () => {
                 fontWeight: "500",
                 "&.Mui-selected": {
                   border: "1px solid #1976d2",
-                  backgroundColor: "rgb(221, 221, 221)",
-                  color: "#rgb(29, 161, 242)",
+                  backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  color: "#1976d2",
                 },
               }}
               label="Học phí Trung tâm tiếng Anh"
@@ -170,17 +170,17 @@ const PaymentTable = () => {
                 fontSize: "15px",
                 fontWeight: "500",
                 "&.Mui-selected": {
-                  border: "1px solid rgb(221, 221, 221)",
-                  backgroundColor: "rgb(221, 221, 221)",
-                  color: "#rgb(29, 161, 242)",
+                  border: "1px solid #1976d2",
+                  backgroundColor: "rgba(0, 0, 0, 0.04)",
+                  color: "#1976d2",
                 },
               }}
               label="Học phí Khác"
             />
           </Tabs>
-          {selectedTab === 0 && <PaymentTab data2={hocPhiNganh} />}
-          {selectedTab === 1 && <PaymentTab data2={hocPhiTrungTamTiengAnh} />}
-          {selectedTab === 2 && <PaymentTab data2={hocPhiKhac} />}
+          {selectedTab === 0 && <PaymentTab data={hocPhiNganh} />}
+          {selectedTab === 1 && <PaymentTab data={hocPhiTrungTamTiengAnh} />}
+          {selectedTab === 2 && <PaymentTab data={hocPhiKhac} />}
         </Box>
         <Box>
           <Box
@@ -190,33 +190,29 @@ const PaymentTable = () => {
               justifyContent: "space-between",
             }}
           >
-            <Box>
-              <Typography
-                sx={{
-                  color: "#333333",
-                  fontSize: "20px",
-                  fontWeight: "700",
-                }}
-              >
-                Chọn hình thức thanh toán
-              </Typography>
-            </Box>
-            <Box>
-              <Button
-                sx={{
-                  backgroundColor: "#ff6600", // Màu cam
-                  color: "white", // Màu chữ trắng
-                  "&:hover": {
-                    backgroundColor: "#ff4d00", // Màu cam đậm hơn khi hover
-                  },
-                  padding: "20px 35px",
-                  fontSize: "18px",
-                  fontWeight: "700",
-                }}
-              >
-                Thanh toán
-              </Button>
-            </Box>
+            <Typography
+              sx={{
+                color: "#333333",
+                fontSize: "20px",
+                fontWeight: "700",
+              }}
+            >
+              Chọn hình thức thanh toán
+            </Typography>
+            <Button
+              sx={{
+                backgroundColor: "#ff6600",
+                color: "white",
+                "&:hover": {
+                  backgroundColor: "#ff4d00",
+                },
+                padding: "20px 35px",
+                fontSize: "18px",
+                fontWeight: "700",
+              }}
+            >
+              Thanh toán
+            </Button>
           </Box>
         </Box>
       </Box>

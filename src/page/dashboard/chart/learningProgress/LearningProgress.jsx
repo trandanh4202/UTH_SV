@@ -1,5 +1,5 @@
-import { Box, Divider, Paper, Typography } from "@mui/material";
 import { useEffect } from "react";
+import { Box, Divider, Paper, Typography } from "@mui/material";
 import { Doughnut } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
 import { getLearningProgress } from "../../../../features/profileSlice/ProfileSlice";
@@ -8,21 +8,18 @@ const LearningProgress = () => {
   const learningProgress = useSelector(
     (state) => state.profile.learningProgress
   );
-
-  console.log(learningProgress);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getLearningProgress());
   }, [dispatch]);
+
   const innerData = {
     labels: "",
     datasets: [
       {
-        label: ["Tổng số tín chỉ "],
-        data: [
-          learningProgress.canDat,
-          learningProgress.canDat - learningProgress.canDat,
-        ],
+        label: ["Tổng số tín chỉ"],
+        data: [learningProgress.canDat, 0],
         backgroundColor: ["rgb(255, 99, 132)", "rgba(0, 0, 0, 0.1)"],
       },
       {
@@ -31,7 +28,7 @@ const LearningProgress = () => {
           learningProgress.hienTai,
           learningProgress.canDat - learningProgress.hienTai,
         ],
-        backgroundColor: ["rgb(255, 99, 132)", "rgba(0, 0, 0, 0.1)"],
+        backgroundColor: ["rgb(54, 162, 235)", "rgba(0, 0, 0, 0.1)"],
       },
     ],
   };
@@ -45,9 +42,9 @@ const LearningProgress = () => {
     cutout: "70%", // Khoảng cách giữa 2 vòng tròn
     responsive: true,
   };
+
   return (
-    <Box
-      component={Paper}
+    <Paper
       sx={{
         padding: "10px",
         height: "100%",
@@ -57,17 +54,15 @@ const LearningProgress = () => {
         flexDirection: "column",
       }}
     >
-      <Box sx={{ textAlign: "left", width: "100%" }}>
-        <Typography
-          sx={{
-            fontSize: "20px",
-            fontWeight: "700",
-            color: "rgb(102, 117, 128)",
-          }}
-        >
-          Tiến độ học tập
-        </Typography>
-      </Box>
+      <Typography
+        sx={{
+          fontSize: "20px",
+          fontWeight: "700",
+          color: "rgb(102, 117, 128)",
+        }}
+      >
+        Tiến độ học tập
+      </Typography>
       <Divider sx={{ width: "100%", margin: "10px 0 " }} />
       <Box sx={{ position: "relative", width: "100%", height: "100%" }}>
         <Doughnut data={innerData} options={innerOptions} />
@@ -80,15 +75,13 @@ const LearningProgress = () => {
             textAlign: "center",
           }}
         >
-          <Typography
-            style={{ fontSize: 16, fontWeight: "bold", marginTop: 10 }}
-          >
+          <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
             {learningProgress.canDat}
           </Typography>
-          <Typography style={{ fontSize: 16 }}>Tổng số tín chỉ</Typography>
+          <Typography sx={{ fontSize: 16 }}>Tổng số tín chỉ</Typography>
         </Box>
       </Box>
-    </Box>
+    </Paper>
   );
 };
 

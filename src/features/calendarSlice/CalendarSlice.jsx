@@ -24,7 +24,7 @@ export const getCalendar = createAsyncThunk(
       };
 
       const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/lichhoc/tuan?date=${date}`,
+        `/api/lichhoc/tuan?date=${date}`,
         config
       );
 
@@ -57,10 +57,7 @@ export const getTotalofWeek = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/lichhoc/songayhoc`,
-        config
-      );
+      const response = await axios.get(`/api/lichhoc/songayhoc`, config);
 
       return response.data.body;
     } catch (error) {

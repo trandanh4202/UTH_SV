@@ -12,7 +12,7 @@ export const loginPage = createAsyncThunk(
   async (combinedData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `https://uth-api-boot.ut.edu.vn/api/v1/user/login?g-recaptcha-response=${combinedData.recaptcha}`,
+        `/api/user/login?g-recaptcha-response=${combinedData.recaptcha}`,
         {
           username: combinedData.username,
           password: combinedData.password,
@@ -20,12 +20,9 @@ export const loginPage = createAsyncThunk(
       );
 
       const { token } = response.data;
-      console.log(token);
 
       if (token) {
-        const account = { token };
         localStorage.setItem("account", token);
-        console.log("LocalStorage set: ", JSON.stringify(account));
       } else {
         console.error("Token not found in response");
       }

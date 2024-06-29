@@ -12,7 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTranscript } from "../../features/transcriptSlice/TranscriptSlice";
 
@@ -42,15 +42,20 @@ const columns = [
 
 const Transcript = () => {
   const transcript = useSelector((state) => state.transcript.transcript);
-
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getTranscript());
   }, [dispatch]);
+
   return (
     <Box>
       <Container sx={{ minHeight: "500px" }}>
-        <TableContainer sx={{ padding: "10px" }} component={Paper} variant={4}>
+        <TableContainer
+          sx={{ padding: "10px" }}
+          component={Paper}
+          variant="outlined"
+        >
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -66,30 +71,27 @@ const Transcript = () => {
                 >
                   STT
                 </TableCell>
-
                 {columns.map((column) => (
-                  <>
-                    <TableCell
-                      key={column.field}
-                      sx={{
-                        fontWeight: "700",
-                        color: "rgb(29, 161, 242)",
-                        backgroundColor: "rgb(243, 247, 249)",
-                        border: "1px solid rgb(221, 221, 221)",
-                        fontSize: "14px",
-                        textAlign: "center",
-                        minWidth: column.minWidth,
-                      }}
-                    >
-                      {column.headerName}
-                    </TableCell>
-                  </>
+                  <TableCell
+                    key={column.field}
+                    sx={{
+                      fontWeight: "700",
+                      color: "rgb(29, 161, 242)",
+                      backgroundColor: "rgb(243, 247, 249)",
+                      border: "1px solid rgb(221, 221, 221)",
+                      fontSize: "14px",
+                      textAlign: "center",
+                      minWidth: column.minWidth,
+                    }}
+                  >
+                    {column.headerName}
+                  </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {transcript.map((hocKy) => (
-                <>
+              {transcript.map((hocKy, hocKyIndex) => (
+                <React.Fragment key={hocKyIndex}>
                   <TableRow>
                     <TableCell
                       colSpan={12}
@@ -104,6 +106,7 @@ const Transcript = () => {
                           fontSize: "16px",
                           fontWeight: "700",
                           color: "#f15253",
+                          padding: "0 10px",
                         }}
                       >
                         {hocKy.tenDot}
@@ -141,7 +144,7 @@ const Transcript = () => {
                             row[column.field] ? (
                               <CheckCircle style={{ color: "green" }} />
                             ) : (
-                              <Cancel sx={{ color: "red" }} />
+                              <Cancel style={{ color: "red" }} />
                             )
                           ) : (
                             row[column.field]
@@ -149,7 +152,7 @@ const Transcript = () => {
                         </TableCell>
                       ))}
                     </TableRow>
-                  ))}{" "}
+                  ))}
                   <TableRow>
                     <TableCell colSpan={2} sx={cellStyle}>
                       Tổng số tín chỉ đã đăng ký: {hocKy.stcdangKyHocKy}
@@ -197,16 +200,16 @@ const Transcript = () => {
                     </TableCell>
                     <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                   </TableRow>
-                  {/* <TableRow>
+                  <TableRow>
                     <TableCell colSpan={2} sx={cellStyle}>
-                      Điểm rèn luyện học kỳ: {summary.DRLHK}
+                      Điểm rèn luyện học kỳ: {hocKy.soDiemRenLuyen}
                     </TableCell>
                     <TableCell colSpan={3} sx={cellStyle}>
-                      Xếp loại điểm rèn luyện: {summary.XDLDRLHK}
+                      Xếp loại điểm rèn luyện: {hocKy.xepLoaiDiemRenLuyen}
                     </TableCell>
                     <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
-                  </TableRow> */}
-                </>
+                  </TableRow>
+                </React.Fragment>
               ))}
             </TableBody>
           </Table>

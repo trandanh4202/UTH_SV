@@ -25,11 +25,7 @@ export const getProfile = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/user/profile`,
-        config
-      );
+      const response = await axios.get(`/api/user/profile`, config);
 
       // Assuming the new token is in the response data, adjust as needed
       const newToken = response.data.token;
@@ -66,10 +62,7 @@ export const getSelect = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/hocky`,
-        config
-      );
+      const response = await axios.get(`/api/hoctap/hocky`, config);
       return response.data.body;
     } catch (error) {
       if (
@@ -98,9 +91,8 @@ export const getLearningResults = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("learning results", semester);
       const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/kqtheoky/${semester}`,
+        `/api/hoctap/kqtheoky/${semester}`,
         config
       );
       return response.data.body;
@@ -132,10 +124,7 @@ export const getLearningProgress = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/tiendo`,
-        config
-      );
+      const response = await axios.get(`/api/hoctap/tiendo`, config);
       return response.data.body;
     } catch (error) {
       if (
@@ -164,9 +153,8 @@ export const getCourses = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log("courses", semester);
       const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/hoctap/montheoky/${semester}`,
+        `/api/hoctap/montheoky/${semester}`,
         config
       );
       return response.data.body;
