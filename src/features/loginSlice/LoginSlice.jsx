@@ -32,8 +32,14 @@ export const loginPage = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.error("Error during authentication:", error.response || error);
-      return rejectWithValue(error.response.data);
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
     }
   }
 );

@@ -1,7 +1,10 @@
 import { Box, Typography } from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { getTotalofWeek } from "../../../features/calendarSlice/CalendarSlice";
 
-const BoxNoti = ({ title, count, icon, color, to }) => {
+const BoxNoti = ({ title, icon, color, to, total }) => {
   return (
     <Box
       sx={{
@@ -24,10 +27,10 @@ const BoxNoti = ({ title, count, icon, color, to }) => {
               color: color,
             }}
           >
-            {count}
+            {total}
           </Typography>
         </Box>
-        <Link to="/transcript">
+        <Link to={to}>
           <Typography sx={{ color: "red", fontSize: "13px" }}>
             Xem chi tiết
           </Typography>

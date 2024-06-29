@@ -81,10 +81,12 @@ export const getLearningResults = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/user/dashboard/ketquatheodot/${semester}`,
-        config
-      );
+      const response =
+        semester &
+        ( await axios.get(
+          `https://uth-api-boot.ut.edu.vn/api/v1/user/dashboard/ketquatheodot/${semester}`,
+          config
+        ));
       return response.data.body;
     } catch (error) {
       console.error("Error during authentication:", error);
@@ -135,7 +137,7 @@ export const getCourses = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(
+      const response = semester & await axios.get(
         `https://uth-api-boot.ut.edu.vn/api/v1/user/dashboard/monhoctheoky/${semester}`,
         config
       );

@@ -1,7 +1,6 @@
 import {
   ExpandMore,
   KeyboardArrowDown,
-  NotificationImportant,
   Search,
   ViewHeadlineRounded,
 } from "@mui/icons-material";
@@ -10,7 +9,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Avatar,
-  Badge,
   Box,
   Container,
   Divider,
@@ -70,7 +68,7 @@ const Header = () => {
       <Container>
         <Grid container sx={{ display: "flex", alignItems: "center" }}>
           <Grid item lg={3} xs={8}>
-            <Box component={Link} to="#" sx={{ flexGrow: 1 }}>
+            <Box component={Link} to="/dashboard" sx={{ flexGrow: 1 }}>
               <img
                 src="./images/sv_logo_dashboard.png"
                 alt="sv_logo_dashboard.png"
@@ -119,7 +117,7 @@ const Header = () => {
               </Box>
 
               {/* Tin tức - Thông báo */}
-              <Box
+              {/* <Box
                 sx={{
                   display: { lg: "flex", xs: "none" },
                   justifyContent: "center",
@@ -139,7 +137,7 @@ const Header = () => {
                     Tin tức - Thông báo
                   </Typography>
                 </Box>
-              </Box>
+              </Box> */}
 
               {/* Avatar với menu */}
               <Box

@@ -12,24 +12,25 @@ import {
   Visibility,
 } from "@mui/icons-material";
 import { Box, Container, Grid, Paper } from "@mui/material";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelect } from "../../features/profileSlice/ProfileSlice";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
 import BoxNoti from "./boxNoti/BoxNoti";
 import Courses from "./chart/courses/Courses";
 import LearningProgress from "./chart/learningProgress/LearningProgress";
 import LearningResults from "./chart/learningResults/LearningResults";
-import { getSelect } from "../../features/profileSlice/ProfileSlice";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
 import InforSV from "./inforSV/InforSV";
+import { getTotalofWeek } from "../../features/calendarSlice/CalendarSlice";
 const data = [
   {
     icon: <ContactEmergency sx={{ fontSize: "25px" }} />,
-    title: "Thông tin sinh viên",
+    title: "Trang học trực tuyến",
   },
   {
     icon: <CalendarMonth sx={{ fontSize: "25px" }} />,
-    title: "Lịch theo tuần",
+    title: "Kết quả học tập",
+    to: "/transcript",
   },
   {
     icon: <Visibility sx={{ fontSize: "25px" }} />,
@@ -78,12 +79,14 @@ const box = [
 const Dashboard = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("account");
+
   useEffect(() => {
     if (token) {
       dispatch(getSelect());
+      dispatch(getTotalofWeek());
     }
   }, [token, dispatch]);
-
+  const total = useSelector((state) => state.calendar.total);
   return (
     <Container>
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
@@ -105,10 +108,10 @@ const Dashboard = () => {
                 >
                   <BoxNoti
                     title={item.title}
-                    count={item.count}
                     icon={item.icon}
                     color={item.color}
                     to={item.to}
+                    total={total}
                   />
                 </Box>
               </Grid>
@@ -137,6 +140,7 @@ const Dashboard = () => {
                   index={index}
                   icon={item.icon}
                   title={item.title}
+                  to={item.to}
                 />
               </Box>
             </Grid>

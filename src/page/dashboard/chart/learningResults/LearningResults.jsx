@@ -84,16 +84,19 @@ const options = {
   maintainAspectRatio: false,
 };
 const LearningResults = () => {
-  const [semester, setSemester] = useState("");
   const select = useSelector((state) => state.profile.select);
+  const [semester, setSemester] = useState("");
 
   const handleChange = (event) => {
     setSemester(event.target.value);
   };
   const dispatch = useDispatch();
   useEffect(() => {
+    if (select.length > 0 && !semester) {
+      setSemester(select[0].id);
+    }
     dispatch(getLearningResults({ semester }));
-  }, [dispatch, semester]);
+  }, [dispatch, semester, select]);
   const learningResults = useSelector((state) => state.profile.learningResults);
   const data = {
     labels: learningResults.map((result) => result.lopHocPhan),

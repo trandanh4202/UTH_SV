@@ -20,16 +20,20 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCourses } from "../../../../features/profileSlice/ProfileSlice";
 
 const Courses = () => {
-  const [semester, setSemester] = useState("");
   const select = useSelector((state) => state.profile.select);
+  const [semester, setSemester] = useState("");
   const handleChange = (event) => {
     setSemester(event.target.value);
   };
   const courses = useSelector((state) => state.profile.courses);
   const dispatch = useDispatch();
   useEffect(() => {
+    if (select.length > 0 && !semester) {
+      console.log(select[0].id);
+      setSemester(select[0].id);
+    }
     dispatch(getCourses({ semester }));
-  }, [dispatch, semester]);
+  }, [dispatch, semester, select]);
 
   return (
     <Box

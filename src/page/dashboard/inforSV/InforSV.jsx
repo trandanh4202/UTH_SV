@@ -31,7 +31,6 @@ const InfoField = ({ label, value }) => (
 );
 
 const InforSV = () => {
-
   const profile = useSelector((state) => state.profile.profile.body);
 
   return (
@@ -60,16 +59,29 @@ const InforSV = () => {
             }}
           >
             <Box sx={{ borderRadius: "50%" }}>
-              <img
-                src={profile?.image}
-                alt="avatar"
-                style={{
-                  width: "140px",
-                  height: "140px",
-                  objectFit: "contain",
-                  borderRadius: "50%",
-                }}
-              />
+              {profile?.image ? (
+                <img
+                  src={profile?.image}
+                  alt="avatar"
+                  style={{
+                    width: "140px",
+                    height: "140px",
+                    objectFit: "contain",
+                    borderRadius: "50%",
+                  }}
+                />
+              ) : (
+                <img
+                  src="./images/avatarDashboard.png"
+                  alt="avatar"
+                  style={{
+                    width: "140px",
+                    height: "140px",
+                    objectFit: "contain",
+                    borderRadius: "50%",
+                  }}
+                />
+              )}
             </Box>
           </Box>
         </Grid>

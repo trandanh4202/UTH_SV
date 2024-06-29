@@ -1,7 +1,9 @@
+/* eslint-disable react/jsx-key */
 import { Cancel, CheckCircle } from "@mui/icons-material";
 import {
   Box,
   Container,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -10,314 +12,202 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getTranscript } from "../../features/transcriptSlice/TranscriptSlice";
 
-// Dữ liệu mẫu sau khi làm sạch
-const rows = [
-  {
-    id: 1,
-    stt: 1,
-    maLop: "100000000",
-    tenMon: "Giải tích 1",
-    soTinChi: 3,
-    diemQuaTrinh: 9.5,
-    diemCuoiKy: 9.5,
-    diemTongKet: 9.5,
-    thangDiem4: 4,
-    diemChu: "A",
-    xepLoai: "Khá",
-    dat: false,
-  },
-  {
-    id: 2,
-    stt: 2,
-    maLop: "20000000",
-    tenMon: "Giải tích 2",
-    soTinChi: 3,
-    diemQuaTrinh: 9.5,
-    diemCuoiKy: 9,
-    diemTongKet: 9.25,
-    thangDiem4: 4,
-    diemChu: "A",
-    xepLoai: "Gioi",
-    dat: true,
-  },
-];
-
-// Định nghĩa các cột cho DataGrid
 const columns = [
-  { field: "stt", headerName: "STT", align: "center" },
   {
-    field: "maLop",
+    field: "maLopHocPhan",
     headerName: "Mã lớp học phần",
     align: "center",
     minWidth: "200px",
   },
   {
-    field: "tenMon",
+    field: "tenMonHoc",
     headerName: "Tên môn học/học phần",
     align: "left",
     minWidth: "200px",
   },
   { field: "soTinChi", headerName: "Số tín chỉ", align: "center" },
-  { field: "diemQuaTrinh", headerName: "Điểm quá trình", align: "center" },
-  { field: "diemCuoiKy", headerName: "Điểm cuối kỳ", align: "center" },
+  { field: "diemTBThuongKy", headerName: "Điểm quá trình", align: "center" },
+  { field: "diemThi", headerName: "Điểm cuối kỳ", align: "center" },
   { field: "diemTongKet", headerName: "Điểm tổng kết", align: "center" },
-  { field: "thangDiem4", headerName: "Điểm 4", align: "center" },
+  { field: "diemTinChi", headerName: "Điểm 4", align: "center" },
   { field: "diemChu", headerName: "Điểm chữ", align: "center" },
   { field: "xepLoai", headerName: "Xếp loại", align: "center" },
-  { field: "dat", headerName: "Đạt", align: "center" },
+  { field: "isDat", headerName: "Đạt", align: "center" },
+  { field: "ghiChu", headerName: "Ghi chú", align: "center" },
 ];
-// Dữ liệu tổng kết
-const summary = {
-  TSTCDDK: 10,
-  TSTCD: 10,
-  STCTLCSV: 10,
-  DTBHKH4: 4.0,
-  DTBHKH10: 10,
-  XLHLHK: "Giỏi",
-  DTBTLH4: 4.0,
-  DTBTLH10: 10.0,
-  XLHLTL: "Giỏi",
-  TSTCNTDHT: 0,
-};
 
-// Tạo component cho bảng
-const Transcirpt = () => {
+const Transcript = () => {
+  const transcript = useSelector((state) => state.transcript.transcript);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getTranscript());
+  }, [dispatch]);
   return (
     <Box>
-      <Container sx={{ backgroundColor: "white", height: "500px" }}>
-        <TableContainer>
+      <Container sx={{ minHeight: "500px" }}>
+        <TableContainer sx={{ padding: "10px" }} component={Paper} variant={4}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
+                <TableCell
+                  sx={{
+                    fontWeight: "700",
+                    color: "rgb(29, 161, 242)",
+                    backgroundColor: "rgb(243, 247, 249)",
+                    border: "1px solid rgb(221, 221, 221)",
+                    fontSize: "14px",
+                    textAlign: "center",
+                  }}
+                >
+                  STT
+                </TableCell>
+
                 {columns.map((column) => (
-                  <TableCell
-                    key={column.field}
-                    sx={{
-                      fontWeight: "700",
-                      color: "rgb(29, 161, 242)",
-                      backgroundColor: "rgb(243, 247, 249)",
-                      border: "1px solid rgb(221, 221, 221)",
-                      fontSize: "15px",
-                      textAlign: "center",
-                      minWidth: `${column.minWidth}`,
-                    }}
-                  >
-                    {column.headerName}
-                  </TableCell>
+                  <>
+                    <TableCell
+                      key={column.field}
+                      sx={{
+                        fontWeight: "700",
+                        color: "rgb(29, 161, 242)",
+                        backgroundColor: "rgb(243, 247, 249)",
+                        border: "1px solid rgb(221, 221, 221)",
+                        fontSize: "14px",
+                        textAlign: "center",
+                        minWidth: column.minWidth,
+                      }}
+                    >
+                      {column.headerName}
+                    </TableCell>
+                  </>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell
-                  colSpan={11}
-                  sx={{
-                    backgroundColor: "rgb(245, 245, 245)",
-                    color: "rgb(87, 142, 190)",
-                    padding: "5px",
-                  }}
-                >
-                  <Box>
-                    <Typography sx={{ fontSize: "13px", fontWeight: "700" }}>
-                      Học kỳ 1 năm học 2023-2024
-                    </Typography>
-                  </Box>
-                </TableCell>
-              </TableRow>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  sx={{
-                    backgroundColor: "#ffffff",
-                  }}
-                >
-                  {columns.map((column) => (
+              {transcript.map((hocKy) => (
+                <>
+                  <TableRow>
                     <TableCell
-                      key={column.field}
+                      colSpan={12}
                       sx={{
-                        border: "1px solid rgb(221, 221, 221)",
-                        color: "rgb(102, 117, 128)",
-                        fontSize: "14px",
-                        fontWeight: "500",
+                        backgroundColor: "rgb(231, 236, 240)",
+                        color: "rgb(87, 142, 190)",
+                        padding: "5px",
                       }}
-                      align={column.align}
                     >
-                      {column.field === "dat" ? (
-                        row[column.field] ? (
-                          <CheckCircle style={{ color: "green" }} />
-                        ) : (
-                          <Cancel sx={{ color: "red" }} />
-                        )
-                      ) : (
-                        row[column.field]
-                      )}
+                      <Typography
+                        sx={{
+                          fontSize: "16px",
+                          fontWeight: "700",
+                          color: "#f15253",
+                        }}
+                      >
+                        {hocKy.tenDot}
+                      </Typography>
                     </TableCell>
-                  ))}
-                </TableRow>
+                  </TableRow>
+                  {hocKy.diems.map((row, rowIndex) => (
+                    <TableRow
+                      key={rowIndex}
+                      sx={{ backgroundColor: "#ffffff" }}
+                    >
+                      <TableCell
+                        sx={{
+                          border: "1px solid rgb(221, 221, 221)",
+                          color: "rgb(102, 117, 128)",
+                          fontSize: "14px",
+                          fontWeight: "500",
+                          textAlign: "center",
+                        }}
+                      >
+                        {rowIndex + 1}
+                      </TableCell>
+                      {columns.map((column) => (
+                        <TableCell
+                          key={column.field}
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                          }}
+                          align={column.align}
+                        >
+                          {column.field === "isDat" ? (
+                            row[column.field] ? (
+                              <CheckCircle style={{ color: "green" }} />
+                            ) : (
+                              <Cancel sx={{ color: "red" }} />
+                            )
+                          ) : (
+                            row[column.field]
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}{" "}
+                  <TableRow>
+                    <TableCell colSpan={2} sx={cellStyle}>
+                      Tổng số tín chỉ đã đăng ký: {hocKy.stcdangKyHocKy}
+                    </TableCell>
+                    <TableCell colSpan={3} sx={cellStyle}>
+                      Điểm trung bình học kỳ hệ 4: {hocKy.diemTBTinChi}
+                    </TableCell>
+                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={2} sx={cellStyle}>
+                      Tổng số tín chỉ đạt: {hocKy.stcdatHocKy}
+                    </TableCell>
+                    <TableCell colSpan={3} sx={cellStyle}>
+                      Điểm trung bình học kỳ hệ 10: {hocKy.diemTBHocLuc}
+                    </TableCell>
+                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={2} sx={cellStyle}>
+                      Số tín chỉ tích lũy của sinh viên: {hocKy.soTCTichLuy}
+                    </TableCell>
+                    <TableCell colSpan={3} sx={cellStyle}>
+                      Xếp loại học lực học kỳ: {hocKy.xepLoaiHocLuc}
+                    </TableCell>
+                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={2} sx={cellStyle}>
+                      Điểm trung bình tích lũy (hệ 4):{" "}
+                      {hocKy.diemTBTinChiTichLuy}
+                    </TableCell>
+                    <TableCell colSpan={3} sx={cellStyle}>
+                      Điểm trung bình tích lũy (hệ 10):{" "}
+                      {hocKy.diemTBHocLucTichLuy}
+                    </TableCell>
+                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell colSpan={2} sx={cellStyle}>
+                      Tổng số tín chỉ nợ tính đến hiện tại: {hocKy.soTCKhongDat}
+                    </TableCell>
+                    <TableCell colSpan={3} sx={cellStyle}>
+                      Xếp loại học lực tích lũy: {hocKy.xepLoaiHocLucTichLuy}
+                    </TableCell>
+                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                  </TableRow>
+                  {/* <TableRow>
+                    <TableCell colSpan={2} sx={cellStyle}>
+                      Điểm rèn luyện học kỳ: {summary.DRLHK}
+                    </TableCell>
+                    <TableCell colSpan={3} sx={cellStyle}>
+                      Xếp loại điểm rèn luyện: {summary.XDLDRLHK}
+                    </TableCell>
+                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                  </TableRow> */}
+                </>
               ))}
-              <>
-                <TableRow>
-                  <TableCell
-                    colspan={2}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Tổng số tín chỉ đã đăng ký: {summary.STCDDK}
-                  </TableCell>
-                  <TableCell
-                    colspan={3}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Điểm trung bình học kỳ hệ 4: {summary.DTBHKH4}
-                  </TableCell>
-                  <TableCell
-                    colSpan={6}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                    }}
-                  ></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colspan={2}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Tổng số tín chỉ đạt: {summary.TSTCD}
-                  </TableCell>
-                  <TableCell
-                    colspan={3}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Điểm trung bình học kỳ hệ 10: {summary.DTBHKH10}
-                  </TableCell>
-                  <TableCell
-                    colSpan={6}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                    }}
-                  ></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colspan={2}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Số tín chỉ tích lũy của sinh viên: {summary.STCTLCSV}
-                  </TableCell>
-                  <TableCell
-                    colspan={3}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Xếp loại học lực học kỳ: {summary.XLHLHK}
-                  </TableCell>
-                  <TableCell
-                    colSpan={6}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                    }}
-                  ></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colspan={2}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Điểm trung bình tích lũy (hệ 4) {summary.DTBTLH4}
-                  </TableCell>
-                  <TableCell
-                    colspan={3}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Điểm trung bình tích lũy (hệ 10): {summary.DTBTLH10}
-                  </TableCell>
-                  <TableCell
-                    colSpan={6}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                    }}
-                  ></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colspan={2}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Tổng số tín chỉ nợ tính đến hiện tại: {summary.TSTCNTDHT}
-                  </TableCell>
-                  <TableCell
-                    colspan={3}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                      color: "rgb(102, 117, 128)",
-                      fontSize: "14px",
-                      fontWeight: "500",
-                      padding: "0 10px",
-                    }}
-                  >
-                    Xếp loại học lực tích lũy: {summary.XLHLTL}
-                  </TableCell>
-                  <TableCell
-                    colSpan={6}
-                    sx={{
-                      border: "1px solid rgb(221, 221, 221)",
-                    }}
-                  ></TableCell>
-                </TableRow>
-              </>
             </TableBody>
           </Table>
         </TableContainer>
@@ -326,4 +216,18 @@ const Transcirpt = () => {
   );
 };
 
-export default Transcirpt;
+const cellStyle = {
+  border: "1px solid rgb(221, 221, 221)",
+  color: "rgb(102, 117, 128)",
+  fontSize: "14px",
+  fontWeight: "500",
+  padding: "0 10px",
+  backgroundColor: "#ffffff",
+};
+
+const cellBorderStyle = {
+  border: "1px solid rgb(221, 221, 221)",
+  backgroundColor: "#ffffff",
+};
+
+export default Transcript;
