@@ -8,8 +8,9 @@ import "swiper/css/pagination";
 
 import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
 
-import { Box, Container, Grid } from "@mui/material";
+import { Box, Container, Grid, Paper } from "@mui/material";
 import FormLogin2 from "./formLogin2/FormLogin2";
+import TabsPanel from "./tabPanel/TabsPanel";
 // init Swiper:
 
 const Login = () => {
@@ -32,7 +33,7 @@ const Login = () => {
               sx={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center",
+                // alignItems: "center",
                 flexDirection: {
                   xs: "column-reverse",
                   md: "row",
@@ -41,7 +42,18 @@ const Login = () => {
               }}
             >
               <Grid item xs={12} md={6} lg={8}>
-                <Swiper
+                <Box
+                  sx={{
+                    marginRight: "10px",
+                  }}
+                >
+                  <Paper
+                    sx={{ width: "100%", height: "100%", minHeight: "500px" }}
+                  >
+                    <TabsPanel />
+                  </Paper>
+                </Box>
+                {/* <Swiper
                   cssMode={true}
                   navigation={true}
                   pagination={true}
@@ -72,7 +84,7 @@ const Login = () => {
                       }}
                     />
                   </SwiperSlide>
-                </Swiper>
+                </Swiper> */}
               </Grid>
               <Grid item xs={12} md={6} lg={4}>
                 <FormLogin2 />
