@@ -21,7 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCalendar } from "../../features/calendarSlice/CalendarSlice";
-
+import { format, parseISO } from "date-fns";
 const timetableData = {
   days: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
   slots: [
@@ -134,7 +134,9 @@ const Calendar = () => {
   }, [calendar]);
 
   const dates = generateDatesForCurrentWeek(currentDate);
-
+  const formatTime = (time) => {
+    return time.slice(0, 5);
+  };
   return (
     <>
       <Container>
@@ -303,7 +305,7 @@ const Calendar = () => {
                               <Box
                                 sx={{
                                   backgroundColor:
-                                    relevantData.isTamNgung === 1
+                                    relevantData.isTamNgung === true
                                       ? "red"
                                       : "rgb(51, 181, 229)",
                                   padding: "5px",
@@ -366,8 +368,8 @@ const Calendar = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  Thời gian: {relevantData.tuGio} -{" "}
-                                  {relevantData.denGio}
+                                  Thời gian: {formatTime(relevantData.tuGio)} -{" "}
+                                  {formatTime(relevantData.denGio)}
                                 </Typography>
                                 <Typography
                                   sx={{

@@ -21,9 +21,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
+import { getProfile } from "../../features/profileSlice/ProfileSlice";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -68,8 +69,11 @@ const Header = () => {
   //     navigate("/");
   //   }
   // }, [token, navigate]);
-
-  const profile = useSelector((state) => state.profile?.profile?.body);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProfile());
+  }, [dispatch]);
+  const profile = useSelector((state) => state.profile.profile.body);
 
   return (
     <Box
@@ -81,6 +85,7 @@ const Header = () => {
         left: "0",
         right: "0",
         zIndex: "1000",
+        boxShadow: "0 1px 4px rgba(0, 0, 0, 0.2)",
       }}
     >
       <Container>
@@ -88,7 +93,7 @@ const Header = () => {
           <Grid item lg={3} xs={8}>
             <Box component={Link} to="/dashboard" sx={{ flexGrow: 1 }}>
               <img
-                src="./images/sv_logo_dashboard.png"
+                src="../images/sv_logo_dashboard.png"
                 alt="sv_logo_dashboard.png"
               />
             </Box>

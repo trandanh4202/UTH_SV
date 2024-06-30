@@ -1,13 +1,15 @@
-import { Box } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import TabsPanel from "../login/tabPanel/TabsPanel";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getProfile } from "../../features/profileSlice/ProfileSlice";
 
 const Newfeeds = () => {
-  console.log(process.env.VITE_API_BASE_URL);
-  console.log(process.env);
-  console.log(import.meta.env);
   return (
     <Box>
-      <TabsPanel />
+      <Container>
+        <TabsPanel />
+      </Container>
     </Box>
   );
 };

@@ -66,18 +66,18 @@ const router = createBrowserRouter([
             path: "dashboard",
             element: <Dashboard />,
           },
-          // {
-          //   path: "generalreceipts",
-          //   element: <GeneralReceipts />,
-          // },
-          // {
-          //   path: "paymentonline",
-          //   element: <PaymentTable />,
-          // },
-          // {
-          //   path: "tuitiontable",
-          //   element: <TuitionTable />,
-          // },
+          {
+            path: "generalreceipts",
+            element: <GeneralReceipts />,
+          },
+          {
+            path: "paymentonline",
+            element: <PaymentTable />,
+          },
+          {
+            path: "tuitiontable",
+            element: <TuitionTable />,
+          },
           {
             path: "transcript",
             element: <Transcript />,
@@ -94,16 +94,17 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "newfeeds",
-    element: <Newfeeds />,
-  },
+
   {
     element: <Layout />,
     children: [
       {
         path: "newfeeds/:id",
         element: <SingleNews />,
+      },
+      {
+        path: "newfeeds",
+        element: <Newfeeds />,
       },
     ],
   },

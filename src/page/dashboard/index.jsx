@@ -26,19 +26,23 @@ import {
   AttachMoney,
   AutoStories,
   CalendarMonth,
+  CastForEducation,
   ContactEmergency,
   NotificationAdd,
   ReceiptLong,
   School,
+  SupportAgent,
   Upcoming,
   Visibility,
 } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 const data = [
   {
-    icon: <ContactEmergency sx={{ fontSize: "25px" }} />,
+    icon: <CastForEducation sx={{ fontSize: "25px" }} />,
     title: "Trang học trực tuyến",
-    status: "loading",
+    // status: "loading",
+    to: "https://courses.ut.edu.vn/login/index.php",
   },
   {
     icon: <CalendarMonth sx={{ fontSize: "25px" }} />,
@@ -46,9 +50,14 @@ const data = [
     to: "/transcript",
   },
   {
-    icon: <Visibility sx={{ fontSize: "25px" }} />,
-    title: "Lịch toàn trường",
-    status: "loading",
+    icon: <SupportAgent sx={{ fontSize: "25px" }} />,
+    title: "Hỗ trợ trực tuyến",
+    to: "https://support.ut.edu.vn/login.php",
+  },
+  {
+    icon: <AccountBalance sx={{ fontSize: "25px" }} />,
+    title: "Thanh toán trực tuyến",
+    to: "https://payment.ut.edu.vn/",
   },
   {
     icon: <AutoStories sx={{ fontSize: "25px" }} />,
@@ -60,11 +69,7 @@ const data = [
     title: "Tra cứu công nợ",
     status: "loading",
   },
-  {
-    icon: <AccountBalance sx={{ fontSize: "25px" }} />,
-    title: "Thanh toán ",
-    status: "loading",
-  },
+
   {
     icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
     title: "Phiếu thu tổng hợp",
@@ -74,25 +79,6 @@ const data = [
     icon: <School sx={{ fontSize: "25px" }} />,
     title: "Chương trình khung",
     status: "loading",
-  },
-];
-
-const box = [
-  {
-    title: "Nhắc nhở mới, chưa xem",
-    count: 0,
-    icon: <NotificationAdd sx={{ fontSize: "20px" }} />,
-    backgroundColor: "white",
-    color: "rgb(102, 117, 128)",
-    to: "",
-  },
-  {
-    title: "Lịch học trong tuần",
-    count: 5,
-    icon: <Upcoming sx={{ fontSize: "20px" }} />,
-    backgroundColor: "rgb(224, 251, 255)",
-    color: "rgb(77, 161, 232)",
-    to: "/calendar",
   },
 ];
 
@@ -115,13 +101,31 @@ const Dashboard = () => {
   const total = useSelector((state) => state.calendar.total);
   const categories = useSelector((state) => state.notification.category);
 
+  const box = [
+    {
+      title: "Nhắc nhở mới, chưa xem",
+      count: 0,
+      icon: <NotificationAdd sx={{ fontSize: "20px" }} />,
+      backgroundColor: "white",
+      color: "rgb(102, 117, 128)",
+      to: "",
+    },
+    {
+      title: "Lịch học trong tuần",
+      count: total,
+      icon: <Upcoming sx={{ fontSize: "20px" }} />,
+      backgroundColor: "rgb(224, 251, 255)",
+      color: "rgb(77, 161, 232)",
+      to: "/calendar",
+    },
+  ];
   return (
     <Container>
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
         <Grid item lg={7} xs={12}>
           <Grid container spacing={2}>
             <Grid item lg={12} xs={12}>
-              <Paper sx={{ padding: "15px 10px" }}>
+              <Paper sx={{ padding: "15px 10px" }} elevation={4}>
                 {loadingInfoSV ? ( // Kiểm tra trạng thái loading để hiển thị placeholder hoặc nội dung
                   <Box
                     sx={{
@@ -141,6 +145,7 @@ const Dashboard = () => {
                     padding: "5px 10px",
                     backgroundColor: item.backgroundColor,
                   }}
+                  elevation={3}
                 >
                   <BoxNoti
                     title={item.title}
@@ -159,50 +164,61 @@ const Dashboard = () => {
             sx={{
               padding: "5px 10px",
               height: "100%",
-              position: "relative",
-              overflow: "hidden",
-              color: "#fff",
+              // position: "relative",
+              // overflow: "hidden",
+              // color: "#fff",
             }}
+            elevation={3}
           >
-            {" "}
-            <Box
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu nền đen với opacity
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                zIndex: 10,
-                fontSize: "20px",
-                fontWeight: "600",
-              }}
-            >
-              Đang cập nhật
-            </Box>
+            {/* <Box
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu nền đen với opacity
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  zIndex: 10,
+                  fontSize: "20px",
+                  fontWeight: "600",
+                }}
+              >
+                Đang cập nhật
+              </Box> */}
+            {/* <Box>
+              <Typography
+                sx={{
+                  fontSize: "20px",
+                  fontWeight: "600",
+                  color: "#333333 ",
+                  textAlign: "center",
+                  margin: "10px 0",
+                }}
+              >
+                Bảng thông báo
+              </Typography>
+            </Box> */}
             {categories.map((item) => (
               <Box
                 key={item.id}
                 sx={{
                   margin: "20px",
-                  position: "relative",
+                  // position: "relative",
                 }}
               >
-                <Box>
-                  <Badge color="error" badgeContent={4}>
-                    <Typography
-                      sx={{
-                        fontSize: "20px",
-                        fontWeight: "600",
-                        color: "#37b4e1",
-                      }}
-                    >
-                      {item.tenDanhMuc}
-                    </Typography>
-                  </Badge>
+                <Box component={Link} to="/newfeeds">
+                  <Typography
+                    sx={{
+                      fontSize: "20px",
+                      fontWeight: "600",
+                      color: "#37b4e1",
+                    }}
+                  >
+                    {item.tenDanhMuc}
+                  </Typography>
                 </Box>
               </Box>
             ))}
@@ -219,6 +235,7 @@ const Dashboard = () => {
                 overflow: "hidden",
                 color: "#fff",
               }}
+              elevation={4}
             >
               {item.status === "loading" ? (
                 <Box

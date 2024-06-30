@@ -161,9 +161,9 @@ const LearningResults = () => {
     ],
   };
   return (
-    <Box
-      component={Paper}
+    <Paper
       sx={{ padding: "10px", minHeight: "350px", height: "350px" }}
+      elevation={3}
     >
       <Box
         sx={{
@@ -220,7 +220,7 @@ const LearningResults = () => {
       <Box sx={{ height: "" }}>
         <Bar data={data} plugins={[ChartDataLabels]} options={options} />
       </Box>
-    </Box>
+    </Paper>
   );
 };
 

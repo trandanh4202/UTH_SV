@@ -13,9 +13,29 @@ import { format } from "date-fns";
 import { getProfile } from "../../features/profileSlice/ProfileSlice";
 
 const formatDate = (dateString) => {
-  if (!dateString) return "";
-  return format(new Date(dateString), "dd/MM/yyyy");
+  if (!dateString) return ""; // Handle null or undefined dateString
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ""; // Handle invalid date strings
+  return format(date, "dd/MM/yyyy");
 };
+
+const Section = ({ title, children }) => (
+  <Box>
+    <Typography
+      sx={{
+        fontSize: "20px",
+        fontWeight: "750",
+        color: "rgb(102, 117, 128)",
+        padding: "10px",
+      }}
+    >
+      {title}
+    </Typography>
+    <Divider sx={{ margin: "5px 0 10px 0" }} />
+    {children}
+    <Divider />
+  </Box>
+);
 
 const InfoField = ({ column, label, value }) => (
   <Grid item xs={4}>
@@ -59,10 +79,11 @@ const InforDetail = () => {
   const family = useSelector(
     (state) => state.profile.profile.body?.quanHeGiaDinhs
   );
+
   return (
     <Box>
       <Container>
-        <Paper elevation={4} sx={{ padding: "10px" }}>
+        <Paper elevation={6} sx={{ padding: "10px" }}>
           <Section title="Thông tin học vấn">
             <Grid
               container
@@ -78,13 +99,19 @@ const InforDetail = () => {
                     alignItems: "center",
                   }}
                 >
-                  <Box sx={{ borderRadius: "50%" }}>
+                  <Box
+                    sx={{
+                      borderRadius: "50%",
+                      width: "200px",
+                      height: "200px",
+                    }}
+                  >
                     <img
                       src={profile?.image || "./images/avatarDashboard.png"}
                       alt="avatar"
                       style={{
-                        width: "140px",
-                        height: "140px",
+                        width: "100%",
+                        height: "100%",
                         objectFit: "contain",
                         borderRadius: "50%",
                       }}
@@ -306,23 +333,5 @@ const InforDetail = () => {
     </Box>
   );
 };
-
-const Section = ({ title, children }) => (
-  <Box>
-    <Typography
-      sx={{
-        fontSize: "20px",
-        fontWeight: "750",
-        color: "rgb(102, 117, 128)",
-        padding: "10px",
-      }}
-    >
-      {title}
-    </Typography>
-    <Divider sx={{ margin: "5px 0 10px 0" }} />
-    {children}
-    <Divider />
-  </Box>
-);
 
 export default InforDetail;

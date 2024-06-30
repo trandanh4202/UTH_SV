@@ -12,7 +12,9 @@ const BoxNoti = ({ title, icon, color, to, total }) => {
       }}
     >
       <Box>
-        <Typography sx={{ fontSize: "13px", color }}>{title}</Typography>
+        <Typography sx={{ fontSize: "15px", color, fontWeight: "600" }}>
+          {title}
+        </Typography>
         <Typography
           sx={{
             fontSize: "36px",
@@ -26,12 +28,28 @@ const BoxNoti = ({ title, icon, color, to, total }) => {
         <Box
           component={Link}
           to={to}
-          sx={{ color: "red", fontSize: "13px", textDecoration: "none" }}
+          sx={{
+            color: "red",
+            fontSize: "13px",
+            textDecoration: "none",
+            fontWeight: "600",
+          }}
         >
           Xem chi tiết
         </Box>
       </Box>
-      <Box sx={{ color }}>{icon}</Box>
+      <Box
+        sx={{
+          color,
+
+          "& .MuiSvgIcon-root": {
+            width: "25px",
+            height: "25px",
+          },
+        }}
+      >
+        {icon}
+      </Box>
     </Box>
   );
 };

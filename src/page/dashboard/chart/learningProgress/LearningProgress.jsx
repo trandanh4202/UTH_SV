@@ -53,6 +53,7 @@ const LearningProgress = () => {
         alignItems: "center",
         flexDirection: "column",
       }}
+      elevation={3}
     >
       <Typography
         sx={{

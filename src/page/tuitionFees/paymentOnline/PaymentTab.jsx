@@ -21,9 +21,9 @@ const tableCell = [
   "Số tiền (VND)",
 ];
 
-const PaymentTab = ({ data2 }) => {
+const PaymentTab = ({ data }) => {
   const calculateTotal = () => {
-    return data2
+    return data
       .reduce((total, item) => {
         const amount = parseInt(item.SoTien.replace(/,/g, ""));
         return total + amount;
@@ -54,7 +54,7 @@ const PaymentTab = ({ data2 }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data2.map((row) => (
+            {data.map((row) => (
               <TableRow key={row.STT}>
                 <TableCell
                   align="center"
