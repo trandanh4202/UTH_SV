@@ -13,7 +13,9 @@ export const getCategoryNoti = createAsyncThunk(
   "noti/getCategoryNoti",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/notification/category`);
+      const response = await axios.get(
+        `https://uth-api-boot.ut.edu.vn/api/v1/notification/category`
+      );
 
       return response.data.body;
     } catch (error) {
@@ -55,7 +57,9 @@ export const getNewfeedsById = createAsyncThunk(
   "noti/getNewfeedsById",
   async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`/api/notification/${id}`);
+      const response = await axios.get(
+        `https://uth-api-boot.ut.edu.vn/api/v1/notification/${id}`
+      );
       console.log(response.data);
       return response.data.body;
     } catch (error) {
