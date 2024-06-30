@@ -6,13 +6,14 @@ const initialState = {
   loading: false,
   error: null,
 };
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const loginPage = createAsyncThunk(
   "auth/authenticate",
   async (combinedData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `/api/user/login?g-recaptcha-response=${combinedData.recaptcha}`,
+        `${API_BASE_URL}user/login?g-recaptcha-response=${combinedData.recaptcha}`,
         {
           username: combinedData.username,
           password: combinedData.password,

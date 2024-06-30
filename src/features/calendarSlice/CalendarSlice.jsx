@@ -7,6 +7,7 @@ const initialState = {
   error: null,
   total: 0,
 };
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getCalendar = createAsyncThunk(
   "calendar/getCalendar",
@@ -24,7 +25,7 @@ export const getCalendar = createAsyncThunk(
       };
 
       const response = await axios.get(
-        `/api/lichhoc/tuan?date=${date}`,
+        `${API_BASE_URL}/lichhoc/tuan?date=${date}`,
         config
       );
 

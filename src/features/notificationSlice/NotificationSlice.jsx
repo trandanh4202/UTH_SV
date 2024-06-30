@@ -8,14 +8,13 @@ const initialState = {
   newfeeds: [],
   content: {},
 };
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getCategoryNoti = createAsyncThunk(
   "noti/getCategoryNoti",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/notification/category`
-      );
+      const response = await axios.get(`${API_BASE_URL}/notification/category`);
 
       return response.data.body;
     } catch (error) {
@@ -36,7 +35,7 @@ export const getNewfeeds = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/notification?categoryId=${id}&page=1&size=10`
+        `${API_BASE_URL}/notification?categoryId=${id}&page=1&size=10`
       );
       console.log(response.data);
       return response.data.body;
