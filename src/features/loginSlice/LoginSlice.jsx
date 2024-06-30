@@ -5,6 +5,7 @@ const initialState = {
   info: [],
   loading: false,
   error: null,
+  errorMessage: null,
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,12 +22,12 @@ export const loginPage = createAsyncThunk(
       );
 
       const { token } = response.data;
-
       if (token) {
         localStorage.setItem("account", token);
       } else {
         console.error("Token not found in response");
       }
+      console.log(response.data);
 
       return response.data;
     } catch (error) {
@@ -34,8 +35,7 @@ export const loginPage = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        return rejectWithValue("Sai thông tin đăng nhập. Vui lòng thử lại.");
       }
       return rejectWithValue(error.message);
     }
@@ -59,6 +59,8 @@ const loginSlice = createSlice({
       .addCase(loginPage.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || action.error.message;
+        state.errorMessage =
+          action.payload || "Đã xảy ra lỗi. Vui lòng thử lại.";
       });
   },
 });

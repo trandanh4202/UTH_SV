@@ -1,4 +1,11 @@
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Paper,
+  TextField,
+  Typography,
+  Alert,
+} from "@mui/material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,8 +21,10 @@ const FormLogin2 = () => {
   } = useForm();
 
   const [recaptchaValue, setRecaptchaValue] = useState(null);
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { errorMessage } = useSelector((state) => state.login);
 
   const onSubmit = (data) => {
     if (recaptchaValue) {
@@ -37,21 +46,19 @@ const FormLogin2 = () => {
   const handleRecaptchaChange = (value) => {
     setRecaptchaValue(value);
   };
-  const navigate = useNavigate();
-  const token = localStorage.getItem("account");
+
   useEffect(() => {
     const token = localStorage.getItem("account");
     console.log("Token in useEffect:", token); // Log token
     if (token) {
       navigate("/dashboard");
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   return (
     <Paper
       elevation={4}
       sx={{
-        // minHeight: "60vh",
         backgroundColor: "rgba(255,255,255,0.7)",
         border: "5px solid white",
         padding: "10px",
@@ -87,6 +94,7 @@ const FormLogin2 = () => {
         >
           ĐĂNG NHẬP HỆ THỐNG
         </Typography>
+
         <Box
           component="form"
           onSubmit={handleSubmit(onSubmit)}
@@ -150,7 +158,6 @@ const FormLogin2 = () => {
               },
             }}
           />
-
           <Box
             sx={{
               width: "100%",
@@ -164,6 +171,11 @@ const FormLogin2 = () => {
               onChange={handleRecaptchaChange}
             />
           </Box>
+          {errorMessage && (
+            <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
+              {errorMessage}
+            </Alert>
+          )}
           <Button
             variant="contained"
             type="submit"

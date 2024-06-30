@@ -85,16 +85,12 @@ const data = [
 const Dashboard = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("account");
-  const [loadingInfoSV, setLoadingInfoSV] = useState(true); // State để xác định trạng thái loading thông tin sinh viên
 
   useEffect(() => {
     if (token) {
       dispatch(getSelect());
       dispatch(getTotalofWeek());
       dispatch(getCategoryNoti());
-      dispatch(getProfile())
-        .then(() => setLoadingInfoSV(false)) // Khi dữ liệu đã tải xong, set loadingInfoSV về false
-        .catch(() => setLoadingInfoSV(false)); // Xử lý lỗi khi fetch dữ liệu
     }
   }, [token, dispatch]);
 
@@ -126,16 +122,7 @@ const Dashboard = () => {
           <Grid container spacing={2}>
             <Grid item lg={12} xs={12}>
               <Paper sx={{ padding: "15px 10px" }} elevation={4}>
-                {loadingInfoSV ? ( // Kiểm tra trạng thái loading để hiển thị placeholder hoặc nội dung
-                  <Box
-                    sx={{
-                      height: "100px", // Chiều cao của placeholder
-                      backgroundColor: "#f0f0f0", // Màu nền placeholder
-                    }}
-                  />
-                ) : (
-                  <InforSV />
-                )}
+                <InforSV />
               </Paper>
             </Grid>
             {box.map((item, index) => (

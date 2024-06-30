@@ -21,6 +21,7 @@ import Test from "./page/test/Test";
 import InforDetail from "./page/inforDetail/InforDetail";
 import Newfeeds from "./page/newfeeds/Newfeeds";
 import SingleNews from "./page/singleNews/SingleNews";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 // Function to check for account in localStorage
 const isAuthenticated = () => {
@@ -113,9 +114,15 @@ const router = createBrowserRouter([
   //   element: <SingleNews />,
   // },
 ]);
-
+const theme = createTheme({
+  typography: {
+    fontFamily: "'Noto Sans', sans-serif",
+  },
+});
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider>
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </ThemeProvider>
 );

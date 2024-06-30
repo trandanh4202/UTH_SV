@@ -9,6 +9,7 @@ const initialState = {
   learningResults: [],
   learningProgress: [],
   courses: [],
+  loadingUI: false,
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -180,10 +181,12 @@ const profileSlice = createSlice({
       .addCase(getProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.loadingUI = true;
       })
       .addCase(getProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.profile = action.payload;
+        state.loadingUI = false;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;

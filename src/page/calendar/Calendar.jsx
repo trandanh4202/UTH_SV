@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCalendar } from "../../features/calendarSlice/CalendarSlice";
 import { format, parseISO } from "date-fns";
+
 const timetableData = {
   days: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
   slots: [
@@ -70,22 +71,15 @@ const getPeriodSlot = (period) => {
   if (period >= 16 && period <= 18) return "Ca 6";
   return null;
 };
-
 const generateDatesForCurrentWeek = (currentDate) => {
   const dates = [];
   const startOfWeek = new Date(currentDate);
-  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() + 1);
+  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() - 6);
 
   for (let i = 0; i < 7; i++) {
     const date = new Date(startOfWeek);
     date.setDate(date.getDate() + i);
-    const options = {
-      weekday: "long",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    };
-    dates.push(new Intl.DateTimeFormat("vi-VN", options).format(date));
+    dates.push(format(date, "dd/MM/yyyy"));
   }
 
   return dates;
@@ -137,9 +131,12 @@ const Calendar = () => {
   const formatTime = (time) => {
     return time.slice(0, 5);
   };
+
   return (
     <>
       <Container>
+        {/* Watermark */}
+
         <Box
           sx={{
             display: "flex",
@@ -250,6 +247,8 @@ const Calendar = () => {
                       width: "12.5%",
                     }}
                   >
+                    {day}
+                    <br />
                     {dates[index]}
                   </TableCell>
                 ))}
@@ -296,7 +295,7 @@ const Calendar = () => {
                             key={dayIndex}
                             sx={{
                               border: "1px solid rgba(224, 224, 224, 1)",
-                              padding: "5px",
+                              padding: "10px",
                               minHeight: "150px",
                               minWidth: "135px",
                             }}
@@ -312,23 +311,70 @@ const Calendar = () => {
                                   display: "flex",
                                   flexDirection: "column",
                                   alignItems: "start",
+                                  position: "relative",
                                 }}
                               >
                                 {relevantData.isTamNgung && (
                                   <Box
                                     sx={{
                                       position: "absolute",
-                                      top: 0,
-                                      right: 0,
-                                      backgroundColor: "yellow",
-                                      color: "red",
-                                      padding: "2px 4px",
-                                      borderRadius: "0 0 0 5px",
-                                      fontSize: "12px",
-                                      fontWeight: "bold",
+                                      left: "-6px",
+                                      top: "-5px",
+                                      zIndex: 1,
+                                      overflow: "hidden",
+                                      width: "100%",
+                                      height: "100%",
+                                      textAlign: "right",
                                     }}
                                   >
-                                    Tạm ngưng
+                                    <Box
+                                      sx={{
+                                        fontSize: "16px",
+                                        fontWeight: 700,
+                                        color: "#fff",
+                                        textAlign: "center",
+                                        lineHeight: "20px",
+                                        transform: "rotate(-45deg)",
+                                        WebkitTransform: "rotate(-45deg)",
+                                        width: "132px",
+                                        padding: "5px 0",
+
+                                        display: "block",
+                                        background:
+                                          "linear-gradient(#f14f3f 0, #cb4335 100%)",
+                                        boxShadow:
+                                          "0 3px 10px -5px rgba(0, 0, 0, 1)",
+                                        textShadow:
+                                          "1px 1px 2px rgba(0, 0, 0, 0.25)",
+                                        position: "absolute",
+                                        top: "23px",
+                                        left: "-28px",
+                                        "&::before": {
+                                          borderBottom: "3px solid transparent",
+                                          borderTop: "3px solid #a3362a",
+                                          content: "''",
+                                          position: "absolute",
+                                          top: "100%",
+                                          zIndex: -1,
+                                          borderLeft: "3px solid #a3362a",
+                                          borderRight: "3px solid transparent",
+                                          left: "0",
+                                        },
+                                        "&::after": {
+                                          right: "0",
+                                          borderLeft: "3px solid transparent",
+                                          borderRight: "3px solid #a3362a",
+                                          borderBottom: "3px solid transparent",
+                                          borderTop: "3px solid #a3362a",
+                                          content: "''",
+                                          position: "absolute",
+                                          top: "100%",
+                                          zIndex: -1,
+                                        },
+                                      }}
+                                    >
+                                      Tạm ngưng
+                                    </Box>
                                   </Box>
                                 )}
                                 <Typography

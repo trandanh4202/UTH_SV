@@ -2,6 +2,7 @@
 import { Cancel, CheckCircle } from "@mui/icons-material";
 import {
   Box,
+  CircularProgress,
   Container,
   Paper,
   Table,
@@ -42,6 +43,8 @@ const columns = [
 
 const Transcript = () => {
   const transcript = useSelector((state) => state.transcript.transcript);
+  const loading = useSelector((state) => state.transcript.loading);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -51,29 +54,36 @@ const Transcript = () => {
   return (
     <Box>
       <Container sx={{ minHeight: "500px" }}>
-        <TableContainer
-          sx={{ padding: "10px" }}
-          component={Paper}
-          variant="outlined"
+        <Paper
+          elevation={12}
+          sx={{
+            padding: "10px",
+          }}
         >
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    fontWeight: "700",
-                    color: "rgb(29, 161, 242)",
-                    backgroundColor: "rgb(243, 247, 249)",
-                    border: "1px solid rgb(221, 221, 221)",
-                    fontSize: "14px",
-                    textAlign: "center",
-                  }}
-                >
-                  STT
-                </TableCell>
-                {columns.map((column) => (
+          <TableContainer
+            sx={{
+              height: "100vh",
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#008689",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: "#008950",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+              },
+            }}
+            component={Paper}
+            variant="outlined"
+          >
+            <Table stickyHeader sx={{}}>
+              <TableHead>
+                <TableRow>
                   <TableCell
-                    key={column.field}
                     sx={{
                       fontWeight: "700",
                       color: "rgb(29, 161, 242)",
@@ -81,139 +91,172 @@ const Transcript = () => {
                       border: "1px solid rgb(221, 221, 221)",
                       fontSize: "14px",
                       textAlign: "center",
-                      minWidth: column.minWidth,
                     }}
                   >
-                    {column.headerName}
+                    STT
                   </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {transcript.map((hocKy, hocKyIndex) => (
-                <React.Fragment key={hocKyIndex}>
-                  <TableRow>
+                  {columns.map((column) => (
                     <TableCell
-                      colSpan={12}
+                      key={column.field}
                       sx={{
-                        backgroundColor: "rgb(231, 236, 240)",
-                        color: "rgb(87, 142, 190)",
-                        padding: "5px",
+                        fontWeight: "700",
+                        color: "rgb(29, 161, 242)",
+                        backgroundColor: "rgb(243, 247, 249)",
+                        border: "1px solid rgb(221, 221, 221)",
+                        fontSize: "14px",
+                        textAlign: "center",
+                        minWidth: column.minWidth,
                       }}
                     >
-                      <Typography
-                        sx={{
-                          fontSize: "16px",
-                          fontWeight: "700",
-                          color: "#f15253",
-                          padding: "0 10px",
-                        }}
-                      >
-                        {hocKy.tenDot}
-                      </Typography>
+                      {column.headerName}
                     </TableCell>
-                  </TableRow>
-                  {hocKy.diems.map((row, rowIndex) => (
-                    <TableRow
-                      key={rowIndex}
-                      sx={{ backgroundColor: "#ffffff" }}
-                    >
-                      <TableCell
-                        sx={{
-                          border: "1px solid rgb(221, 221, 221)",
-                          color: "rgb(102, 117, 128)",
-                          fontSize: "14px",
-                          fontWeight: "500",
-                          textAlign: "center",
-                        }}
-                      >
-                        {rowIndex + 1}
-                      </TableCell>
-                      {columns.map((column) => (
-                        <TableCell
-                          key={column.field}
-                          sx={{
-                            border: "1px solid rgb(221, 221, 221)",
-                            color: "rgb(102, 117, 128)",
-                            fontSize: "14px",
-                            fontWeight: "500",
-                          }}
-                          align={column.align}
-                        >
-                          {column.field === "isDat" ? (
-                            row[column.field] ? (
-                              <CheckCircle style={{ color: "green" }} />
-                            ) : (
-                              <Cancel style={{ color: "red" }} />
-                            )
-                          ) : (
-                            row[column.field]
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
                   ))}
-                  <TableRow>
-                    <TableCell colSpan={2} sx={cellStyle}>
-                      Tổng số tín chỉ đã đăng ký: {hocKy.stcdangKyHocKy}
-                    </TableCell>
-                    <TableCell colSpan={3} sx={cellStyle}>
-                      Điểm trung bình học kỳ hệ 4: {hocKy.diemTBTinChi}
-                    </TableCell>
-                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={2} sx={cellStyle}>
-                      Tổng số tín chỉ đạt: {hocKy.stcdatHocKy}
-                    </TableCell>
-                    <TableCell colSpan={3} sx={cellStyle}>
-                      Điểm trung bình học kỳ hệ 10: {hocKy.diemTBHocLuc}
-                    </TableCell>
-                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={2} sx={cellStyle}>
-                      Số tín chỉ tích lũy của sinh viên: {hocKy.soTCTichLuy}
-                    </TableCell>
-                    <TableCell colSpan={3} sx={cellStyle}>
-                      Xếp loại học lực học kỳ: {hocKy.xepLoaiHocLuc}
-                    </TableCell>
-                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={2} sx={cellStyle}>
-                      Điểm trung bình tích lũy (hệ 4):{" "}
-                      {hocKy.diemTBTinChiTichLuy}
-                    </TableCell>
-                    <TableCell colSpan={3} sx={cellStyle}>
-                      Điểm trung bình tích lũy (hệ 10):{" "}
-                      {hocKy.diemTBHocLucTichLuy}
-                    </TableCell>
-                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={2} sx={cellStyle}>
-                      Tổng số tín chỉ nợ tính đến hiện tại: {hocKy.soTCKhongDat}
-                    </TableCell>
-                    <TableCell colSpan={3} sx={cellStyle}>
-                      Xếp loại học lực tích lũy: {hocKy.xepLoaiHocLucTichLuy}
-                    </TableCell>
-                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell colSpan={2} sx={cellStyle}>
-                      Điểm rèn luyện học kỳ: {hocKy.soDiemRenLuyen}
-                    </TableCell>
-                    <TableCell colSpan={3} sx={cellStyle}>
-                      Xếp loại điểm rèn luyện: {hocKy.xepLoaiDiemRenLuyen}
-                    </TableCell>
-                    <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
-                  </TableRow>
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                </TableRow>
+              </TableHead>
+              {loading ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    position: "absolute",
+                  }}
+                >
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <TableBody>
+                  {transcript.map((hocKy, hocKyIndex) => (
+                    <React.Fragment key={hocKyIndex}>
+                      <TableRow>
+                        <TableCell
+                          colSpan={12}
+                          sx={{
+                            backgroundColor: "rgb(231, 236, 240)",
+                            color: "rgb(87, 142, 190)",
+                            padding: "5px",
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontSize: "16px",
+                              fontWeight: "700",
+                              color: "#f15253",
+                              padding: "0 10px",
+                            }}
+                          >
+                            {hocKy.tenDot}
+                          </Typography>
+                        </TableCell>
+                      </TableRow>
+                      {hocKy.diems.map((row, rowIndex) => (
+                        <TableRow
+                          key={rowIndex}
+                          sx={{ backgroundColor: "#ffffff" }}
+                        >
+                          <TableCell
+                            sx={{
+                              border: "1px solid rgb(221, 221, 221)",
+                              color: "rgb(102, 117, 128)",
+                              fontSize: "14px",
+                              fontWeight: "500",
+                              textAlign: "center",
+                            }}
+                          >
+                            {rowIndex + 1}
+                          </TableCell>
+                          {columns.map((column) => (
+                            <TableCell
+                              key={column.field}
+                              sx={{
+                                border: "1px solid rgb(221, 221, 221)",
+                                color: "rgb(102, 117, 128)",
+                                fontSize: "14px",
+                                fontWeight: "500",
+                              }}
+                              align={column.align}
+                            >
+                              {column.field === "isDat" ? (
+                                row[column.field] ? (
+                                  <CheckCircle style={{ color: "green" }} />
+                                ) : (
+                                  <Cancel style={{ color: "red" }} />
+                                )
+                              ) : (
+                                row[column.field]
+                              )}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
+                      <TableRow>
+                        <TableCell colSpan={2} sx={cellStyle}>
+                          Tổng số tín chỉ đã đăng ký: {hocKy.stcdangKyHocKy}
+                        </TableCell>
+                        <TableCell colSpan={3} sx={cellStyle}>
+                          Điểm trung bình học kỳ hệ 4: {hocKy.diemTBTinChi}
+                        </TableCell>
+                        <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={cellStyle}>
+                          Tổng số tín chỉ đạt: {hocKy.stcdatHocKy}
+                        </TableCell>
+                        <TableCell colSpan={3} sx={cellStyle}>
+                          Điểm trung bình học kỳ hệ 10: {hocKy.diemTBHocLuc}
+                        </TableCell>
+                        <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={cellStyle}>
+                          Số tín chỉ tích lũy của sinh viên: {hocKy.soTCTichLuy}
+                        </TableCell>
+                        <TableCell colSpan={3} sx={cellStyle}>
+                          Xếp loại học lực học kỳ: {hocKy.xepLoaiHocLuc}
+                        </TableCell>
+                        <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={cellStyle}>
+                          Điểm trung bình tích lũy (hệ 4):{" "}
+                          {hocKy.diemTBTinChiTichLuy}
+                        </TableCell>
+                        <TableCell colSpan={3} sx={cellStyle}>
+                          Điểm trung bình tích lũy (hệ 10):{" "}
+                          {hocKy.diemTBHocLucTichLuy}
+                        </TableCell>
+                        <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={cellStyle}>
+                          Tổng số tín chỉ nợ tính đến hiện tại:{" "}
+                          {hocKy.soTCKhongDat}
+                        </TableCell>
+                        <TableCell colSpan={3} sx={cellStyle}>
+                          Xếp loại học lực tích lũy:{" "}
+                          {hocKy.xepLoaiHocLucTichLuy}
+                        </TableCell>
+                        <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell colSpan={2} sx={cellStyle}>
+                          Điểm rèn luyện học kỳ: {hocKy.soDiemRenLuyen}
+                        </TableCell>
+                        <TableCell colSpan={3} sx={cellStyle}>
+                          Xếp loại điểm rèn luyện: {hocKy.xepLoaiDiemRenLuyen}
+                        </TableCell>
+                        <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              )}
+            </Table>
+          </TableContainer>
+        </Paper>
       </Container>
     </Box>
   );
@@ -221,7 +264,7 @@ const Transcript = () => {
 
 const cellStyle = {
   border: "1px solid rgb(221, 221, 221)",
-  color: "rgb(102, 117, 128)",
+  color: "rgb(117, 117, 117)",
   fontSize: "14px",
   fontWeight: "500",
   padding: "0 10px",

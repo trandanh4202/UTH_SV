@@ -13,4 +13,5 @@ export const store = configureStore({
     calendar: calendarReducer,
     notification: notificationReducer,
   },
+  devTools: process.env.NODE_ENV !== "production",
 });
