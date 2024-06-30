@@ -7,7 +7,7 @@ export default defineConfig({
     proxy: {
       "/foo": "http://localhost:5173/",
       "/api": {
-        target: "https://uth-api-boot.ut.edu.vn/api/v1",
+        target: import.meta.env.VITE_API_BASE_URL,
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
