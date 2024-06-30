@@ -1,15 +1,16 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import envCompatible from "vite-plugin-env-compatible";
 import dotenv from "dotenv";
 
+// Load environment variables from .env file
 dotenv.config();
+
 export default defineConfig({
-  plugins: [react()],
-  // define: {
-  //   "process.env.VITE_API_BASE_URL": JSON.stringify(
-  //     process.env.VITE_API_BASE_URL
-  //   ),
-  // },
+  plugins: [react(), envCompatible()],
+  define: {
+    "process.env": process.env, // Add this line to define environment variables
+  },
   server: {
     proxy: {
       "/foo": "http://localhost:5173/",
