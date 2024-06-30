@@ -10,6 +10,7 @@ const initialState = {
   learningProgress: [],
   courses: [],
 };
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getProfile = createAsyncThunk(
   "profile/getProfile",
@@ -25,7 +26,7 @@ export const getProfile = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`/api/user/profile`, config);
+      const response = await axios.get(`${API_BASE_URL}/user/profile`, config);
 
       // Assuming the new token is in the response data, adjust as needed
       const newToken = response.data.token;
@@ -62,7 +63,7 @@ export const getSelect = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(`/api/hoctap/hocky`, config);
+      const response = await axios.get(`${API_BASE_URL}/hoctap/hocky`, config);
       return response.data.body;
     } catch (error) {
       if (
@@ -92,7 +93,7 @@ export const getLearningResults = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `/api/hoctap/kqtheoky/${semester}`,
+        `${API_BASE_URL}/hoctap/kqtheoky/${semester}`,
         config
       );
       return response.data.body;
@@ -124,7 +125,7 @@ export const getLearningProgress = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(`/api/hoctap/tiendo`, config);
+      const response = await axios.get(`${API_BASE_URL}/hoctap/tiendo`, config);
       return response.data.body;
     } catch (error) {
       if (
@@ -154,7 +155,7 @@ export const getCourses = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `/api/hoctap/montheoky/${semester}`,
+        `API_BASE_URL/hoctap/montheoky/${semester}`,
         config
       );
       return response.data.body;

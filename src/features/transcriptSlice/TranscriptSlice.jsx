@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: null,
 };
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getTranscript = createAsyncThunk(
   "transcript/getTranscript",
@@ -21,7 +22,7 @@ export const getTranscript = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`/api/hoctap/bangdiem`, config);
+      const response = await axios.get(`${API_BASE_URL}/hoctap/bangdiem`, config);
 
       return response.data.body;
     } catch (error) {

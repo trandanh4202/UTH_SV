@@ -58,7 +58,10 @@ export const getTotalofWeek = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(`/api/lichhoc/songayhoc`, config);
+      const response = await axios.get(
+        `${API_BASE_URL}/lichhoc/songayhoc`,
+        config
+      );
 
       return response.data.body;
     } catch (error) {
