@@ -34,7 +34,7 @@ export const getNewfeeds = createAsyncThunk(
   async ({ id }, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `/api/notification?categoryId=${id}&page=1&size=10`
+        `https://uth-api-boot.ut.edu.vn/api/v1/notification?categoryId=${id}&page=1&size=10`
       );
       console.log(response.data);
       return response.data.body;
