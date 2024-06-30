@@ -20,7 +20,7 @@ const LearningProgress = () => {
       {
         label: ["Tổng số tín chỉ"],
         data: [learningProgress.canDat, 0],
-        backgroundColor: ["rgb(255, 99, 132)", "rgba(0, 0, 0, 0.1)"],
+        backgroundColor: ["rgba(44, 175, 254,0.85)"],
       },
       {
         label: ["Tín chỉ tích luỹ"],
@@ -28,7 +28,7 @@ const LearningProgress = () => {
           learningProgress.hienTai,
           learningProgress.canDat - learningProgress.hienTai,
         ],
-        backgroundColor: ["rgb(54, 162, 235)", "rgba(0, 0, 0, 0.1)"],
+        backgroundColor: ["rgba(0, 226, 114,0.8)", "rgba(0, 0, 0, 0.1)"],
       },
     ],
   };
@@ -39,8 +39,13 @@ const LearningProgress = () => {
         display: false,
       },
     },
-    cutout: "70%", // Khoảng cách giữa 2 vòng tròn
+    cutout: "60%", // Adjust the cutout radius percentage here
     responsive: true,
+    elements: {
+      arc: {
+        borderWidth: 0, // Adjust the thickness of the outer circle (doughnut ring)
+      },
+    },
   };
 
   return (
@@ -80,6 +85,11 @@ const LearningProgress = () => {
             {learningProgress.canDat}
           </Typography>
           <Typography sx={{ fontSize: 16 }}>Tổng số tín chỉ</Typography>
+        </Box>
+        <Box sx={{ textAlign: "center", marginTop: "20px" }}>
+          <Typography sx={{ fontSize: "16px", fontWeight: "600" }}>
+            {learningProgress.hienTai}/{learningProgress.canDat}
+          </Typography>
         </Box>
       </Box>
     </Paper>

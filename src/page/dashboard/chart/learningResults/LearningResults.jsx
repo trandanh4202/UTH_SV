@@ -162,7 +162,7 @@ const LearningResults = () => {
   };
   return (
     <Paper
-      sx={{ padding: "10px", minHeight: "350px", height: "350px" }}
+      sx={{ padding: "10px", minHeight: "350px", height: "100%" }}
       elevation={3}
     >
       <Box
