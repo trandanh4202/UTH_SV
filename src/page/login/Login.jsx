@@ -58,7 +58,7 @@ const Login = () => {
                       flexDirection: "column",
                     }}
                   >
-                    <TabsPanel />
+                    {/* <TabsPanel /> */}
                   </Paper>
                 </Box>
                 {/* <Swiper
