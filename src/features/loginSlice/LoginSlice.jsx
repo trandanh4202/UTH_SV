@@ -13,7 +13,7 @@ export const loginPage = createAsyncThunk(
   async (combinedData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        `${API_BASE_URL}user/login?g-recaptcha-response=${combinedData.recaptcha}`,
+        `${API_BASE_URL}/user/login?g-recaptcha-response=${combinedData.recaptcha}`,
         {
           username: combinedData.username,
           password: combinedData.password,
@@ -34,8 +34,8 @@ export const loginPage = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }

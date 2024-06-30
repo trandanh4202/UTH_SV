@@ -155,7 +155,7 @@ export const getCourses = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `API_BASE_URL/hoctap/montheoky/${semester}`,
+        `${API_BASE_URL}/hoctap/montheoky/${semester}`,
         config
       );
       return response.data.body;
