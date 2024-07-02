@@ -62,7 +62,7 @@ const Transcript = () => {
         >
           <TableContainer
             sx={{
-              height: "100vh",
+              height: "87vh",
               "&::-webkit-scrollbar": {
                 width: "8px",
               },
@@ -77,7 +77,6 @@ const Transcript = () => {
                 backgroundColor: "#f1f1f1",
               },
             }}
-            component={Paper}
             variant="outlined"
           >
             <Table stickyHeader sx={{}}>

@@ -4,6 +4,7 @@ import profileReducer from "./profileSlice/ProfileSlice";
 import transcriptReducer from "./transcriptSlice/TranscriptSlice";
 import calendarReducer from "./calendarSlice/CalendarSlice";
 import notificationReducer from "./notificationSlice/NotificationSlice";
+import programReducer from "./programSlice/ProgramSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     transcript: transcriptReducer,
     calendar: calendarReducer,
     notification: notificationReducer,
+    program: programReducer,
   },
-  devTools: process.env.NODE_ENV !== "production",
+  // devTools: false,
 });

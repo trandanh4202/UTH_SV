@@ -1,26 +1,29 @@
 /* eslint-disable react/prop-types */
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const BoxNavigation = ({ index, icon, title, to, status }) => {
   return (
-    <Box
+    <Grid
+      container
       key={index}
       sx={{
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        textDecoration: "none",
         color: "rgb(77, 161, 232)",
         backgroundColor: status === "loading" ? "rgb(26 15 15 / 20%)" : "white",
         width: "100%",
         height: "100%",
+        flexWrap:'nowrap'
       }}
       component={Link}
       to={to}
     >
-      <Box
+      <Grid
+        item
+        xs={12}
         sx={{
           padding: "10px",
 
@@ -31,8 +34,8 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
         }}
       >
         {icon}
-      </Box>
-      <Box sx={{ padding: "10px 0" }}>
+      </Grid>
+      <Grid item xs={12} sx={{ padding: "10px 0" }}>
         <Typography
           sx={{
             fontSize: "13px",
@@ -43,8 +46,8 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
         >
           {title}
         </Typography>
-      </Box>
-    </Box>
+      </Grid>
+    </Grid>
   );
 };
 

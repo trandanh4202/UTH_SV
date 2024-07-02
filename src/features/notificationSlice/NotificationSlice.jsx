@@ -22,8 +22,8 @@ export const getCategoryNoti = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -44,8 +44,8 @@ export const getNewfeeds = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }

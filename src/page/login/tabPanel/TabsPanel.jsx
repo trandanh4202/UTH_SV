@@ -63,7 +63,13 @@ const TabsPanel = () => {
         {categoryTab.map((item, index) => (
           <Tab
             key={index}
-            sx={{ fontSize: "17px", fontWeight: "600" }}
+            sx={{
+              fontSize: "17px",
+              fontWeight: "600",
+              "&.Mui-selected": {
+                color: "#da1d2d",
+              },
+            }}
             label={item.tenDanhMuc}
             value={item.id}
           />

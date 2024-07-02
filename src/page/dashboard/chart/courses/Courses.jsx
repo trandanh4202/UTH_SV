@@ -56,7 +56,7 @@ const Courses = () => {
             sx={{
               fontSize: "20px",
               fontWeight: "700",
-              color: "rgb(102, 117, 128)",
+              color: "#008689",
             }}
           >
             Lớp học phần

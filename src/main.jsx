@@ -22,6 +22,7 @@ import InforDetail from "./page/inforDetail/InforDetail";
 import Newfeeds from "./page/newfeeds/Newfeeds";
 import SingleNews from "./page/singleNews/SingleNews";
 import { createTheme, ThemeProvider } from "@mui/material";
+import Program from "./page/educationProgram/Program";
 
 // Function to check for account in localStorage
 const isAuthenticated = () => {
@@ -90,6 +91,10 @@ const router = createBrowserRouter([
           {
             path: "infordetail",
             element: <InforDetail />,
+          },
+          {
+            path: "educationprogram",
+            element: <Program />,
           },
         ],
       },

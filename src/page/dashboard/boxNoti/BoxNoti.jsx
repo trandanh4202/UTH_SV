@@ -25,17 +25,17 @@ const BoxNoti = ({ title, icon, color, to, total }) => {
         >
           {total}
         </Typography>
-        <Box
-          component={Link}
-          to={to}
-          sx={{
-            color: "red",
-            fontSize: "13px",
-            textDecoration: "none",
-            fontWeight: "600",
-          }}
-        >
-          Xem chi tiết
+        <Box component={Link} to={to}>
+          <Typography
+            sx={{
+              color: "red",
+              fontSize: "13px",
+              textDecoration: "none",
+              fontWeight: "600",
+            }}
+          >
+            Xem chi tiết
+          </Typography>
         </Box>
       </Box>
       <Box

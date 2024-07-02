@@ -1,41 +1,35 @@
 import {
+  AccountBalance,
+  AttachMoney,
+  AutoStories,
+  CalendarMonth,
+  CastForEducation,
+  NotificationAdd,
+  ReceiptLong,
+  School,
+  SupportAgent,
+  Upcoming,
+} from "@mui/icons-material";
+import {
   Box,
+  CircularProgress,
   Container,
   Grid,
   Paper,
   Typography,
-  CircularProgress,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Badge } from "@mui/material";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getProfile,
-  getSelect,
-} from "../../features/profileSlice/ProfileSlice";
+import { Link } from "react-router-dom";
 import { getTotalofWeek } from "../../features/calendarSlice/CalendarSlice";
 import { getCategoryNoti } from "../../features/notificationSlice/NotificationSlice";
+import { getSelect } from "../../features/profileSlice/ProfileSlice";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
 import BoxNoti from "./boxNoti/BoxNoti";
 import Courses from "./chart/courses/Courses";
 import LearningProgress from "./chart/learningProgress/LearningProgress";
 import LearningResults from "./chart/learningResults/LearningResults";
 import InforSV from "./inforSV/InforSV";
-import {
-  AccountBalance,
-  AttachMoney,
-  AutoStories,
-  CalendarMonth,
-  CastForEducation,
-  ContactEmergency,
-  NotificationAdd,
-  ReceiptLong,
-  School,
-  SupportAgent,
-  Upcoming,
-  Visibility,
-} from "@mui/icons-material";
-import { Link } from "react-router-dom";
 
 const data = [
   {

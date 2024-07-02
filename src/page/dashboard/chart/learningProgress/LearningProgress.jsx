@@ -64,7 +64,7 @@ const LearningProgress = () => {
         sx={{
           fontSize: "20px",
           fontWeight: "700",
-          color: "rgb(102, 117, 128)",
+          color: "#008689",
         }}
       >
         Tiến độ học tập

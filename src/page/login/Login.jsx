@@ -56,7 +56,9 @@ const Login = () => {
                       overflow: "hidden",
                       display: "flex",
                       flexDirection: "column",
+                      borderRadius: "18px",
                     }}
+                    elevation={6}
                   >
                     <TabsPanel />
                   </Paper>

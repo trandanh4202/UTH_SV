@@ -37,7 +37,7 @@ const InforSV = () => {
           sx={{
             fontSize: "20px",
             fontWeight: "750",
-            color: "rgb(102, 117, 128)",
+            color: "#008689",
             padding: "10px",
           }}
         >
@@ -83,7 +83,12 @@ const InforSV = () => {
                 <Typography
                   component={Link}
                   to="/inforDetail"
-                  sx={{ color: "red", fontSize: "13px" }}
+                  sx={{
+                    color: "red",
+                    fontSize: "13px",
+                    textDecoration: "none",
+                    fontWeight: "600",
+                  }}
                 >
                   Xem chi tiết
                 </Typography>

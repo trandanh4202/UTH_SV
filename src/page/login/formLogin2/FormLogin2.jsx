@@ -5,7 +5,10 @@ import {
   TextField,
   Typography,
   Alert,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +24,8 @@ const FormLogin2 = () => {
   } = useForm();
 
   const [recaptchaValue, setRecaptchaValue] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -55,13 +60,17 @@ const FormLogin2 = () => {
     }
   }, [navigate]);
 
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <Paper
       elevation={4}
       sx={{
-        backgroundColor: "rgba(255,255,255,0.7)",
         border: "5px solid white",
-        padding: "10px",
+        padding: "10px 25px",
+        borderRadius: "18px",
       }}
     >
       <Box
@@ -133,7 +142,7 @@ const FormLogin2 = () => {
           <TextField
             label="Mật khẩu"
             variant="outlined"
-            type="password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             {...register("password", {
               required: "Mật khẩu là bắt buộc",
@@ -149,6 +158,17 @@ const FormLogin2 = () => {
                 backgroundColor: "white",
                 fontSize: "1.4rem", // Increase font size for input
               },
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={handleClickShowPassword}
+                    edge="end"
+                    aria-label="toggle password visibility"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
             }}
             InputLabelProps={{
               sx: {
@@ -181,12 +201,12 @@ const FormLogin2 = () => {
             type="submit"
             fullWidth
             sx={{
-              backgroundColor: "#ff5a00",
+              backgroundColor: "#008689",
               color: "white",
               fontSize: "1.4rem", // Increase the font size
               padding: "10px 0", // Increase the padding
               "&:hover": {
-                backgroundColor: "#e64a00", // Darker shade for hover state
+                backgroundColor: "#1D999D", // Darker shade for hover state
               },
               margin: "20px 0",
             }}

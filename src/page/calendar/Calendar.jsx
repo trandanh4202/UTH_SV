@@ -171,7 +171,7 @@ const Calendar = () => {
               variant="outlined"
               onClick={handlePrevWeek}
               sx={{
-                backgroundColor: "rgb(51, 181, 229)",
+                backgroundColor: "#008689",
                 color: "white",
                 "&:hover": {
                   backgroundColor: "rgb(41, 161, 209)",
@@ -187,7 +187,7 @@ const Calendar = () => {
               variant="outlined"
               onClick={handleToday}
               sx={{
-                backgroundColor: "rgb(51, 181, 229)",
+                backgroundColor: "#008689",
                 color: "white",
                 "&:hover": {
                   backgroundColor: "rgb(41, 161, 209)",
@@ -203,7 +203,7 @@ const Calendar = () => {
               variant="outlined"
               onClick={handleNextWeek}
               sx={{
-                backgroundColor: "rgb(51, 181, 229)",
+                backgroundColor: "#008689",
                 color: "white",
                 "&:hover": {
                   backgroundColor: "rgb(41, 161, 209)",
@@ -220,7 +220,7 @@ const Calendar = () => {
 
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }}>
-            <TableHead sx={{ backgroundColor: "rgb(51, 181, 229)" }}>
+            <TableHead sx={{ backgroundColor: "#008689" }}>
               <TableRow>
                 <TableCell
                   sx={{
@@ -262,7 +262,7 @@ const Calendar = () => {
                       rowSpan={slot.periods.length + 1}
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        backgroundColor: "#3B5998",
+                        backgroundColor: "#008689",
                         color: "white",
                         fontWeight: "600",
                         fontSize: "15px",
@@ -276,7 +276,7 @@ const Calendar = () => {
                       <TableCell
                         sx={{
                           border: "1px solid rgba(224, 224, 224, 1)",
-                          backgroundColor: "#3B5998",
+                          backgroundColor: "#008689",
                           color: "white",
                           fontWeight: "600",
                           fontSize: "15px",
@@ -303,10 +303,7 @@ const Calendar = () => {
                             {relevantData && (
                               <Box
                                 sx={{
-                                  backgroundColor:
-                                    relevantData.isTamNgung === true
-                                      ? "red"
-                                      : "rgb(51, 181, 229)",
+                                  backgroundColor: "rgb(51, 181, 229)",
                                   padding: "5px",
                                   display: "flex",
                                   flexDirection: "column",
@@ -381,7 +378,7 @@ const Calendar = () => {
                                   component={Link}
                                   sx={{
                                     fontSize: "14px",
-                                    color: "rgb(240,240,240)",
+                                    color: "#da1d2d",
                                     fontWeight: "700",
                                   }}
                                 >
@@ -404,8 +401,8 @@ const Calendar = () => {
                                     fontWeight: "500",
                                   }}
                                 >
-                                  Tiết: {relevantData.tuTiet} -{" "}
-                                  {relevantData.denTiet}
+                                  Tiết:{""}
+                                  {relevantData.tuTiet} - {relevantData.denTiet}
                                 </Typography>
                                 <Typography
                                   sx={{
