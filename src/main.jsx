@@ -84,10 +84,10 @@ const router = createBrowserRouter([
             path: "transcript",
             element: <Transcript />,
           },
-          {
-            path: "calendar",
-            element: <Calendar />,
-          },
+          // {
+          //   path: "calendar",
+          //   element: <Calendar />,
+          // },
           {
             path: "infordetail",
             element: <InforDetail />,
@@ -99,6 +99,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "calendar",
+    element: <Calendar />,
   },
 
   {

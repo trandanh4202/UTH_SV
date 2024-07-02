@@ -21,7 +21,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCalendar } from "../../features/calendarSlice/CalendarSlice";
-import { format, parseISO } from "date-fns";
+import { addDays, format, parseISO, startOfWeek } from "date-fns";
 
 const timetableData = {
   days: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
@@ -73,18 +73,15 @@ const getPeriodSlot = (period) => {
 };
 const generateDatesForCurrentWeek = (currentDate) => {
   const dates = [];
-  const startOfWeek = new Date(currentDate);
-  startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay() - 6);
+  const startOfWeekDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Thứ hai là ngày bắt đầu tuần
 
   for (let i = 0; i < 7; i++) {
-    const date = new Date(startOfWeek);
-    date.setDate(date.getDate() + i);
+    const date = addDays(startOfWeekDate, i);
     dates.push(format(date, "dd/MM/yyyy"));
   }
 
   return dates;
 };
-
 const Calendar = () => {
   const { days, slots } = timetableData;
   const [currentDate, setCurrentDate] = useState(new Date());
