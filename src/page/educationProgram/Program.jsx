@@ -14,6 +14,7 @@ import {
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getProgram } from "../../features/programSlice/ProgramSlice";
+import { Cancel, CheckCircle } from "@mui/icons-material";
 
 const columns = [
   {
@@ -111,10 +112,15 @@ const Program1 = () => {
   return (
     <Box mt={3}>
       <Container>
-        <Paper elevation={12}>
+        <Paper
+          elevation={12}
+          sx={{
+            borderRadius: "10px",
+          }}
+        >
           <TableContainer
             sx={{
-              padding: "10px",
+              padding: "20px",
             }}
           >
             <Table stickyHeader aria-label="curriculum table">
@@ -145,8 +151,8 @@ const Program1 = () => {
                       onClick={() => handleToggleSemester(index)}
                       sx={{
                         cursor: "pointer",
-
-                        backgroundColor: "#bec5c9",
+                        transition: "all 1s ease", // Hiệu ứng chuyển động
+                        backgroundColor: "rgba(72, 128, 255, 0.05)",
                       }}
                     >
                       <TableCell
@@ -375,7 +381,17 @@ const Program1 = () => {
                                   fontSize: "15px",
                                 }}
                               >
-                                {course.isDat}
+                                {course.isDat === true ? (
+                                  <CheckCircle
+                                    sx={{ color: "#66e321", fontSize: "20px" }}
+                                  />
+                                ) : course.isDat === false ? (
+                                  <Cancel
+                                    sx={{ color: "red", fontSize: "20px" }}
+                                  />
+                                ) : (
+                                  ""
+                                )}
                               </Typography>
                             </TableCell>
                           </TableRow>
@@ -568,7 +584,17 @@ const Program1 = () => {
                                   fontSize: "15px",
                                 }}
                               >
-                                {course.isDat}
+                                {course.isDat === true ? (
+                                  <CheckCircle
+                                    sx={{ color: "#66e321", fontSize: "20px" }}
+                                  />
+                                ) : course.isDat === false ? (
+                                  <Cancel
+                                    sx={{ color: "red", fontSize: "20px" }}
+                                  />
+                                ) : (
+                                  ""
+                                )}
                               </Typography>
                             </TableCell>
                           </TableRow>

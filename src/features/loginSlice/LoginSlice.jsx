@@ -41,7 +41,37 @@ export const loginPage = createAsyncThunk(
     }
   }
 );
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async ({ passWord }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
 
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/user/change_password`,
+        config
+      );
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
 const loginSlice = createSlice({
   name: "login",
   initialState,
@@ -57,6 +87,20 @@ const loginSlice = createSlice({
         state.token = action.payload;
       })
       .addCase(loginPage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.message || action.error.message;
+        state.errorMessage =
+          action.payload || "Đã xảy ra lỗi. Vui lòng thử lại.";
+      })
+      .addCase(changePassword.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(changePassword.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = action.payload;
+      })
+      .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload?.message || action.error.message;
         state.errorMessage =

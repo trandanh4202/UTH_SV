@@ -77,12 +77,16 @@ const router = createBrowserRouter([
             element: <PaymentTable />,
           },
           {
-            path: "tuitiontable",
+            path: "tuition",
             element: <TuitionTable />,
           },
           {
             path: "transcript",
             element: <Transcript />,
+          },
+          {
+            path: "calendar",
+            element: <Calendar />,
           },
           // {
           //   path: "calendar",
@@ -99,10 +103,6 @@ const router = createBrowserRouter([
         ],
       },
     ],
-  },
-  {
-    path: "calendar",
-    element: <Calendar />,
   },
 
   {

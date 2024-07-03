@@ -43,9 +43,10 @@ const TabsPanel = () => {
     <TabContext value={id}>
       <TabList
         onChange={handleChange}
-        aria-label="lab API tabs example"
         variant="scrollable"
         scrollButtons="auto"
+        indicatorColor="primary" // Thay đổi màu của dấu gạch chân
+        textColor="" // Màu chữ khi chưa được chọn
         sx={{
           "& .MuiTabs-scrollButtons.Mui-disabled": { opacity: 0.3 },
           "& .MuiTabs-scrollButtons": {
@@ -56,7 +57,10 @@ const TabsPanel = () => {
               height: "3rem",
               width: "3rem",
             },
-            color: "red",
+            color: "#333333", // Màu chữ khi đã chọn
+            "& .MuiTabs-indicator": {
+              backgroundColor: "#da1d2d", // Màu của dấu gạch chân khi đã chọn
+            },
           },
         }}
       >
@@ -68,6 +72,9 @@ const TabsPanel = () => {
               fontWeight: "600",
               "&.Mui-selected": {
                 color: "#da1d2d",
+              },
+              "& .MuiTab-textColorPrimary": {
+                background: "green",
               },
             }}
             label={item.tenDanhMuc}

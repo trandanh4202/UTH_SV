@@ -5,6 +5,7 @@ import transcriptReducer from "./transcriptSlice/TranscriptSlice";
 import calendarReducer from "./calendarSlice/CalendarSlice";
 import notificationReducer from "./notificationSlice/NotificationSlice";
 import programReducer from "./programSlice/ProgramSlice";
+import tuitionReducer from "./tuitionSlice/TuitionSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
     calendar: calendarReducer,
     notification: notificationReducer,
     program: programReducer,
+    tuition: tuitionReducer,
   },
   // devTools: false,
 });

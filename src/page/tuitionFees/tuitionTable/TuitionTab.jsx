@@ -10,17 +10,18 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const tableCell = [
   "STT",
   "Học kỳ",
-  "Mã nhóm HP",
-  "Tên HP",
+  "Mã lớp học phần",
+  "Tên môn học",
   "TC",
   "Học phí",
   "Mức nộp",
   "Trạng thái ĐK",
-  "Ngày xử lý",
+  "Ngày nộp",
   "Số tiền nộp",
   "Khấu trừ (+)",
   "Trừ nợ (-)",
@@ -29,10 +30,33 @@ const tableCell = [
   "Không truy cứu công nợ",
 ];
 
-const TuitionTab = ({ data2 }) => {
+const TuitionTab = ({ data }) => {
+  const formatCurrency = (number) => {
+    return number.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
-      <TableContainer sx={{ maxHeight: 440 }}>
+      <TableContainer
+        sx={{
+          maxHeight: "67vh",
+          "&::-webkit-scrollbar": {
+            width: "8px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#008689",
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: "#008950",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#f1f1f1",
+          },
+        }}
+      >
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
@@ -40,11 +64,12 @@ const TuitionTab = ({ data2 }) => {
                 <TableCell
                   key={item}
                   sx={{
-                    border: "2px solid rgb(221, 221, 221)",
-                    textAlign: "center",
+                    color: "white",
                     fontSize: "15px",
-                    fontWeight: "600",
-                    color: "rgb(29, 161, 242)",
+                    fontWeight: "800",
+                    border: "1px solid rgba(224, 224, 224, 1)",
+                    background: "#008689",
+                    textAlign: "center",
                   }}
                 >
                   {item}
@@ -53,9 +78,9 @@ const TuitionTab = ({ data2 }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data2 &&
-              data2.map((row) => (
-                <TableRow key={row.STT}>
+            {data &&
+              data.map((row, index) => (
+                <TableRow key={index}>
                   <TableCell
                     align="center"
                     sx={{
@@ -65,7 +90,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.STT}
+                    {index + 1}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -75,9 +100,10 @@ const TuitionTab = ({ data2 }) => {
                       minWidth: "250px",
                       fontSize: "14px",
                       color: "rgb(102, 117, 128)",
+                      textAlign: "center",
                     }}
                   >
-                    {row.HocKy}
+                    {row.tenDot}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -88,7 +114,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.MaNhomHP}
+                    {row.maLopHocPhan}
                   </TableCell>
                   <TableCell
                     align="left"
@@ -100,7 +126,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.TenHP}
+                    {row.noiDung}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -111,7 +137,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.SoTC}
+                    {row.soTinChi}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -122,7 +148,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.HocPhi}
+                    {formatCurrency(row.mucPhiBanDau)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -133,7 +159,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.MucNop}
+                    {formatCurrency(row.mucNop)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -145,7 +171,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.TrangThaiDK}
+                    {row.trangThaiDangKy}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -156,7 +182,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.NgayXuLy}
+                    {new Date(row.ngayNop).toLocaleDateString("vi-VN")}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -167,7 +193,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.SoTienNop}
+                    {formatCurrency(row.soTienNop)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -178,7 +204,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.KhauTru}
+                    {row.khauTru ? formatCurrency(row.khauTru) : 0}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -189,7 +215,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.TruNo}
+                    {row.truNo ? formatCurrency(row.truNo) : 0}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -200,7 +226,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.CongNo}
+                    {row.congNo ? formatCurrency(row.congNo) : 0}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -211,7 +237,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.TrangThai ? (
+                    {row.daDongHocPhi ? (
                       <CheckCircle sx={{ color: "#66e321" }} />
                     ) : (
                       ""
@@ -226,7 +252,7 @@ const TuitionTab = ({ data2 }) => {
                       color: "rgb(102, 117, 128)",
                     }}
                   >
-                    {row.KhongTruyCuuCongNo ? (
+                    {row.khongTruyCuuCongNo ? (
                       <Cancel sx={{ color: "red" }} />
                     ) : (
                       ""
@@ -239,9 +265,9 @@ const TuitionTab = ({ data2 }) => {
                 colSpan={4}
                 align="center"
                 sx={{
-                  fontWeight: "600",
-                  fontSize: "14px",
-                  color: "rgb(29, 161, 242)",
+                  fontWeight: "700",
+                  fontSize: "18px",
+                  color: "rgb(218, 28, 45)",
                   border: "1px solid rgba(224, 224, 224, 1)",
                 }}
               >
@@ -253,10 +279,10 @@ const TuitionTab = ({ data2 }) => {
                   fontWeight: "600",
                   fontSize: "14px",
                   border: "1px solid rgba(224, 224, 224, 1)",
-                  color: "rgb(29, 161, 242)",
+                  color: "rgb(218, 28, 45)",
                 }}
               >
-                {data2.reduce((acc, row) => acc + row.SoTC, 0)}
+                {data?.reduce((acc, row) => acc + row.soTinChi, 0)}
               </TableCell>
               <TableCell
                 align="center"
@@ -264,10 +290,12 @@ const TuitionTab = ({ data2 }) => {
                   fontWeight: "600",
                   fontSize: "14px",
                   border: "1px solid rgba(224, 224, 224, 1)",
-                  color: "rgb(29, 161, 242)",
+                  color: "rgb(218, 28, 45)",
                 }}
               >
-                {data2.reduce((acc, row) => acc + row.HocPhi, 0)}
+                {formatCurrency(
+                  data.reduce((acc, row) => acc + row.mucPhiBanDau, 0)
+                )}
               </TableCell>
               <TableCell
                 align="center"
@@ -275,10 +303,10 @@ const TuitionTab = ({ data2 }) => {
                   fontWeight: "600",
                   fontSize: "14px",
                   border: "1px solid rgba(224, 224, 224, 1)",
-                  color: "rgb(29, 161, 242)",
+                  color: "rgb(218, 28, 45)",
                 }}
               >
-                {data2.reduce((acc, row) => acc + row.MucNop, 0)}
+                {formatCurrency(data.reduce((acc, row) => acc + row.mucNop, 0))}
               </TableCell>
               <TableCell colSpan={3}></TableCell>
               <TableCell
@@ -287,10 +315,12 @@ const TuitionTab = ({ data2 }) => {
                   fontWeight: "600",
                   fontSize: "14px",
                   border: "1px solid rgba(224, 224, 224, 1)",
-                  color: "rgb(29, 161, 242)",
+                  color: "rgb(218, 28, 45)",
                 }}
               >
-                {data2.reduce((acc, row) => acc + row.KhauTru, 0)}
+                {formatCurrency(
+                  data.reduce((acc, row) => acc + row.khauTru, 0)
+                )}
               </TableCell>
               <TableCell
                 align="center"
@@ -298,10 +328,10 @@ const TuitionTab = ({ data2 }) => {
                   fontWeight: "600",
                   fontSize: "14px",
                   border: "1px solid rgba(224, 224, 224, 1)",
-                  color: "rgb(29, 161, 242)",
+                  color: "rgb(218, 28, 45)",
                 }}
               >
-                {data2.reduce((acc, row) => acc + row.TruNo, 0)}
+                {formatCurrency(data.reduce((acc, row) => acc + row.truNo, 0))}
               </TableCell>
               <TableCell
                 align="center"
@@ -309,10 +339,10 @@ const TuitionTab = ({ data2 }) => {
                   fontWeight: "600",
                   fontSize: "14px",
                   border: "1px solid rgba(224, 224, 224, 1)",
-                  color: "rgb(29, 161, 242)",
+                  color: "rgb(218, 28, 45)",
                 }}
               >
-                {data2.reduce((acc, row) => acc + row.CongNo, 0)}
+                {formatCurrency(data.reduce((acc, row) => acc + row.congNo, 0))}
               </TableCell>
               <TableCell colSpan={2}></TableCell>
             </TableRow>

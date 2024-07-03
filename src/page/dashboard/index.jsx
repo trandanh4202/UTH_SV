@@ -54,24 +54,26 @@ const data = [
     to: "https://payment.ut.edu.vn/",
   },
   {
-    icon: <AutoStories sx={{ fontSize: "25px" }} />,
-    title: "Đăng ký học phần",
-    status: "loading",
+    icon: <School sx={{ fontSize: "25px" }} />,
+    title: "Chương trình khung",
+    // status: "loading",
+    to: "educationprogram",
   },
+
   {
     icon: <AttachMoney sx={{ fontSize: "25px" }} />,
     title: "Tra cứu công nợ",
-    status: "loading",
+    to: "tuition",
+    // status: "loading",
   },
-
   {
     icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
     title: "Phiếu thu tổng hợp",
     status: "loading",
   },
   {
-    icon: <School sx={{ fontSize: "25px" }} />,
-    title: "Chương trình khung",
+    icon: <AutoStories sx={{ fontSize: "25px" }} />,
+    title: "Đăng ký học phần",
     status: "loading",
   },
 ];

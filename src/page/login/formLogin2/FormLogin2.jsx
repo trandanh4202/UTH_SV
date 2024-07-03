@@ -29,8 +29,6 @@ const FormLogin2 = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { errorMessage } = useSelector((state) => state.login);
-
   const onSubmit = (data) => {
     if (recaptchaValue) {
       const combinedData = {
@@ -63,6 +61,7 @@ const FormLogin2 = () => {
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
+  const message = useSelector((state) => state.login.token?.message);
 
   return (
     <Paper
@@ -117,11 +116,11 @@ const FormLogin2 = () => {
           autoComplete="off"
         >
           <TextField
-            label="Mã số sinh viên"
+            label="Tài khoản đăng nhập"
             variant="outlined"
             fullWidth
             {...register("username", {
-              required: "Mã số sinh viên là bắt buộc",
+              required: "Tài khoản đăng nhập là bắt buộc",
             })}
             error={!!errors.username}
             helperText={errors.username ? errors.username.message : ""}
@@ -191,9 +190,9 @@ const FormLogin2 = () => {
               onChange={handleRecaptchaChange}
             />
           </Box>
-          {errorMessage && (
+          {message && (
             <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
-              {errorMessage}
+              {message}
             </Alert>
           )}
           <Button

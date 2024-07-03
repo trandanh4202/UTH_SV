@@ -1,78 +1,28 @@
 /* eslint-disable react/prop-types */
 import {
   Box,
-  Container,
   Divider,
   FormControl,
   MenuItem,
+  Paper,
   Select,
   Tab,
   Tabs,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelect } from "../../../features/profileSlice/ProfileSlice";
 import TuitionTab from "./TuitionTab";
-import { useState } from "react";
-
-const data = [
-  {
-    STT: 1,
-    HocKy: "Học kỳ 1 năm học 2023-2024",
-    MaNhomHP: "010100510690",
-    TenHP: "Kinh tế chính trị Mác - Lênin",
-    SoTC: 2,
-    HocPhi: 708.0,
-    MucNop: 708.0,
-    TrangThaiDK: "Đăng ký mới",
-    NgayXuLy: "03/02/2024",
-    SoTienNop: 708.0,
-    KhauTru: 0,
-    TruNo: 0,
-    CongNo: 0,
-    TrangThai: true,
-    KhongTruyCuuCongNo: false,
-    LoaiHocPhi: "Học phí ngành",
-  },
-  {
-    STT: 1,
-    HocKy: "Học kỳ 2 năm học 2023-2024",
-    MaNhomHP: "010100510690",
-    TenHP: "Kinh tế chính trị Mác - Lênin",
-    SoTC: 2,
-    HocPhi: 708.0,
-    MucNop: 708.0,
-    TrangThaiDK: "Đăng ký mới",
-    NgayXuLy: "03/02/2024",
-    SoTienNop: 708.0,
-    KhauTru: 0,
-    TruNo: 0,
-    CongNo: 0,
-    TrangThai: false,
-    KhongTruyCuuCongNo: false,
-    LoaiHocPhi: "Học phí Trung tâm tiếng Anh",
-  },
-  {
-    STT: 1,
-    HocKy: "Học kỳ 3 năm học 2023-2024",
-    MaNhomHP: "010100510690",
-    TenHP: "Kinh tế chính trị Mác - Lênin",
-    SoTC: 2,
-    HocPhi: 708.0,
-    MucNop: 708.0,
-    TrangThaiDK: "Đăng ký mới",
-    NgayXuLy: "03/02/2024",
-    SoTienNop: 708.0,
-    KhauTru: 0,
-    TruNo: 0,
-    CongNo: 0,
-    TrangThai: false,
-    KhongTruyCuuCongNo: true,
-    LoaiHocPhi: "Học phí Khác",
-  },
-];
+import {
+  getTuitionFee,
+  getTuitionOther,
+} from "../../../features/tuitionSlice/TuitionSlice";
+import TuitionOther from "./TuitionOther";
 
 const TuitionTable = () => {
   const [selectedTab, setSelectedTab] = useState(0);
-  const [semester, setSemester] = useState("");
+  const [semester, setSemester] = useState(0);
 
   const handleChangeTab = (event, newValue) => {
     setSelectedTab(newValue);
@@ -83,17 +33,31 @@ const TuitionTable = () => {
   };
 
   // Filter data into three arrays based on LoaiHocPhi
-  const hocPhiNganh = data.filter(
-    (item) => item.LoaiHocPhi === "Học phí ngành"
-  );
-  const hocPhiTrungTamTiengAnh = data.filter(
-    (item) => item.LoaiHocPhi === "Học phí Trung tâm tiếng Anh"
-  );
-  const hocPhiKhac = data.filter((item) => item.LoaiHocPhi === "Học phí Khác");
+
+  const dispatch = useDispatch();
+  const select = useSelector((state) => state.profile?.select);
+
+  useEffect(() => {
+    dispatch(getSelect());
+    dispatch(getTuitionOther());
+  }, [dispatch]);
+  useEffect(() => {
+    if (select.length > 0 && !semester) {
+      setSemester(select[0].id);
+    }
+  }, [select, semester]);
+
+  useEffect(() => {
+    if (semester) {
+      dispatch(getTuitionFee({ semester }));
+    }
+  }, [dispatch, semester]);
+  const tuition = useSelector((state) => state.tuition);
+  const { tuitionFee, tuitionOther } = tuition;
 
   return (
-    <Container sx={{ backgroundColor: "white" }}>
-      <Box sx={{ padding: "10px 5px" }}>
+    <Box sx={{ padding: "10px" }}>
+      <Paper sx={{ padding: "20px", borderRadius: "10px" }} elevation={4}>
         <Box>
           <Box
             sx={{
@@ -103,7 +67,9 @@ const TuitionTable = () => {
               alignItems: "center",
             }}
           >
-            <Box sx={{ display: "flex" }}>
+            <Box
+              sx={{ display: "flex", alignItems: "center", padding: "10px" }}
+            >
               <Divider
                 orientation="vertical"
                 sx={{
@@ -114,7 +80,7 @@ const TuitionTable = () => {
                 }}
               />
               <Typography
-                sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
+                sx={{ color: "#008689", fontWeight: "700", fontSize: "20px" }}
               >
                 Tra cứu công nợ
               </Typography>
@@ -142,15 +108,18 @@ const TuitionTable = () => {
                   <MenuItem value="" disabled>
                     Chọn học kỳ
                   </MenuItem>
-                  <MenuItem value="semester1" sx={{ fontSize: "18px" }}>
-                    Học kỳ 1 năm học 2023 - 2024
+                  <MenuItem value="0" sx={{ fontSize: "18px" }}>
+                    Tất cả
                   </MenuItem>
-                  <MenuItem value="semester2" sx={{ fontSize: "18px" }}>
-                    Học kỳ 2 năm học 2023 - 2024
-                  </MenuItem>
-                  <MenuItem value="summerSemester" sx={{ fontSize: "18px" }}>
-                    Học kỳ hè năm học 2023 - 2024
-                  </MenuItem>
+                  {select.map((item) => (
+                    <MenuItem
+                      key={item.id}
+                      value={item.id}
+                      sx={{ fontSize: "18px" }}
+                    >
+                      {item.tenDot}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -160,53 +129,44 @@ const TuitionTable = () => {
           <Tabs
             value={selectedTab}
             onChange={handleChangeTab}
-            textColor="primary"
-            indicatorColor="primary"
             aria-label="tabs"
+            // textColor="secondary"
+            // indicatorColor="secondary"
+            sx={{
+              "& .MuiTabs-indicator": {
+                backgroundColor: "#008689",
+              },
+            }}
           >
             <Tab
               sx={{
-                fontSize: "15px",
-                fontWeight: "500",
+                fontSize: "17px",
+                fontWeight: "600",
                 "&.Mui-selected": {
-                  border: "1px solid #1976d2",
-                  backgroundColor: "#rgb(221, 221, 221)",
-                  color: "#rgb(29, 161, 242)",
+                  backgroundColor: "#1D999D",
+                  color: "white",
                 },
               }}
               label="Học phí ngành"
             />
+
             <Tab
               sx={{
-                fontSize: "15px",
-                fontWeight: "500",
+                fontSize: "18px",
+                fontWeight: "700",
                 "&.Mui-selected": {
-                  border: "1px solid #1976d2",
-                  backgroundColor: "rgb(221, 221, 221)",
-                  color: "#rgb(29, 161, 242)",
-                },
-              }}
-              label="Học phí Trung tâm tiếng Anh"
-            />
-            <Tab
-              sx={{
-                fontSize: "15px",
-                fontWeight: "500",
-                "&.Mui-selected": {
-                  border: "1px solid rgb(221, 221, 221)",
-                  backgroundColor: "rgb(221, 221, 221)",
-                  color: "#rgb(29, 161, 242)",
+                  backgroundColor: "#1D999D",
+                  color: "white",
                 },
               }}
               label="Học phí Khác"
             />
           </Tabs>
-          {selectedTab === 0 && <TuitionTab data2={hocPhiNganh} />}
-          {selectedTab === 1 && <TuitionTab data2={hocPhiTrungTamTiengAnh} />}
-          {selectedTab === 2 && <TuitionTab data2={hocPhiKhac} />}
+          {selectedTab === 0 && <TuitionTab data={tuitionFee} />}
+          {selectedTab === 1 && <TuitionOther data={tuitionOther} />}
         </Box>
-      </Box>
-    </Container>
+      </Paper>
+    </Box>
   );
 };
 
