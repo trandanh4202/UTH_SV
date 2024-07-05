@@ -1,11 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const initialState = {
   info: [],
   loading: false,
   error: null,
   errorMessage: null,
+  message: null,
+  status: null,
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -43,7 +47,7 @@ export const loginPage = createAsyncThunk(
 );
 export const changePassword = createAsyncThunk(
   "auth/changePassword",
-  async ({ passWord }, { rejectWithValue }) => {
+  async ({ oldPassword, newPassword }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -55,20 +59,23 @@ export const changePassword = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(
+      const response = await axios.post(
         `${API_BASE_URL}/user/change_password`,
+        {
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        },
         config
       );
-      return response.data.body;
+      
+
+      return response.data;
     } catch (error) {
       if (
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
-      ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
-      return rejectWithValue(error.message);
+      )
+        return rejectWithValue(error.message);
     }
   }
 );
@@ -98,7 +105,9 @@ const loginSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload;
+        state.message = action.payload.message;
+        state.status = action.payload.status;
+        // localStorage.removeItem("account"); // Xóa token từ localStorage
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.loading = false;

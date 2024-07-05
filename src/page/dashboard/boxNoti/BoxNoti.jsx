@@ -12,12 +12,12 @@ const BoxNoti = ({ title, icon, color, to, total }) => {
       }}
     >
       <Box>
-        <Typography sx={{ fontSize: "15px", color, fontWeight: "600" }}>
+        <Typography sx={{ fontSize: "14px", color, fontWeight: "600" }}>
           {title}
         </Typography>
         <Typography
           sx={{
-            fontSize: "36px",
+            fontSize: "25px",
             fontWeight: "700",
             color,
             marginTop: "5px",

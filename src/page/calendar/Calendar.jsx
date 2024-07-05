@@ -233,10 +233,11 @@ const Calendar = () => {
               borderTopLeftRadius: "20px",
               // overflow: "hidden",
               borderTopRightRadius: "20px",
-              maxHeight: "78vh",
+              maxHeight: "75vh",
 
               "&::-webkit-scrollbar": {
-                width: "20px",
+                width: "10px",
+                height: "10px",
                 borderRadius: "10px",
               },
               "&::-webkit-scrollbar-thumb": {

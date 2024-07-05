@@ -125,7 +125,9 @@ const Program1 = () => {
               maxHeight: "80vh",
 
               "&::-webkit-scrollbar": {
-                width: "8px",
+                width: "10px",
+                height: "10px",
+                borderRadius: "10px",
               },
               "&::-webkit-scrollbar-thumb": {
                 backgroundColor: "#008689",
@@ -133,9 +135,11 @@ const Program1 = () => {
               },
               "&::-webkit-scrollbar-thumb:hover": {
                 backgroundColor: "#008950",
+                borderRadius: "10px",
               },
               "&::-webkit-scrollbar-track": {
                 backgroundColor: "#f1f1f1",
+                borderRadius: "10px",
               },
             }}
           >

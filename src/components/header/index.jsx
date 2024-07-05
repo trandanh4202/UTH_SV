@@ -1,6 +1,10 @@
 import {
+  ContactEmergency,
   ExpandMore,
   KeyboardArrowDown,
+  ReceiptLong,
+  School,
+  SupportAgent,
   ViewHeadlineRounded,
 } from "@mui/icons-material";
 import {
@@ -26,6 +30,7 @@ import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
 const menu = [
   {
     title: "Thông tin chung",
+    icon: <ContactEmergency sx={{ fontSize: "25px" }} />,
     children: [
       {
         title: "Thông tin chi tiết",
@@ -39,6 +44,7 @@ const menu = [
   },
   {
     title: "Học tập",
+    icon: <School sx={{ fontSize: "25px" }} />,
     children: [
       {
         title: "Kết quả học tập",
@@ -56,10 +62,15 @@ const menu = [
   },
   {
     title: "Công nợ học phí",
+    icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
     children: [
       {
         title: "Tra cứu công nợ",
         link: "/tuition",
+      },
+      {
+        title: "Phiếu thu tổng hợp",
+        link: "/generalreceipts",
       },
       {
         title: "Thanh toán trực tuyến",
@@ -69,6 +80,7 @@ const menu = [
   },
   {
     title: "Hỗ trợ trực tuyến",
+    icon: <SupportAgent sx={{ fontSize: "25px" }} />,
     link: "https://support.ut.edu.vn/",
   },
 ];
@@ -88,6 +100,7 @@ const Header = () => {
   };
 
   const handleClick = (event) => {
+    event.preventDefault();
     setAnchorEl(event.currentTarget);
   };
 
@@ -133,7 +146,7 @@ const Header = () => {
           <Grid container sx={{ display: "flex", alignItems: "center" }}>
             <Grid item lg={3} xs={8}>
               <Box>
-                <Box component={Link} to="/" sx={{ flexGrow: 1 }}>
+                <Box sx={{ flexGrow: 1 }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -141,7 +154,7 @@ const Header = () => {
                       justifyContent: "center",
                     }}
                   >
-                    <Box>
+                    <Box component={Link} to="/">
                       <img
                         src="../images/sv_logo_dashboard.png"
                         alt="sv_logo_dashboard.png"
@@ -151,99 +164,111 @@ const Header = () => {
                       <Box>
                         <Box
                           onClick={toggleDrawer(true)}
-                          sx={{ padding: "15px 10px" }}
+                          sx={{
+                            padding: "15px 10px",
+                            cursor: "pointer",
+                            color: "#008689",
+                          }}
                         >
                           <ViewHeadlineRounded sx={{ fontSize: "35px" }} />
                         </Box>
                         <Drawer open={openDrawer} onClose={toggleDrawer(false)}>
-                          <Box>
-                            {openDrawer && (
-                              <Box
+                          <Box
+                            sx={{
+                              backgroundColor: "#ffffff",
+                              boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                              padding: "10px",
+                              border: "1px solid #ccc",
+                              borderRadius: "5px",
+                              zIndex: 1000,
+                            }}
+                          >
+                            {menu.map((menuItem, index) => (
+                              <Accordion
+                                key={index}
+                                expanded={expanded === `panel${index}`}
+                                onChange={handleChange(`panel${index}`)}
                                 sx={{
-                                  backgroundColor: "#ffffff",
-                                  boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                                  padding: "10px",
-                                  border: "1px solid #ccc",
-                                  borderRadius: "5px",
-                                  zIndex: 1000,
+                                  border: "none",
+                                  boxShadow: "none",
                                 }}
                               >
-                                {menu.map((menuItem, index) => (
-                                  <Accordion
-                                    key={index}
-                                    expanded={expanded === `panel${index}`}
-                                    onChange={handleChange(`panel${index}`)}
+                                <AccordionSummary
+                                  expandIcon={<ExpandMore />}
+                                  aria-controls={`panel${index}bh-content`}
+                                  id={`panel${index}bh-header`}
+                                  sx={{
+                                    color: "#008689",
+                                    fontWeight: "600",
+                                    "&:hover": {
+                                      backgroundColor: "#e0f7fa", // Màu nền khi hover
+                                    },
+
+                                    "& .MuiAccordionSummary-content": {
+                                      display: "flex",
+                                      alignItems: "center",
+                                      gap: "10px",
+                                    },
+                                  }}
+                                >
+                                  <Box>{menuItem.icon}</Box>
+                                  <Typography
                                     sx={{
-                                      border: "none",
-                                      boxShadow: "none",
+                                      fontWeight: "500",
+                                      fontSize: "16px",
                                     }}
                                   >
-                                    <AccordionSummary
-                                      expandIcon={<ExpandMore />}
-                                      aria-controls={`panel${index}bh-content`}
-                                      id={`panel${index}bh-header`}
-                                      sx={{
-                                        color: "#008689",
-                                        "&:hover": {
-                                          backgroundColor: "#e0f7fa", // Màu nền khi hover
-                                        },
-                                      }}
-                                    >
-                                      <Typography
-                                        sx={{
-                                          fontWeight: "500",
-                                          fontSize: "16px",
-                                        }}
-                                      >
-                                        {menuItem.title}
-                                      </Typography>
-                                    </AccordionSummary>
-                                    <Divider />
-                                    <AccordionDetails
-                                      sx={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "30px",
-                                      }}
-                                    >
-                                      {menuItem.children ? (
-                                        menuItem.children.map(
-                                          (child, childIndex) => (
-                                            <Typography
-                                              key={childIndex}
-                                              component={Link}
-                                              to={child.link}
-                                              sx={{
-                                                fontSize: "14px",
-                                                color: "black",
-                                                "&:hover": {
-                                                  color: "#da1d2d", // Màu chữ khi hover
-                                                },
-                                              }}
-                                            >
-                                              {child.title}
-                                            </Typography>
-                                          )
-                                        )
-                                      ) : (
+                                    {menuItem.title}
+                                  </Typography>
+                                </AccordionSummary>
+                                <Divider />
+                                <AccordionDetails
+                                  sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: "30px",
+                                  }}
+                                >
+                                  {menuItem.children ? (
+                                    menuItem.children.map(
+                                      (child, childIndex) => (
                                         <Typography
+                                          key={childIndex}
                                           component={Link}
-                                          to={menuItem.link}
+                                          to={child.link}
                                           sx={{
                                             fontSize: "14px",
+                                            fontWeight: "500",
+                                            color: "black",
                                             "&:hover": {
-                                              color: "#ff5722", // Màu chữ khi hover
+                                              color: "#da1d2d", // Màu chữ khi hover
                                             },
                                           }}
+                                          onClick={toggleDrawer(false)}
                                         >
-                                          {menuItem.title}
+                                          {child.title}
                                         </Typography>
-                                      )}
-                                    </AccordionDetails>
-                                  </Accordion>
-                                ))}
-                              </Box>
-                            )}
+                                      )
+                                    )
+                                  ) : (
+                                    <Typography
+                                      component={Link}
+                                      to={menuItem.link}
+                                      sx={{
+                                        fontSize: "14px",
+                                        fontWeight: "500",
+                                        "&:hover": {
+                                          color: "#ff5722", // Màu chữ khi hover
+                                        },
+                                      }}
+                                      onClick={toggleDrawer(false)}
+                                    >
+                                      {menuItem.title}
+                                    </Typography>
+                                  )}
+                                </AccordionDetails>
+                              </Accordion>
+                            ))}
                           </Box>
                         </Drawer>
                       </Box>
@@ -267,7 +292,6 @@ const Header = () => {
                     display: "flex",
                     alignItems: "center",
                     "&:hover": {
-                      backgroundColor: "#f0f0f0",
                       "& .MuiAvatar-root": {
                         backgroundColor: "#3f51b5",
                         color: "#ffffff",
@@ -297,7 +321,8 @@ const Header = () => {
                   </Avatar>
                   <Typography
                     sx={{
-                      fontSize: "14px",
+                      fontSize: "15px",
+                      fontWeight: "600",
                       display: { lg: "flex", xs: "none" },
                     }}
                   >

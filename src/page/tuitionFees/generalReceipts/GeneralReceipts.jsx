@@ -1,5 +1,10 @@
 /* eslint-disable react/jsx-key */
-import { CloudDownload, EditNote, ReceiptLong } from "@mui/icons-material";
+import {
+  CloudDownload,
+  EditNote,
+  Receipt,
+  ReceiptLong,
+} from "@mui/icons-material";
 import {
   Box,
   Container,
@@ -13,47 +18,20 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-
-const data = [
-  {
-    STT: 1,
-    SoPhieu: 508411,
-    MaHoaDon: 8804,
-    NgayThu: "21/03/2024 17:35",
-    SoTien: "5.310.000",
-    DonViThu: "VNPay Đại trà",
-    LoaiHDDT: "Cá nhân",
-    HDDT: false,
-    ChiTiet: true,
-    NhatKy: true,
-  },
-  {
-    STT: 2,
-    SoPhieu: 478066,
-    MaHoaDon: 13808,
-    NgayThu: "10/01/2024 10:39",
-    SoTien: "708.000",
-    DonViThu: "Dương Linh Chi",
-    LoaiHDDT: "Cá nhân",
-    HDDT: true,
-    ChiTiet: true,
-    NhatKy: false,
-  },
-  {
-    STT: 3,
-    SoPhieu: 444124,
-    MaHoaDon: 25708,
-    NgayThu: "10/10/2023 14:53",
-    SoTien: "2.124.000",
-    DonViThu: "Dương Linh Chi",
-    LoaiHDDT: "Cá nhân",
-    HDDT: true,
-    ChiTiet: false,
-    NhatKy: true,
-  },
-  // Add more data as needed
-];
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getReceiptDetail,
+  getReceipts,
+} from "../../../features/tuitionSlice/TuitionSlice";
+import { format } from "date-fns";
+import ReceiptDetailPopup from "./ReceiptDetailPopup"; // Import component mới
+const formatDate = (dateString) => {
+  if (!dateString) return ""; // Handle null or undefined dateString
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ""; // Handle invalid date strings
+  return format(date, "dd/MM/yyyy");
+};
 
 const tableCell = [
   "STT",
@@ -62,22 +40,43 @@ const tableCell = [
   "Ngày thu",
   "Số tiền",
   "Đơn vị thu",
-  "Loại HĐĐT",
   "HĐĐT",
   "Chi tiết",
-  "Nhật ký",
 ];
 
 const GeneralReceipts = () => {
   const [selectedRow, setSelectedRow] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedSoPhieu, setSelectedSoPhieu] = useState(null);
+  const [selectedMaHoaDon, setSelectedMaHoaDon] = useState(null);
+  const [selectedNgayThu, setSelectedNgayThu] = useState(null);
+
+  const dispatch = useDispatch();
 
   const handleRowClick = (index) => {
     setSelectedRow(index);
   };
 
+  useEffect(() => {
+    dispatch(getReceipts());
+  }, [dispatch]);
+
+  const receipts = useSelector((state) => state.tuition.receipts);
+
+  const handleReceiptClick = (soPhieu, maHoaDon, ngayThu) => {
+    setSelectedSoPhieu(soPhieu);
+    setSelectedMaHoaDon(maHoaDon);
+    setSelectedNgayThu(ngayThu);
+
+    dispatch(getReceiptDetail({ soPhieu }));
+    setOpenModal(true);
+  };
+
+  const receiptDetail = useSelector((state) => state.tuition.receiptDetail);
+
   return (
     <Box>
-      <Container sx={{ backgroundColor: "white", height: "500px" }}>
+      <Container sx={{ backgroundColor: "white" }}>
         <Box sx={{ padding: "10px 5px" }}>
           <Box sx={{ margin: "15px 0" }}>
             <Box sx={{ display: "flex" }}>
@@ -97,7 +96,28 @@ const GeneralReceipts = () => {
               </Typography>
             </Box>
           </Box>
-          <TableContainer component={Paper}>
+          <TableContainer
+            component={Paper}
+            sx={{
+              maxHeight: "78vh",
+              "&::-webkit-scrollbar": {
+                width: "10px",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#008689",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: "#008950",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+                borderRadius: "10px",
+              },
+            }}
+          >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -106,11 +126,11 @@ const GeneralReceipts = () => {
                       key={item}
                       align="center"
                       sx={{
-                        border: "2px solid rgb(221, 221, 221)",
-                        textAlign: "center",
-                        fontSize: "15px",
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        backgroundColor: "#008689",
+                        color: "white",
                         fontWeight: "600",
-                        color: "rgb(29, 161, 242)",
+                        fontSize: "18px",
                       }}
                     >
                       {item}
@@ -119,13 +139,13 @@ const GeneralReceipts = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {data.map((row, index) => (
+                {receipts?.map((row, index) => (
                   <TableRow
-                    key={row.STT}
+                    key={row.soPhieu}
                     sx={{
                       cursor: "pointer",
                       backgroundColor:
-                        selectedRow === index ? "lightblue" : "inherit",
+                        selectedRow === index ? "#006b89x" : "inherit",
                     }}
                     onClick={() => handleRowClick(index)}
                   >
@@ -133,144 +153,109 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgb(221, 221, 221)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.STT}
+                      {index + 1}
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.SoPhieu}
+                      {row.soPhieu}
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.MaHoaDon}
+                      {row.maHoaDon}
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.NgayThu}
+                      {formatDate(row.ngayThu)}
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.SoTien}
+                      {row.daNop}
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.DonViThu}
+                      {row.nguoiTao}
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.LoaiHDDT}
+                      {row.hoaDonDienTu ? <CloudDownload /> : ""}
                     </TableCell>
                     <TableCell
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
+                        color: selectedRow === index ? "white" : "black ",
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
                     >
-                      {row.HDDT ? <CloudDownload /> : ""}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.ChiTiet ? <EditNote /> : ""}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-                        color:
-                          selectedRow === index
-                            ? "rgb(12, 111, 190)"
-                            : "rgb(102, 117, 128)",
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.NhatKy ? <ReceiptLong /> : ""}
+                      <Receipt
+                        onClick={() =>
+                          handleReceiptClick(
+                            row.soPhieu,
+                            row.maHoaDon,
+                            row.ngayThu
+                          )
+                        }
+                      />
                     </TableCell>
                   </TableRow>
                 ))}
+                <ReceiptDetailPopup
+                  open={openModal}
+                  onClose={() => setOpenModal(false)}
+                  receiptDetail={receiptDetail}
+                  soPhieu={selectedSoPhieu}
+                  maHoaDon={selectedMaHoaDon}
+                  ngayThu={formatDate(selectedNgayThu)}
+                />
               </TableBody>
             </Table>
           </TableContainer>

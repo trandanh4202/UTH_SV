@@ -69,7 +69,7 @@ const data = [
   {
     icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
     title: "Phiếu thu tổng hợp",
-    status: "loading",
+    to: "/generalreceipts",
   },
   {
     icon: <AutoStories sx={{ fontSize: "25px" }} />,

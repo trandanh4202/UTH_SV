@@ -38,7 +38,6 @@ const Courses = () => {
   const handleChange = (event) => {
     setSemester(event.target.value);
   };
-  console.log("A");
   return (
     <Paper
       sx={{ padding: "10px", height: "100%", minHeight: "300px" }}

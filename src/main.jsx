@@ -23,6 +23,8 @@ import Newfeeds from "./page/newfeeds/Newfeeds";
 import SingleNews from "./page/singleNews/SingleNews";
 import { createTheme, ThemeProvider } from "@mui/material";
 import Program from "./page/educationProgram/Program";
+import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
 // Function to check for account in localStorage
 const isAuthenticated = () => {
@@ -132,6 +134,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ToastContainer autoClose={5000} />
     </Provider>
   </ThemeProvider>
 );

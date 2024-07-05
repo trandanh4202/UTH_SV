@@ -52,7 +52,6 @@ const FormLogin2 = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("account");
-    console.log("Token in useEffect:", token); // Log token
     if (token) {
       navigate("/dashboard");
     }
@@ -62,6 +61,8 @@ const FormLogin2 = () => {
     setShowPassword((prev) => !prev);
   };
   const message = useSelector((state) => state.login.token?.message);
+  const status = useSelector((state) => state.login.token?.status);
+
 
   return (
     <Paper
@@ -190,7 +191,7 @@ const FormLogin2 = () => {
               onChange={handleRecaptchaChange}
             />
           </Box>
-          {message && (
+          {message && status !== 200 && (
             <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
               {message}
             </Alert>
