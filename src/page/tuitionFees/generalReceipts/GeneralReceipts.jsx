@@ -102,6 +102,7 @@ const GeneralReceipts = () => {
               maxHeight: "78vh",
               "&::-webkit-scrollbar": {
                 width: "10px",
+                height: "10px",
                 borderRadius: "10px",
               },
               "&::-webkit-scrollbar-thumb": {
@@ -118,7 +119,11 @@ const GeneralReceipts = () => {
               },
             }}
           >
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table
+              sx={{ minWidth: 650 }}
+              aria-label="simple table"
+              stickyHeader
+            >
               <TableHead>
                 <TableRow>
                   {tableCell.map((item) => (

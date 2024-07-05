@@ -41,9 +41,11 @@ const TuitionTab = ({ data }) => {
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer
         sx={{
-          maxHeight: { xs: "62vh" ,lg:'63vh'},
+          maxHeight: { xs: "60vh", lg: "63vh" },
           "&::-webkit-scrollbar": {
-            width: "8px",
+            width: "10px",
+            height: "10px",
+            borderRadius: "10px",
           },
           "&::-webkit-scrollbar-thumb": {
             backgroundColor: "#008689",
@@ -51,9 +53,11 @@ const TuitionTab = ({ data }) => {
           },
           "&::-webkit-scrollbar-thumb:hover": {
             backgroundColor: "#008950",
+            borderRadius: "10px",
           },
           "&::-webkit-scrollbar-track": {
             backgroundColor: "#f1f1f1",
+            borderRadius: "10px",
           },
         }}
       >

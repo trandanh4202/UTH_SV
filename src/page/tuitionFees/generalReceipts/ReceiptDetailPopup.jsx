@@ -24,17 +24,16 @@ const ReceiptDetailPopup = ({
   ngayThu,
 }) => {
   return (
-    <Modal open={open} onClose={onClose}>
+    <Modal open={open} onClose={onClose} sx={{ padding: "10px" }}>
       <Paper
         sx={{
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          bgcolor: "background.paper",
           boxShadow: 24,
-          minWidth: "600px",
-          width: "50%",
+          maxWidth: "600px",
+          width: "90%",
           p: 4,
           borderRadius: "20px",
         }}
@@ -61,7 +60,7 @@ const ReceiptDetailPopup = ({
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
+            alignItems: { xs: "start", lg: "center" },
           }}
         >
           <Box sx={{ margin: "15px 0" }}>
@@ -119,8 +118,30 @@ const ReceiptDetailPopup = ({
             </Box>
           </Box>
         </Box>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 500 }} aria-label="simple table">
+        <TableContainer
+          component={Paper}
+          sx={{
+            maxHeight: "50vh",
+            "&::-webkit-scrollbar": {
+              width: "10px",
+              height: "10px",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#008689",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#008950",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1",
+              borderRadius: "10px",
+            },
+          }}
+        >
+          <Table sx={{ minWidth: 500 }} aria-label="simple table" stickyHeader>
             <TableHead>
               <TableRow>
                 {tableCell.map((cell) => (
