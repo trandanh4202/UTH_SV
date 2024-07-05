@@ -27,7 +27,7 @@ const tableCell = [
   "Trừ nợ (-)",
   "Công nợ",
   "Trạng thái",
-  "Không truy cứu công nợ",
+  // "Không truy cứu công nợ",
 ];
 
 const TuitionTab = ({ data }) => {
@@ -41,7 +41,7 @@ const TuitionTab = ({ data }) => {
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer
         sx={{
-          maxHeight: "67vh",
+          maxHeight: { xs: "62vh" ,lg:'63vh'},
           "&::-webkit-scrollbar": {
             width: "8px",
           },
@@ -243,21 +243,6 @@ const TuitionTab = ({ data }) => {
                       ""
                     )}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontWeight: "500",
-                      fontSize: "14px",
-                      color: "rgb(102, 117, 128)",
-                    }}
-                  >
-                    {row.khongTruyCuuCongNo ? (
-                      <Cancel sx={{ color: "red" }} />
-                    ) : (
-                      ""
-                    )}
-                  </TableCell>
                 </TableRow>
               ))}
             <TableRow>
@@ -344,7 +329,11 @@ const TuitionTab = ({ data }) => {
               >
                 {formatCurrency(data.reduce((acc, row) => acc + row.congNo, 0))}
               </TableCell>
-              <TableCell colSpan={2}></TableCell>
+              <TableCell
+                sx={{
+                  border: "1px solid rgba(224, 224, 224, 1)",
+                }}
+              ></TableCell>
             </TableRow>
           </TableBody>
         </Table>

@@ -3,6 +3,7 @@ import {
   Box,
   Divider,
   FormControl,
+  Grid,
   MenuItem,
   Paper,
   Select,
@@ -56,10 +57,11 @@ const TuitionTable = () => {
   const { tuitionFee, tuitionOther } = tuition;
 
   return (
-    <Box sx={{ padding: "10px" }}>
+    <Box sx={{ padding: { xs: "0 10px 0", lg: "0 40px 0" } }}>
       <Paper sx={{ padding: "20px", borderRadius: "10px" }} elevation={4}>
         <Box>
-          <Box
+          <Grid
+            container
             sx={{
               margin: "15px 0",
               display: "flex",
@@ -67,63 +69,67 @@ const TuitionTable = () => {
               alignItems: "center",
             }}
           >
-            <Box
-              sx={{ display: "flex", alignItems: "center", padding: "10px" }}
-            >
-              <Divider
-                orientation="vertical"
-                sx={{
-                  color: "red",
-                  border: "3px solid",
-                  height: "20px",
-                  marginRight: "5px",
-                }}
-              />
-              <Typography
-                sx={{ color: "#008689", fontWeight: "700", fontSize: "20px" }}
+            <Grid item xs={12}>
+              <Box
+                sx={{ display: "flex", alignItems: "center", padding: "10px" }}
               >
-                Tra cứu công nợ
-              </Typography>
-            </Box>
-            <Box>
-              <FormControl variant="outlined" sx={{ minWidth: "400px" }}>
-                <Select
-                  value={semester}
-                  onChange={handleChange}
-                  displayEmpty
+                <Divider
+                  orientation="vertical"
                   sx={{
-                    "& .MuiSelect-select": {
-                      padding: "15px 25px",
-                      fontSize: "18px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    },
-                    "& .MuiSvgIcon-root": {
-                      width: "20px",
-                      height: "20px",
-                    },
+                    color: "red",
+                    border: "3px solid",
+                    height: "20px",
+                    marginRight: "5px",
                   }}
+                />
+                <Typography
+                  sx={{ color: "#008689", fontWeight: "700", fontSize: "20px" }}
                 >
-                  <MenuItem value="" disabled>
-                    Chọn học kỳ
-                  </MenuItem>
-                  <MenuItem value="0" sx={{ fontSize: "18px" }}>
-                    Tất cả
-                  </MenuItem>
-                  {select.map((item) => (
-                    <MenuItem
-                      key={item.id}
-                      value={item.id}
-                      sx={{ fontSize: "18px" }}
-                    >
-                      {item.tenDot}
+                  Tra cứu công nợ
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Box>
+                <FormControl variant="outlined">
+                  <Select
+                    value={semester}
+                    onChange={handleChange}
+                    displayEmpty
+                    sx={{
+                      "& .MuiSelect-select": {
+                        padding: "15px 25px",
+                        fontSize: "18px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      },
+                      "& .MuiSvgIcon-root": {
+                        width: "20px",
+                        height: "20px",
+                      },
+                    }}
+                  >
+                    <MenuItem value="" disabled>
+                      Chọn học kỳ
                     </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Box>
-          </Box>
+                    <MenuItem value="0" sx={{ fontSize: "18px" }}>
+                      Tất cả
+                    </MenuItem>
+                    {select.map((item) => (
+                      <MenuItem
+                        key={item.id}
+                        value={item.id}
+                        sx={{ fontSize: "18px" }}
+                      >
+                        {item.tenDot}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+            </Grid>
+          </Grid>
         </Box>
         <Box sx={{ width: "100%" }}>
           <Tabs

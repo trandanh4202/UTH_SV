@@ -22,7 +22,7 @@ const columns = [
     field: "maLopHocPhan",
     headerName: "Mã lớp học phần",
     align: "center",
-    minWidth: "200px",
+    minWidth: "220px",
   },
   {
     field: "tenMonHoc",
@@ -40,8 +40,24 @@ const columns = [
   { field: "isDat", headerName: "Đạt", align: "center" },
   { field: "ghiChu", headerName: "Ghi chú", align: "center" },
 ];
+const formatNumberFields = [
+  "diemTBThuongKy",
+  "diemThi",
+  "diemTongKet",
+  "diemTinChi",
+];
 
 const Transcript = () => {
+  const formatNumber = (num) => {
+    if (num !== null && num !== undefined) {
+      return new Intl.NumberFormat("de-DE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(num);
+    }
+    return num;
+  };
+
   const transcript = useSelector((state) => state.transcript.transcript);
   const loading = useSelector((state) => state.transcript.loading);
 
@@ -62,7 +78,8 @@ const Transcript = () => {
         >
           <TableContainer
             sx={{
-              height: "87vh",
+              height: "80vh",
+
               "&::-webkit-scrollbar": {
                 width: "8px",
               },
@@ -85,11 +102,11 @@ const Transcript = () => {
                   <TableCell
                     sx={{
                       fontWeight: "700",
-                      color: "rgb(29, 161, 242)",
-                      backgroundColor: "rgb(243, 247, 249)",
                       border: "1px solid rgb(221, 221, 221)",
                       fontSize: "14px",
                       textAlign: "center",
+                      backgroundColor: "#008689",
+                      color: "white",
                     }}
                   >
                     STT
@@ -99,12 +116,12 @@ const Transcript = () => {
                       key={column.field}
                       sx={{
                         fontWeight: "700",
-                        color: "rgb(29, 161, 242)",
-                        backgroundColor: "rgb(243, 247, 249)",
                         border: "1px solid rgb(221, 221, 221)",
                         fontSize: "14px",
                         textAlign: "center",
                         minWidth: column.minWidth,
+                        backgroundColor: "#008689",
+                        color: "white",
                       }}
                     >
                       {column.headerName}
@@ -184,6 +201,8 @@ const Transcript = () => {
                                 ) : (
                                   <Cancel style={{ color: "red" }} />
                                 )
+                              ) : formatNumberFields.includes(column.field) ? (
+                                formatNumber(row[column.field])
                               ) : (
                                 row[column.field]
                               )}
@@ -193,59 +212,66 @@ const Transcript = () => {
                       ))}
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
-                          Tổng số tín chỉ đã đăng ký: {hocKy.stcdangKyHocKy}
+                          Tổng số tín chỉ đã đăng ký:{" "}
+                          {hocKy.tongKetDot.stcdangKyHocKy}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
-                          Điểm trung bình học kỳ hệ 4: {hocKy.diemTBTinChi}
+                          Điểm trung bình học kỳ hệ 4:{" "}
+                          {formatNumber(hocKy.tongKetDot.diemTBTinChi)}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
-                          Tổng số tín chỉ đạt: {hocKy.stcdatHocKy}
+                          Tổng số tín chỉ đạt: {hocKy.tongKetDot.stcdatHocKy}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
-                          Điểm trung bình học kỳ hệ 10: {hocKy.diemTBHocLuc}
+                          Điểm trung bình học kỳ hệ 10:{" "}
+                          {formatNumber(hocKy.tongKetDot.diemTBHocLuc)}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
-                          Số tín chỉ tích lũy của sinh viên: {hocKy.soTCTichLuy}
+                          Số tín chỉ tích lũy của sinh viên:{" "}
+                          {hocKy.tongKetDot.soTCTichLuy}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
-                          Xếp loại học lực học kỳ: {hocKy.xepLoaiHocLuc}
+                          Xếp loại học lực học kỳ:{" "}
+                          {hocKy.tongKetDot.xepLoaiHocLuc}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
                           Điểm trung bình tích lũy (hệ 4):{" "}
-                          {hocKy.diemTBTinChiTichLuy}
+                          {formatNumber(hocKy.tongKetDot.diemTBTinChiTichLuy)}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Điểm trung bình tích lũy (hệ 10):{" "}
-                          {hocKy.diemTBHocLucTichLuy}
+                          {formatNumber(hocKy.tongKetDot.diemTBHocLucTichLuy)}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
                           Tổng số tín chỉ nợ tính đến hiện tại:{" "}
-                          {hocKy.soTCKhongDat}
+                          {hocKy.tongKetDot.soTCKhongDat}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Xếp loại học lực tích lũy:{" "}
-                          {hocKy.xepLoaiHocLucTichLuy}
+                          {hocKy.tongKetDot.xepLoaiHocLucTichLuy}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
-                          Điểm rèn luyện học kỳ: {hocKy.soDiemRenLuyen}
+                          Điểm rèn luyện học kỳ:{" "}
+                          {formatNumber(hocKy.tongKetDot.soDiemRenLuyen)}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
-                          Xếp loại điểm rèn luyện: {hocKy.xepLoaiDiemRenLuyen}
+                          Xếp loại điểm rèn luyện:{" "}
+                          {hocKy.tongKetDot.xepLoaiDiemRenLuyen}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>

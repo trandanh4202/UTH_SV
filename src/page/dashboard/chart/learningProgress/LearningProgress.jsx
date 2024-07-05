@@ -81,15 +81,11 @@ const LearningProgress = () => {
             textAlign: "center",
           }}
         >
-          <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-            {learningProgress.canDat}
-          </Typography>
-          <Typography sx={{ fontSize: 16 }}>Tổng số tín chỉ</Typography>
-        </Box>
-        <Box sx={{ textAlign: "center", marginTop: "20px" }}>
-          <Typography sx={{ fontSize: "16px", fontWeight: "600" }}>
-            {learningProgress.hienTai}/{learningProgress.canDat}
-          </Typography>
+          <Box sx={{ textAlign: "center", marginTop: "20px" }}>
+            <Typography sx={{ fontSize: "16px", fontWeight: "600" }}>
+              Đã đạt: {learningProgress.hienTai}/{learningProgress.canDat}
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Paper>

@@ -57,13 +57,13 @@ const data = [
     icon: <School sx={{ fontSize: "25px" }} />,
     title: "Chương trình khung",
     // status: "loading",
-    to: "educationprogram",
+    to: "/educationprogram",
   },
 
   {
     icon: <AttachMoney sx={{ fontSize: "25px" }} />,
     title: "Tra cứu công nợ",
-    to: "tuition",
+    to: "/tuition",
     // status: "loading",
   },
   {
@@ -135,7 +135,7 @@ const Dashboard = () => {
                     icon={item.icon}
                     color={item.color}
                     to={item.to}
-                    total={total}
+                    total={item.count}
                   />
                 </Paper>
               </Grid>

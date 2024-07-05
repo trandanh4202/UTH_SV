@@ -35,7 +35,7 @@ const TuitionOther = ({ data }) => {
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer
         sx={{
-          maxHeight: "67vh",
+          maxHeight: "60vh",
           "&::-webkit-scrollbar": {
             width: "8px",
           },

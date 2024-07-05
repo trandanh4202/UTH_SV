@@ -21,46 +21,46 @@ const columns = [
     field: "tenHocPhan",
     headerName: "Tên học phần",
     align: "center",
-    width: "20%",
+    width: "400px",
   },
   {
     field: "maHocPhan",
     headerName: "Mã học phần",
     align: "center",
-    width: "15%",
+    width: "150px",
   },
   {
     field: "dieuKien",
     headerName: "Điều kiện đăng ký",
     align: "center",
-    width: "15%",
+    width: "150px",
   },
-  { field: "soTinChi", headerName: "Số TC", align: "center", width: "10%" },
+  { field: "soTinChi", headerName: "Số TC", align: "center", width: "50px" },
   {
     field: "soTietLT",
     headerName: "Số tiết LT",
     align: "center",
-    width: "10%",
+    width: "50px",
   },
   {
     field: "soTietTH",
     headerName: "Số tiết TH",
     align: "center",
-    width: "10%",
+    width: "50px",
   },
   {
     field: "nhomTuChon",
     headerName: "Nhóm tự chọn",
     align: "center",
-    width: "5%",
+    width: "50px",
   },
   {
     field: "soTCBBCuaNhom",
     headerName: "Số TC bắt buộc của nhóm",
     align: "center",
-    width: "5%",
+    width: "50px",
   },
-  { field: "isDat", headerName: "Đạt", align: "center", width: "10%" },
+  { field: "isDat", headerName: "Đạt", align: "center", width: "50px" },
 ];
 
 const formatConditions = (course) => {
@@ -90,7 +90,7 @@ const formatConditions = (course) => {
   if (course.hocPhanSongHanhs) addCondition(course.hocPhanSongHanhs, "c");
 
   return conditions.length > 0
-    ? conditions.reduce((prev, curr) => [prev, ", ", curr])
+    ? conditions.reduce((prev, curr) => [prev, curr])
     : "";
 };
 
@@ -116,11 +116,27 @@ const Program1 = () => {
           elevation={12}
           sx={{
             borderRadius: "10px",
+            padding: "20px",
           }}
         >
           <TableContainer
             sx={{
-              padding: "20px",
+              // padding: "0 0 10px 10px",
+              maxHeight: "80vh",
+
+              "&::-webkit-scrollbar": {
+                width: "8px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#008689",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: "#008950",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+              },
             }}
           >
             <Table stickyHeader aria-label="curriculum table">
@@ -131,7 +147,7 @@ const Program1 = () => {
                       key={column.field}
                       align={column.align}
                       sx={{
-                        width: column.width,
+                        minWidth: column.width,
                         color: "white",
                         fontSize: "15px",
                         fontWeight: "800",
@@ -231,7 +247,6 @@ const Program1 = () => {
                           <TableRow key={course.maHocPhan}>
                             <TableCell
                               sx={{
-                                width: "20%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -259,7 +274,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "15%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -275,7 +289,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "15%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -291,7 +304,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -307,7 +319,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -323,7 +334,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -339,7 +349,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "5%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -355,7 +364,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "5%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -371,7 +379,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -383,7 +390,7 @@ const Program1 = () => {
                               >
                                 {course.isDat === true ? (
                                   <CheckCircle
-                                    sx={{ color: "#66e321", fontSize: "20px" }}
+                                    sx={{ color: "#008950", fontSize: "20px" }}
                                   />
                                 ) : course.isDat === false ? (
                                   <Cancel
@@ -434,7 +441,6 @@ const Program1 = () => {
                           <TableRow key={course.maHocPhan}>
                             <TableCell
                               sx={{
-                                width: "20%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -462,7 +468,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "15%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -478,7 +483,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "15%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -494,7 +498,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -510,7 +513,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -526,7 +528,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -542,7 +543,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "5%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -558,7 +558,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "5%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -574,7 +573,6 @@ const Program1 = () => {
                             <TableCell
                               align="center"
                               sx={{
-                                width: "10%",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                               }}
                             >
@@ -586,7 +584,7 @@ const Program1 = () => {
                               >
                                 {course.isDat === true ? (
                                   <CheckCircle
-                                    sx={{ color: "#66e321", fontSize: "20px" }}
+                                    sx={{ color: "#008950", fontSize: "20px" }}
                                   />
                                 ) : course.isDat === false ? (
                                   <Cancel
@@ -603,6 +601,129 @@ const Program1 = () => {
                     )}
                   </React.Fragment>
                 ))}
+                <TableRow
+                  sx={{
+                    background: "rgba(72, 128, 255, 0.05)",
+                  }}
+                >
+                  <TableCell
+                    colSpan={3}
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        textAlign: "left",
+                      }}
+                    >
+                      Số tín chỉ bắt buộc
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        textAlign: "center",
+                      }}
+                    >
+                      {soTCBatBuoc}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    colSpan={5}
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  ></TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{
+                    background: "rgba(72, 128, 255, 0.05)",
+                  }}
+                >
+                  <TableCell
+                    colSpan={3}
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        textAlign: "left",
+                      }}
+                    >
+                      Số tín chỉ tự chọn
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        textAlign: "center",
+                      }}
+                    >
+                      {soTCTuChon}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    colSpan={5}
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  ></TableCell>
+                </TableRow>
+                <TableRow
+                  sx={{
+                    background: "rgba(72, 128, 255, 0.05)",
+                  }}
+                >
+                  <TableCell
+                    colSpan={3}
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        textAlign: "left",
+                      }}
+                    >
+                      Tổng số tín chỉ
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        textAlign: "center",
+                      }}
+                    >
+                      {soTCYeuCau}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    colSpan={5}
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  ></TableCell>
+                </TableRow>
               </TableBody>
             </Table>
           </TableContainer>

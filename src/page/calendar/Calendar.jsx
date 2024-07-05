@@ -1,15 +1,9 @@
-import React, { useEffect, useState } from "react";
-import {
-  ArrowBack,
-  ArrowBackIosNew,
-  ArrowForward,
-  ArrowForwardIos,
-  CalendarMonth,
-} from "@mui/icons-material";
+import { ArrowBack, ArrowForward, CalendarMonth } from "@mui/icons-material";
 import {
   Box,
   Button,
   Container,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -18,13 +12,12 @@ import {
   TableRow,
   TextField,
   Typography,
-  Paper,
-  Divider,
 } from "@mui/material";
+import { addDays, format, startOfWeek } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCalendar } from "../../features/calendarSlice/CalendarSlice";
-import { addDays, format, parseISO, startOfWeek } from "date-fns";
 
 const timetableData = {
   days: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
@@ -238,29 +231,47 @@ const Calendar = () => {
           <TableContainer
             sx={{
               borderTopLeftRadius: "20px",
-              overflow: "hidden",
+              // overflow: "hidden",
+              borderTopRightRadius: "20px",
+              maxHeight: "78vh",
+
+              "&::-webkit-scrollbar": {
+                width: "20px",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#008689",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: "#008950",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+                borderRadius: "10px",
+              },
             }}
           >
             <Table
               sx={{
                 minWidth: 650,
               }}
+              stickyHeader
+              aria-label="curriculum table"
             >
-              <TableHead
-                sx={{
-                  backgroundColor: "#008689",
-                }}
-              >
+              <TableHead>
                 <TableRow>
                   <TableCell
                     sx={{
                       border: "1px solid rgba(224, 224, 224, 1)",
-                      color: "white",
                       fontSize: "15px",
-                      fontWeight: "600",
+                      // fontWeight: "600",
                       textAlign: "center",
                       width: "12.5%",
                       borderTopLeftRadius: "20px",
+                      color: "white",
+                      background: "#008689",
                     }}
                     colSpan={2}
                   >
@@ -272,13 +283,14 @@ const Calendar = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: "white",
                         fontSize: "15px",
                         fontWeight: "600",
                         width: "12.5%",
                         ...(index === days.length - 1 && {
                           borderTopRightRadius: "20px",
                         }),
+                        color: "white",
+                        background: "#008689",
                       }}
                     >
                       {day}

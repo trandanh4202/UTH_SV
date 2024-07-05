@@ -14,7 +14,7 @@ const InfoField = ({ label, value }) => (
     <Box sx={{ display: "block", textAlign: "left", padding: "5px" }}>
       <Typography
         sx={{
-          fontSize: { xs: "12px", lg: "13px" },
+          fontSize: { xs: "13px", lg: "14px" },
           color: "rgb(102, 117, 128)",
           fontWeight: "750",
         }}
@@ -57,7 +57,7 @@ const InforSV = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <Grid container sx={{ textAlign: "center" }} spacing={{ xs: 1, lg: 4 }}>
+        <Grid container sx={{ textAlign: "center" }} spacing={{ xs: 1, lg: 2 }}>
           <Grid item lg={3} xs={12}>
             <Box
               sx={{
@@ -103,49 +103,35 @@ const InforSV = () => {
           >
             <Grid container>
               <InfoField label="MSSV: " value={profile?.maSinhVien} />
-              <InfoField label="Lớp: " value={profile?.lopHoc} />
+              <InfoField label="Bậc đào tạo: " value={profile?.heDaoTao} />
             </Grid>
+
             <Grid container>
               <InfoField
                 label="Họ tên: "
                 value={`${profile?.hoDem} ${profile?.ten}`}
               />
-              <InfoField label="Khoá: " value={profile?.khoaHoc} />
-            </Grid>
-            <Grid container>
-              <InfoField
-                label="Giới tính: "
-                value={profile?.gioiTinh ? "Nữ" : "Nam"}
-              />
-              <InfoField label="Bậc đào tạo: " value={profile?.heDaoTao} />
-            </Grid>
-            <Grid container>
-              <InfoField label="Ngày sinh: " value={profile?.ngaySinh2} />
+
               <InfoField
                 label="Loại hình đào tạo: "
                 value={profile?.loaiHinhDT}
               />
             </Grid>
             <Grid container>
-              <InfoField label="Nơi sinh: " value={profile?.noiSinhText} />
+              <InfoField label="Lớp: " value={profile?.lopHoc} />
+
               <InfoField label="Khoa: " value={profile?.khoa} />
             </Grid>
-            <Grid container>
-              <InfoField label="Ngành: " value={profile?.nganh} />
-              <InfoField
-                label="Chuyên ngành: "
-                value={
-                  // [
-                  //   "Công nghệ thông tin",
-                  //   "Mạng máy tính và truyền thông dữ liệu",
-                  //   "Kỹ thuật môi trường",
-                  // ].includes(profile?.chuyenNganh)
-                  //   ? ""
-                  //   : profile?.chuyenNganh
 
-                  profile?.chuyenNganh
-                }
-              />
+            <Grid container>
+              <InfoField label="Ngày sinh: " value={profile?.ngaySinh2} />
+
+              <InfoField label="Ngành: " value={profile?.nganh} />
+            </Grid>
+            <Grid container>
+              <InfoField label="Nơi sinh: " value={profile?.noiSinhText} />
+
+              <InfoField label="Chuyên ngành: " value={profile?.chuyenNganh} />
             </Grid>
           </Grid>
         </Grid>

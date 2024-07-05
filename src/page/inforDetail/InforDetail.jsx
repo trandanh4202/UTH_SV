@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
 import {
   Box,
   Container,
@@ -8,8 +7,9 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
 import { format } from "date-fns";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { getProfile } from "../../features/profileSlice/ProfileSlice";
 
 const formatDate = (dateString) => {
@@ -37,8 +37,8 @@ const Section = ({ title, children }) => (
   </Box>
 );
 
-const InfoField = ({ column, label, value }) => (
-  <Grid item xs={4}>
+const InfoField = ({ label, value, column }) => (
+  <Grid item xs={column ? column : 4}>
     <Box
       sx={{
         display: "block",
@@ -49,7 +49,7 @@ const InfoField = ({ column, label, value }) => (
     >
       <Typography
         sx={{
-          fontSize: { xs: "12px", lg: "13px" },
+          fontSize: { xs: "14px", lg: "15px" },
           color: "rgb(102, 117, 128)",
         }}
         variant="span"
@@ -58,7 +58,7 @@ const InfoField = ({ column, label, value }) => (
       </Typography>
       <Typography
         sx={{
-          fontSize: { xs: "12px", lg: "13px" },
+          fontSize: { xs: "14px", lg: "15px" },
           fontWeight: "750",
           color: "rgb(102, 117, 128)",
         }}
@@ -126,42 +126,67 @@ const InforDetail = () => {
                 sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
               >
                 <Grid container>
-                  <InfoField label="MSSV: " value={profile?.maSinhVien} />
-                  <InfoField label="Lớp: " value={profile?.lopHoc} />
+                  <InfoField
+                    label="MSSV: "
+                    value={profile?.maSinhVien}
+                    column={6}
+                  />
+                  <InfoField label="Lớp: " value={profile?.lopHoc} column={6} />
                 </Grid>
                 <Grid container>
                   <InfoField
                     label="Họ tên: "
                     value={`${profile?.hoDem} ${profile?.ten}`}
+                    column={6}
                   />
-                  <InfoField label="Khoá: " value={profile?.khoaHoc} />
+                  <InfoField
+                    label="Khoá: "
+                    value={profile?.khoaHoc}
+                    column={6}
+                  />
                 </Grid>
                 <Grid container>
                   <InfoField
                     label="Ngày nhập học: "
                     value={formatDate(profile?.ngayNhapHoc)}
+                    column={6}
                   />
-                  <InfoField label="Bậc đào tạo: " value={profile?.heDaoTao} />
+                  <InfoField
+                    label="Bậc đào tạo: "
+                    value={profile?.heDaoTao}
+                    column={6}
+                  />
                 </Grid>
                 <Grid container>
                   <InfoField
                     label="Trạng thái sinh viên: "
                     value={profile?.trangThaiText}
+                    column={6}
                   />
                   <InfoField
                     label="Loại hình đào tạo: "
                     value={profile?.loaiHinhDT}
+                    column={6}
                   />
                 </Grid>
                 <Grid container>
-                  <InfoField label="Nơi sinh: " value={profile?.noiSinhText} />
-                  <InfoField label="Khoa: " value={profile?.khoa} />
+                  <InfoField
+                    label="Nơi sinh: "
+                    value={profile?.noiSinhText}
+                    column={6}
+                  />
+                  <InfoField label="Khoa: " value={profile?.khoa} column={6} />
                 </Grid>
                 <Grid container>
-                  <InfoField label="Ngành: " value={profile?.nganh} />
+                  <InfoField
+                    label="Ngành: "
+                    value={profile?.nganh}
+                    column={6}
+                  />
                   <InfoField
                     label="Chuyên ngành: "
                     value={profile?.chuyenNganh}
+                    column={6}
                   />
                 </Grid>
               </Grid>
@@ -183,18 +208,12 @@ const InforDetail = () => {
                   <InfoField
                     label="Giới tính "
                     value={profile?.gioiTinh ? "Nữ" : "Nam"}
-                    column="6"
                   />
                   <InfoField
                     label="Ngày sinh: "
                     value={formatDate(profile?.ngaySinh2)}
-                    column="6"
                   />
-                  <InfoField
-                    label="Nơi sinh: "
-                    value={profile?.noiSinhText}
-                    column="6"
-                  />
+                  <InfoField label="Nơi sinh: " value={profile?.noiSinhText} />
                 </Grid>
                 <Grid container>
                   <InfoField label="Dân tộc: " value={profile?.danToc} />
