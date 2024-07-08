@@ -36,8 +36,8 @@ const TabsPanel = () => {
   useEffect(() => {
     dispatch(getNewfeeds({ id }));
   }, [dispatch, id]);
-  const categoryTab = useSelector((state) => state.notification.category);
-  const newfeeds = useSelector((state) => state.notification.newfeeds);
+  const categoryTab = useSelector((state) => state.notification?.category);
+  const newfeeds = useSelector((state) => state.notification.newfeeds?.content);
 
   return (
     <TabContext value={id}>
@@ -53,14 +53,17 @@ const TabsPanel = () => {
             "&.Mui-disabled": {
               color: "rgba(0, 0, 0, 0.26)",
             },
-            "& .MuiSvgIcon-root ": {
+            "& .MuiSvgIcon-root": {
               height: "3rem",
               width: "3rem",
             },
-            color: "#333333", // Màu chữ khi đã chọn
+            color: "#333333",
             "& .MuiTabs-indicator": {
-              backgroundColor: "#da1d2d", // Màu của dấu gạch chân khi đã chọn
+              backgroundColor: "#da1d2d",
             },
+          },
+          "& .MuiTabs-indicator": {
+            backgroundColor: "#008689",
           },
         }}
       >
@@ -69,12 +72,10 @@ const TabsPanel = () => {
             key={index}
             sx={{
               fontSize: "17px",
-              fontWeight: "600",
+              fontWeight: "500",
               "&.Mui-selected": {
-                color: "#da1d2d",
-              },
-              "& .MuiTab-textColorPrimary": {
-                background: "green",
+                color: "#008689",
+                fontWeight: "800",
               },
             }}
             label={item.tenDanhMuc}
@@ -167,7 +168,11 @@ const TabsPanel = () => {
             <Divider />
           </Box>
         ))}
-        <Box sx={{ textAlign: "center" }} component={Link} to="/newfeeds">
+        <Box
+          sx={{ textAlign: "center" }}
+          component={Link}
+          to={`/newfeeds/${id}`}
+        >
           <Typography
             sx={{
               color: "red",

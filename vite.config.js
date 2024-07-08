@@ -13,5 +13,7 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+    host: "0.0.0.0", // Cho phép truy cập từ tất cả các địa chỉ IP
+    port: 5173, // Đảm bảo cổng này là cổng bạn đang sử dụng
   },
 });

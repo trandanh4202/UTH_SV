@@ -32,7 +32,7 @@ const tableCell = [
 
 const TuitionTab = ({ data }) => {
   const formatCurrency = (number) => {
-    return number.toLocaleString("vi-VN", {
+    return number?.toLocaleString("vi-VN", {
       style: "currency",
       currency: "VND",
     });

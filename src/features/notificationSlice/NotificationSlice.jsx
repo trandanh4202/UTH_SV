@@ -5,9 +5,15 @@ const initialState = {
   category: [],
   loading: false,
   error: null,
-  newfeeds: [],
+  newfeeds: {
+    totalPages: 0,
+    totalElements: 0,
+    size: 10,
+    content: [],
+  },
   content: {},
 };
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getCategoryNoti = createAsyncThunk(
@@ -15,16 +21,8 @@ export const getCategoryNoti = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${API_BASE_URL}/notification/category`);
-
       return response.data.body;
     } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
       return rejectWithValue(error.message);
     }
   }
@@ -32,21 +30,17 @@ export const getCategoryNoti = createAsyncThunk(
 
 export const getNewfeeds = createAsyncThunk(
   "noti/getNewfeeds",
-  async ({ id }, { rejectWithValue }) => {
+  async ({ id, page = 1, size = 10 }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/notification?categoryId=${id}&page=1&size=10`
-      );
-      console.log(response.data);
+      const response = await axios.get(`${API_BASE_URL}/notification`, {
+        params: {
+          categoryId: id,
+          page: page,
+          size: size,
+        },
+      });
       return response.data.body;
     } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
       return rejectWithValue(error.message);
     }
   }
@@ -56,10 +50,7 @@ export const getNewfeedsById = createAsyncThunk(
   "noti/getNewfeedsById",
   async ({ id }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `https://uth-api-boot.ut.edu.vn/api/v1/notification/${id}`
-      );
-      console.log(response.data);
+      const response = await axios.get(`${API_BASE_URL}/notification/${id}`);
       return response.data.body;
     } catch (error) {
       if (
@@ -67,14 +58,14 @@ export const getNewfeedsById = createAsyncThunk(
         (error.response.status === 401 || error.response.status === 403)
       ) {
         localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login nếu không được phép truy cập
       }
       return rejectWithValue(error.message);
     }
   }
 );
 
-const notifitaionSlice = createSlice({
+const notificationSlice = createSlice({
   name: "noti",
   initialState,
   reducers: {},
@@ -98,7 +89,7 @@ const notifitaionSlice = createSlice({
       })
       .addCase(getNewfeeds.fulfilled, (state, action) => {
         state.loading = false;
-        state.newfeeds = action.payload.content;
+        state.newfeeds = action.payload;
       })
       .addCase(getNewfeeds.rejected, (state, action) => {
         state.loading = false;
@@ -119,4 +110,4 @@ const notifitaionSlice = createSlice({
   },
 });
 
-export default notifitaionSlice.reducer;
+export default notificationSlice.reducer;

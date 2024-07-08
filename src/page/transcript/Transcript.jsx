@@ -58,8 +58,8 @@ const Transcript = () => {
     return num;
   };
 
-  const transcript = useSelector((state) => state.transcript.transcript);
-  const loading = useSelector((state) => state.transcript.loading);
+  const transcript = useSelector((state) => state.transcript?.transcript);
+  const loading = useSelector((state) => state.transcript?.loading);
 
   const dispatch = useDispatch();
 

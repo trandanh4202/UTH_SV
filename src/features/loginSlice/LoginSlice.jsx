@@ -28,10 +28,7 @@ export const loginPage = createAsyncThunk(
       const { token } = response.data;
       if (token) {
         localStorage.setItem("account", token);
-      } else {
-        console.error("Token not found in response");
       }
-      console.log(response.data);
 
       return response.data;
     } catch (error) {
@@ -67,7 +64,6 @@ export const changePassword = createAsyncThunk(
         },
         config
       );
-      
 
       return response.data;
     } catch (error) {

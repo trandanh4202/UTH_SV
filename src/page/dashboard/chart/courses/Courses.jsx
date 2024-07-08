@@ -49,17 +49,20 @@ const Courses = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
+            flexDirection: "column",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: "20px",
-              fontWeight: "700",
-              color: "#008689",
-            }}
-          >
-            Lớp học phần
-          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: "20px",
+                fontWeight: "700",
+                color: "#008689",
+              }}
+            >
+              Lớp học phần
+            </Typography>
+          </Box>
           <FormControl variant="outlined" sx={{ minWidth: 200 }}>
             <Select
               value={semester}
@@ -67,8 +70,8 @@ const Courses = () => {
               displayEmpty
               sx={{
                 "& .MuiSelect-select": {
-                  padding: "5px 10px",
-                  fontSize: "15px",
+                  padding: " 5px 40px 5px 20px",
+                  fontSize: { xs: "13px", lg: "15px" },
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",

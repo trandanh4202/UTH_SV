@@ -112,12 +112,12 @@ const router = createBrowserRouter([
     children: [
       {
         path: "newfeeds/:id",
-        element: <SingleNews />,
-      },
-      {
-        path: "newfeeds",
         element: <Newfeeds />,
       },
+      // {
+      //   path: "newfeeds",
+      //   element: <Newfeeds />,
+      // },
     ],
   },
   // {

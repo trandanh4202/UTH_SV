@@ -12,7 +12,7 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
         justifyContent: "center",
         alignItems: "center",
         flexDirection: "column",
-        color: "rgb(77, 161, 232)",
+        color: "#008689",
         backgroundColor: status === "loading" ? "rgb(26 15 15 / 20%)" : "white",
         width: "100%",
         height: "100%",
@@ -41,7 +41,7 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
             fontSize: "14px",
             textAlign: "center",
             color: "rgb(102, 117, 128)",
-            fontWeight: "600",
+            fontWeight: "700",
           }}
         >
           {title}

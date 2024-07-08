@@ -24,15 +24,20 @@ const ChangePasswordPopup = ({ open, onClose }) => {
     formState: { errors },
   } = useForm();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showOldPassword, setShowOldPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isPasswordChanged, setIsPasswordChanged] = useState(false);
+  const [focusedField, setFocusedField] = useState(null); // State để lưu trữ trường đang được focus
 
   const newPassword = watch("newPassword", ""); // Lấy giá trị newPassword từ form
+  const confirmPassword = watch("confirmPassword", ""); // Lấy giá trị confirmPassword từ form
 
   const togglePasswordVisibility = (type) => {
-    if (type === "password") {
-      setShowPassword(!showPassword);
+    if (type === "oldPassword") {
+      setShowOldPassword(!showOldPassword);
+    } else if (type === "newPassword") {
+      setShowNewPassword(!showNewPassword);
     } else if (type === "confirmPassword") {
       setShowConfirmPassword(!showConfirmPassword);
     }
@@ -56,7 +61,6 @@ const ChangePasswordPopup = ({ open, onClose }) => {
         toast.success(message);
         localStorage.clear();
 
-        // Chuyển hướng người dùng về trang Đăng nhập sau 2 giây
         setTimeout(() => {
           navigate("/");
         }, 2000);
@@ -66,6 +70,7 @@ const ChangePasswordPopup = ({ open, onClose }) => {
       setIsPasswordChanged(false);
     }
   }, [isPasswordChanged, message, status, navigate, onClose]);
+
   return (
     <Modal open={open} onClose={onClose}>
       <Box
@@ -103,7 +108,7 @@ const ChangePasswordPopup = ({ open, onClose }) => {
         >
           <TextField
             label="Mật khẩu cũ (*)"
-            type={showPassword ? "text" : "password"}
+            type={showOldPassword ? "text" : "password"}
             {...register("oldPassword", {
               required: "Mật khẩu cũ là bắt buộc",
             })}
@@ -118,11 +123,11 @@ const ChangePasswordPopup = ({ open, onClose }) => {
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => togglePasswordVisibility("password")}
+                    onClick={() => togglePasswordVisibility("oldPassword")}
                     edge="end"
                     size="large"
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showOldPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -134,10 +139,17 @@ const ChangePasswordPopup = ({ open, onClose }) => {
                 color: "gray",
               },
             }}
+            onFocus={() => setFocusedField("oldPassword")} // Xử lý khi trường được focus
+            onBlur={() => setFocusedField(null)} // Xử lý khi trường mất focus
+            sx={{
+              "& fieldset": {
+                borderColor: "#008689 !important", // Thiết lập màu viền khi trường được focus
+              },
+            }}
           />
           <TextField
             label="Mật khẩu mới (*)"
-            type={showPassword ? "text" : "password"}
+            type={showNewPassword ? "text" : "password"}
             {...register("newPassword", {
               required: "Mật khẩu mới là bắt buộc",
             })}
@@ -148,15 +160,18 @@ const ChangePasswordPopup = ({ open, onClose }) => {
               sx: {
                 backgroundColor: "white",
                 fontSize: "1.4rem", // Increase font size for input
+                "& input:focus fieldset": {
+                  borderColor: "#008689 !important", // Thiết lập màu viền khi trường được focus
+                },
               },
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => togglePasswordVisibility("password")}
+                    onClick={() => togglePasswordVisibility("newPassword")}
                     edge="end"
                     size="large"
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showNewPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -166,6 +181,13 @@ const ChangePasswordPopup = ({ open, onClose }) => {
                 fontStyle: "italic",
                 fontSize: "1.4rem", // Increase font size for label
                 color: "gray",
+              },
+            }}
+            onFocus={() => setFocusedField("newPassword")} // Xử lý khi trường được focus
+            onBlur={() => setFocusedField(null)} // Xử lý khi trường mất focus
+            sx={{
+              "& fieldset": {
+                borderColor: "#008689 !important", // Thiết lập màu viền khi trường được focus
               },
             }}
           />
@@ -192,7 +214,7 @@ const ChangePasswordPopup = ({ open, onClose }) => {
                     edge="end"
                     size="large"
                   >
-                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
               ),
@@ -204,13 +226,23 @@ const ChangePasswordPopup = ({ open, onClose }) => {
                 color: "gray",
               },
             }}
+            onFocus={() => setFocusedField("confirmPassword")} // Xử lý khi trường được focus
+            onBlur={() => setFocusedField(null)} // Xử lý khi trường mất focus
+            sx={{
+              "& fieldset": {
+                borderColor: "#008689 !important", // Thiết lập màu viền khi trường được focus
+              },
+            }}
           />
           <Button
             type="submit"
             variant="contained"
             sx={{
-              backgroundColor: "#33b5e5",
+              backgroundColor: "#008689",
               padding: "10px",
+              "&:hover": {
+                backgroundColor: "#008699",
+              },
             }}
           >
             Đổi mật khẩu

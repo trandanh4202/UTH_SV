@@ -170,6 +170,7 @@ const LearningResults = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          flexDirection: { xs: "column", lg: "row" },
         }}
       >
         <Box>

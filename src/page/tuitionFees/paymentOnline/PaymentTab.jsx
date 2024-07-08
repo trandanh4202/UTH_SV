@@ -24,7 +24,7 @@ const tableCell = [
 const PaymentTab = ({ data }) => {
   const calculateTotal = () => {
     return data
-      .reduce((total, item) => {
+      ?.reduce((total, item) => {
         const amount = parseInt(item.SoTien.replace(/,/g, ""));
         return total + amount;
       }, 0)

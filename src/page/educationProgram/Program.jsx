@@ -17,55 +17,23 @@ import { getProgram } from "../../features/programSlice/ProgramSlice";
 import { Cancel, CheckCircle } from "@mui/icons-material";
 
 const columns = [
-  {
-    field: "tenHocPhan",
-    headerName: "Tên học phần",
-    align: "center",
-    width: "400px",
-  },
-  {
-    field: "maHocPhan",
-    headerName: "Mã học phần",
-    align: "center",
-    width: "150px",
-  },
-  {
-    field: "dieuKien",
-    headerName: "Điều kiện đăng ký",
-    align: "center",
-    width: "150px",
-  },
-  { field: "soTinChi", headerName: "Số TC", align: "center", width: "50px" },
-  {
-    field: "soTietLT",
-    headerName: "Số tiết LT",
-    align: "center",
-    width: "50px",
-  },
-  {
-    field: "soTietTH",
-    headerName: "Số tiết TH",
-    align: "center",
-    width: "50px",
-  },
-  {
-    field: "nhomTuChon",
-    headerName: "Nhóm tự chọn",
-    align: "center",
-    width: "50px",
-  },
+  { field: "tenHocPhan", headerName: "Tên học phần", width: "400px" },
+  { field: "maHocPhan", headerName: "Mã học phần", width: "150px" },
+  { field: "dieuKien", headerName: "Điều kiện đăng ký", width: "150px" },
+  { field: "soTinChi", headerName: "Số TC", width: "50px" },
+  { field: "soTietLT", headerName: "Số tiết LT", width: "50px" },
+  { field: "soTietTH", headerName: "Số tiết TH", width: "50px" },
+  { field: "nhomTuChon", headerName: "Nhóm tự chọn", width: "100px" },
   {
     field: "soTCBBCuaNhom",
     headerName: "Số TC bắt buộc của nhóm",
-    align: "center",
-    width: "50px",
+    width: "100px",
   },
-  { field: "isDat", headerName: "Đạt", align: "center", width: "50px" },
+  { field: "isDat", headerName: "Đạt", width: "50px" },
 ];
 
 const formatConditions = (course) => {
   const conditions = [];
-
   const addCondition = (items, suffix) => {
     items.forEach((item) => {
       conditions.push(
@@ -76,7 +44,11 @@ const formatConditions = (course) => {
           arrow
         >
           <Typography
-            sx={{ color: "#da1d2d", fontSize: "15px", fontWeight: "800" }}
+            sx={{
+              color: "#da1d2d",
+              fontSize: { xs: "13px", lg: "15px" },
+              fontWeight: "800",
+            }}
           >
             {item.maHocPhan}({suffix})
           </Typography>
@@ -112,18 +84,10 @@ const Program1 = () => {
   return (
     <Box mt={3}>
       <Container>
-        <Paper
-          elevation={12}
-          sx={{
-            borderRadius: "10px",
-            padding: "20px",
-          }}
-        >
+        <Paper elevation={12} sx={{ borderRadius: "10px", padding: "20px" }}>
           <TableContainer
             sx={{
-              // padding: "0 0 10px 10px",
               maxHeight: "80vh",
-
               "&::-webkit-scrollbar": {
                 width: "10px",
                 height: "10px",
@@ -149,17 +113,23 @@ const Program1 = () => {
                   {columns.map((column) => (
                     <TableCell
                       key={column.field}
-                      align={column.align}
+                      align="center"
                       sx={{
                         minWidth: column.width,
-                        color: "white",
-                        fontSize: "15px",
-                        fontWeight: "800",
                         border: "1px solid rgba(224, 224, 224, 1)",
                         background: "#008689",
+                        padding: "0",
                       }}
                     >
-                      {column.headerName}
+                      <Typography
+                        sx={{
+                          fontSize: { xs: "15px", lg: "15px" },
+                          fontWeight: "800",
+                          color: "white",
+                        }}
+                      >
+                        {column.headerName}
+                      </Typography>
                     </TableCell>
                   ))}
                 </TableRow>
@@ -171,21 +141,19 @@ const Program1 = () => {
                       onClick={() => handleToggleSemester(index)}
                       sx={{
                         cursor: "pointer",
-                        transition: "all 1s ease", // Hiệu ứng chuyển động
+                        transition: "all 1s ease",
                         backgroundColor: "rgba(72, 128, 255, 0.05)",
                       }}
                     >
                       <TableCell
                         colSpan={3}
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                        }}
+                        sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                       >
                         <Typography
                           sx={{
                             color: "#da1d2d",
-                            fontSize: "15px",
-                            fontWeight: "800",
+                            fontSize: { xs: "10px", lg: "15px" },
+                            fontWeight: "700",
                             textAlign: "center",
                           }}
                         >
@@ -198,7 +166,7 @@ const Program1 = () => {
                         <Typography
                           sx={{
                             color: "#da1d2d",
-                            fontSize: "15px",
+                            fontSize: { xs: "10px", lg: "15px" },
                             fontWeight: "800",
                             textAlign: "center",
                           }}
@@ -221,8 +189,8 @@ const Program1 = () => {
                             <Typography
                               sx={{
                                 color: "#da1d2d",
-                                fontSize: "15px",
-                                fontWeight: "800",
+                                fontSize: { xs: "10px", lg: "15px" },
+                                fontWeight: "700",
                               }}
                             >
                               Học phần bắt buộc
@@ -234,7 +202,7 @@ const Program1 = () => {
                             <Typography
                               sx={{
                                 color: "#da1d2d",
-                                fontSize: "15px",
+                                fontSize: { xs: "10px", lg: "15px" },
                                 fontWeight: "800",
                                 textAlign: "center",
                               }}
@@ -249,162 +217,65 @@ const Program1 = () => {
                         </TableRow>
                         {semester.monBatBuoc.map((course) => (
                           <TableRow key={course.maHocPhan}>
-                            <TableCell
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
+                            {[
+                              {
+                                value: course.tenMonHoc,
+                                extra: course.isKhongTinhTBC ? "(*)" : "",
+                              },
+                              { value: course.maHocPhan },
+                              { value: formatConditions(course) },
+                              { value: course.soTC },
+                              { value: course.soTietLT },
+                              { value: course.soTietTH },
+                              { value: course.nhomTuChon ?? 0 },
+                              { value: course.soTCBatBuocNhom },
+                              {
+                                value:
+                                  course.isDat === true ? (
+                                    <CheckCircle
+                                      sx={{
+                                        color: "#008950",
+                                        fontSize: "20px",
+                                      }}
+                                    />
+                                  ) : course.isDat === false ? (
+                                    <Cancel
+                                      sx={{ color: "red", fontSize: "20px" }}
+                                    />
+                                  ) : (
+                                    ""
+                                  ),
+                              },
+                            ].map((cell, cellIndex) => (
+                              <TableCell
+                                key={cellIndex}
+                                align="center"
                                 sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
+                                  border: "1px solid rgba(224, 224, 224, 1)",
                                 }}
                               >
-                                {course.tenMonHoc}
-                                {course.isKhongTinhTBC && (
-                                  <Typography
-                                    sx={{
-                                      color: "#da1d2d",
-                                      fontSize: "15px",
-                                      fontWeight: "800",
-                                    }}
-                                    variant="span"
-                                  >
-                                    (*)
-                                  </Typography>
-                                )}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.maHocPhan}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {formatConditions(course)}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTC}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTietLT}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTietTH}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.nhomTuChon ?? 0}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTCBatBuocNhom}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.isDat === true ? (
-                                  <CheckCircle
-                                    sx={{ color: "#008950", fontSize: "20px" }}
-                                  />
-                                ) : course.isDat === false ? (
-                                  <Cancel
-                                    sx={{ color: "red", fontSize: "20px" }}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </Typography>
-                            </TableCell>
+                                <Typography
+                                  sx={{
+                                    color: "rgb(117, 117, 117)",
+                                    fontSize: { xs: "10px", lg: "15px" },
+                                  }}
+                                >
+                                  {cell.value}
+                                  {cell.extra && (
+                                    <Typography
+                                      variant="span"
+                                      sx={{
+                                        color: "#da1d2d",
+                                        fontSize: { xs: "13px", lg: "15px" },
+                                        fontWeight: "800",
+                                      }}
+                                    >
+                                      {cell.extra}
+                                    </Typography>
+                                  )}
+                                </Typography>
+                              </TableCell>
+                            ))}
                           </TableRow>
                         ))}
                         <TableRow>
@@ -415,7 +286,7 @@ const Program1 = () => {
                             <Typography
                               sx={{
                                 color: "#da1d2d",
-                                fontSize: "15px",
+                                fontSize: { xs: "10px", lg: "15px" },
                                 fontWeight: "800",
                               }}
                             >
@@ -428,7 +299,7 @@ const Program1 = () => {
                             <Typography
                               sx={{
                                 color: "#da1d2d",
-                                fontSize: "15px",
+                                fontSize: { xs: "10px", lg: "15px" },
                                 fontWeight: "800",
                                 textAlign: "center",
                               }}
@@ -443,188 +314,84 @@ const Program1 = () => {
                         </TableRow>
                         {semester.monTuChon.map((course) => (
                           <TableRow key={course.maHocPhan}>
-                            <TableCell
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
+                            {[
+                              {
+                                value: course.tenMonHoc,
+                                extra: course.isKhongTinhTBC ? "(*)" : "",
+                              },
+                              { value: course.maHocPhan },
+                              { value: formatConditions(course) },
+                              { value: course.soTC },
+                              { value: course.soTietLT },
+                              { value: course.soTietTH },
+                              { value: course.nhomTuChon ?? 0 },
+                              { value: course.soTCBatBuocNhom },
+                              {
+                                value:
+                                  course.isDat === true ? (
+                                    <CheckCircle
+                                      sx={{
+                                        color: "#008950",
+                                        fontSize: "20px",
+                                      }}
+                                    />
+                                  ) : course.isDat === false ? (
+                                    <Cancel
+                                      sx={{ color: "red", fontSize: "20px" }}
+                                    />
+                                  ) : (
+                                    ""
+                                  ),
+                              },
+                            ].map((cell, cellIndex) => (
+                              <TableCell
+                                key={cellIndex}
+                                align="center"
                                 sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
+                                  border: "1px solid rgba(224, 224, 224, 1)",
                                 }}
                               >
-                                {course.tenMonHoc}
-                                {course.isKhongTinhTBC && (
-                                  <Typography
-                                    sx={{
-                                      color: "#da1d2d",
-                                      fontSize: "15px",
-                                      fontWeight: "800",
-                                    }}
-                                    variant="span"
-                                  >
-                                    (*)
-                                  </Typography>
-                                )}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.maHocPhan}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {formatConditions(course)}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTC}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTietLT}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTietTH}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.nhomTuChon ?? 0}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.soTCBatBuocNhom}
-                              </Typography>
-                            </TableCell>
-                            <TableCell
-                              align="center"
-                              sx={{
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                              }}
-                            >
-                              <Typography
-                                sx={{
-                                  color: "rgb(117, 117, 117)",
-                                  fontSize: "15px",
-                                }}
-                              >
-                                {course.isDat === true ? (
-                                  <CheckCircle
-                                    sx={{ color: "#008950", fontSize: "20px" }}
-                                  />
-                                ) : course.isDat === false ? (
-                                  <Cancel
-                                    sx={{ color: "red", fontSize: "20px" }}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </Typography>
-                            </TableCell>
+                                <Typography
+                                  sx={{
+                                    color: "rgb(117, 117, 117)",
+                                    fontSize: { xs: "10px", lg: "15px" },
+                                  }}
+                                >
+                                  {cell.value}
+                                  {cell.extra && (
+                                    <Typography
+                                      variant="span"
+                                      sx={{
+                                        color: "#da1d2d",
+                                        fontSize: { xs: "13px", lg: "15px" },
+                                        fontWeight: "800",
+                                      }}
+                                    >
+                                      {cell.extra}
+                                    </Typography>
+                                  )}
+                                </Typography>
+                              </TableCell>
+                            ))}
                           </TableRow>
                         ))}
                       </>
                     )}
                   </React.Fragment>
                 ))}
-                <TableRow
-                  sx={{
-                    background: "rgba(72, 128, 255, 0.05)",
-                  }}
-                >
+                <TableRow>
                   <TableCell
                     colSpan={3}
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                    }}
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                   >
                     <Typography
                       sx={{
                         color: "#da1d2d",
-                        fontSize: "15px",
-                        fontWeight: "800",
-                        textAlign: "left",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "700",
                       }}
                     >
-                      Số tín chỉ bắt buộc
+                      Tổng số tín chỉ yêu cầu
                     </Typography>
                   </TableCell>
                   <TableCell
@@ -633,8 +400,42 @@ const Program1 = () => {
                     <Typography
                       sx={{
                         color: "#da1d2d",
-                        fontSize: "15px",
-                        fontWeight: "800",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "700",
+                        textAlign: "center",
+                      }}
+                    >
+                      {soTCYeuCau}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    colSpan={5}
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  ></TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    colSpan={3}
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "700",
+                      }}
+                    >
+                      Tổng số tín chỉ bắt buộc
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                  >
+                    <Typography
+                      sx={{
+                        color: "#da1d2d",
+                        fontSize: { xs: "13px", lg: "15px" },
+                        fontWeight: "700",
                         textAlign: "center",
                       }}
                     >
@@ -646,26 +447,19 @@ const Program1 = () => {
                     sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                   ></TableCell>
                 </TableRow>
-                <TableRow
-                  sx={{
-                    background: "rgba(72, 128, 255, 0.05)",
-                  }}
-                >
+                <TableRow>
                   <TableCell
                     colSpan={3}
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                    }}
+                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                   >
                     <Typography
                       sx={{
                         color: "#da1d2d",
-                        fontSize: "15px",
-                        fontWeight: "800",
-                        textAlign: "left",
+                        fontSize: { xs: "13px", lg: "15px" },
+                        fontWeight: "700",
                       }}
                     >
-                      Số tín chỉ tự chọn
+                      Tổng số tín chỉ tự chọn
                     </Typography>
                   </TableCell>
                   <TableCell
@@ -674,53 +468,12 @@ const Program1 = () => {
                     <Typography
                       sx={{
                         color: "#da1d2d",
-                        fontSize: "15px",
-                        fontWeight: "800",
+                        fontSize: { xs: "13px", lg: "15px" },
+                        fontWeight: "700",
                         textAlign: "center",
                       }}
                     >
                       {soTCTuChon}
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    colSpan={5}
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  ></TableCell>
-                </TableRow>
-                <TableRow
-                  sx={{
-                    background: "rgba(72, 128, 255, 0.05)",
-                  }}
-                >
-                  <TableCell
-                    colSpan={3}
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: "15px",
-                        fontWeight: "800",
-                        textAlign: "left",
-                      }}
-                    >
-                      Tổng số tín chỉ
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: "15px",
-                        fontWeight: "800",
-                        textAlign: "center",
-                      }}
-                    >
-                      {soTCYeuCau}
                     </Typography>
                   </TableCell>
                   <TableCell

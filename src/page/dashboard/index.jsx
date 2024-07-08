@@ -188,16 +188,15 @@ const Dashboard = () => {
               <Box
                 key={item.id}
                 sx={{
-                  margin: "20px",
-                  // position: "relative",
+                  margin: "10px",
                 }}
               >
-                <Box component={Link} to="/newfeeds">
+                <Box component={Link} to={`/newfeeds/${item.id}`}>
                   <Typography
                     sx={{
                       fontSize: "20px",
                       fontWeight: "600",
-                      color: "#37b4e1",
+                      color: "#008689",
                     }}
                   >
                     {item.tenDanhMuc}

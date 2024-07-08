@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,7 +14,6 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { loginPage } from "../../../features/loginSlice/LoginSlice";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const FormLogin2 = () => {
@@ -25,11 +25,13 @@ const FormLogin2 = () => {
 
   const [recaptchaValue, setRecaptchaValue] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
+  const [submitted, setSubmitted] = useState(false); // State để theo dõi đã nhấn nút Đăng nhập hay chưa
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
+    setSubmitted(true); // Đánh dấu là đã nhấn nút Đăng nhập
     if (recaptchaValue) {
       const combinedData = {
         ...data,
@@ -41,8 +43,6 @@ const FormLogin2 = () => {
           navigate("/dashboard");
         }
       });
-    } else {
-      console.log("Please complete the reCAPTCHA");
     }
   };
 
@@ -60,9 +60,9 @@ const FormLogin2 = () => {
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
   };
+
   const message = useSelector((state) => state.login.token?.message);
   const status = useSelector((state) => state.login.token?.status);
-
 
   return (
     <Paper
@@ -191,6 +191,12 @@ const FormLogin2 = () => {
               onChange={handleRecaptchaChange}
             />
           </Box>
+          {/* Hiển thị thông báo lỗi nếu đã nhấn nút Đăng nhập mà chưa nhập reCAPTCHA */}
+          {submitted && !recaptchaValue && (
+            <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
+              Vui lòng hoàn thành bước xác thực reCAPTCHA.
+            </Alert>
+          )}
           {message && status !== 200 && (
             <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
               {message}

@@ -23,6 +23,7 @@ const Login = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        padding: "10px",
       }}
     >
       <Container>
@@ -34,6 +35,7 @@ const Login = () => {
                 display: "flex",
                 justifyContent: "center",
                 // alignItems: "center",
+                height: "100%",
                 flexDirection: {
                   xs: "column-reverse",
                   md: "row",
@@ -41,7 +43,7 @@ const Login = () => {
                 },
               }}
             >
-              <Grid item xs={12} md={6} lg={8}>
+              <Grid item xs={12} md={6} lg={8} sx={{}}>
                 <Box
                   sx={{
                     marginRight: { xs: "0px", lg: "10px" },
@@ -96,7 +98,7 @@ const Login = () => {
                   </SwiperSlide>
                 </Swiper> */}
               </Grid>
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid item xs={12} md={6} lg={4} sx={{}}>
                 <FormLogin2 />
               </Grid>
             </Grid>

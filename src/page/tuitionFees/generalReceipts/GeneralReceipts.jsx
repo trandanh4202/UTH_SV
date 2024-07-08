@@ -61,7 +61,7 @@ const GeneralReceipts = () => {
     dispatch(getReceipts());
   }, [dispatch]);
 
-  const receipts = useSelector((state) => state.tuition.receipts);
+  const receipts = useSelector((state) => state.tuition?.receipts);
 
   const handleReceiptClick = (soPhieu, maHoaDon, ngayThu) => {
     setSelectedSoPhieu(soPhieu);
@@ -72,7 +72,7 @@ const GeneralReceipts = () => {
     setOpenModal(true);
   };
 
-  const receiptDetail = useSelector((state) => state.tuition.receiptDetail);
+  const receiptDetail = useSelector((state) => state.tuition?.receiptDetail);
 
   return (
     <Box>
@@ -158,7 +158,6 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgb(221, 221, 221)",
-                        color: selectedRow === index ? "white" : "black ",
 
                         fontWeight: "500",
                         fontSize: "14px",
@@ -170,7 +169,7 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
@@ -181,7 +180,7 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
@@ -192,7 +191,7 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
@@ -203,7 +202,7 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
@@ -214,7 +213,7 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
@@ -225,7 +224,7 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
@@ -236,7 +235,7 @@ const GeneralReceipts = () => {
                       align="center"
                       sx={{
                         border: "1px solid rgba(224, 224, 224, 1)",
-                        color: selectedRow === index ? "white" : "black ",
+
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
