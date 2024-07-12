@@ -113,7 +113,7 @@ const Calendar = () => {
     dispatch(getCalendar({ date: formattedDate }));
   }, [dispatch, formattedDate]);
 
-  const calendar = useSelector((state) => state.calendar.calendar);
+  const calendar = useSelector((state) => state.calendar?.calendar);
 
   useEffect(() => {
     const updatedData = splitIntoSlots(calendar);

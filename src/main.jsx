@@ -41,21 +41,11 @@ const LoginRoute = () => {
 const router = createBrowserRouter([
   {
     path: "/",
-    // element: (
-    //   <PublicRoutes>
-    //     <Login />
-    //   </PublicRoutes>
-    // ),
     element: <LoginRoute />,
     errorElement: <ErrorPage />,
   },
   {
     path: "/test",
-    // element: (
-    //   <PublicRoutes>
-    //     <Login />
-    //   </PublicRoutes>
-    // ),
     element: <Test />,
     errorElement: <ErrorPage />,
   },
@@ -90,10 +80,6 @@ const router = createBrowserRouter([
             path: "calendar",
             element: <Calendar />,
           },
-          // {
-          //   path: "calendar",
-          //   element: <Calendar />,
-          // },
           {
             path: "infordetail",
             element: <InforDetail />,
@@ -106,30 +92,28 @@ const router = createBrowserRouter([
       },
     ],
   },
-
   {
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "newfeeds/:id",
         element: <Newfeeds />,
       },
-      // {
-      //   path: "newfeeds",
-      //   element: <Newfeeds />,
-      // },
+      {
+        path: "newfeeds/:id/:articleId",
+        element: <SingleNews />,
+      },
     ],
   },
-  // {
-  //   path: "newfeeds/:id",
-  //   element: <SingleNews />,
-  // },
 ]);
+
 const theme = createTheme({
   typography: {
     fontFamily: "'Noto Sans', sans-serif",
   },
 });
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>

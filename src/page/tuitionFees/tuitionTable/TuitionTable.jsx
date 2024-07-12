@@ -44,7 +44,7 @@ const TuitionTable = () => {
   }, [dispatch]);
   useEffect(() => {
     if (select.length > 0 && !semester) {
-      setSemester(select[0].id);
+      setSemester(select[0]?.id);
     }
   }, [select, semester]);
 

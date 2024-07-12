@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import {
   AccountBalance,
   AttachMoney,
@@ -18,11 +19,13 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
 import { getTotalofWeek } from "../../features/calendarSlice/CalendarSlice";
-import { getCategoryNoti } from "../../features/notificationSlice/NotificationSlice";
+import {
+  getCategoryNoti,
+  getNewfeeds,
+} from "../../features/notificationSlice/NotificationSlice";
 import { getSelect } from "../../features/profileSlice/ProfileSlice";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
 import BoxNoti from "./boxNoti/BoxNoti";
@@ -30,57 +33,68 @@ import Courses from "./chart/courses/Courses";
 import LearningProgress from "./chart/learningProgress/LearningProgress";
 import LearningResults from "./chart/learningResults/LearningResults";
 import InforSV from "./inforSV/InforSV";
+// Import Swiper styles
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
-const data = [
-  {
-    icon: <CastForEducation sx={{ fontSize: "25px" }} />,
-    title: "Trang học trực tuyến",
-    // status: "loading",
-    to: "https://courses.ut.edu.vn/login/index.php",
-  },
-  {
-    icon: <CalendarMonth sx={{ fontSize: "25px" }} />,
-    title: "Kết quả học tập",
-    to: "/transcript",
-  },
-  {
-    icon: <SupportAgent sx={{ fontSize: "25px" }} />,
-    title: "Hỗ trợ trực tuyến",
-    to: "https://support.ut.edu.vn/login.php",
-  },
-  {
-    icon: <AccountBalance sx={{ fontSize: "25px" }} />,
-    title: "Thanh toán trực tuyến",
-    to: "https://payment.ut.edu.vn/",
-  },
-  {
-    icon: <School sx={{ fontSize: "25px" }} />,
-    title: "Chương trình khung",
-    // status: "loading",
-    to: "/educationprogram",
-  },
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
-  {
-    icon: <AttachMoney sx={{ fontSize: "25px" }} />,
-    title: "Tra cứu công nợ",
-    to: "/tuition",
-    // status: "loading",
-  },
-  {
-    icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
-    title: "Phiếu thu tổng hợp",
-    to: "/generalreceipts",
-  },
-  {
-    icon: <AutoStories sx={{ fontSize: "25px" }} />,
-    title: "Đăng ký học phần",
-    status: "loading",
-  },
-];
-
+import { format } from "date-fns";
+import { Link } from "react-router-dom";
+const formatDate = (dateString) => {
+  if (!dateString) return "";
+  return format(new Date(dateString), "dd/MM/yyyy");
+};
 const Dashboard = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("account");
+
+  const data = [
+    {
+      icon: <CastForEducation sx={{ fontSize: "25px" }} />,
+      title: "Trang học trực tuyến",
+      to: `https://courses.ut.edu.vn/logi nhn/index.php?token=${token}`,
+    },
+    {
+      icon: <CalendarMonth sx={{ fontSize: "25px" }} />,
+      title: "Kết quả học tập",
+      to: "/transcript",
+    },
+    {
+      icon: <SupportAgent sx={{ fontSize: "25px" }} />,
+      title: "Hỗ trợ trực tuyến",
+      to: `https://support.ut.edu.vn/login.php?token=${token}`,
+    },
+    {
+      icon: <AccountBalance sx={{ fontSize: "25px" }} />,
+      title: "Thanh toán trực tuyến",
+      to: "https://payment.ut.edu.vn/",
+    },
+    {
+      icon: <School sx={{ fontSize: "25px" }} />,
+      title: "Chương trình khung",
+      // status: "loading",
+      to: "/educationprogram",
+    },
+    {
+      icon: <AttachMoney sx={{ fontSize: "25px" }} />,
+      title: "Tra cứu công nợ",
+      to: "/tuition",
+      // status: "loading",
+    },
+    {
+      icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
+      title: "Phiếu thu tổng hợp",
+      to: "/generalreceipts",
+    },
+    {
+      icon: <AutoStories sx={{ fontSize: "25px" }} />,
+      title: "Đăng ký học phần",
+      status: "loading",
+    },
+  ];
 
   useEffect(() => {
     if (token) {
@@ -90,8 +104,17 @@ const Dashboard = () => {
     }
   }, [token, dispatch]);
 
-  const total = useSelector((state) => state.calendar.total);
-  const categories = useSelector((state) => state.notification.category);
+  const total = useSelector((state) => state.calendar?.total);
+
+  const categories = useSelector((state) => state.notification?.category);
+  const [id, setId] = useState("368");
+  const newfeeds = useSelector((state) => state.notification?.newfeeds.content);
+  console.log(newfeeds);
+  useEffect(() => {
+    if (id) {
+      dispatch(getNewfeeds({ id }));
+    }
+  }, [dispatch, id]);
 
   const box = [
     {
@@ -106,11 +129,12 @@ const Dashboard = () => {
       title: "Lịch học trong tuần",
       count: total,
       icon: <Upcoming sx={{ fontSize: "20px" }} />,
-      backgroundColor: "rgb(224, 251, 255)",
-      color: "rgb(77, 161, 232)",
+      backgroundColor: "rgba(29, 153, 157, 1)",
+      color: "white",
       to: "/calendar",
     },
   ];
+
   return (
     <Container>
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
@@ -145,65 +169,109 @@ const Dashboard = () => {
         <Grid item lg={5} xs={12}>
           <Paper
             sx={{
-              padding: "5px 10px",
+              padding: "10px",
               height: "100%",
-              // position: "relative",
-              // overflow: "hidden",
-              // color: "#fff",
             }}
             elevation={3}
           >
-            {/* <Box
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu nền đen với opacity
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  zIndex: 10,
-                  fontSize: "20px",
-                  fontWeight: "600",
+            <Swiper
+              navigation={true}
+              modules={[Navigation]}
+              className="mySwiper"
+              // loop={true}
+              onSlideChange={(swiper) => {
+                const slide =
+                  categories[swiper.activeIndex % categories.length];
+                setId(slide?.id);
+              }}
+            >
+              {categories.map((item) => (
+                <SwiperSlide key={item.id}>
+                  <Box component={Link} to={`/newfeeds/${id}`}>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        color: "#008689",
+                        textAlign: "center",
+                      }}
+                    >
+                      {item.tenDanhMuc}
+                    </Typography>
+                  </Box>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+            {newfeeds && newfeeds.length > 0 && (
+              <Swiper
+                centeredSlides={true}
+                // autoplay={{
+                //   delay: 2500,
+                //   disableOnInteraction: false,
+                // }}
+                pagination={{
+                  clickable: true,
                 }}
+                modules={[Autoplay, Pagination]}
+                className="mySwiper"
+                loop={true}
               >
-                Đang cập nhật
-              </Box> */}
-            {/* <Box>
-              <Typography
-                sx={{
-                  fontSize: "20px",
-                  fontWeight: "600",
-                  color: "#333333 ",
-                  textAlign: "center",
-                  margin: "10px 0",
-                }}
-              >
-                Bảng thông báo
-              </Typography>
-            </Box> */}
-            {categories.map((item) => (
-              <Box
-                key={item.id}
-                sx={{
-                  margin: "10px",
-                }}
-              >
-                <Box component={Link} to={`/newfeeds/${item.id}`}>
-                  <Typography
-                    sx={{
-                      fontSize: "20px",
-                      fontWeight: "600",
-                      color: "#008689",
-                    }}
-                  >
-                    {item.tenDanhMuc}
-                  </Typography>
-                </Box>
-              </Box>
-            ))}
+                {newfeeds.map((article) => (
+                  <SwiperSlide key={article?.id}>
+                    <Box component={Link} to={`/newfeeds/${id}/${article?.id}`}>
+                      <Box sx={{ textAlign: "center" }}>
+                        {article.hinhDaiDien ? (
+                          <img
+                            src={article.hinhDaiDien}
+                            style={{
+                              objectFit: "contain",
+                              width: "75%",
+                              // height: "75%",
+                            }}
+                            alt="anhdaidien"
+                          />
+                        ) : (
+                          <img
+                            src="/images/news.png"
+                            style={{
+                              objectFit: "contain",
+                              width: "75%",
+                              // height: "75%",
+                            }}
+                            alt="anhdaidien"
+                          />
+                        )}
+                      </Box>
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontSize: "15px",
+                            color: "#d91b2c",
+                            textAlign: "center",
+                            fontWeight: "500",
+                          }}
+                        >
+                          {formatDate(article.ngayHienThi)}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "15px",
+                            fontWeight: "800",
+                            color: "#008689",
+                            textAlign: "center",
+                            // marginTop: "20px",
+                            marginBottom: "35px",
+                          }}
+                          className="webkit-2"
+                        >
+                          {article?.tieuDe}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
           </Paper>
         </Grid>
       </Grid>
@@ -227,7 +295,7 @@ const Dashboard = () => {
                     left: 0,
                     width: "100%",
                     height: "100%",
-                    backgroundColor: "rgba(0, 0, 0, 0.5)", // Màu nền đen với opacity
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -248,6 +316,7 @@ const Dashboard = () => {
           </Grid>
         ))}
       </Grid>
+
       <Grid container spacing={2}>
         <Grid item lg={5} xs={12}>
           <LearningResults />

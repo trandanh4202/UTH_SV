@@ -26,7 +26,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getProfile } from "../../features/profileSlice/ProfileSlice";
 import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
-
+import logoHome from "/images/sv_logo_dashboard.png";
 const menu = [
   {
     title: "Thông tin chung",
@@ -277,7 +277,8 @@ const Header = () => {
                     <Box>
                       <Box component={Link} to="/">
                         <img
-                          src="../images/sv_logo_dashboard.png"
+                          // src={logoHome}
+                          src={logoHome}
                           alt="sv_logo_dashboard.png"
                         />
                       </Box>

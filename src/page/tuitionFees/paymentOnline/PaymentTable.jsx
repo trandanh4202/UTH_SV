@@ -61,12 +61,12 @@ const PaymentTable = () => {
 
   // Filter data based on fee type
   const hocPhiNganh = data.filter(
-    (item) => item.LoaiHocPhi === "Học phí ngành"
+    (item) => item?.LoaiHocPhi === "Học phí ngành"
   );
   const hocPhiTrungTamTiengAnh = data.filter(
-    (item) => item.LoaiHocPhi === "Học phí Trung tâm tiếng Anh"
+    (item) => item?.LoaiHocPhi === "Học phí Trung tâm tiếng Anh"
   );
-  const hocPhiKhac = data.filter((item) => item.LoaiHocPhi === "Học phí Khác");
+  const hocPhiKhac = data.filter((item) => item?.LoaiHocPhi === "Học phí Khác");
 
   return (
     <Container sx={{ backgroundColor: "white" }}>

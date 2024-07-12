@@ -1,6 +1,7 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import {
   Box,
+  CircularProgress,
   Container,
   Divider,
   Grid,
@@ -11,7 +12,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import { format, differenceInDays } from "date-fns";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import {
@@ -34,43 +34,54 @@ const isNewArticle = (dateString) => {
 const Newfeeds = () => {
   const { id: urlId } = useParams();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCategoryNoti());
   }, [dispatch]);
 
-  const categoryTab = useSelector((state) => state.notification.category);
-  const newfeedsResponse = useSelector((state) => state.notification.newfeeds);
-  const newfeeds = newfeedsResponse.content || [];
-  const totalPagesFromApi = newfeedsResponse.totalPages || 1;
+  const categoryTab = useSelector((state) => state.notification?.category);
+  const newfeedsResponse = useSelector((state) => state.notification?.newfeeds);
+  const newfeeds = newfeedsResponse?.content || [];
+  const totalPagesFromApi = newfeedsResponse?.totalPages || 1;
 
   const [selectedTab, setSelectedTab] = useState(urlId || "368");
-  const [page, setPage] = useState(1); // Bắt đầu từ 1 để phù hợp với API
-  const [pageSize, setPageSize] = useState(10); // Kích thước trang mặc định
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue);
-    setPage(1); // Reset lại page về 1 khi chuyển tab
-    navigate(`/newfeeds/${newValue}`);
+    setPage(1);
+    navigate(`${newValue}`);
   };
 
   useEffect(() => {
-    // Cập nhật newfeeds khi selectedTab, page hoặc pageSize thay đổi
-    dispatch(getNewfeeds({ id: selectedTab, page: page, size: pageSize }));
+    if (selectedTab) {
+      dispatch(getNewfeeds({ id: selectedTab, page: page, size: pageSize }));
+    }
   }, [dispatch, selectedTab, page, pageSize]);
 
   const handlePageChange = (event, newPage) => {
-    setPage(newPage); // Cập nhật page khi chuyển trang
+    setPage(newPage);
   };
 
   const handlePageSizeChange = (event) => {
-    setPageSize(parseInt(event.target.value, 10)); // Cập nhật pageSize khi thay đổi lựa chọn
+    setPageSize(parseInt(event.target.value, 10));
   };
 
   if (!categoryTab || newfeeds.length === 0) {
-    return <p>Loading...</p>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
@@ -81,7 +92,6 @@ const Newfeeds = () => {
             elevation={4}
             sx={{
               borderRadius: "15px",
-
               padding: "5px 0 15px 5px",
             }}
           >
@@ -107,9 +117,6 @@ const Newfeeds = () => {
                       width: "3rem",
                     },
                     color: "#333333",
-                    "& .MuiTabs-indicator": {
-                      backgroundColor: "#da1d2d",
-                    },
                   },
                   "& .MuiTabs-indicator": {
                     backgroundColor: "#008689",
@@ -155,13 +162,15 @@ const Newfeeds = () => {
                 }}
               >
                 {newfeeds.map((item) => (
-                  <Box key={item.id}>
+                  <Box
+                    key={item.id}
+                    component={Link}
+                    to={`/newfeeds/${urlId}/${item.id}`}
+                  >
                     <Grid container spacing={1} sx={{ padding: "10px 20px" }}>
                       <Grid item xs={12}>
                         <Grid
                           container
-                          component={Link}
-                          to={`/newfeeds/${item.id}`}
                           sx={{
                             display: "flex",
                           }}
@@ -175,6 +184,7 @@ const Newfeeds = () => {
                                   height: "100%",
                                   objectFit: "contain",
                                 }}
+                                alt="news"
                               />
                             </Box>
                           </Grid>

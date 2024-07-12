@@ -17,5 +17,5 @@ export const store = configureStore({
     program: programReducer,
     tuition: tuitionReducer,
   },
-  devTools: false,
+  // devTools: false,
 });

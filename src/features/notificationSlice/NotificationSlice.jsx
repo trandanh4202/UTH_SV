@@ -48,9 +48,11 @@ export const getNewfeeds = createAsyncThunk(
 
 export const getNewfeedsById = createAsyncThunk(
   "noti/getNewfeedsById",
-  async ({ id }, { rejectWithValue }) => {
+  async ({ articleId }, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/notification/${id}`);
+      const response = await axios.get(
+        `${API_BASE_URL}/notification/${articleId}`
+      );
       return response.data.body;
     } catch (error) {
       if (

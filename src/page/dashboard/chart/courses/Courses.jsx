@@ -18,8 +18,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCourses } from "../../../../features/profileSlice/ProfileSlice";
 
 const Courses = () => {
-  const select = useSelector((state) => state.profile.select);
-  const courses = useSelector((state) => state.profile.courses);
+  const select = useSelector((state) => state.profile?.select);
+  const courses = useSelector((state) => state.profile?.courses);
   const [semester, setSemester] = useState("");
   const dispatch = useDispatch();
 

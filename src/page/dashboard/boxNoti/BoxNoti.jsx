@@ -28,7 +28,7 @@ const BoxNoti = ({ title, icon, color, to, total }) => {
         <Box component={Link} to={to}>
           <Typography
             sx={{
-              color: "red",
+              color: "white",
               fontSize: "13px",
               textDecoration: "none",
               fontWeight: "600",

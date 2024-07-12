@@ -9,48 +9,53 @@ const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
 };
-const SingleNews = () => {
-  const { id } = useParams(); // Retrieve id from URL params
 
+const SingleNews = () => {
+  const { articleId } = useParams(); // Retrieve articleId from URL params
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getNewfeedsById({ id }));
-  }, [dispatch, id]); // Fetch data when id changes
+    if (articleId) {
+      dispatch(getNewfeedsById({ articleId }));
+    }
+  }, [dispatch, articleId]); // Fetch data when articleId changes
 
-  const content = useSelector((state) => state.notification.content);
+  const content = useSelector((state) => state.notification?.content);
+
+  if (!content) {
+    return null; // or a loading spinner/message
+  }
 
   return (
     <Container>
       <Paper sx={{ padding: "20px" }}>
-        <Box mb={2}>
-          <Typography
-            sx={{
-              fontSize: "25px",
-              fontWeight: "600",
-            }}
-          >
-            {content.tieuDe}
-          </Typography>
-          <Typography
+        <Container >
+          <Box mb={2}>
+            <Typography
+              sx={{
+                fontSize: "25px",
+                fontWeight: "600",
+              }}
+            >
+              {content.tieuDe}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "18px",
+                fontWeight: "500",
+              }}
+            >
+              Đã được đăng vào ngày: {formatDate(content.ngayHienThi)}
+            </Typography>
+          </Box>
+          <Box
+            dangerouslySetInnerHTML={{ __html: content.noiDung }}
             sx={{
               fontSize: "18px",
-              fontWeight: "500",
             }}
-          >
-            Đã được đăng vào ngày: {formatDate(content.ngayHienThi)}
-          </Typography>
-        </Box>
-        <Box
-          dangerouslySetInnerHTML={{ __html: content.noiDung }}
-          sx={{
-            fontSize: "18px",
-            "&:hover": {
-              // color: "red",
-            },
-          }}
-        />
-        {/* Render HTML content safely */}
+          />
+          {/* Render HTML content safely */}
+        </Container>
       </Paper>
     </Container>
   );

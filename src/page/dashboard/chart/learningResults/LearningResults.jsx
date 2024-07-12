@@ -98,7 +98,7 @@ const options = {
   maintainAspectRatio: false,
 };
 const LearningResults = () => {
-  const select = useSelector((state) => state.profile.select);
+  const select = useSelector((state) => state.profile?.select);
   const [semester, setSemester] = useState("");
 
   const dispatch = useDispatch();
@@ -118,7 +118,7 @@ const LearningResults = () => {
     setSemester(event.target.value);
   };
 
-  const learningResults = useSelector((state) => state.profile.learningResults);
+  const learningResults = useSelector((state) => state.profile?.learningResults);
   const data = {
     labels: learningResults.map((result) => result.lopHocPhan),
     datasets: [

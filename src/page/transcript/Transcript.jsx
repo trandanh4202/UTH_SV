@@ -149,7 +149,7 @@ const Transcript = () => {
                 </Box>
               ) : (
                 <TableBody>
-                  {transcript.map((hocKy, hocKyIndex) => (
+                  {transcript?.map((hocKy, hocKyIndex) => (
                     <React.Fragment key={hocKyIndex}>
                       <TableRow>
                         <TableCell
@@ -172,7 +172,7 @@ const Transcript = () => {
                           </Typography>
                         </TableCell>
                       </TableRow>
-                      {hocKy.diems.map((row, rowIndex) => (
+                      {hocKy.diems?.map((row, rowIndex) => (
                         <TableRow
                           key={rowIndex}
                           sx={{ backgroundColor: "#ffffff" }}
@@ -217,65 +217,65 @@ const Transcript = () => {
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
                           Tổng số tín chỉ đã đăng ký:{" "}
-                          {hocKy.tongKetDot.stcdangKyHocKy}
+                          {hocKy.tongKetDot?.stcdangKyHocKy}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Điểm trung bình học kỳ hệ 4:{" "}
-                          {formatNumber(hocKy.tongKetDot.diemTBTinChi)}
+                          {formatNumber(hocKy.tongKetDot?.diemTBTinChi)}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
-                          Tổng số tín chỉ đạt: {hocKy.tongKetDot.stcdatHocKy}
+                          Tổng số tín chỉ đạt: {hocKy.tongKetDot?.stcdatHocKy}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Điểm trung bình học kỳ hệ 10:{" "}
-                          {formatNumber(hocKy.tongKetDot.diemTBHocLuc)}
+                          {formatNumber(hocKy.tongKetDot?.diemTBHocLuc)}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
                           Số tín chỉ tích lũy của sinh viên:{" "}
-                          {hocKy.tongKetDot.soTCTichLuy}
+                          {hocKy.tongKetDot?.soTCTichLuy}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Xếp loại học lực học kỳ:{" "}
-                          {hocKy.tongKetDot.xepLoaiHocLuc}
+                          {hocKy.tongKetDot?.xepLoaiHocLuc}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
                           Điểm trung bình tích lũy (hệ 4):{" "}
-                          {formatNumber(hocKy.tongKetDot.diemTBTinChiTichLuy)}
+                          {formatNumber(hocKy.tongKetDot?.diemTBTinChiTichLuy)}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Điểm trung bình tích lũy (hệ 10):{" "}
-                          {formatNumber(hocKy.tongKetDot.diemTBHocLucTichLuy)}
+                          {formatNumber(hocKy.tongKetDot?.diemTBHocLucTichLuy)}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
                           Tổng số tín chỉ nợ tính đến hiện tại:{" "}
-                          {hocKy.tongKetDot.soTCKhongDat}
+                          {hocKy.tongKetDot?.soTCKhongDat}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Xếp loại học lực tích lũy:{" "}
-                          {hocKy.tongKetDot.xepLoaiHocLucTichLuy}
+                          {hocKy.tongKetDot?.xepLoaiHocLucTichLuy}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2} sx={cellStyle}>
                           Điểm rèn luyện học kỳ:{" "}
-                          {formatNumber(hocKy.tongKetDot.soDiemRenLuyen)}
+                          {formatNumber(hocKy.tongKetDot?.soDiemRenLuyen)}
                         </TableCell>
                         <TableCell colSpan={3} sx={cellStyle}>
                           Xếp loại điểm rèn luyện:{" "}
-                          {hocKy.tongKetDot.xepLoaiDiemRenLuyen}
+                          {hocKy.tongKetDot?.xepLoaiDiemRenLuyen}
                         </TableCell>
                         <TableCell colSpan={7} sx={cellBorderStyle}></TableCell>
                       </TableRow>

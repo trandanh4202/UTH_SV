@@ -74,7 +74,7 @@ const Program1 = () => {
     dispatch(getProgram());
   }, [dispatch]);
 
-  const program = useSelector((state) => state.program.program);
+  const program = useSelector((state) => state.program?.program);
   const { chitiets, soTCBatBuoc, soTCTuChon, soTCYeuCau } = program;
 
   const handleToggleSemester = (index) => {
@@ -150,7 +150,7 @@ const Program1 = () => {
                         sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                       >
                         <Typography
-                          sx={{
+                          s x={{
                             color: "#da1d2d",
                             fontSize: { xs: "10px", lg: "15px" },
                             fontWeight: "700",

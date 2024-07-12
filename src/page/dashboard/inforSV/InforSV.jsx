@@ -8,6 +8,10 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+// import Swiper and modules styles
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const InfoField = ({ label, value }) => (
   <Grid item xs={6}>
