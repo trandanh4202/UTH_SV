@@ -109,7 +109,7 @@ const TabsPanel = () => {
           <Box key={index}>
             <Grid container spacing={1} sx={{ padding: "10px 20px" }}>
               <Grid item xs={12}>
-                <Box component={Link} to={`/newfeeds/${item.id}`}>
+                <Box component={Link} to={`/newfeeds/${id}/${item.id}`}>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <Typography
                       className="webkit-2"

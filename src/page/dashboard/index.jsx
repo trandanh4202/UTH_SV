@@ -55,7 +55,7 @@ const Dashboard = () => {
     {
       icon: <CastForEducation sx={{ fontSize: "25px" }} />,
       title: "Trang học trực tuyến",
-      to: `https://courses.ut.edu.vn/logi nhn/index.php?token=${token}`,
+      to: `https://courses.ut.edu.vn/login/index.php?token=${token}`,
     },
     {
       icon: <CalendarMonth sx={{ fontSize: "25px" }} />,
@@ -109,7 +109,6 @@ const Dashboard = () => {
   const categories = useSelector((state) => state.notification?.category);
   const [id, setId] = useState("368");
   const newfeeds = useSelector((state) => state.notification?.newfeeds.content);
-  console.log(newfeeds);
   useEffect(() => {
     if (id) {
       dispatch(getNewfeeds({ id }));
