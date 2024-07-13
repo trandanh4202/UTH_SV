@@ -32,7 +32,7 @@ const ReceiptDetailPopup = ({
           left: "50%",
           transform: "translate(-50%, -50%)",
           boxShadow: 24,
-          maxWidth: "600px",
+          maxWidth: "1000px",
           width: "90%",
           p: 4,
           borderRadius: "20px",

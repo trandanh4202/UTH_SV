@@ -286,7 +286,7 @@ const Calendar = () => {
                         border: "1px solid rgba(224, 224, 224, 1)",
                         fontSize: "15px",
                         fontWeight: "600",
-                        width: "12.5%",
+                        // width: "12.5%",
                         ...(index === days.length - 1 && {
                           borderTopRightRadius: "20px",
                         }),
@@ -319,7 +319,12 @@ const Calendar = () => {
                       </TableCell>
                     </TableRow>
                     {slot.periods.map((period, periodIndex) => (
-                      <TableRow key={periodIndex}>
+                      <TableRow
+                        key={periodIndex}
+                        sx={{
+                          verticalAlign: "top",
+                        }}
+                      >
                         <TableCell
                           sx={{
                             border: "1px solid rgba(224, 224, 224, 1)",
@@ -342,15 +347,22 @@ const Calendar = () => {
                               key={dayIndex}
                               sx={{
                                 order: "1px solid rgba(224, 224, 224, 1)",
-                                padding: "4px",
+                                padding: "5px",
                                 minHeight: "150px",
-                                minWidth: "135px",
+                                // minWidth: "135px",
                                 border: "1px solid rgba(224, 224, 224, 1)",
                                 // display: "flex",
                               }}
                             >
                               {relevantData && (
-                                <Box sx={{ display: "flex" }}>
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    backgroundColor: relevantData.isTamNgung
+                                      ? "rgba(234, 70, 67, 0.05)"
+                                      : "rgba(72, 128, 255, 0.05)",
+                                  }}
+                                >
                                   {/* <Divider
                                     sx={{
                                       width: "2px",
@@ -369,9 +381,7 @@ const Calendar = () => {
                                           ? "rgba(234, 70, 67, 1)"
                                           : "rgba(72, 128, 255, 1)"
                                       }`,
-                                      backgroundColor: relevantData.isTamNgung
-                                        ? "rgba(234, 70, 67, 0.05)"
-                                        : "rgba(72, 128, 255, 0.05)",
+
                                       padding: "5px",
                                       display: "flex",
                                       flexDirection: "column",

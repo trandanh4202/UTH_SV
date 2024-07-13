@@ -27,70 +27,13 @@ import { Link } from "react-router-dom";
 import { getProfile } from "../../features/profileSlice/ProfileSlice";
 import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
 import logoHome from "/images/sv_logo_dashboard.png";
-const menu = [
-  {
-    title: "Thông tin chung",
-    icon: <ContactEmergency sx={{ fontSize: "25px" }} />,
-    children: [
-      {
-        title: "Thông tin chi tiết",
-        link: "/infordetail",
-      },
-      {
-        title: "Tin tức",
-        link: "/newfeeds/368",
-      },
-    ],
-  },
-  {
-    title: "Học tập",
-    icon: <School sx={{ fontSize: "25px" }} />,
-    children: [
-      {
-        title: "Kết quả học tập",
-        link: "/transcript",
-      },
-      {
-        title: "Chương trình khung",
-        link: "/educationprogram",
-      },
-      {
-        title: "Trang học trực tuyến",
-        link: "https://courses.ut.edu.vn/",
-      },
-    ],
-  },
-  {
-    title: "Công nợ học phí",
-    icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
-    children: [
-      {
-        title: "Tra cứu công nợ",
-        link: "/tuition",
-      },
-      {
-        title: "Phiếu thu tổng hợp",
-        link: "/generalreceipts",
-      },
-      {
-        title: "Thanh toán trực tuyến",
-        link: "https://payment.ut.edu.vn/",
-      },
-    ],
-  },
-  {
-    title: "Hỗ trợ trực tuyến",
-    icon: <SupportAgent sx={{ fontSize: "25px" }} />,
-    link: "https://support.ut.edu.vn/",
-  },
-];
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
-
+  const token = localStorage.getItem("account");
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
@@ -127,7 +70,63 @@ const Header = () => {
     dispatch(getProfile());
   }, [dispatch]);
   const profile = useSelector((state) => state.profile?.profile.body);
-
+  const menu = [
+    {
+      title: "Thông tin chung",
+      icon: <ContactEmergency sx={{ fontSize: "25px" }} />,
+      children: [
+        {
+          title: "Thông tin chi tiết",
+          link: "/infordetail",
+        },
+        {
+          title: "Tin tức",
+          link: "/newfeeds/368",
+        },
+      ],
+    },
+    {
+      title: "Học tập",
+      icon: <School sx={{ fontSize: "25px" }} />,
+      children: [
+        {
+          title: "Kết quả học tập",
+          link: "/transcript",
+        },
+        {
+          title: "Chương trình khung",
+          link: "/educationprogram",
+        },
+        {
+          title: "Trang học trực tuyến",
+          link: `https://courses.ut.edu.vn/login/index.php?token=${token}`,
+        },
+      ],
+    },
+    {
+      title: "Công nợ học phí",
+      icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
+      children: [
+        {
+          title: "Tra cứu công nợ",
+          link: "/tuition",
+        },
+        {
+          title: "Phiếu thu tổng hợp",
+          link: "/generalreceipts",
+        },
+        {
+          title: "Thanh toán trực tuyến",
+          link: "https://payment.ut.edu.vn/",
+        },
+      ],
+    },
+    {
+      title: "Hỗ trợ trực tuyến",
+      icon: <SupportAgent sx={{ fontSize: "25px" }} />,
+      link: `https://support.ut.edu.vn/login.php?token=${token}`,
+    },
+  ];
   return (
     <Box
       sx={{
@@ -252,6 +251,11 @@ const Header = () => {
                                       <Typography
                                         component={Link}
                                         to={menuItem.link}
+                                        target={
+                                          menuItem.link.includes("https")
+                                            ? "_blank"
+                                            : "_self"
+                                        }
                                         sx={{
                                           fontSize: "14px",
                                           fontWeight: "500",

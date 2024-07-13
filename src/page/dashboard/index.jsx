@@ -204,10 +204,10 @@ const Dashboard = () => {
             {newfeeds && newfeeds.length > 0 && (
               <Swiper
                 centeredSlides={true}
-                // autoplay={{
-                //   delay: 2500,
-                //   disableOnInteraction: false,
-                // }}
+                autoplay={{
+                  delay: 2500,
+                  disableOnInteraction: false,
+                }}
                 pagination={{
                   clickable: true,
                 }}

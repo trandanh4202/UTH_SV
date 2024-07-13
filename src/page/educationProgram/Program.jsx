@@ -19,7 +19,7 @@ import { Cancel, CheckCircle } from "@mui/icons-material";
 const columns = [
   { field: "tenHocPhan", headerName: "Tên học phần", width: "400px" },
   { field: "maHocPhan", headerName: "Mã học phần", width: "150px" },
-  { field: "dieuKien", headerName: "Điều kiện đăng ký", width: "150px" },
+  { field: "dieuKien", headerName: "Điều kiện đăng ký", width: "100px" },
   { field: "soTinChi", headerName: "Số TC", width: "50px" },
   { field: "soTietLT", headerName: "Số tiết LT", width: "50px" },
   { field: "soTietTH", headerName: "Số tiết TH", width: "50px" },
@@ -87,7 +87,7 @@ const Program1 = () => {
         <Paper elevation={12} sx={{ borderRadius: "10px", padding: "20px" }}>
           <TableContainer
             sx={{
-              maxHeight: "80vh",
+              maxHeight: "82vh",
               "&::-webkit-scrollbar": {
                 width: "10px",
                 height: "10px",
@@ -118,7 +118,6 @@ const Program1 = () => {
                         minWidth: column.width,
                         border: "1px solid rgba(224, 224, 224, 1)",
                         background: "#008689",
-                        padding: "0",
                       }}
                     >
                       <Typography
@@ -150,10 +149,10 @@ const Program1 = () => {
                         sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                       >
                         <Typography
-                          s x={{
+                          sx={{
                             color: "#da1d2d",
                             fontSize: { xs: "10px", lg: "15px" },
-                            fontWeight: "700",
+                            fontWeight: "800",
                             textAlign: "center",
                           }}
                         >
@@ -181,7 +180,11 @@ const Program1 = () => {
                     </TableRow>
                     {expandedSemester === index && (
                       <>
-                        <TableRow>
+                        <TableRow
+                          sx={{
+                            backgroundColor: "rgba(72, 128, 255, 0.05)",
+                          }}
+                        >
                           <TableCell
                             colSpan={3}
                             sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
@@ -216,11 +219,19 @@ const Program1 = () => {
                           ></TableCell>
                         </TableRow>
                         {semester.monBatBuoc.map((course) => (
-                          <TableRow key={course.maHocPhan}>
+                          <TableRow
+                            key={course.maHocPhan}
+                            sx={{
+                              backgroundColor: course.isDat
+                                ? "#e7ecf0"
+                                : "inherit",
+                            }}
+                          >
                             {[
                               {
                                 value: course.tenMonHoc,
                                 extra: course.isKhongTinhTBC ? "(*)" : "",
+                                align: "left",
                               },
                               { value: course.maHocPhan },
                               { value: formatConditions(course) },
@@ -234,7 +245,7 @@ const Program1 = () => {
                                   course.isDat === true ? (
                                     <CheckCircle
                                       sx={{
-                                        color: "#008950",
+                                        color: "#008689",
                                         fontSize: "20px",
                                       }}
                                     />
@@ -249,7 +260,7 @@ const Program1 = () => {
                             ].map((cell, cellIndex) => (
                               <TableCell
                                 key={cellIndex}
-                                align="center"
+                                align={cell.align || "center"}
                                 sx={{
                                   border: "1px solid rgba(224, 224, 224, 1)",
                                 }}
@@ -258,6 +269,7 @@ const Program1 = () => {
                                   sx={{
                                     color: "rgb(117, 117, 117)",
                                     fontSize: { xs: "10px", lg: "15px" },
+                                    fontWeight: "600",
                                   }}
                                 >
                                   {cell.value}
@@ -266,8 +278,7 @@ const Program1 = () => {
                                       variant="span"
                                       sx={{
                                         color: "#da1d2d",
-                                        fontSize: { xs: "13px", lg: "15px" },
-                                        fontWeight: "800",
+                                        fontSize: { xs: "10px", lg: "15px" },
                                       }}
                                     >
                                       {cell.extra}
@@ -287,7 +298,7 @@ const Program1 = () => {
                               sx={{
                                 color: "#da1d2d",
                                 fontSize: { xs: "10px", lg: "15px" },
-                                fontWeight: "800",
+                                fontWeight: "700",
                               }}
                             >
                               Học phần tự chọn
@@ -313,11 +324,19 @@ const Program1 = () => {
                           ></TableCell>
                         </TableRow>
                         {semester.monTuChon.map((course) => (
-                          <TableRow key={course.maHocPhan}>
+                          <TableRow
+                            key={course.maHocPhan}
+                            sx={{
+                              backgroundColor: course.isDat
+                                ? "#e7ecf0"
+                                : "inherit",
+                            }}
+                          >
                             {[
                               {
                                 value: course.tenMonHoc,
                                 extra: course.isKhongTinhTBC ? "(*)" : "",
+                                align: "left",
                               },
                               { value: course.maHocPhan },
                               { value: formatConditions(course) },
@@ -346,7 +365,7 @@ const Program1 = () => {
                             ].map((cell, cellIndex) => (
                               <TableCell
                                 key={cellIndex}
-                                align="center"
+                                align={cell.align || "center"}
                                 sx={{
                                   border: "1px solid rgba(224, 224, 224, 1)",
                                 }}
@@ -355,6 +374,7 @@ const Program1 = () => {
                                   sx={{
                                     color: "rgb(117, 117, 117)",
                                     fontSize: { xs: "10px", lg: "15px" },
+                                    fontWeight: "600",
                                   }}
                                 >
                                   {cell.value}
@@ -363,8 +383,7 @@ const Program1 = () => {
                                       variant="span"
                                       sx={{
                                         color: "#da1d2d",
-                                        fontSize: { xs: "13px", lg: "15px" },
-                                        fontWeight: "800",
+                                        fontSize: { xs: "10px", lg: "15px" },
                                       }}
                                     >
                                       {cell.extra}
