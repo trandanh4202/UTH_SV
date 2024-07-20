@@ -1,16 +1,13 @@
 // Import Swiper React components
-import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import { Keyboard, Mousewheel, Navigation, Pagination } from "swiper/modules";
-
 import { Box, Container, Grid, Paper } from "@mui/material";
-import FormLogin2 from "./formLogin2/FormLogin2";
 import TabsPanel from "./tabPanel/TabsPanel";
+import FormLogin2 from "./formLogin2/FormLogin2";
 // init Swiper:
 
 const Login = () => {

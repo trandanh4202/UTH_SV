@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getCategoryNoti,
   getNewfeeds,
-} from "../../../features/notificationSlice/NotificationSlice";
+} from "~/features/notificationSlice/NotificationSlice";
 import { format, differenceInDays } from "date-fns";
 import { Link } from "react-router-dom";
 

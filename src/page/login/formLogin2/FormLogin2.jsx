@@ -13,7 +13,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { loginPage } from "../../../features/loginSlice/LoginSlice";
+import { loginPage } from "~/features/loginSlice/LoginSlice";
 import { useNavigate } from "react-router-dom";
 
 const FormLogin2 = () => {

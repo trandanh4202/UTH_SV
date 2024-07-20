@@ -25,9 +25,10 @@ export const loginPage = createAsyncThunk(
         }
       );
 
-      const { token } = response.data;
+      const { token, body } = response.data;
       if (token) {
         localStorage.setItem("account", token);
+        localStorage.setItem("role", body);
       }
 
       return response.data;

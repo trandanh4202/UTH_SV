@@ -6,25 +6,25 @@ import {
   Outlet,
   RouterProvider,
 } from "react-router-dom";
-import ErrorPage from "./error-page/error-page";
-import { store } from "./features/store";
-import "./index.css";
-import Layout from "./layout";
-import Calendar from "./page/calendar/Calendar";
-import Dashboard from "./page/dashboard";
-import Login from "./page/login/Login";
-import Transcript from "./page/transcript/Transcript";
-import GeneralReceipts from "./page/tuitionFees/generalReceipts/GeneralReceipts";
-import PaymentTable from "./page/tuitionFees/paymentOnline/PaymentTable";
-import TuitionTable from "./page/tuitionFees/tuitionTable/TuitionTable";
-import Test from "./page/test/Test";
-import InforDetail from "./page/inforDetail/InforDetail";
-import Newfeeds from "./page/newfeeds/Newfeeds";
-import SingleNews from "./page/singleNews/SingleNews";
+import ErrorPage from "~/error-page/error-page";
+import { store } from "~/features/store";
+import "~/index.css";
+
 import { createTheme, ThemeProvider } from "@mui/material";
-import Program from "./page/educationProgram/Program";
-import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
+import Layout from "~/layout/Layout";
+import DashboardLecture from "~/page/lecture/dashboard/DashboardLecture";
+import Calendar from "~/page/student/calendar/Calendar";
+import Dashboard from "~/page/student/dashboard/Dashboard";
+import Program1 from "~/page/student/educationProgram/Program";
+import InforDetail from "~/page/student/inforDetail/InforDetail";
+import Newfeeds from "~/page/student/newfeeds/Newfeeds";
+import SingleNews from "~/page/student/singleNews/SingleNews";
+import Transcript from "~/page/student/transcript/Transcript";
+import GeneralReceipts from "~/page/student/tuitionFees/generalReceipts/GeneralReceipts";
+import PaymentTable from "~/page/student/tuitionFees/paymentOnline/PaymentTable";
+import TuitionTable from "~/page/student/tuitionFees/tuitionTable/TuitionTable";
+import Login from "~/page/login/Login";
 
 // Function to check for account in localStorage
 const isAuthenticated = () => {
@@ -37,7 +37,9 @@ const PrivateRoutes = () => {
 const LoginRoute = () => {
   return isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />;
 };
-
+const getRole = () => {
+  return localStorage.getItem("role");
+};
 const router = createBrowserRouter([
   {
     path: "/",
@@ -46,7 +48,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/test",
-    element: <Test />,
+    // element: <Test />,
     errorElement: <ErrorPage />,
   },
   {
@@ -58,7 +60,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "dashboard",
-            element: <Dashboard />,
+            element: getRole() === "sv" ? <Dashboard /> : <DashboardLecture />,
           },
           {
             path: "generalreceipts",
@@ -86,7 +88,7 @@ const router = createBrowserRouter([
           },
           {
             path: "educationprogram",
-            element: <Program />,
+            element: <Program1 />,
           },
         ],
       },

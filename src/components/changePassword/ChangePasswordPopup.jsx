@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { changePassword } from "../../features/loginSlice/LoginSlice";
+import { changePassword } from "~/features/loginSlice/LoginSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
