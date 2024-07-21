@@ -1,0 +1,86 @@
+:root {
+  --block-background: #555;
+  --block-border: 1px solid #000;
+  --block-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2) inset;
+  --block-light-background: linear-gradient(to right, #2579ba 0%, #0089f2 26%, #214db2 50%, #010023 51%, #0d0e19 100%);
+  --block-light-border: 5px solid;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
+
+main {
+  width: 100vw;
+  height: 100vh;
+  min-height: 450px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, #61d3db 11%, #fff 11%);
+}
+
+
+#logo {
+  position: fixed;
+  top: 3%;
+  left: 3%;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+
+}
+
+
+
+#logo img {
+  width: 60%;
+  height: auto;
+
+}
+
+main #wrap {
+  width: 300px;
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  position: relative;
+  /* background-color: #61d3db; */
+}
+
+main #server #bottom-block .bottom-line {
+  width: calc(100% - 4px);
+  height: 3px;
+  background: #fff;
+  position: absolute;
+  border-bottom: 2px solid #ccc;
+}
+
+main #code-error {
+  width: 60%;
+  min-width: 320px;
+  text-align: center;
+  color: #1C4792;
+
+
+}
+
+main #code-error h1 {
+  font-family: "Source Code Pro", monospace;
+  font-size: 3.2vw;
+  font-weight: bold;
+  margin: 1vw 0;
+  padding-top: 30px;
+}
+
+
+#countdown {
+  font-family: "Source Code Pro", monospace;
+  font-size: 1.9vw;
+  font-weight: bold;
+  margin: 1vw 0;
+}

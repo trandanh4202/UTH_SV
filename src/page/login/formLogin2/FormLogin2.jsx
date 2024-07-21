@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Button,
@@ -21,7 +21,9 @@ const FormLogin2 = () => {
     register,
     handleSubmit,
     formState: { errors },
+    reset, // Hàm reset từ react-hook-form
   } = useForm();
+  const recaptchaRef = useRef(null); // Sử dụng useRef để tạo ref cho reCAPTCHA
 
   const [recaptchaValue, setRecaptchaValue] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
@@ -30,19 +32,23 @@ const FormLogin2 = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     setSubmitted(true); // Đánh dấu là đã nhấn nút Đăng nhập
     if (recaptchaValue) {
       const combinedData = {
         ...data,
         recaptcha: recaptchaValue,
       };
-      dispatch(loginPage(combinedData)).then(() => {
-        const token = localStorage.getItem("account");
-        if (token) {
-          navigate("/dashboard");
-        }
-      });
+      const result = await dispatch(loginPage(combinedData));
+      const token = localStorage.getItem("account");
+      if (token) {
+        navigate("/dashboard");
+      } else {
+        // Xử lý lỗi và reset reCAPTCHA cùng với form
+        recaptchaRef.current.reset();
+        setRecaptchaValue(null);
+        reset(); // Reset form fields
+      }
     }
   };
 
@@ -189,14 +195,11 @@ const FormLogin2 = () => {
             <ReCAPTCHA
               sitekey="6LfFYvwpAAAAADqIqIyHcx2J-7MDS_mHPVtM8Pin"
               onChange={handleRecaptchaChange}
+              ref={recaptchaRef} // Ref to access reCAPTCHA instance
             />
           </Box>
           {/* Hiển thị thông báo lỗi nếu đã nhấn nút Đăng nhập mà chưa nhập reCAPTCHA */}
-          {submitted && !recaptchaValue && (
-            <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
-              Vui lòng hoàn thành bước xác thực reCAPTCHA.
-            </Alert>
-          )}
+
           {message && status !== 200 && (
             <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
               {message}

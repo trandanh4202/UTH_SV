@@ -474,7 +474,7 @@ const Program1 = () => {
                     <Typography
                       sx={{
                         color: "#da1d2d",
-                        fontSize: { xs: "13px", lg: "15px" },
+                        fontSize: { xs: "10px", lg: "15px" },
                         fontWeight: "700",
                       }}
                     >

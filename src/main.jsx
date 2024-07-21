@@ -14,8 +14,9 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import Layout from "~/layout/Layout";
 import DashboardLecture from "~/page/lecture/dashboard/DashboardLecture";
-import Calendar from "~/page/student/calendar/Calendar";
+import CalendarLecture from "~/page/lecture/calendar/Calendar";
 import Dashboard from "~/page/student/dashboard/Dashboard";
+import Calendar from "~/page/student/calendar/Calendar";
 import Program1 from "~/page/student/educationProgram/Program";
 import InforDetail from "~/page/student/inforDetail/InforDetail";
 import Newfeeds from "~/page/student/newfeeds/Newfeeds";
@@ -25,21 +26,29 @@ import GeneralReceipts from "~/page/student/tuitionFees/generalReceipts/GeneralR
 import PaymentTable from "~/page/student/tuitionFees/paymentOnline/PaymentTable";
 import TuitionTable from "~/page/student/tuitionFees/tuitionTable/TuitionTable";
 import Login from "~/page/login/Login";
+import CoursesRegistration from "./page/student/subjectHandling/SubjectHandling";
+import SubjectHandling from "./page/student/subjectHandling/SubjectHandling";
 
-// Function to check for account in localStorage
-const isAuthenticated = () => {
-  return !!localStorage.getItem("account");
+// Function to check if the user is authenticated
+const isAuthenticated = () => !!localStorage.getItem("account");
+
+// Component to get the role-based component
+const RoleBasedRoute = ({ studentComponent, lecturerComponent }) => {
+  const role = localStorage.getItem("role");
+  return role === "sv" ? studentComponent : lecturerComponent;
 };
 
+// Component for private routes
 const PrivateRoutes = () => {
   return isAuthenticated() ? <Outlet /> : <Navigate to="/" />;
 };
+
+// Component for login route
 const LoginRoute = () => {
   return isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />;
 };
-const getRole = () => {
-  return localStorage.getItem("role");
-};
+
+// Router configuration
 const router = createBrowserRouter([
   {
     path: "/",
@@ -48,7 +57,6 @@ const router = createBrowserRouter([
   },
   {
     path: "/test",
-    // element: <Test />,
     errorElement: <ErrorPage />,
   },
   {
@@ -60,7 +68,21 @@ const router = createBrowserRouter([
         children: [
           {
             path: "dashboard",
-            element: getRole() === "sv" ? <Dashboard /> : <DashboardLecture />,
+            element: (
+              <RoleBasedRoute
+                studentComponent={<Dashboard />}
+                lecturerComponent={<DashboardLecture />}
+              />
+            ),
+          },
+          {
+            path: "calendar",
+            element: (
+              <RoleBasedRoute
+                studentComponent={<Calendar />}
+                lecturerComponent={<CalendarLecture />}
+              />
+            ),
           },
           {
             path: "generalreceipts",
@@ -79,16 +101,16 @@ const router = createBrowserRouter([
             element: <Transcript />,
           },
           {
-            path: "calendar",
-            element: <Calendar />,
-          },
-          {
             path: "infordetail",
             element: <InforDetail />,
           },
           {
-            path: "educationprogram",
+            path: "educationProgram",
             element: <Program1 />,
+          },
+          {
+            path: "subjectHandling",
+            element: <SubjectHandling />,
           },
         ],
       },

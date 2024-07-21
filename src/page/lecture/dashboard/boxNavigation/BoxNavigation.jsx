@@ -1,10 +1,8 @@
 /* eslint-disable react/prop-types */
 import { Grid, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 const BoxNavigation = ({ index, icon, title, to, status }) => {
-  const dispatch = useDispatch();
   return (
     <Grid
       container
@@ -16,8 +14,7 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
         flexDirection: "column",
         color: "#008689",
         backgroundColor: status === "loading" ? "rgb(26 15 15 / 20%)" : "white",
-        width: "100%",
-        height: "100%",
+
         flexWrap: "nowrap",
       }}
       component={Link}

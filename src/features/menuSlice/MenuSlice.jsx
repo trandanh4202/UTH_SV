@@ -1,51 +1,30 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  category: [],
+  menu: [],
+  boxNav: [],
   loading: false,
   error: null,
 };
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const getCategoryNoti = createAsyncThunk(
-  "noti/getCategoryNoti",
+export const getMenu = createAsyncThunk(
+  "menu/getMenu",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/notification/category`);
-      return response.data.body;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
 
-export const getNewfeeds = createAsyncThunk(
-  "noti/getNewfeeds",
-  async ({ id, page = 1, size = 10 }, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/notification`, {
-        params: {
-          categoryId: id,
-          page: page,
-          size: size,
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      });
-      return response.data.body;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
+      };
+      const response = await axios.get(`${API_BASE_URL}/menu/nhansu`, config);
 
-export const getNewfeedsById = createAsyncThunk(
-  "noti/getNewfeedsById",
-  async ({ articleId }, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/notification/${articleId}`
-      );
       return response.data.body;
     } catch (error) {
       if (
@@ -53,56 +32,76 @@ export const getNewfeedsById = createAsyncThunk(
         (error.response.status === 401 || error.response.status === 403)
       ) {
         localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login nếu không được phép truy cập
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
   }
 );
 
-const notificationSlice = createSlice({
-  name: "noti",
+export const getBoxNav = createAsyncThunk(
+  "menu/getBoxNav",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/menu/nhansu/main`,
+        config
+      );
+
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+const menuSlice = createSlice({
+  name: "menu",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getCategoryNoti.pending, (state) => {
+      .addCase(getMenu.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getCategoryNoti.fulfilled, (state, action) => {
+      .addCase(getMenu.fulfilled, (state, action) => {
         state.loading = false;
-        state.category = action.payload;
+        state.menu = action.payload;
       })
-      .addCase(getCategoryNoti.rejected, (state, action) => {
+      .addCase(getMenu.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
-      .addCase(getNewfeeds.pending, (state) => {
+      .addCase(getBoxNav.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getNewfeeds.fulfilled, (state, action) => {
+      .addCase(getBoxNav.fulfilled, (state, action) => {
         state.loading = false;
-        state.newfeeds = action.payload;
+        state.boxNav = action.payload;
       })
-      .addCase(getNewfeeds.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || action.error.message;
-      })
-      .addCase(getNewfeedsById.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getNewfeedsById.fulfilled, (state, action) => {
-        state.loading = false;
-        state.content = action.payload;
-      })
-      .addCase(getNewfeedsById.rejected, (state, action) => {
+      .addCase(getBoxNav.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });
   },
 });
 
-export default notificationSlice.reducer;
+export default menuSlice.reducer;

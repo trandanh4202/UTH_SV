@@ -19,7 +19,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // Import Swiper styles
 import "swiper/css";
@@ -34,6 +34,7 @@ import { Link } from "react-router-dom";
 import InforGV from "./inforGV/InforGV";
 import BoxNoti from "./boxNoti/BoxNoti";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
+import { getBoxNav, getMenu } from "../../../features/menuSlice/MenuSlice";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -112,6 +113,11 @@ const DashboardLecture = () => {
       to: "/calendar",
     },
   ];
+  useEffect(() => {
+    dispatch(getMenu());
+    dispatch(getBoxNav());
+  }, [dispatch]);
+  const { boxNav } = useSelector((state) => state.menu);
 
   return (
     <Container>
@@ -254,7 +260,7 @@ const DashboardLecture = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
-        {data.map((item, index) => (
+        {boxNav.map((item, index) => (
           <Grid key={index} item lg={1.5} xs={6}>
             <Paper
               sx={{
@@ -262,6 +268,7 @@ const DashboardLecture = () => {
                 position: "relative",
                 overflow: "hidden",
                 color: "#fff",
+                verticalAlign: "top",
               }}
               elevation={4}
             >
@@ -283,7 +290,13 @@ const DashboardLecture = () => {
                   <CircularProgress color="error" />
                 </Box>
               ) : (
-                <BoxNavigation />
+                <BoxNavigation
+                  index={index}
+                  icon={item.icon}
+                  title={item.name}
+                  to={item.route}
+                  status={item.isActive}
+                />
               )}
             </Paper>
           </Grid>

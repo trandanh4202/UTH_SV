@@ -62,38 +62,6 @@ const Login = () => {
                     <TabsPanel />
                   </Paper>
                 </Box>
-                {/* <Swiper
-                  cssMode={true}
-                  navigation={true}
-                  pagination={true}
-                  mousewheel={true}
-                  keyboard={true}
-                  modules={[Navigation, Pagination, Mousewheel, Keyboard]}
-                  className="mySwiper"
-                >
-                  <SwiperSlide>
-                    <img
-                      src="./images/slide1.png"
-                      alt=""
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      src="./images/slide2.png"
-                      alt=""
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </SwiperSlide>
-                </Swiper> */}
               </Grid>
               <Grid item xs={12} md={6} lg={4} sx={{}}>
                 <FormLogin2 />

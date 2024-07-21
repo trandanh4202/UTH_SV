@@ -6,6 +6,7 @@ import calendarReducer from "./calendarSlice/CalendarSlice";
 import notificationReducer from "./notificationSlice/NotificationSlice";
 import programReducer from "./programSlice/ProgramSlice";
 import tuitionReducer from "./tuitionSlice/TuitionSlice";
+import menuReducer from "./menuSlice/MenuSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     notification: notificationReducer,
     program: programReducer,
     tuition: tuitionReducer,
+    menu: menuReducer,
   },
-  devTools: false,
+  // devTools: false,
 });
