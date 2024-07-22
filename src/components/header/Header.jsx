@@ -324,15 +324,17 @@ const Header = () => {
                     display: "flex",
                     alignItems: "center",
                     "&:hover": {
-                      "& .MuiAvatar-root": {
-                        backgroundColor: "#3f51b5",
-                        color: "#ffffff",
-                      },
+                      // "& .MuiAvatar-root": {
+                      //   backgroundColor: "#3f51b5",
+                      //   color: "#ffffff",
+                      // },
                       "& .MuiTypography-root": {
-                        color: "#3f51b5",
+                        color: "#008689",
+                        fontWeight: "600",
                       },
                       "& .MuiSvgIcon-root": {
-                        color: "#3f51b5",
+                        color: "#008689",
+                        fontWeight: "600",
                       },
                     },
                   }}
@@ -344,7 +346,11 @@ const Header = () => {
                 >
                   <Avatar
                     alt="User Avatar"
-                    src={profile?.image}
+                    src={
+                      profile?.image
+                        ? profile?.image
+                        : "./images/avatarDashboard.png"
+                    }
                     sx={{
                       marginRight: 1,
                       display: { lg: "flex", xs: "none" },

@@ -55,8 +55,7 @@ const Dashboard = () => {
     {
       icon: <CastForEducation sx={{ fontSize: "25px" }} />,
       title: "Trang học trực tuyến",
-      to: "/courses",
-      // to: `https://courses.ut.edu.vn/login/index.php?token=${token}`,
+      to: `https://courses.ut.edu.vn/login/index.php?token=${token}`,
     },
     {
       icon: <CalendarMonth sx={{ fontSize: "25px" }} />,

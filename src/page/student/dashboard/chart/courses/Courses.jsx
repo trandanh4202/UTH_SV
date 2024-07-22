@@ -70,8 +70,8 @@ const Courses = () => {
               displayEmpty
               sx={{
                 "& .MuiSelect-select": {
-                  padding: " 5px 40px 5px 20px",
-                  fontSize: { xs: "13px", lg: "15px" },
+                  padding: "5px 10px",
+                  fontSize: "15px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -81,10 +81,11 @@ const Courses = () => {
               <MenuItem value="" disabled>
                 Chọn học kỳ
               </MenuItem>
-              {select.map((item) => (
+              {select.map((item, index) => (
                 <MenuItem
                   key={item.id}
                   value={item.id}
+                  index={index}
                   sx={{ fontSize: "13px" }}
                 >
                   {item.tenDot}
@@ -94,7 +95,28 @@ const Courses = () => {
           </FormControl>
         </Box>
         <Divider sx={{ width: "100%", margin: "10px 0 " }} />
-        <TableContainer sx={{ maxHeight: 200, overflowY: "auto" }}>
+        <TableContainer
+          sx={{
+            maxHeight: "20vh",
+            "&::-webkit-scrollbar": {
+              width: "10px",
+              height: "10px",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-thumb": {
+              backgroundColor: "#008689",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-thumb:hover": {
+              backgroundColor: "#008950",
+              borderRadius: "10px",
+            },
+            "&::-webkit-scrollbar-track": {
+              backgroundColor: "#f1f1f1",
+              borderRadius: "10px",
+            },
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow>

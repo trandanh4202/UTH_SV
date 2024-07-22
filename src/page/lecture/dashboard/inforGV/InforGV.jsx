@@ -81,7 +81,7 @@ const InforGV = () => {
             >
               <Box sx={{ borderRadius: "50%" }}>
                 <img
-                  src={"./images/avatarDashboard.png"}
+                  src="./images/avatarDashboard.png"
                   alt="avatar"
                   style={{
                     width: "140px",
@@ -90,20 +90,6 @@ const InforGV = () => {
                     borderRadius: "50%",
                   }}
                 />
-              </Box>
-              <Box>
-                <Typography
-                  component={Link}
-                  to="/inforDetail"
-                  sx={{
-                    color: "red",
-                    fontSize: "13px",
-                    textDecoration: "none",
-                    fontWeight: "600",
-                  }}
-                >
-                  Xem chi tiết
-                </Typography>
               </Box>
             </Box>
           </Grid>

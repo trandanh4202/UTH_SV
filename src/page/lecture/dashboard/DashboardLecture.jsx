@@ -1,16 +1,5 @@
 /* eslint-disable react/jsx-key */
-import {
-  AccountBalance,
-  AttachMoney,
-  AutoStories,
-  CalendarMonth,
-  CastForEducation,
-  NotificationAdd,
-  ReceiptLong,
-  School,
-  SupportAgent,
-  Upcoming,
-} from "@mui/icons-material";
+import { NotificationAdd, Upcoming } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -31,10 +20,10 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
-import InforGV from "./inforGV/InforGV";
-import BoxNoti from "./boxNoti/BoxNoti";
-import BoxNavigation from "./boxNavigation/BoxNavigation";
 import { getBoxNav, getMenu } from "../../../features/menuSlice/MenuSlice";
+import BoxNavigation from "./boxNavigation/BoxNavigation";
+import BoxNoti from "./boxNoti/BoxNoti";
+import InforGV from "./inforGV/InforGV";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -42,52 +31,6 @@ const formatDate = (dateString) => {
 const DashboardLecture = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("account");
-
-  const data = [
-    {
-      icon: <CastForEducation sx={{ fontSize: "25px" }} />,
-      title: "Trang học trực tuyến",
-      to: "/courses",
-      // to: `https://courses.ut.edu.vn/login/index.php?token=${token}`,
-    },
-    {
-      icon: <CalendarMonth sx={{ fontSize: "25px" }} />,
-      title: "Kết quả học tập",
-      to: "/transcript",
-    },
-    {
-      icon: <SupportAgent sx={{ fontSize: "25px" }} />,
-      title: "Hỗ trợ trực tuyến",
-      to: `https://support.ut.edu.vn/login.php?token=${token}`,
-    },
-    {
-      icon: <AccountBalance sx={{ fontSize: "25px" }} />,
-      title: "Thanh toán trực tuyến",
-      to: "https://payment.ut.edu.vn/",
-    },
-    {
-      icon: <School sx={{ fontSize: "25px" }} />,
-      title: "Chương trình khung",
-      // status: "loading",
-      to: "/educationprogram",
-    },
-    {
-      icon: <AttachMoney sx={{ fontSize: "25px" }} />,
-      title: "Tra cứu công nợ",
-      to: "/tuition",
-      // status: "loading",
-    },
-    {
-      icon: <ReceiptLong sx={{ fontSize: "25px" }} />,
-      title: "Phiếu thu tổng hợp",
-      to: "/generalreceipts",
-    },
-    {
-      icon: <AutoStories sx={{ fontSize: "25px" }} />,
-      title: "Đăng ký học phần",
-      status: "loading",
-    },
-  ];
 
   const total = useSelector((state) => state.calendar?.total);
 

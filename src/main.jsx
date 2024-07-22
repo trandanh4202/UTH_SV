@@ -27,6 +27,7 @@ import PaymentTable from "~/page/student/tuitionFees/paymentOnline/PaymentTable"
 import TuitionTable from "~/page/student/tuitionFees/tuitionTable/TuitionTable";
 import Login from "~/page/login/Login";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"; // Import GoogleReCaptchaProvider
+import SubjectHandling from "./page/student/subjectHandling/SubjectHandling";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -106,6 +107,10 @@ const router = createBrowserRouter([
           {
             path: "educationprogram",
             element: <Program1 />,
+          },
+          {
+            path: "subjecthandling",
+            element: <SubjectHandling />,
           },
         ],
       },

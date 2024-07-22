@@ -19,6 +19,7 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
       }}
       component={Link}
       to={to}
+      target={to?.includes("https") ? "_blank" : "_self"}
     >
       <Grid
         item

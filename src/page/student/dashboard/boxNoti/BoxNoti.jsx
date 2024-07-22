@@ -31,7 +31,7 @@ const BoxNoti = ({ title, icon, color, to, total }) => {
               color: "white",
               fontSize: "13px",
               textDecoration: "none",
-              fontWeight: "600",
+              fontWeight: "700",
             }}
           >
             Xem chi tiết

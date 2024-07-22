@@ -87,7 +87,7 @@ const Program1 = () => {
         <Paper elevation={12} sx={{ borderRadius: "10px", padding: "20px" }}>
           <TableContainer
             sx={{
-              maxHeight: "82vh",
+              maxHeight: "72vh",
               "&::-webkit-scrollbar": {
                 width: "10px",
                 height: "10px",

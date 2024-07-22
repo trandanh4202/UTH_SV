@@ -144,6 +144,10 @@ const SubjectHandling = () => {
                               width: 30,
                               height: 30,
                               "&.Mui-checked": { color: "#008689" },
+                              "&.Mui-checked + .MuiFormControlLabel-label ": {
+                                color: "#008689",
+                                fontWeight: "700",
+                              },
                             }}
                           />
                         }
@@ -152,7 +156,7 @@ const SubjectHandling = () => {
                           "& .MuiFormControlLabel-label": {
                             fontSize: "14px",
                             color: "rgb(102, 117, 128)",
-                            fontWeight: "600",
+                            fontWeight: "500",
                           },
                         }}
                       />
