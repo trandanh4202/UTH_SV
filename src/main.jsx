@@ -26,8 +26,7 @@ import GeneralReceipts from "~/page/student/tuitionFees/generalReceipts/GeneralR
 import PaymentTable from "~/page/student/tuitionFees/paymentOnline/PaymentTable";
 import TuitionTable from "~/page/student/tuitionFees/tuitionTable/TuitionTable";
 import Login from "~/page/login/Login";
-import CoursesRegistration from "./page/student/subjectHandling/SubjectHandling";
-import SubjectHandling from "./page/student/subjectHandling/SubjectHandling";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"; // Import GoogleReCaptchaProvider
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -105,12 +104,8 @@ const router = createBrowserRouter([
             element: <InforDetail />,
           },
           {
-            path: "educationProgram",
+            path: "educationprogram",
             element: <Program1 />,
-          },
-          {
-            path: "subjectHandling",
-            element: <SubjectHandling />,
           },
         ],
       },
@@ -141,8 +136,10 @@ const theme = createTheme({
 ReactDOM.createRoot(document.getElementById("root")).render(
   <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <RouterProvider router={router} />
-      <ToastContainer autoClose={5000} />
+      <GoogleReCaptchaProvider reCaptchaKey="6Ldz8PUpAAAAALEoaICewBmqHCkt6VgvQzkiCgeJ">
+        <RouterProvider router={router} />
+        <ToastContainer autoClose={5000} />
+      </GoogleReCaptchaProvider>
     </Provider>
   </ThemeProvider>
 );

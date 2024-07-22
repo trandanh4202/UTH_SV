@@ -10,58 +10,53 @@ import {
   InputAdornment,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import ReCAPTCHA from "react-google-recaptcha";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { loginPage } from "~/features/loginSlice/LoginSlice";
 import { useNavigate } from "react-router-dom";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3"; // Import từ thư viện reCAPTCHA
 
 const FormLogin2 = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset, // Hàm reset từ react-hook-form
+    reset,
   } = useForm();
-  const recaptchaRef = useRef(null); // Sử dụng useRef để tạo ref cho reCAPTCHA
-
-  const [recaptchaValue, setRecaptchaValue] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-  const [submitted, setSubmitted] = useState(false); // State để theo dõi đã nhấn nút Đăng nhập hay chưa
+  const [submitted, setSubmitted] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { executeRecaptcha } = useGoogleReCaptcha(); // Hàm từ thư viện reCAPTCHA
+
   const onSubmit = async (data) => {
-    setSubmitted(true); // Đánh dấu là đã nhấn nút Đăng nhập
-    if (recaptchaValue) {
-      const combinedData = {
-        ...data,
-        recaptcha: recaptchaValue,
-      };
-      const result = await dispatch(loginPage(combinedData));
-      const token = localStorage.getItem("account");
-      if (token) {
-        navigate("/dashboard");
-      } else {
-        // Xử lý lỗi và reset reCAPTCHA cùng với form
-        recaptchaRef.current.reset();
-        setRecaptchaValue(null);
+    setSubmitted(true);
+
+    if (executeRecaptcha) {
+      try {
+        const recaptchaToken = await executeRecaptcha("login"); // Gửi hành động reCAPTCHA
+
+        const combinedData = {
+          ...data,
+          recaptcha: recaptchaToken,
+        };
+
+        const result = await dispatch(loginPage(combinedData));
+        const token = localStorage.getItem("account");
+
+        if (token) {
+          navigate("/dashboard");
+        } else {
+          reset(); // Reset form fields
+        }
+      } catch (error) {
+        console.error("reCAPTCHA error:", error);
         reset(); // Reset form fields
       }
     }
   };
-
-  const handleRecaptchaChange = (value) => {
-    setRecaptchaValue(value);
-  };
-
-  useEffect(() => {
-    const token = localStorage.getItem("account");
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
 
   const handleClickShowPassword = () => {
     setShowPassword((prev) => !prev);
@@ -69,6 +64,13 @@ const FormLogin2 = () => {
 
   const message = useSelector((state) => state.login.token?.message);
   const status = useSelector((state) => state.login.token?.status);
+
+  useEffect(() => {
+    const token = localStorage.getItem("account");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   return (
     <Paper
@@ -117,7 +119,7 @@ const FormLogin2 = () => {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            p: 2, // Adjust padding
+            p: 2,
           }}
           noValidate
           autoComplete="off"
@@ -134,13 +136,13 @@ const FormLogin2 = () => {
             InputProps={{
               sx: {
                 backgroundColor: "white",
-                fontSize: "1.4rem", // Increase font size for input
+                fontSize: "1.4rem",
               },
             }}
             InputLabelProps={{
               sx: {
                 fontStyle: "italic",
-                fontSize: "1.4rem", // Increase font size for label
+                fontSize: "1.4rem",
                 color: "gray",
               },
             }}
@@ -162,7 +164,7 @@ const FormLogin2 = () => {
             InputProps={{
               sx: {
                 backgroundColor: "white",
-                fontSize: "1.4rem", // Increase font size for input
+                fontSize: "1.4rem",
               },
               endAdornment: (
                 <InputAdornment position="end">
@@ -179,27 +181,11 @@ const FormLogin2 = () => {
             InputLabelProps={{
               sx: {
                 fontStyle: "italic",
-                fontSize: "1.4rem", // Increase font size for label
+                fontSize: "1.4rem",
                 color: "gray",
               },
             }}
           />
-          <Box
-            sx={{
-              width: "100%",
-              "& div div div": {
-                width: "100% !important",
-              },
-            }}
-          >
-            <ReCAPTCHA
-              sitekey="6LfFYvwpAAAAADqIqIyHcx2J-7MDS_mHPVtM8Pin"
-              onChange={handleRecaptchaChange}
-              ref={recaptchaRef} // Ref to access reCAPTCHA instance
-            />
-          </Box>
-          {/* Hiển thị thông báo lỗi nếu đã nhấn nút Đăng nhập mà chưa nhập reCAPTCHA */}
-
           {message && status !== 200 && (
             <Alert severity="error" sx={{ margin: "10px 0", fontSize: "15px" }}>
               {message}
@@ -212,10 +198,10 @@ const FormLogin2 = () => {
             sx={{
               backgroundColor: "#008689",
               color: "white",
-              fontSize: "1.4rem", // Increase the font size
-              padding: "10px 0", // Increase the padding
+              fontSize: "1.4rem",
+              padding: "10px 0",
               "&:hover": {
-                backgroundColor: "#1D999D", // Darker shade for hover state
+                backgroundColor: "#1D999D",
               },
               margin: "20px 0",
             }}
