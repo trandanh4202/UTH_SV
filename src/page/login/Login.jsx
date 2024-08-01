@@ -63,7 +63,7 @@ const Login = () => {
                   </Paper>
                 </Box>
               </Grid>
-              <Grid item xs={12} md={6} lg={4} sx={{}}>
+              <Grid item xs={12} md={6} lg={4} >
                 <FormLogin2 />
               </Grid>
             </Grid>

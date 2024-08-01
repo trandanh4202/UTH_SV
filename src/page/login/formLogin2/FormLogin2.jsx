@@ -1,25 +1,34 @@
-import React, { useState, useEffect } from "react";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+  Alert,
   Box,
   Button,
-  Paper,
-  TextField,
-  Typography,
-  Alert,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Grid,
   IconButton,
   InputAdornment,
+  Paper,
   Radio,
   RadioGroup,
-  FormControlLabel,
-  FormControl,
-  FormLabel,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { loginPage } from "~/features/loginSlice/LoginSlice";
-import { useNavigate } from "react-router-dom";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  loginPage,
+  getOtp,
+  validateOTP,
+} from "~/features/loginSlice/LoginSlice";
+import { resetPassword } from "../../../features/loginSlice/LoginSlice";
+import { toast, ToastContainer } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
+import Spinner from "../../../components/Spinner/Spinner";
 
 const FormLogin2 = () => {
   const {
@@ -30,45 +39,79 @@ const FormLogin2 = () => {
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [authMethod, setAuthMethod] = useState("phone");
-
+  const [authMethod, setAuthMethod] = useState("0");
+  const [otp, setOtp] = useState("");
+  const [username, setUsername] = useState("");
+  const [recallOtp, setRecallOtp] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { executeRecaptcha } = useGoogleReCaptcha();
+  const { message: getOtpMessage, status: getOtpStatus } =
+    useSelector((state) => state.login.getOtp) || {};
+  const { message: validateOtpMessage, status: validateOtpStatus } =
+    useSelector((state) => state.login.validateOTP) || {};
+  const { message: resetPasswordMessage, status: resetPasswordStatus } =
+    useSelector((state) => state.login.resetPassword) || {};
+
+  const [isPasswordChanged, setIsPasswordChanged] = useState(false);
+  const loading = useSelector((state) => state.login.loading);
+  useEffect(() => {
+    const token = localStorage.getItem("account");
+    if (token) navigate("/dashboard");
+  }, [navigate]);
 
   const onSubmit = async (data) => {
+    const recaptchaToken = await executeRecaptcha("login");
     if (!isForgotPassword) {
-      // Logic đăng nhập
-      const recaptchaToken = await executeRecaptcha("login");
-      const combinedData = { ...data, recaptcha: recaptchaToken };
-      const result = await dispatch(loginPage(combinedData));
-      const token = localStorage.getItem("account");
-      if (token) {
-        navigate("/dashboard");
-      } else {
-        reset();
-      }
+      const loginData = { ...data, recaptcha: recaptchaToken };
+      const results = await dispatch(loginPage(loginData));
+
+      localStorage.getItem("account") ? navigate("/dashboard") : reset();
     } else {
-      // Logic khôi phục mật khẩu
-      console.log("Khôi phục mật khẩu:", data);
-      // Xử lý khôi phục mật khẩu ở đây
+      const forgotPasswordData = {
+        ...data,
+        authMethod,
+        recaptcha: recaptchaToken,
+      };
+      dispatch(getOtp(forgotPasswordData));
+      setUsername(data.username);
     }
   };
 
-  const handleClickShowPassword = () => setShowPassword((prev) => !prev);
-  const handleForgotPasswordClick = () => setIsForgotPassword(true);
-  const handleBackToLoginClick = () => setIsForgotPassword(false);
-
-  const message = useSelector((state) => state.login.token?.message);
-  const status = useSelector((state) => state.login.token?.status);
-
+  const validateOtp = async (data) => {
+    const recaptchaToken = await executeRecaptcha("login");
+    dispatch(
+      validateOTP({ username, otp: data.otp, recaptcha: recaptchaToken })
+    );
+    setOtp(data.otp);
+  };
+  const resetPasswordHandle = async (data) => {
+    const recaptchaToken = await executeRecaptcha("login");
+    dispatch(
+      resetPassword({
+        username,
+        otp,
+        password: data.password,
+        recaptcha: recaptchaToken,
+      })
+    );
+    setIsPasswordChanged(true);
+  };
   useEffect(() => {
-    const token = localStorage.getItem("account");
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
+    if (isPasswordChanged && resetPasswordMessage) {
+      if (resetPasswordStatus === 200) {
+        toast.success(resetPasswordMessage);
+        localStorage.clear();
 
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else if (resetPasswordStatus === 400) {
+        toast.error(resetPasswordMessage);
+      }
+      setIsPasswordChanged(false);
+    }
+  }, [isPasswordChanged, resetPasswordMessage, resetPasswordStatus, navigate]);
   return (
     <Paper
       elevation={4}
@@ -76,8 +119,10 @@ const FormLogin2 = () => {
         border: "5px solid white",
         padding: "10px 25px",
         borderRadius: "18px",
+        position: "relative",
       }}
     >
+      {loading && <Spinner />}
       <Box
         sx={{
           display: "flex",
@@ -85,6 +130,8 @@ const FormLogin2 = () => {
           alignItems: "center",
           margin: "10px 0",
         }}
+        component={Link}
+        to="dashboard"
       >
         <img
           src="./images/logo_uth.png"
@@ -92,351 +139,496 @@ const FormLogin2 = () => {
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
         />
       </Box>
-      <Box>
-        <Typography
-          variant="h4"
-          sx={{
-            textAlign: "center",
-            color: "#da1c2d",
-            fontWeight: "700",
-            margin: "20px 0 10px 0",
-          }}
-        >
-          {isForgotPassword ? "KHÔI PHỤC MẬT KHẨU" : "ĐĂNG NHẬP HỆ THỐNG"}
-        </Typography>
-        <Box
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-          sx={{ display: "flex", flexDirection: "column", gap: 2, p: 2 }}
-          noValidate
-          autoComplete="off"
-        >
-          {!isForgotPassword ? (
-            <>
-              <TextField
-                label="Tài khoản đăng nhập"
-                variant="outlined"
-                fullWidth
-                {...register("username", {
-                  required: "Tài khoản đăng nhập là bắt buộc",
-                })}
-                error={!!errors.username}
-                helperText={errors.username ? errors.username.message : ""}
-                FormHelperTextProps={{
-                  sx: { fontSize: "11px" },
-                }}
-                InputProps={{
-                  sx: { backgroundColor: "white", fontSize: "1.4rem" },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontStyle: "italic",
-                    fontSize: "1.4rem",
-                    color: "gray",
-                    "&.Mui-focused": {
-                      color: "#008689",
-                    },
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008689",
-                    },
-                  },
-                }}
-              />
-              <TextField
-                label="Mật khẩu"
-                variant="outlined"
-                type={showPassword ? "text" : "password"}
-                fullWidth
-                {...register("password", {
-                  required: "Mật khẩu là bắt buộc",
-                  minLength: {
-                    value: 6,
-                    message: "Mật khẩu phải có ít nhất 6 ký tự",
-                  },
-                })}
-                error={!!errors.password}
-                helperText={errors.password ? errors.password.message : ""}
-                FormHelperTextProps={{
-                  sx: { fontSize: "11px" },
-                }}
-                InputProps={{
-                  sx: { backgroundColor: "white", fontSize: "1.4rem" },
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleClickShowPassword} edge="end">
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontStyle: "italic",
-                    fontSize: "1.4rem",
-                    color: "gray",
-                    "&.Mui-focused": {
-                      color: "#008689",
-                    },
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008689",
-                    },
-                  },
-                }}
-              />
-              {message && status !== 200 && (
-                <Alert
-                  severity="error"
-                  sx={{ margin: "10px 0", fontSize: "15px" }}
-                >
-                  {message}
-                </Alert>
-              )}
-              <Button
-                variant="contained"
-                type="submit"
-                fullWidth
-                sx={{
-                  backgroundColor: "#008689",
-                  color: "white",
-                  fontSize: "15px",
-                  padding: "10px 0",
-                  "&:hover": { backgroundColor: "#1D999D" },
-                  margin: "20px 0",
-                  fontWeight: "700",
-                }}
-              >
-                Đăng nhập
-              </Button>
-              <Button
-                onClick={handleForgotPasswordClick}
-                sx={{ color: "#008689", fontSize: "13px" }}
-              >
-                Quên mật khẩu?
-              </Button>
-            </>
-          ) : (
-            <>
-              <FormControl
-                sx={{
-                  textAlign: "center",
-                }}
-              >
-                <FormLabel
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: "600",
-                    color: "red",
-                    "&.Mui-focused": {
-                      color: "red",
-                    },
-                  }}
-                >
-                  Chọn phương thức khôi phục
-                </FormLabel>
-                <RadioGroup
-                  aria-label="authMethod"
-                  value={authMethod}
-                  onChange={(e) => setAuthMethod(e.target.value)}
-                  row
-                  sx={{
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <FormControlLabel
-                    value="phone"
-                    control={
-                      <Radio
-                        sx={{
-                          width: 30,
-                          height: 30,
-                          "&.Mui-checked": { color: "#008689" },
-                          "&.Mui-checked + .MuiFormControlLabel-label ": {
-                            color: "#008689",
-                            fontSize: "14px",
-                            fontWeight: "700",
-                          },
-                        }}
-                      />
-                    }
-                    label="Số điện thoại"
-                    sx={{
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: "15px",
-                        color: "rgb(102, 117, 128)",
-                        fontWeight: "500",
-                      },
-                    }}
-                  />
-                  <FormControlLabel
-                    value="email"
-                    control={
-                      <Radio
-                        sx={{
-                          "&.Mui-checked": { color: "#008689" },
-                          "&.Mui-checked + .MuiFormControlLabel-label ": {
-                            color: "#008689",
-                            fontSize: "14px",
-                            fontWeight: "700",
-                          },
-                        }}
-                      />
-                    }
-                    label="Email"
-                    sx={{
-                      "& .MuiFormControlLabel-label": {
-                        fontSize: "15px",
-                        color: "rgb(102, 117, 128)",
-                        fontWeight: "500",
-                      },
-                    }}
-                  />
-                </RadioGroup>
-              </FormControl>
-              <TextField
-                label="Nhập tài khoản đăng nhập"
-                variant="outlined"
-                fullWidth
-                {...register("studentId", {
-                  required: "Tài khoản đăng nhập là bắt buộc",
-                })}
-                error={!!errors.studentId}
-                helperText={errors.studentId ? errors.studentId.message : ""}
-                FormHelperTextProps={{
-                  sx: { fontSize: "11px" },
-                }}
-                InputProps={{
-                  sx: { backgroundColor: "white", fontSize: "1.4rem" },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontStyle: "italic",
-                    fontSize: "1.4rem",
-                    color: "gray",
-                    "&.Mui-focused": {
-                      color: "#008689",
-                    },
-                  },
-                }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#008689",
-                    },
-                  },
-                }}
-              />
-              {authMethod === "phone" ? (
-                <TextField
-                  label="Nhập số điện thoại"
-                  variant="outlined"
-                  fullWidth
-                  {...register("phone", {
-                    required: "Số điện thoại là bắt buộc",
-                    pattern: {
-                      value: /^\d{10}$/,
-                      message: "Số điện thoại phải đủ 10 số",
-                    },
-                  })}
-                  error={!!errors.phone}
-                  helperText={errors.phone ? errors.phone.message : ""}
-                  FormHelperTextProps={{
-                    sx: { fontSize: "11px" },
-                  }}
-                  InputProps={{
-                    sx: { backgroundColor: "white", fontSize: "1.4rem" },
-                  }}
-                  InputLabelProps={{
-                    sx: {
-                      fontStyle: "italic",
-                      fontSize: "1.4rem",
-                      color: "gray",
-                      "&.Mui-focused": {
-                        color: "#008689",
-                      },
-                    },
-                  }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#008689",
-                      },
-                    },
-                  }}
-                />
-              ) : (
-                <TextField
-                  label="Nhập email"
-                  variant="outlined"
-                  fullWidth
-                  {...register("email", {
-                    required: "Email là bắt buộc",
-                    pattern: {
-                      value: /^[a-zA-Z0-9._%+-]+@ut\.edu\.vn$/,
-                      message: "Email phải có đuôi @ut.edu.vn",
-                    },
-                  })}
-                  error={!!errors.email}
-                  helperText={errors.email ? errors.email.message : ""}
-                  FormHelperTextProps={{
-                    sx: { fontSize: "11px" },
-                  }}
-                  InputProps={{
-                    sx: { backgroundColor: "white", fontSize: "1.4rem" },
-                  }}
-                  InputLabelProps={{
-                    sx: {
-                      fontStyle: "italic",
-                      fontSize: "1.4rem",
-                      color: "gray",
-                      "&.Mui-focused": {
-                        color: "#008689",
-                      },
-                    },
-                  }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "&.Mui-focused fieldset": {
-                        borderColor: "#008689",
-                      },
-                    },
-                  }}
-                />
-              )}
 
-              <Button
-                variant="contained"
-                type="submit"
-                fullWidth
+      <Typography
+        variant="h4"
+        sx={{
+          textAlign: "center",
+          color: "#da1c2d",
+          fontWeight: "700",
+          margin: "20px 0 10px 0",
+        }}
+      >
+        {isForgotPassword ? "KHÔI PHỤC MẬT KHẨU" : "ĐĂNG NHẬP HỆ THỐNG"}
+      </Typography>
+
+      <Box
+        component="form"
+        onSubmit={handleSubmit(
+          recallOtp
+            ? onSubmit
+            : getOtpStatus === 200 && getOtpMessage && !otp
+            ? validateOtp
+            : otp
+            ? resetPasswordHandle
+            : onSubmit
+        )}
+        sx={{ display: "flex", flexDirection: "column", gap: 2, p: 2 }}
+        noValidate
+        autoComplete="off"
+      >
+        {getOtpStatus === 200 && getOtpMessage && !otp && isForgotPassword ? (
+          <>
+            {/* <Grid container spacing={2}> */}
+            {/* <Grid item xs={12}> */}
+            <TextField
+              label="OTP"
+              variant="outlined"
+              fullWidth
+              {...register("otp", { required: "OTP là bắt buộc" })}
+              error={!!errors.otp}
+              helperText={errors.otp?.message || ""}
+              FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+              InputProps={{
+                sx: { backgroundColor: "white", fontSize: "1.4rem" },
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontStyle: "italic",
+                  fontSize: "1.4rem",
+                  color: "gray",
+                  "&.Mui-focused": { color: "#008689" },
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#008689" },
+                },
+              }}
+            />
+            {/* </Grid> */}
+            {/* <Grid item xs={3}>
+                <Button
+                  variant="contained"
+                  type="button"
+                  fullWidth
+                  sx={{
+                    backgroundColor: "#008689",
+                    color: "white",
+                    fontSize: "13px",
+                    padding: "4px",
+                    "&:hover": { backgroundColor: "#1D999D" },
+                    fontWeight: "700",
+                    height: "100%",
+                  }}
+                  onClick={() => {
+                    setRecallOtp(true);
+                    handleSubmit(onSubmit)();
+                  }}
+                >
+                  Gửi lại OTP
+                </Button>
+              </Grid> */}
+            {/* </Grid> */}
+            {getOtpMessage && (
+              <Alert
                 sx={{
-                  backgroundColor: "#008689",
-                  color: "white",
+                  fontSize: "12px",
+                  fontWeight: "500",
+                }}
+                severity={getOtpStatus === 200 ? "success" : "error"}
+              >
+                {getOtpMessage}
+              </Alert>
+            )}
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              sx={{
+                backgroundColor: "#008689",
+                color: "white",
+                fontSize: "15px",
+                padding: "10px 0",
+                "&:hover": { backgroundColor: "#1D999D" },
+                margin: "20px 0",
+                fontWeight: "700",
+              }}
+            >
+              Xác nhận OTP
+            </Button>
+          </>
+        ) : otp && isForgotPassword ? (
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField
+              label="Mật khẩu mới"
+              variant="outlined"
+              type={showPassword ? "text" : "password"}
+              fullWidth
+              {...register("password", {
+                required: "Mật khẩu mới là bắt buộc",
+              })}
+              error={!!errors.password}
+              helperText={errors.password?.message || ""}
+              FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: { backgroundColor: "white", fontSize: "1.4rem" },
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontStyle: "italic",
+                  fontSize: "1.4rem",
+                  color: "gray",
+                  "&.Mui-focused": { color: "#008689" },
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#008689" },
+                },
+              }}
+            />
+            <TextField
+              label="Xác nhận mật khẩu mới"
+              variant="outlined"
+              type={showPassword ? "text" : "password"}
+              fullWidth
+              {...register("confirmPassword", {
+                required: "Xác nhận mật khẩu là bắt buộc",
+                // validate: (value) =>
+                //   value === watch("password") || "Mật khẩu không khớp",
+              })}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message || ""}
+              FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: { backgroundColor: "white", fontSize: "1.4rem" },
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontStyle: "italic",
+                  fontSize: "1.4rem",
+                  color: "gray",
+                  "&.Mui-focused": { color: "#008689" },
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#008689" },
+                },
+              }}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              sx={{
+                backgroundColor: "#008689",
+                color: "white",
+                fontSize: "15px",
+                padding: "10px 0",
+                "&:hover": { backgroundColor: "#1D999D" },
+                margin: "20px 0",
+                fontWeight: "700",
+              }}
+            >
+              Đặt lại mật khẩu
+            </Button>
+          </Box>
+        ) : isForgotPassword ? (
+          <>
+            <FormControl sx={{ textAlign: "center" }}>
+              <FormLabel
+                sx={{
                   fontSize: "15px",
-                  padding: "10px 0",
-                  "&:hover": { backgroundColor: "#1D999D" },
-                  margin: "20px 0",
-                  fontWeight: "700",
+                  fontWeight: "600",
+                  color: "red",
+                  "&.Mui-focused": { color: "red" },
                 }}
               >
-                Xác nhận
-              </Button>
-              <Button
-                onClick={handleBackToLoginClick}
-                sx={{ color: "#008689", fontSize: "13px" }}
+                Chọn phương thức khôi phục
+              </FormLabel>
+              <RadioGroup
+                aria-label="authMethod"
+                value={authMethod}
+                onChange={(e) => setAuthMethod(e.target.value)}
+                row
+                sx={{ alignItems: "center", justifyContent: "center" }}
               >
-                Quay lại đăng nhập
-              </Button>
-            </>
-          )}
-        </Box>
+                <FormControlLabel
+                  value="0"
+                  control={
+                    <Radio
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        "&.Mui-checked": { color: "#008689" },
+                        "&.Mui-checked + .MuiFormControlLabel-label ": {
+                          color: "#008689",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  }
+                  label="Số điện thoại"
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                      color: "rgb(102, 117, 128)",
+                      fontWeight: "500",
+                    },
+                  }}
+                />
+                <FormControlLabel
+                  value="1"
+                  control={
+                    <Radio
+                      sx={{
+                        "&.Mui-checked": { color: "#008689" },
+                        "&.Mui-checked + .MuiFormControlLabel-label ": {
+                          color: "#008689",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  }
+                  label="Email"
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                      color: "rgb(102, 117, 128)",
+                      fontWeight: "500",
+                    },
+                  }}
+                />
+              </RadioGroup>
+            </FormControl>
+            <TextField
+              label="Tài khoản đăng nhập"
+              variant="outlined"
+              fullWidth
+              {...register("username", {
+                required: "Tài khoản đăng nhập là bắt buộc",
+              })}
+              error={!!errors.username}
+              helperText={errors.username?.message || ""}
+              FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+              InputProps={{
+                sx: { backgroundColor: "white", fontSize: "1.4rem" },
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontStyle: "italic",
+                  fontSize: "1.4rem",
+                  color: "gray",
+                  "&.Mui-focused": { color: "#008689" },
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#008689" },
+                },
+              }}
+            />
+            {authMethod === "0" ? (
+              <TextField
+                label="Số điện thoại"
+                variant="outlined"
+                fullWidth
+                {...register("phone", {
+                  required: "Số điện thoại là bắt buộc",
+                  pattern: {
+                    value: /^[0-9]{10,11}$/,
+                    message: "Số điện thoại không hợp lệ",
+                  },
+                })}
+                error={!!errors.phone}
+                helperText={errors.phone?.message || ""}
+                FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+                InputProps={{
+                  sx: { backgroundColor: "white", fontSize: "1.4rem" },
+                }}
+                InputLabelProps={{
+                  sx: {
+                    fontStyle: "italic",
+                    fontSize: "1.4rem",
+                    color: "gray",
+                    "&.Mui-focused": { color: "#008689" },
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": { borderColor: "#008689" },
+                  },
+                }}
+              />
+            ) : (
+              <TextField
+                label="Email"
+                variant="outlined"
+                fullWidth
+                {...register("email", {
+                  required: "Email là bắt buộc",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Email không hợp lệ",
+                  },
+                })}
+                error={!!errors.email}
+                helperText={errors.email?.message || ""}
+                FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+                InputProps={{
+                  sx: { backgroundColor: "white", fontSize: "1.4rem" },
+                }}
+                InputLabelProps={{
+                  sx: {
+                    fontStyle: "italic",
+                    fontSize: "1.4rem",
+                    color: "gray",
+                    "&.Mui-focused": { color: "#008689" },
+                  },
+                }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": { borderColor: "#008689" },
+                  },
+                }}
+              />
+            )}
+            {getOtpMessage && (
+              <Alert
+                sx={{
+                  fontSize: "11px",
+                }}
+                severity={getOtpStatus === 200 ? "success" : "error"}
+              >
+                {getOtpMessage}
+              </Alert>
+            )}
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              sx={{
+                backgroundColor: "#008689",
+                color: "white",
+                fontSize: "15px",
+                padding: "10px 0",
+                "&:hover": { backgroundColor: "#1D999D" },
+                margin: "20px 0",
+                fontWeight: "700",
+              }}
+            >
+              Lấy lại mật khẩu
+            </Button>
+          </>
+        ) : (
+          <>
+            <TextField
+              label="Tài khoản đăng nhập"
+              variant="outlined"
+              fullWidth
+              {...register("username", {
+                required: "Tài khoản đăng nhập là bắt buộc",
+              })}
+              error={!!errors.username}
+              helperText={errors.username?.message || ""}
+              FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+              InputProps={{
+                sx: { backgroundColor: "white", fontSize: "1.4rem" },
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontStyle: "italic",
+                  fontSize: "1.4rem",
+                  color: "gray",
+                  "&.Mui-focused": { color: "#008689" },
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#008689" },
+                },
+              }}
+            />
+            <TextField
+              label="Mật khẩu"
+              variant="outlined"
+              type={showPassword ? "text" : "password"}
+              fullWidth
+              {...register("password", { required: "Mật khẩu là bắt buộc" })}
+              error={!!errors.password}
+              helperText={errors.password?.message || ""}
+              FormHelperTextProps={{ sx: { fontSize: "11px" } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: { backgroundColor: "white", fontSize: "1.4rem" },
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontStyle: "italic",
+                  fontSize: "1.4rem",
+                  color: "gray",
+                  "&.Mui-focused": { color: "#008689" },
+                },
+              }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "#008689" },
+                },
+              }}
+            />
+            <Button
+              variant="contained"
+              type="submit"
+              fullWidth
+              sx={{
+                backgroundColor: "#008689",
+                color: "white",
+                fontSize: "15px",
+                padding: "10px 0",
+                "&:hover": { backgroundColor: "#1D999D" },
+                margin: "20px 0",
+                fontWeight: "700",
+              }}
+            >
+              Đăng nhập
+            </Button>
+          </>
+        )}
+
+        <Button
+          variant="text"
+          fullWidth
+          onClick={() => setIsForgotPassword(!isForgotPassword)}
+          sx={{ fontSize: "13px", color: "#008689", margin: "10px 0" }}
+        >
+          {isForgotPassword ? "Đăng nhập" : "Quên mật khẩu?"}
+        </Button>
       </Box>
     </Paper>
   );

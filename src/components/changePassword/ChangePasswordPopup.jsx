@@ -13,8 +13,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { changePassword } from "~/features/loginSlice/LoginSlice";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangePasswordPopup = ({ open, onClose }) => {
   const {
@@ -248,7 +248,6 @@ const ChangePasswordPopup = ({ open, onClose }) => {
             Đổi mật khẩu
           </Button>
         </Box>
-        <ToastContainer autoClose={2000} />
       </Box>
       {/* Đảm bảo rằng ToastContainer được render để hiển thị toast message */}
     </Modal>

@@ -12,6 +12,8 @@ import "~/index.css";
 
 import { createTheme, ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import Layout from "~/layout/Layout";
 import DashboardLecture from "~/page/lecture/dashboard/DashboardLecture";
 import CalendarLecture from "~/page/lecture/calendar/Calendar";
@@ -28,6 +30,7 @@ import TuitionTable from "~/page/student/tuitionFees/tuitionTable/TuitionTable";
 import Login from "~/page/login/Login";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"; // Import GoogleReCaptchaProvider
 import SubjectHandling from "./page/student/subjectHandling/SubjectHandling";
+import Test from "./page/test/Test";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -55,10 +58,7 @@ const router = createBrowserRouter([
     element: <LoginRoute />,
     errorElement: <ErrorPage />,
   },
-  {
-    path: "/test",
-    errorElement: <ErrorPage />,
-  },
+
   {
     element: <PrivateRoutes />,
     errorElement: <ErrorPage />,
@@ -129,6 +129,10 @@ const router = createBrowserRouter([
         element: <SingleNews />,
       },
     ],
+  },
+  {
+    path: "test",
+    element: <Test />,
   },
 ]);
 

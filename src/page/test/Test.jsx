@@ -1,7 +1,14 @@
-import { Link } from "react-router-dom";
+import { Box } from "@mui/material";
+import IconList from "./IconList";
+import FlipBirthdayCard from "./IconList";
 
 const Test = () => {
-  return <Link to="/calendar">Click here</Link>;
+  console.log("a");
+  return (
+    <Box>
+      <FlipBirthdayCard />
+    </Box>
+  );
 };
 
 export default Test;

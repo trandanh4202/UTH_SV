@@ -24,6 +24,7 @@ import { getBoxNav, getMenu } from "../../../features/menuSlice/MenuSlice";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
 import BoxNoti from "./boxNoti/BoxNoti";
 import InforGV from "./inforGV/InforGV";
+import { getTotalofWeek } from "../../../features/calendarSlice/CalendarSlice";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -58,6 +59,7 @@ const DashboardLecture = () => {
   ];
   useEffect(() => {
     dispatch(getMenu());
+    dispatch(getTotalofWeek());
     dispatch(getBoxNav());
   }, [dispatch]);
   const { boxNav } = useSelector((state) => state.menu);
