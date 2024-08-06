@@ -55,3 +55,6 @@ html::-webkit-scrollbar-track {
 .swiper-button-next {
   color: #008689 !important;
 }
+.MuiFilledInput-root::after {
+  border-bottom: 2px solid #008689 !important;
+}

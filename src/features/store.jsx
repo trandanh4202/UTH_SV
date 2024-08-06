@@ -7,6 +7,8 @@ import notificationReducer from "./notificationSlice/NotificationSlice";
 import programReducer from "./programSlice/ProgramSlice";
 import tuitionReducer from "./tuitionSlice/TuitionSlice";
 import menuReducer from "./menuSlice/MenuSlice";
+import religionReducer from "./religionSlice/ReligionSlice";
+import nationReducer from "./nationSlice/NationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ export const store = configureStore({
     program: programReducer,
     tuition: tuitionReducer,
     menu: menuReducer,
+    religion: religionReducer,
+    nation: nationReducer,
   },
   // devTools: false,
 });

@@ -31,6 +31,8 @@ import Login from "~/page/login/Login";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3"; // Import GoogleReCaptchaProvider
 import SubjectHandling from "./page/student/subjectHandling/SubjectHandling";
 import Test from "./page/test/Test";
+import PersonalInfo from "./page/student/editProfile/PersonalInfo";
+import EditProfile from "./page/student/editProfile/EditProfile";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -83,6 +85,10 @@ const router = createBrowserRouter([
                 lecturerComponent={<CalendarLecture />}
               />
             ),
+          },
+          {
+            path: "editprofile",
+            element: <EditProfile />,
           },
           {
             path: "generalreceipts",

@@ -172,6 +172,46 @@ export const getCourses = createAsyncThunk(
     }
   }
 );
+
+export const getProvince = createAsyncThunk(
+  "profile/getProvince",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/tinh/getAll`);
+      return response.data.body;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getDistrict = createAsyncThunk(
+  "profile/getDistrict",
+  async (idProvince, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/huyen/getByTinh?idTinh=${idProvince}`
+      );
+      return response.data.body;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getWard = createAsyncThunk(
+  "profile/getWard",
+  async (idDistrict, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${API_BASE_URL}/xa/getByHuyen?idHuyen=${idDistrict}`
+      );
+      return response.data.body;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 const profileSlice = createSlice({
   name: "profile",
   initialState,
@@ -237,6 +277,42 @@ const profileSlice = createSlice({
         state.courses = action.payload;
       })
       .addCase(getCourses.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getProvince.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getProvince.fulfilled, (state, action) => {
+        state.loading = false;
+        state.province = action.payload;
+      })
+      .addCase(getProvince.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getDistrict.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getDistrict.fulfilled, (state, action) => {
+        state.loading = false;
+        state.district = action.payload;
+      })
+      .addCase(getDistrict.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getWard.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getWard.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ward = action.payload;
+      })
+      .addCase(getWard.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

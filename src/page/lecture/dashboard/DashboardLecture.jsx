@@ -20,15 +20,16 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import { getTotalofWeek } from "../../../features/calendarSlice/CalendarSlice";
 import { getBoxNav, getMenu } from "../../../features/menuSlice/MenuSlice";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
 import BoxNoti from "./boxNoti/BoxNoti";
 import InforGV from "./inforGV/InforGV";
-import { getTotalofWeek } from "../../../features/calendarSlice/CalendarSlice";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
 };
+
 const DashboardLecture = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("account");
@@ -214,6 +215,14 @@ const DashboardLecture = () => {
                 overflow: "hidden",
                 color: "#fff",
                 verticalAlign: "top",
+                "&:hover": {
+                  backgroundColor: "#008689",
+                  color: "white",
+                  boxShadow: "0 0 10px #008689",
+                  "& p, & svg": {
+                    color: "white",
+                  },
+                },
               }}
               elevation={4}
             >

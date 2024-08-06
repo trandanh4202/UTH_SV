@@ -283,6 +283,14 @@ const Dashboard = () => {
                 position: "relative",
                 overflow: "hidden",
                 color: "#fff",
+                "&:hover": {
+                  backgroundColor: "#008689",
+                  color: "white",
+                  boxShadow: "0 0 10px #008689",
+                  "& p, & svg": {
+                    color: "white",
+                  },
+                },
               }}
               elevation={4}
             >

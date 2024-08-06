@@ -52,6 +52,8 @@ const FormLogin2 = () => {
     useSelector((state) => state.login.validateOTP) || {};
   const { message: resetPasswordMessage, status: resetPasswordStatus } =
     useSelector((state) => state.login.resetPassword) || {};
+  const { message: loginPageMessage, status: loginPageStatus } =
+    useSelector((state) => state.login.loginPage) || {};
 
   const [isPasswordChanged, setIsPasswordChanged] = useState(false);
   const loading = useSelector((state) => state.login.loading);
@@ -182,6 +184,7 @@ const FormLogin2 = () => {
               InputProps={{
                 sx: { backgroundColor: "white", fontSize: "1.4rem" },
               }}
+              props
               InputLabelProps={{
                 sx: {
                   fontStyle: "italic",
@@ -602,6 +605,17 @@ const FormLogin2 = () => {
                 },
               }}
             />
+            {loginPageMessage && (
+              <Alert
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: "500",
+                }}
+                severity={loginPageStatus === 200 ? "success" : "error"}
+              >
+                {loginPageMessage}
+              </Alert>
+            )}
             <Button
               variant="contained"
               type="submit"

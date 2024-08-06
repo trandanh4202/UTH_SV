@@ -11,6 +11,7 @@ const initialState = {
   getOtp: null,
   messageotp: null,
   messagerspw: null,
+  loginPage: null,
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -180,7 +181,7 @@ const loginSlice = createSlice({
       })
       .addCase(loginPage.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload;
+        state.loginPage = action.payload;
       })
       .addCase(loginPage.rejected, (state, action) => {
         state.loading = false;

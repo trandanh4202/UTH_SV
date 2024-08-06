@@ -13,7 +13,8 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
         alignItems: "center",
         flexDirection: "column",
         color: "#008689",
-        backgroundColor: status === "loading" ? "rgb(26 15 15 / 20%)" : "white",
+        backgroundColor:
+          status === "loading" ? "rgb(26 15 15 / 20%)" : "inherit",
         width: "100%",
         height: "100%",
         flexWrap: "nowrap",
