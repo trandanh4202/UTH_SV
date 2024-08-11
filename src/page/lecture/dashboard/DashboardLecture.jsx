@@ -214,6 +214,7 @@ const DashboardLecture = () => {
                 position: "relative",
                 overflow: "hidden",
                 color: "#fff",
+                transition: "all ease 0.5s ",
                 verticalAlign: "top",
                 "&:hover": {
                   backgroundColor: "#008689",

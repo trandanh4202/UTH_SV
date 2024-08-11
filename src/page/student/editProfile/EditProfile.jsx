@@ -3,23 +3,37 @@ import {
   Button,
   Container,
   Divider,
+  Paper,
   Tab,
   Tabs,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useState } from "react";
 import PersonalInfo from "./PersonalInfo";
+import AvatartInfo from "./AvatartInfo";
+import FamilyProfile from "./FamilyProfile";
 
 const EditProfile = () => {
   const [selectedTab, setSelectedTab] = useState(0);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Check if the screen is small
 
   const handleChangeTab = (event, newValue) => {
     setSelectedTab(newValue);
   };
 
   return (
-    <Container sx={{ backgroundColor: "white" }}>
-      <Box sx={{ padding: "10px 5px" }}>
+    <Container>
+      <Paper
+        elevation={14}
+        sx={{
+          borderRadius: "10px",
+          padding: { xs: "5px", lg: "20px" },
+          overflow: "hidden",
+        }}
+      >
         <Box>
           <Box
             sx={{
@@ -40,64 +54,98 @@ const EditProfile = () => {
                 }}
               />
               <Typography
-                sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
+                sx={{ color: "#008588", fontWeight: "700", fontSize: "16px" }}
               >
                 Đề xuất cập nhật thông tin
               </Typography>
             </Box>
           </Box>
-        </Box>
-        <Box sx={{ width: "100%" }}>
-          <Tabs
-            value={selectedTab}
-            onChange={handleChangeTab}
-            textColor="primary"
-            indicatorColor="primary"
-            aria-label="tabs"
+          <Box
+            sx={{
+              width: "100%",
+              overflowX: "auto", // Allow horizontal scrolling if needed
+            }}
           >
-            <Tab
+            <Tabs
+              value={selectedTab}
+              onChange={handleChangeTab}
+              aria-label="tabs"
+              variant="scrollable"
+              scrollButtons="auto"
               sx={{
-                fontSize: "15px",
-                fontWeight: "500",
-                "&.Mui-selected": {
-                  border: "1px solid #1976d2",
-                  backgroundColor: "rgba(0, 0, 0, 0.04)",
-                  color: "#1976d2",
+                "& .MuiTabs-indicator": {
+                  backgroundColor: "red",
                 },
+                display: "flex",
+                flexDirection: isSmallScreen ? "column" : "row", // Stack tabs vertically on small screens
+                gap: "10px",
+                justifyContent: "center",
+                overflowX: "auto", // Ensure tabs scroll horizontally on small screens
               }}
-              label="Học phí ngành"
-            />
-            <Tab
-              sx={{
-                fontSize: "15px",
-                fontWeight: "500",
-                "&.Mui-selected": {
-                  border: "1px solid #1976d2",
-                  backgroundColor: "rgba(0, 0, 0, 0.04)",
-                  color: "#1976d2",
-                },
-              }}
-              label="Học phí Trung tâm tiếng Anh"
-            />
-            <Tab
-              sx={{
-                fontSize: "15px",
-                fontWeight: "500",
-                "&.Mui-selected": {
-                  border: "1px solid #1976d2",
-                  backgroundColor: "rgba(0, 0, 0, 0.04)",
-                  color: "#1976d2",
-                },
-              }}
-              label="Học phí Khác"
-            />
-          </Tabs>
-          {selectedTab === 0 && <PersonalInfo />}
-          {selectedTab === 1 && <PersonalInfo />}
-          {selectedTab === 2 && <PersonalInfo />}
+            >
+              <Tab
+                sx={{
+                  fontSize: "15px",
+                  fontWeight: "500",
+                  padding: "5px 10px",
+                  "&.Mui-selected": {
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "15px",
+                    backgroundColor: "#008588",
+                    color: "white",
+                    transition: "all ease 0.4s",
+                    fontWeight: "700",
+                  },
+                }}
+                label="Thông tin cá nhân"
+              />
+              <Tab
+                sx={{
+                  fontSize: "15px",
+                  padding: "5px 10px",
+                  fontWeight: "500",
+                  "&.Mui-selected": {
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "15px",
+                    backgroundColor: "#008588",
+                    color: "white",
+                    fontWeight: "700",
+                    transition: "all ease 0.4s",
+                  },
+                }}
+                label="Ảnh sinh viên"
+              />
+              <Tab
+                sx={{
+                  fontSize: "15px",
+                  padding: "5px 10px",
+                  fontWeight: "500",
+                  "&.Mui-selected": {
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "15px",
+                    backgroundColor: "#008588",
+                    fontWeight: "700",
+                    color: "white",
+                    transition: "all ease 0.4s",
+                  },
+                }}
+                label="Gia đình"
+              />
+            </Tabs>
+          </Box>
+          <Box sx={{ padding: { xs: "5px", lg: '"20px"' } }}>
+            {selectedTab === 0 && <PersonalInfo />}
+            {selectedTab === 1 && <AvatartInfo />}
+            {selectedTab === 2 && <FamilyProfile />}
+          </Box>
         </Box>
-        <Box></Box>
-      </Box>
+      </Paper>
     </Container>
   );
 };

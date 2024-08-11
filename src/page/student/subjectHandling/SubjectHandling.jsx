@@ -21,9 +21,9 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelect } from "~/features/profileSlice/ProfileSlice";
 import { data, data2, data3, columns, columns2, columns3 } from "./fakeApi"; // Import dữ liệu từ file data.js
 import commonStyles from "./style";
+import { getSelect } from "../../../features/programSlice/ProgramSlice";
 
 const SubjectHandling = () => {
   const [semester, setSemester] = useState("");

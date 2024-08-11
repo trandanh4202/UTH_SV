@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { Box, Divider, Paper, Typography } from "@mui/material";
 import { Doughnut } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
-import { getLearningProgress } from "~/features/profileSlice/ProfileSlice";
+import { getLearningProgress } from "../../../../../features/programSlice/ProgramSlice";
 
 const LearningProgress = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ const LearningProgress = () => {
   }, [dispatch]);
 
   const learningProgress = useSelector(
-    (state) => state.profile?.learningProgress
+    (state) => state.program?.learningProgress
   );
 
   const innerData = useMemo(() => {

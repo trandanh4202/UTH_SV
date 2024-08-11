@@ -21,12 +21,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getTotalofWeek } from "~/features/calendarSlice/CalendarSlice";
 import {
   getCategoryNoti,
   getNewfeeds,
 } from "~/features/notificationSlice/NotificationSlice";
-import { getSelect } from "~/features/profileSlice/ProfileSlice";
 import BoxNavigation from "./boxNavigation/BoxNavigation";
 import BoxNoti from "./boxNoti/BoxNoti";
 import Courses from "./chart/courses/Courses";
@@ -43,6 +41,9 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 
 import { format } from "date-fns";
 import { Link } from "react-router-dom";
+import UpdatePhone from "~/components/popupWarning/UpdatePhone";
+import { getTotalofWeek } from "~/features/calendarSlice/CalendarSlice";
+import { getSelect } from "~/features/programSlice/ProgramSlice";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -50,6 +51,7 @@ const formatDate = (dateString) => {
 const Dashboard = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("account");
+  const [id, setId] = useState("368");
 
   const data = [
     {
@@ -70,7 +72,7 @@ const Dashboard = () => {
     {
       icon: <AccountBalance sx={{ fontSize: "25px" }} />,
       title: "Thanh toán trực tuyến",
-      to: "https://payment.ut.edu.vn/",
+      to: `https://payment.ut.edu.vn?token=${token}`,
     },
     {
       icon: <School sx={{ fontSize: "25px" }} />,
@@ -105,16 +107,8 @@ const Dashboard = () => {
   }, [token, dispatch]);
 
   const total = useSelector((state) => state.calendar?.total);
-
   const categories = useSelector((state) => state.notification?.category);
-  const [id, setId] = useState("368");
   const newfeeds = useSelector((state) => state.notification?.newfeeds.content);
-  useEffect(() => {
-    if (id) {
-      dispatch(getNewfeeds({ id }));
-    }
-  }, [dispatch, id]);
-
   const box = [
     {
       title: "Nhắc nhở mới, chưa xem",
@@ -133,9 +127,15 @@ const Dashboard = () => {
       to: "/calendar",
     },
   ];
+  useEffect(() => {
+    if (id) {
+      dispatch(getNewfeeds({ id }));
+    }
+  }, [dispatch, id]);
 
   return (
     <Container>
+      <UpdatePhone />
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
         <Grid item lg={7} xs={12}>
           <Grid container spacing={2}>
@@ -282,6 +282,7 @@ const Dashboard = () => {
                 height: "100%",
                 position: "relative",
                 overflow: "hidden",
+                transition: "all ease 0.5s ",
                 color: "#fff",
                 "&:hover": {
                   backgroundColor: "#008689",

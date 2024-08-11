@@ -9,6 +9,10 @@ import tuitionReducer from "./tuitionSlice/TuitionSlice";
 import menuReducer from "./menuSlice/MenuSlice";
 import religionReducer from "./religionSlice/ReligionSlice";
 import nationReducer from "./nationSlice/NationSlice";
+import provinceReducer from "./provinceSlice/ProvinceSlice";
+import districtReducer from "./districtSlice/DistrictSlice";
+import wardReducer from "./wardSlice/WardSlice";
+import familyReducer from "./familySlice/FamilySlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +26,10 @@ export const store = configureStore({
     menu: menuReducer,
     religion: religionReducer,
     nation: nationReducer,
+    province: provinceReducer,
+    district: districtReducer,
+    ward: wardReducer,
+    family: familyReducer,
   },
   // devTools: false,
 });

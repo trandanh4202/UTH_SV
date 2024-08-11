@@ -36,6 +36,7 @@
     "react-router-dom": "^6.23.1",
     "react-toastify": "^10.0.5",
     "swiper": "^11.1.4",
+    "uuidv4": "^6.2.13",
     "vite-plugin-env-compatible": "^2.0.1"
   },
   "devDependencies": {

@@ -58,3 +58,21 @@ html::-webkit-scrollbar-track {
 .MuiFilledInput-root::after {
   border-bottom: 2px solid #008689 !important;
 }
+input[type="file"]::file-selector-button {
+  /* margin-right: 20px; */
+  border: 1px solid white;
+  background: #008588;
+  padding: 5px 10px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+input[type="file"]::file-selector-button:hover {
+  border-color: #008689;
+  background-color: white;
+  color: #008689;
+  box-shadow: 0 0 10px #008689;
+  border-width: 1px;
+}

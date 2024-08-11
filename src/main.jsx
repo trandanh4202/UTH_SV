@@ -43,7 +43,6 @@ const RoleBasedRoute = ({ studentComponent, lecturerComponent }) => {
   return role === "sv" ? studentComponent : lecturerComponent;
 };
 
-// Component for private routes
 const PrivateRoutes = () => {
   return isAuthenticated() ? <Outlet /> : <Navigate to="/" />;
 };
@@ -52,7 +51,6 @@ const PrivateRoutes = () => {
 const LoginRoute = () => {
   return isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />;
 };
-
 // Router configuration
 const router = createBrowserRouter([
   {

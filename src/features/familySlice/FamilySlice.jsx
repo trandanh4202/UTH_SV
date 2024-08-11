@@ -2,18 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  program: [],
-  select: [],
-  learningResults: [],
-  learningProgress: [],
-  courses: [],
+  family: [],
+  addFamily: [],
+  updateFamily: [],
+  deleteFamily: [],
   loading: false,
   error: null,
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const getProgram = createAsyncThunk(
-  "program/getProgram",
+export const getFamily = createAsyncThunk(
+  "family/getFamily",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
@@ -26,10 +25,9 @@ export const getProgram = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(
-        `${API_BASE_URL}/hoctap/chuongtrinhkhung`,
-        config
-      );
+      const response = await axios.get(`${API_BASE_URL}/quanHeGiaDinh`, config);
+
+      // Assuming the new token is in the response data, adjust as needed
 
       return response.data.body;
     } catch (error) {
@@ -37,16 +35,128 @@ export const getProgram = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
   }
 );
 
-export const getSelect = createAsyncThunk(
-  "program/getSelect",
+export const addFamily = createAsyncThunk(
+  "family/addFamily",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log(formData);
+      const message = await axios.post(
+        `${API_BASE_URL}/quanHeGiaDinh`,
+        formData, // Gửi FormData
+        config
+      );
+
+      const response = await axios.get(`${API_BASE_URL}/quanHeGiaDinh`, config);
+      return {
+        message: message.data.body,
+        data: response.data.body,
+      };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateFamily = createAsyncThunk(
+  "family/updateFamily",
+  async ({ formData, id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const message = await axios.put(
+        `${API_BASE_URL}/quanHeGiaDinh/${id}`,
+        formData, // Gửi FormData
+        config
+      );
+
+      const response = await axios.get(`${API_BASE_URL}/quanHeGiaDinh`, config);
+      return {
+        message: message.data.body,
+        data: response.data.body,
+      };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const deleteFamily = createAsyncThunk(
+  "family/deleteFamily",
+  async ({ id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const message = await axios.delete(
+        `${API_BASE_URL}/quanHeGiaDinh/${id}`,
+        config
+      );
+      const response = await axios.get(`${API_BASE_URL}/quanHeGiaDinh`, config);
+      return {
+        message: message.data.body,
+        data: response.data.body,
+      };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const categoryFamily = createAsyncThunk(
+  "family/categoryFamily",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
@@ -60,181 +170,95 @@ export const getSelect = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(`${API_BASE_URL}/hoctap/hocky`, config);
-      return response.data.body;
-    } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const getLearningResults = createAsyncThunk(
-  "program/getLearningResults",
-  async ({ semester }, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("account");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
       const response = await axios.get(
-        `${API_BASE_URL}/hoctap/kqtheoky/${semester}`,
+        `${API_BASE_URL}/quanHeGiaDinh/category`,
+
         config
       );
+
       return response.data.body;
     } catch (error) {
       if (
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // Xử lý lỗi token hết hạn
       }
       return rejectWithValue(error.message);
     }
   }
 );
-
-export const getLearningProgress = createAsyncThunk(
-  "program/getLearningProgress",
-  async (_, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("account");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-
-      const response = await axios.get(`${API_BASE_URL}/hoctap/tiendo`, config);
-      return response.data.body;
-    } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const getCourses = createAsyncThunk(
-  "program/getCourses",
-  async ({ semester }, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("account");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.get(
-        `${API_BASE_URL}/hoctap/montheoky/${semester}`,
-        config
-      );
-      return response.data.body;
-    } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
-      return rejectWithValue(error.message);
-    }
-  }
-);
-const programSlice = createSlice({
-  name: "program",
+const familySlice = createSlice({
+  name: "family",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getProgram.pending, (state) => {
+      .addCase(getFamily.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getProgram.fulfilled, (state, action) => {
+      .addCase(getFamily.fulfilled, (state, action) => {
         state.loading = false;
-        state.program = action.payload;
+        state.family = action.payload;
       })
-      .addCase(getProgram.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload || action.error.message;
-      })
-      .addCase(getSelect.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getSelect.fulfilled, (state, action) => {
-        state.loading = false;
-        state.select = action.payload;
-      })
-      .addCase(getSelect.rejected, (state, action) => {
+      .addCase(getFamily.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getLearningResults.pending, (state) => {
+
+      .addCase(addFamily.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getLearningResults.fulfilled, (state, action) => {
+      .addCase(addFamily.fulfilled, (state, action) => {
         state.loading = false;
-        state.learningResults = action.payload;
+        state.addFamily = action.payload.message;
+        state.family = action.payload.data;
       })
-      .addCase(getLearningResults.rejected, (state, action) => {
+      .addCase(addFamily.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getLearningProgress.pending, (state) => {
+      .addCase(updateFamily.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getLearningProgress.fulfilled, (state, action) => {
+      .addCase(updateFamily.fulfilled, (state, action) => {
         state.loading = false;
-        state.learningProgress = action.payload;
+        state.updateFamily = action.payload.message;
+        state.family = action.payload.data;
       })
-      .addCase(getLearningProgress.rejected, (state, action) => {
+      .addCase(updateFamily.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getCourses.pending, (state) => {
+      .addCase(deleteFamily.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getCourses.fulfilled, (state, action) => {
+      .addCase(deleteFamily.fulfilled, (state, action) => {
         state.loading = false;
-        state.courses = action.payload;
+        state.deleteFamily = action.payload.message;
+        state.family = action.payload.data;
       })
-      .addCase(getCourses.rejected, (state, action) => {
+      .addCase(deleteFamily.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(categoryFamily.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(categoryFamily.fulfilled, (state, action) => {
+        state.loading = false;
+        state.categoryFamily = action.payload;
+      })
+      .addCase(categoryFamily.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
   },
 });
 
-export default programSlice.reducer;
+export default familySlice.reducer;

@@ -89,6 +89,10 @@ const Header = () => {
           route: "/infordetail",
         },
         {
+          name: "Đề xuất cập nhật thông tin",
+          route: "/editprofile",
+        },
+        {
           name: "Tin tức",
           route: "/newfeeds/368",
         },

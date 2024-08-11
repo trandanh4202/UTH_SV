@@ -32,7 +32,7 @@ ChartJS.register(
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLearningResults } from "~/features/profileSlice/ProfileSlice";
+import { getLearningResults } from "../../../../../features/programSlice/ProgramSlice";
 
 const options = {
   plugins: {
@@ -98,7 +98,7 @@ const options = {
   maintainAspectRatio: false,
 };
 const LearningResults = () => {
-  const select = useSelector((state) => state.profile?.select);
+  const select = useSelector((state) => state.program?.select);
   const [semester, setSemester] = useState("");
 
   const dispatch = useDispatch();
@@ -119,7 +119,7 @@ const LearningResults = () => {
   };
 
   const learningResults = useSelector(
-    (state) => state.profile?.learningResults
+    (state) => state.program?.learningResults
   );
   const data = {
     labels: learningResults.map((result) => result.lopHocPhan),

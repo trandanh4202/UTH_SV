@@ -13,13 +13,13 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelect } from "~/features/profileSlice/ProfileSlice";
 import TuitionTab from "./TuitionTab";
 import {
   getTuitionFee,
   getTuitionOther,
 } from "~/features/tuitionSlice/TuitionSlice";
 import TuitionOther from "./TuitionOther";
+import { getSelect } from "../../../../features/programSlice/ProgramSlice";
 
 const TuitionTable = () => {
   const [selectedTab, setSelectedTab] = useState(0);

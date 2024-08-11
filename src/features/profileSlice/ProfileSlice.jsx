@@ -49,9 +49,9 @@ export const getProfile = createAsyncThunk(
   }
 );
 
-export const getSelect = createAsyncThunk(
-  "profile/getSelect",
-  async (_, { rejectWithValue }) => {
+export const uploadAvatar = createAsyncThunk(
+  "profile/uploadAvatar",
+  async (formData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -61,59 +61,32 @@ export const getSelect = createAsyncThunk(
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data", // Sử dụng multipart/form-data
         },
       };
 
-      const response = await axios.get(`${API_BASE_URL}/hoctap/hocky`, config);
-      return response.data.body;
-    } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const getLearningResults = createAsyncThunk(
-  "profile/getLearningResults",
-  async ({ semester }, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("account");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.get(
-        `${API_BASE_URL}/hoctap/kqtheoky/${semester}`,
+      const response = await axios.put(
+        `${API_BASE_URL}/user/updateAvatar`,
+        formData, // Gửi FormData
         config
       );
-      return response.data.body;
+
+      return response.data;
     } catch (error) {
       if (
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // Xử lý lỗi token hết hạn
       }
       return rejectWithValue(error.message);
     }
   }
 );
 
-export const getLearningProgress = createAsyncThunk(
-  "profile/getLearningProgress",
-  async (_, { rejectWithValue }) => {
+export const updateEmail = createAsyncThunk(
+  "profile/updateEmail",
+  async (email, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -126,92 +99,93 @@ export const getLearningProgress = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(`${API_BASE_URL}/hoctap/tiendo`, config);
-      return response.data.body;
-    } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
-export const getCourses = createAsyncThunk(
-  "profile/getCourses",
-  async ({ semester }, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("account");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.get(
-        `${API_BASE_URL}/hoctap/montheoky/${semester}`,
+      const response = await axios.put(
+        `${API_BASE_URL}/user/updateEmail`,
+        email, // Gửi FormData
         config
       );
-      return response.data.body;
+
+      return response.data;
     } catch (error) {
       if (
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // Xử lý lỗi token hết hạn
       }
       return rejectWithValue(error.message);
     }
   }
 );
 
-export const getProvince = createAsyncThunk(
-  "profile/getProvince",
-  async (_, { rejectWithValue }) => {
+export const updatePhone = createAsyncThunk(
+  "profile/updatePhone",
+  async (phone, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/tinh/getAll`);
-      return response.data.body;
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.put(
+        `${API_BASE_URL}/user/updatePhone`,
+        phone, // Gửi FormData
+        config
+      );
+
+      return response.data;
     } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
       return rejectWithValue(error.message);
     }
   }
 );
 
-export const getDistrict = createAsyncThunk(
-  "profile/getDistrict",
-  async (idProvince, { rejectWithValue }) => {
+export const updateProfile = createAsyncThunk(
+  "profile/updateProfile",
+  async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${API_BASE_URL}/huyen/getByTinh?idTinh=${idProvince}`
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.put(
+        `${API_BASE_URL}/user/updateInfo`,
+        formData, // Gửi FormData
+        config
       );
-      return response.data.body;
+
+      return response.data;
     } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
       return rejectWithValue(error.message);
     }
   }
 );
 
-export const getWard = createAsyncThunk(
-  "profile/getWard",
-  async (idDistrict, { rejectWithValue }) => {
-    try {
-      const response = await axios.get(
-        `${API_BASE_URL}/xa/getByHuyen?idHuyen=${idDistrict}`
-      );
-      return response.data.body;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
 const profileSlice = createSlice({
   name: "profile",
   initialState,
@@ -232,87 +206,52 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getSelect.pending, (state) => {
+
+      .addCase(uploadAvatar.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getSelect.fulfilled, (state, action) => {
+      .addCase(uploadAvatar.fulfilled, (state, action) => {
         state.loading = false;
-        state.select = action.payload;
+        state.avatar = action.payload;
       })
-      .addCase(getSelect.rejected, (state, action) => {
+      .addCase(uploadAvatar.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getLearningResults.pending, (state) => {
+      .addCase(updateEmail.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getLearningResults.fulfilled, (state, action) => {
+      .addCase(updateEmail.fulfilled, (state, action) => {
         state.loading = false;
-        state.learningResults = action.payload;
+        state.updateEmail = action.payload;
       })
-      .addCase(getLearningResults.rejected, (state, action) => {
+      .addCase(updateEmail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getLearningProgress.pending, (state) => {
+      .addCase(updatePhone.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getLearningProgress.fulfilled, (state, action) => {
+      .addCase(updatePhone.fulfilled, (state, action) => {
         state.loading = false;
-        state.learningProgress = action.payload;
+        state.updatePhone = action.payload;
       })
-      .addCase(getLearningProgress.rejected, (state, action) => {
+      .addCase(updatePhone.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
-      .addCase(getCourses.pending, (state) => {
+      .addCase(updateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getCourses.fulfilled, (state, action) => {
+      .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.courses = action.payload;
+        state.updateProfile = action.payload;
       })
-      .addCase(getCourses.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(getProvince.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getProvince.fulfilled, (state, action) => {
-        state.loading = false;
-        state.province = action.payload;
-      })
-      .addCase(getProvince.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(getDistrict.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getDistrict.fulfilled, (state, action) => {
-        state.loading = false;
-        state.district = action.payload;
-      })
-      .addCase(getDistrict.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      })
-      .addCase(getWard.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getWard.fulfilled, (state, action) => {
-        state.loading = false;
-        state.ward = action.payload;
-      })
-      .addCase(getWard.rejected, (state, action) => {
+      .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

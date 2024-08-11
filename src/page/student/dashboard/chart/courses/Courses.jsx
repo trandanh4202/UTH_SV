@@ -15,11 +15,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getCourses } from "~/features/profileSlice/ProfileSlice";
+import { getCourses } from "~/features/programSlice/ProgramSlice";
 
 const Courses = () => {
-  const select = useSelector((state) => state.profile?.select);
-  const courses = useSelector((state) => state.profile?.courses);
+  const select = useSelector((state) => state.program?.select);
+  const courses = useSelector((state) => state.program?.courses);
   const [semester, setSemester] = useState("");
   const dispatch = useDispatch();
 
