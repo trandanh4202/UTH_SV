@@ -1,0 +1,288 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+const initialState = {
+  order: [],
+  // : [],
+  loading: false,
+  error: null,
+};
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+export const getAllOrder = createAsyncThunk(
+  "order/getAllOrder",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(`${API_BASE_URL}/order/getAll`, config);
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAllToShip = createAsyncThunk(
+  "order/getAllToShip",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getAllToShip`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAllToHandle = createAsyncThunk(
+  "order/getAllToHandle",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getAllToHandle`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAllToDeliverWithoutShip = createAsyncThunk(
+  "order/getAllToDeliverWithoutShip",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getAllToDeliverWithoutShip`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAllToApprove = createAsyncThunk(
+  "order/getAllToApprove",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getAllToApprove`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAllApprove = createAsyncThunk(
+  "order/getAllApprove",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/order/approve?orderId=${id}`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+const orderSlice = createSlice({
+  name: "order",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.order = action.payload;
+      })
+      .addCase(getAllOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getAllToShip.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllToShip.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getAllToShip = action.payload;
+      })
+      .addCase(getAllToShip.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getAllToHandle.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllToHandle.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getAllToHandle = action.payload;
+      })
+      .addCase(getAllToHandle.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getAllToDeliverWithoutShip.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllToDeliverWithoutShip.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getAllToDeliverWithoutShip = action.payload;
+      })
+      .addCase(getAllToDeliverWithoutShip.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getAllToApprove.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllToApprove.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getAllToApprove = action.payload;
+      })
+      .addCase(getAllToApprove.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getAllApprove.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllApprove.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getAllApprove = action.payload;
+      })
+      .addCase(getAllApprove.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      });
+  },
+});
+
+export default orderSlice.reducer;

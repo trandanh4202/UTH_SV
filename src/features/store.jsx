@@ -13,6 +13,11 @@ import provinceReducer from "./provinceSlice/ProvinceSlice";
 import districtReducer from "./districtSlice/DistrictSlice";
 import wardReducer from "./wardSlice/WardSlice";
 import familyReducer from "./familySlice/FamilySlice";
+import orderReducer from "./orderSlice/OrderSlice";
+import cartReducer from "./cartSlice/CartSlice";
+import productReducer from "./productSlice/ProductSlice";
+import addressReducer from "./addressSlice/AddressSlice";
+import viettelReducer from "./viettelSlice/ViettelSlice";
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +35,11 @@ export const store = configureStore({
     district: districtReducer,
     ward: wardReducer,
     family: familyReducer,
+    order: orderReducer,
+    cart: cartReducer,
+    product: productReducer,
+    address: addressReducer,
+    viettel: viettelReducer,
   },
   // devTools: false,
 });

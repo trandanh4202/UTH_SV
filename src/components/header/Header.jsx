@@ -1,9 +1,11 @@
+/* eslint-disable react/jsx-key */
 import {
   ContactEmergency,
   ExpandMore,
   KeyboardArrowDown,
   ReceiptLong,
   School,
+  ShoppingCart,
   SupportAgent,
   ViewHeadlineRounded,
 } from "@mui/icons-material";
@@ -28,10 +30,13 @@ import logoHome from "/images/sv_logo_dashboard.png";
 import { getProfile } from "~/features/profileSlice/ProfileSlice";
 import { getMenu } from "~/features/menuSlice/MenuSlice";
 import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
+import { getCart } from "../../features/cartSlice/CartSlice";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [openDrawerCart, setOpenDrawerCart] = useState(false);
+
   const [expanded, setExpanded] = useState(false);
   const [openChangePassword, setOpenChangePassword] = useState(false);
   const token = localStorage.getItem("account");
@@ -45,6 +50,11 @@ const Header = () => {
     setOpenDrawer(newOpen);
   };
 
+  const toggleDrawerCart = (newOpen) => () => {
+    setOpenDrawerCart(newOpen);
+    dispatch(getCart());
+  };
+  const carts = useSelector((state) => state.cart.cart.body);
   const handleClick = (event) => {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
@@ -322,6 +332,16 @@ const Header = () => {
                   gap: { xs: "0px", lg: "40px" },
                 }}
               >
+                <Box
+                  onClick={toggleDrawerCart(true)}
+                  sx={{
+                    cursor: "pointer",
+                    color: "#008689",
+                  }}
+                >
+                  <ShoppingCart sx={{ fontSize: "35px" }} />
+                </Box>
+
                 {/* Avatar with Menu */}
                 <Box
                   sx={{
@@ -439,6 +459,169 @@ const Header = () => {
           )}
         </Grid>
       </Container>
+      <Drawer
+        anchor="right"
+        open={openDrawerCart}
+        onClose={toggleDrawerCart(false)}
+      >
+        <Box
+          sx={{
+            width: "700px",
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{
+                color: "#008588",
+                fontWeight: "700",
+                fontSize: "20px",
+                textAlign: "center",
+              }}
+            >
+              Giỏ hàng của bạn
+            </Typography>
+          </Box>
+          <Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-around",
+                alignItems: "center",
+              }}
+            >
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  Hình ảnh
+                </Typography>
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  Nội dung
+                </Typography>
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  số lượng
+                </Typography>
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  Đơn giá
+                </Typography>
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  Tổng tiền
+                </Typography>
+              </Box>
+            </Box>
+            {carts?.map((item) => (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  alignItems: "center",
+                }}
+              >
+                <Box>
+                  <img
+                    src="/images/giayxacnhan.png"
+                    alt=""
+                    style={{
+                      width: "100px",
+                      objectFit: "contain",
+                    }}
+                  />
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#333333",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {item.product.name}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#333333",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    x{item.quantity}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#333333",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {item.product.price}
+                  </Typography>
+                </Box>
+
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#333333",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                      textAlign: "center",
+                    }}
+                  >
+                    {item.product.price}
+                  </Typography>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </Drawer>
     </Box>
   );
 };

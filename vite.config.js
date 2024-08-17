@@ -13,6 +13,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
+      "/viettelapi": {
+        target: "https://partner.viettelpost.vn/v2/categories",
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/viettelapi/, ""),
+      },
     },
     host: "0.0.0.0", // Cho phép truy cập từ tất cả các địa chỉ IP
     port: 5173, // Đảm bảo cổng này là cổng bạn đang sử dụng

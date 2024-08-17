@@ -33,6 +33,8 @@ import SubjectHandling from "./page/student/subjectHandling/SubjectHandling";
 import Test from "./page/test/Test";
 import PersonalInfo from "./page/student/editProfile/PersonalInfo";
 import EditProfile from "./page/student/editProfile/EditProfile";
+import Dormitory from "./page/student/dormitory/Dormitory";
+import StudentCertificate from "./page/student/studentCertificate/StudentCertificate";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -45,11 +47,17 @@ const RoleBasedRoute = ({ studentComponent, lecturerComponent }) => {
 
 const PrivateRoutes = () => {
   return isAuthenticated() ? <Outlet /> : <Navigate to="/" />;
+  // return isAuthenticated() ? <Outlet /> : <Outlet />;
 };
 
 // Component for login route
 const LoginRoute = () => {
   return isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />;
+  // return isAuthenticated() ? (
+  //   <Navigate to="/dashboard" />
+  // ) : (
+  //   <Navigate to="/dashboard" />
+  // );
 };
 // Router configuration
 const router = createBrowserRouter([
@@ -115,6 +123,14 @@ const router = createBrowserRouter([
           {
             path: "subjecthandling",
             element: <SubjectHandling />,
+          },
+          {
+            path: "Dormitory",
+            element: <Dormitory />,
+          },
+          {
+            path: "studentCertificate",
+            element: <StudentCertificate />,
           },
         ],
       },
