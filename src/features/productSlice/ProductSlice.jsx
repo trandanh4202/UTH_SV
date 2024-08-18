@@ -24,7 +24,7 @@ export const getAllProduct = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `${API_BASE_URL}/application/getAll`,
+        `${API_BASE_URL}/product/getAll`,
         config
       );
 
