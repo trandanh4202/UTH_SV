@@ -24,7 +24,13 @@ const Certification = () => {
   return (
     <Box>
       <Box>
-        <Typography>
+        <Typography
+          sx={{
+            fontSize: "15px",
+            color: "red",
+            fontWeight: "600",
+          }}
+        >
           Các loại giấy cấp cho sinh viên đang được cập nhật thêm tới khi đầy
           đủ, sinh viên theo dõi sau
         </Typography>
