@@ -19,7 +19,7 @@ const Certification = () => {
     dispatch(getCertification());
   }, [dispatch]);
   const certification = useSelector(
-    (state) => state.certification?.certification
+    (state) => state.certification?.certification.data
   );
 
   return (
@@ -30,6 +30,7 @@ const Certification = () => {
             fontSize: "15px",
             color: "red",
             fontWeight: "600",
+            textAlign: "center",
           }}
         >
           Các loại giấy cấp cho sinh viên đang được cập nhật thêm tới khi đầy

@@ -20,7 +20,6 @@ export const getCertification = createAsyncThunk(
         `/ts24/getdatanhaphoc.php?token=${token}`
       );
 
-      console.log(a);
       return response.data;
     } catch (error) {
       if (
