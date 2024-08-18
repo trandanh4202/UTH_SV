@@ -13,30 +13,41 @@ const Certification = () => {
     (state) => state.certification?.certification
   );
   return (
-    <Box>
-      {certification.map((c) => (
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {/* {certification?.map((c) => ( */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+        }}
+      >
         <Box>
-          <Box>
-            <Typography
-              sx={{
-                textAlign: "center",
-                fontSize: "20px",
-                fontWeight: "600",
-                whiteSpace: "2",
-                backgroundColor: "#008689",
-                color: "white",
-                boxShadow: "0 0 10px #008689",
-                padding: "5px",
-              }}
-            >
-              TITLE
-            </Typography>
-          </Box>
-          <Box>
-            <img src="" alt="" />
-          </Box>
+          <Typography
+            sx={{
+              textAlign: "center",
+              fontSize: "20px",
+              fontWeight: "600",
+              whiteSpace: "2",
+              backgroundColor: "#008689",
+              color: "white",
+              boxShadow: "0 0 10px #008689",
+              padding: "5px",
+            }}
+          >
+            {/* {c.name} */}
+          </Typography>
         </Box>
-      ))}
+        <Box>{/* <img src={c.base64} alt={c.name} /> */}</Box>
+      </Box>
+      {/* ))} */}
     </Box>
   );
 };

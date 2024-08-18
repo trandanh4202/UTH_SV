@@ -16,8 +16,10 @@ export const getCertification = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-
-      const response = await axios.get(`API_BASE_URL?token=${token}`);
+      console.log(token);
+      const response = await axios.get(
+        `/ts24/getdatanhaphoc.php?token=${token}`
+      );
 
       return response.data;
     } catch (error) {
@@ -33,8 +35,8 @@ export const getCertification = createAsyncThunk(
   }
 );
 
-const viettelSlice = createSlice({
-  name: "viettel",
+const certificationSlice = createSlice({
+  name: "certification",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -54,4 +56,4 @@ const viettelSlice = createSlice({
   },
 });
 
-export default viettelSlice.reducer;
+export default certificationSlice.reducer;
