@@ -44,6 +44,7 @@ import { Link } from "react-router-dom";
 import UpdatePhone from "~/components/popupWarning/UpdatePhone";
 import { getTotalofWeek } from "~/features/calendarSlice/CalendarSlice";
 import { getSelect } from "~/features/programSlice/ProgramSlice";
+import Spinner from "../../../components/Spinner/Spinner";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -109,6 +110,7 @@ const Dashboard = () => {
   const total = useSelector((state) => state.calendar?.total);
   const categories = useSelector((state) => state.notification?.category);
   const newfeeds = useSelector((state) => state.notification?.newfeeds.content);
+  const loadingNews = useSelector((state) => state.notification.loading);
   const box = [
     {
       title: "Nhắc nhở mới, chưa xem",
@@ -173,34 +175,38 @@ const Dashboard = () => {
             }}
             elevation={3}
           >
-            <Swiper
-              navigation={true}
-              modules={[Navigation]}
-              className="mySwiper"
-              // loop={true}
-              onSlideChange={(swiper) => {
-                const slide =
-                  categories[swiper.activeIndex % categories.length];
-                setId(slide?.id);
-              }}
-            >
-              {categories.map((item) => (
-                <SwiperSlide key={item.id}>
-                  <Box component={Link} to={`/newfeeds/${id}`}>
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        fontWeight: "800",
-                        color: "#008689",
-                        textAlign: "center",
-                      }}
-                    >
-                      {item.tenDanhMuc}
-                    </Typography>
-                  </Box>
-                </SwiperSlide>
-              ))}
-            </Swiper>
+            {loadingNews ? (
+              <Spinner />
+            ) : (
+              <Swiper
+                navigation={true}
+                modules={[Navigation]}
+                className="mySwiper"
+                // loop={true}
+                onSlideChange={(swiper) => {
+                  const slide =
+                    categories[swiper.activeIndex % categories.length];
+                  setId(slide?.id);
+                }}
+              >
+                {categories.map((item) => (
+                  <SwiperSlide key={item.id}>
+                    <Box component={Link} to={`/newfeeds/${id}`}>
+                      <Typography
+                        sx={{
+                          fontSize: "15px",
+                          fontWeight: "800",
+                          color: "#008689",
+                          textAlign: "center",
+                        }}
+                      >
+                        {item.tenDanhMuc}
+                      </Typography>
+                    </Box>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            )}
             {newfeeds && newfeeds.length > 0 && (
               <Swiper
                 centeredSlides={true}

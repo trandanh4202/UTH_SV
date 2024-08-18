@@ -27,6 +27,7 @@ import { addToCart } from "../../../features/cartSlice/CartSlice";
 import { getAllOrder } from "../../../features/orderSlice/OrderSlice";
 import { getAllProduct } from "../../../features/productSlice/ProductSlice";
 import { getProvinceViettel } from "../../../features/viettelSlice/ViettelSlice";
+import Spinner from "../../../components/Spinner/Spinner";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -73,19 +74,9 @@ const StudentCertificate = () => {
   const receipts = useSelector((state) => state.order.order?.body);
   const products = useSelector((state) => state.product.product?.body);
   const address = useSelector((state) => state.address.address?.body);
-  const addresses = useSelector((state) => state.address.addresses?.body);
 
   const loading = useSelector((state) => state.address.loading);
 
-  const [modalKTXOpen, setModalKTXOpen] = useState(false);
-
-  const handleModalKTXOpen = () => {
-    setModalKTXOpen(true);
-  };
-
-  const handleModalKTXClose = () => {
-    setModalKTXOpen(false);
-  };
   const handleAddToCart = (product) => {
     // Kiểm tra nếu options rỗng thì đặt là []
     const options =
@@ -112,7 +103,9 @@ const StudentCertificate = () => {
   const handleModalAddressClose = () => {
     setModalAddressOpen(false);
   };
-
+  const addCombo = (item) => {
+    dispatch(addToCart({ productId: item.id, quantity: 1 }));
+  };
   return (
     <Box>
       <Container sx={{}}>
@@ -171,7 +164,7 @@ const StudentCertificate = () => {
                 <Box>
                   <Button
                     variant="contained"
-                    onClick={() => handleAddToCart(product)} // Gọi hàm khi nhấn nút
+                    onClick={() => addCombo(product)} // Truyền product vào hàm addCombo
                     sx={{
                       display: "flex",
                       justifyContent: "center",
@@ -311,7 +304,7 @@ const StudentCertificate = () => {
               </TableHead>
               <TableBody>
                 {loading ? (
-                  <CircularProgress />
+                  <Spinner />
                 ) : (
                   address?.map((item, index) => (
                     <TableRow

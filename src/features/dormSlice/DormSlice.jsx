@@ -2,15 +2,15 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  cart: [],
+  dorms: [],
   // : [],
   loading: false,
   error: null,
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export const getCart = createAsyncThunk(
-  "cart/getCart",
+export const getDorm = createAsyncThunk(
+  "dorm/getDorm",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
@@ -23,7 +23,7 @@ export const getCart = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`${API_BASE_URL}/cart`, config);
+      const response = await axios.get(`${API_BASE_URL}/dorm/getAll`, config);
 
       return response.data;
     } catch (error) {
@@ -31,16 +31,16 @@ export const getCart = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
   }
 );
 
-export const addToCart = createAsyncThunk(
-  "cart/addToCart",
+export const cancelDorm = createAsyncThunk(
+  "dorm/cencelDorm",
   async (formData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
@@ -53,12 +53,11 @@ export const addToCart = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const message = await axios.post(
-        `${API_BASE_URL}/cart?productId=${formData}`,
-        {},
+      const message = await axios.get(
+        `${API_BASE_URL}/dorm/cancel/${formData}`,
         config
       );
-      const response = await axios.get(`${API_BASE_URL}/cart`, config);
+      const response = await axios.get(`${API_BASE_URL}/dorm/getall`, config);
 
       return { message: message.data, response: response.data };
     } catch (error) {
@@ -74,9 +73,9 @@ export const addToCart = createAsyncThunk(
   }
 );
 
-export const updateCart = createAsyncThunk(
-  "cart/updateCart",
-  async (formData, { rejectWithValue }) => {
+export const getInforDorm = createAsyncThunk(
+  "dorm/getInforDorm",
+  async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -88,14 +87,43 @@ export const updateCart = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const message = await axios.put(
-        `${API_BASE_URL}/cart/${formData.productId}`,
+      const response = await axios.get(`${API_BASE_URL}/dorm/getInfor`, config);
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const registerDorm = createAsyncThunk(
+  "dorm/registerDorm",
+  async ({ formData, id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.post(
+        `${API_BASE_URL}/dorm/register?campusId=${id}`,
         formData,
         config
       );
-      const response = await axios.get(`${API_BASE_URL}/cart`, config);
 
-      return { message: message.data, response: response.data };
+      return response.data;
     } catch (error) {
       if (
         error.response &&
@@ -109,97 +137,64 @@ export const updateCart = createAsyncThunk(
   }
 );
 
-export const deleteCart = createAsyncThunk(
-  "cart/deleteCart",
-  async (formData, { rejectWithValue }) => {
-    try {
-      const token = localStorage.getItem("account");
-      if (!token) {
-        throw new Error("No token found");
-      }
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const message = await axios.delete(
-        `${API_BASE_URL}/cart/deleteAll`,
-        config
-      );
-      const response = await axios.get(`${API_BASE_URL}/cart`, config);
-
-      return { message: message.data, response: response.data };
-    } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 401 || error.response.status === 403)
-      ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
-      }
-      return rejectWithValue(error.message);
-    }
-  }
-);
-const cartSlice = createSlice({
-  name: "cart",
+const dormSlice = createSlice({
+  name: "dorm",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getCart.pending, (state) => {
+      .addCase(getDorm.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getCart.fulfilled, (state, action) => {
+      .addCase(getDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload;
+        state.dorm = action.payload;
       })
-      .addCase(getCart.rejected, (state, action) => {
+      .addCase(getDorm.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
-      .addCase(addToCart.pending, (state) => {
+      .addCase(registerDorm.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(addToCart.fulfilled, (state, action) => {
+      .addCase(registerDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.addToCartMessage = action.payload.message;
-        state.cart = action.payload.response;
+        state.registerDormMessage = action.payload.message;
+        state.dorm = action.payload.response;
       })
-      .addCase(addToCart.rejected, (state, action) => {
+      .addCase(registerDorm.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
-      .addCase(updateCart.pending, (state) => {
+      .addCase(getInforDorm.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateCart.fulfilled, (state, action) => {
+      .addCase(getInforDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.updateCartMessage = action.payload.message;
-        state.cart = action.payload.response;
+        state.getInforDormMessage = action.payload.message;
+        state.dorm = action.payload.response;
       })
-      .addCase(updateCart.rejected, (state, action) => {
+      .addCase(getInforDorm.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
-      .addCase(deleteCart.pending, (state) => {
+      .addCase(cancelDorm.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteCart.fulfilled, (state, action) => {
+      .addCase(cancelDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.deleteCartMessage = action.payload.message;
-        state.cart = action.payload.response;
+        state.cancelDormMessage = action.payload.message;
+        state.dorm = action.payload.response;
       })
-      .addCase(deleteCart.rejected, (state, action) => {
+      .addCase(cancelDorm.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });
   },
 });
 
-export default cartSlice.reducer;
+export default dormSlice.reducer;

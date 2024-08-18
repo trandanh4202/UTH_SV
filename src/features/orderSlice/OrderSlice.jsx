@@ -204,6 +204,40 @@ export const getAllApprove = createAsyncThunk(
   }
 );
 
+export const getEstimateTotalAmount = createAsyncThunk(
+  "order/getEstimateTotalAmount",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+      console.log(formData);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.post(
+        `${API_BASE_URL}/order/estimateTotalAmount`,
+        formData,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -279,6 +313,18 @@ const orderSlice = createSlice({
         state.getAllApprove = action.payload;
       })
       .addCase(getAllApprove.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getEstimateTotalAmount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getEstimateTotalAmount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getEstimateTotalAmount = action.payload;
+      })
+      .addCase(getEstimateTotalAmount.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

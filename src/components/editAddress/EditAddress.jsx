@@ -203,11 +203,10 @@ const EditAddress = ({ editData }) => {
   const [id, setId] = useState(editData.id);
   const dispatch = useDispatch();
   const addMessage = useSelector(
-    (state) => state.address.addAddressMessage?.message
+    (state) => state.address.updateMessage?.message
   );
-  const addStatus = useSelector(
-    (state) => state.address.addAddressMessage?.status
-  );
+  const addStatus = useSelector((state) => state.address.updateMessage?.status);
+  const success = useSelector((state) => state.address.updateMessage?.success);
   const [isAddAddress, setIsAddAddress] = useState(false);
 
   const navigate = useNavigate();
@@ -215,7 +214,7 @@ const EditAddress = ({ editData }) => {
   const provinces = useSelector((state) => state.viettel.province.data);
   const districts = useSelector((state) => state.viettel.district.data) || [];
   const wards = useSelector((state) => state.viettel.ward?.data) || [];
-  const loading = useSelector((state) => state.viettel.loading);
+  const loading = useSelector((state) => state.address.loading);
   const [editAddressPopUpOpen, setEditAddressPopUpOpen] = useState(false);
   useEffect(() => {
     if (editAddressPopUpOpen) {
@@ -266,20 +265,18 @@ const EditAddress = ({ editData }) => {
 
   const onSubmit = async () => {
     await dispatch(updateAddress({ formData, id }));
-    setIsAddAddress(true);
     // onClose();
   };
   useEffect(() => {
-    if (isAddAddress && addMessage) {
-      if (addMessage && addStatus === 200) {
+    if (!loading) {
+      if (addMessage && success === true && addMessage) {
         toast.success(addMessage);
         // localStorage.clear();
-      } else if (addStatus === 400) {
+      } else if (success === false) {
         toast.error(addMessage);
       }
-      setIsAddAddress(false);
     }
-  }, [isAddAddress, addMessage, addStatus]);
+  }, [loading, success, addMessage, addStatus]);
   const handleEditClick = () => {
     setEditAddressPopUpOpen(true);
   };

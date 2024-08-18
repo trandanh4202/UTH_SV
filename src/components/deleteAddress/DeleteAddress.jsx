@@ -19,12 +19,14 @@ import "react-toastify/dist/ReactToastify.css";
 const DeleteAddress = ({ item }) => {
   const [deleteAddressPopUpOpen, setDeleteAddressPopUpOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [isDeleteAddress, setIsDeleteAddress] = useState(false);
   const deleteMessage = useSelector(
     (state) => state.address.deleteMessage.message
   );
   const deleteStatus = useSelector(
     (state) => state.address.deleteMessage.status
+  );
+  const deleteSuccess = useSelector(
+    (state) => state.address.deleteMessage.success
   );
 
   const loading = useSelector((state) => state.address.loading);
@@ -32,26 +34,27 @@ const DeleteAddress = ({ item }) => {
   const dispatch = useDispatch();
   const handleDeleteClick = () => {
     setDeleteAddressPopUpOpen(true);
+    setSelectedAddress(item); // Đảm bảo selectedAddress được thiết lập
   };
   const handleDeleteCancel = () => {
     setDeleteAddressPopUpOpen(false);
   };
 
-  const handleDeleteConfirm = async () => {
-    await setIsDeleteAddress(true);
-    setDeleteAddressPopUpOpen(false);
-    dispatch(deleteAddress(selectedAddress.id));
+  const handleDeleteConfirm = () => {
+    if (selectedAddress) {
+      dispatch(deleteAddress(selectedAddress.id));
+      setDeleteAddressPopUpOpen(false); // Đóng pop-up sau khi xác nhận
+    }
   };
   useEffect(() => {
-    if (!loading && deleteMessage) {
-      if (deleteMessage && deleteStatus === 200) {
+    if (!loading) {
+      if (deleteMessage && deleteSuccess === true) {
         toast.success(deleteMessage);
-        // localStorage.clear();
-      } else if (deleteStatus === 400) {
+      } else if (deleteSuccess === false) {
         toast.error(deleteMessage);
       }
     }
-  }, [loading, deleteMessage, deleteStatus]);
+  }, [loading, deleteMessage, deleteSuccess]);
   return (
     <>
       <IconButton

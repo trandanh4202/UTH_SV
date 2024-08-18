@@ -18,6 +18,7 @@ import {
   updateFamily,
   categoryFamily,
 } from "../../features/familySlice/FamilySlice";
+import Spinner from "../Spinner/Spinner";
 const inputStyles = {
   "& .MuiInputBase-root": {
     borderRadius: "8px",
@@ -138,7 +139,7 @@ const EditFamily = ({ open, onClose, editData }) => {
   return (
     <>
       {loading ? (
-        <CircularProgress />
+        <Spinner />
       ) : (
         <Modal open={open} onClose={onClose}>
           <Box

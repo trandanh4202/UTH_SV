@@ -43,6 +43,7 @@ const Courses = () => {
       sx={{ padding: "10px", height: "100%", minHeight: "300px" }}
       elevation={3}
     >
+      
       <Box>
         <Box
           sx={{

@@ -2,26 +2,15 @@ import { Box, CircularProgress } from "@mui/material";
 
 const Spinner = () => {
   return (
-    <Box
+    <CircularProgress
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         position: "absolute",
-        height: "100%",
-        top: 0,
-        left: 0,
-        width: "100%",
-        backgroundColor: "rgba(255, 255, 255, 0.5)",
-        zIndex: 9999,
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        color: "#008689",
       }}
-    >
-      <CircularProgress
-        sx={{
-          color: "#008689",
-        }}
-      />
-    </Box>
+    />
   );
 };
 

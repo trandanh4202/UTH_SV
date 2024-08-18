@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { getProgram } from "~/features/programSlice/ProgramSlice";
 import { Cancel, CheckCircle } from "@mui/icons-material";
+import Spinner from "../../../components/Spinner/Spinner";
 
 const columns = [
   { field: "tenHocPhan", headerName: "Tên học phần", width: "400px" },
@@ -76,7 +77,7 @@ const Program1 = () => {
 
   const program = useSelector((state) => state.program?.program);
   const { chitiets, soTCBatBuoc, soTCTuChon, soTCYeuCau } = program;
-
+  const loading = useSelector((state) => state.program.loading);
   const handleToggleSemester = (index) => {
     setExpandedSemester(expandedSemester === index ? null : index);
   };
@@ -133,374 +134,390 @@ const Program1 = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {chitiets?.map((semester, index) => (
-                  <React.Fragment key={index}>
-                    <TableRow
-                      onClick={() => handleToggleSemester(index)}
-                      sx={{
-                        cursor: "pointer",
-                        transition: "all 1s ease",
-                        backgroundColor: "rgba(72, 128, 255, 0.05)",
-                      }}
-                    >
-                      <TableCell
-                        colSpan={3}
-                        sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+              {loading ? (
+                <Spinner />
+              ) : (
+                <TableBody>
+                  {chitiets?.map((semester, index) => (
+                    <React.Fragment key={index}>
+                      <TableRow
+                        onClick={() => handleToggleSemester(index)}
+                        sx={{
+                          cursor: "pointer",
+                          transition: "all 1s ease",
+                          backgroundColor: "rgba(72, 128, 255, 0.05)",
+                        }}
                       >
-                        <Typography
-                          sx={{
-                            color: "#da1d2d",
-                            fontSize: { xs: "10px", lg: "15px" },
-                            fontWeight: "800",
-                            textAlign: "center",
-                          }}
+                        <TableCell
+                          colSpan={3}
+                          sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                         >
-                          Học kỳ {semester.hocKy}
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                      >
-                        <Typography
-                          sx={{
-                            color: "#da1d2d",
-                            fontSize: { xs: "10px", lg: "15px" },
-                            fontWeight: "800",
-                            textAlign: "center",
-                          }}
-                        >
-                          {semester.soTCBatBuoc + semester.soTCTuChon}
-                        </Typography>
-                      </TableCell>
-                      <TableCell
-                        colSpan={5}
-                        sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                      ></TableCell>
-                    </TableRow>
-                    {expandedSemester === index && (
-                      <>
-                        <TableRow
-                          sx={{
-                            backgroundColor: "rgba(72, 128, 255, 0.05)",
-                          }}
-                        >
-                          <TableCell
-                            colSpan={3}
-                            sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                          >
-                            <Typography
-                              sx={{
-                                color: "#da1d2d",
-                                fontSize: { xs: "10px", lg: "15px" },
-                                fontWeight: "700",
-                              }}
-                            >
-                              Học phần bắt buộc
-                            </Typography>
-                          </TableCell>
-                          <TableCell
-                            sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                          >
-                            <Typography
-                              sx={{
-                                color: "#da1d2d",
-                                fontSize: { xs: "10px", lg: "15px" },
-                                fontWeight: "800",
-                                textAlign: "center",
-                              }}
-                            >
-                              {semester.soTCBatBuoc}
-                            </Typography>
-                          </TableCell>
-                          <TableCell
-                            colSpan={5}
-                            sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                          ></TableCell>
-                        </TableRow>
-                        {semester.monBatBuoc.map((course) => (
-                          <TableRow
-                            key={course.maHocPhan}
+                          <Typography
                             sx={{
-                              backgroundColor: course.isDat
-                                ? "#e7ecf0"
-                                : "inherit",
+                              color: "#da1d2d",
+                              fontSize: { xs: "10px", lg: "15px" },
+                              fontWeight: "800",
+                              textAlign: "center",
                             }}
                           >
-                            {[
-                              {
-                                value: course.tenMonHoc,
-                                extra: course.isKhongTinhTBC ? "(*)" : "",
-                                align: "left",
-                              },
-                              { value: course.maHocPhan },
-                              { value: formatConditions(course) },
-                              { value: course.soTC },
-                              { value: course.soTietLT },
-                              { value: course.soTietTH },
-                              { value: course.nhomTuChon ?? 0 },
-                              { value: course.soTCBatBuocNhom },
-                              {
-                                value:
-                                  course.isDat === true ? (
-                                    <CheckCircle
-                                      sx={{
-                                        color: "#008689",
-                                        fontSize: "20px",
-                                      }}
-                                    />
-                                  ) : course.isDat === false ? (
-                                    <Cancel
-                                      sx={{ color: "red", fontSize: "20px" }}
-                                    />
-                                  ) : (
-                                    ""
-                                  ),
-                              },
-                            ].map((cell, cellIndex) => (
-                              <TableCell
-                                key={cellIndex}
-                                align={cell.align || "center"}
-                                sx={{
-                                  border: "1px solid rgba(224, 224, 224, 1)",
-                                }}
-                              >
-                                <Typography
-                                  sx={{
-                                    color: "rgb(117, 117, 117)",
-                                    fontSize: { xs: "10px", lg: "15px" },
-                                    fontWeight: "600",
-                                  }}
-                                >
-                                  {cell.value}
-                                  {cell.extra && (
-                                    <Typography
-                                      variant="span"
-                                      sx={{
-                                        color: "#da1d2d",
-                                        fontSize: { xs: "10px", lg: "15px" },
-                                      }}
-                                    >
-                                      {cell.extra}
-                                    </Typography>
-                                  )}
-                                </Typography>
-                              </TableCell>
-                            ))}
-                          </TableRow>
-                        ))}
-                        <TableRow>
-                          <TableCell
-                            colSpan={3}
-                            sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                          >
-                            <Typography
-                              sx={{
-                                color: "#da1d2d",
-                                fontSize: { xs: "10px", lg: "15px" },
-                                fontWeight: "700",
-                              }}
-                            >
-                              Học phần tự chọn
-                            </Typography>
-                          </TableCell>
-                          <TableCell
-                            sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                          >
-                            <Typography
-                              sx={{
-                                color: "#da1d2d",
-                                fontSize: { xs: "10px", lg: "15px" },
-                                fontWeight: "800",
-                                textAlign: "center",
-                              }}
-                            >
-                              {semester.soTCTuChon}
-                            </Typography>
-                          </TableCell>
-                          <TableCell
-                            colSpan={5}
-                            sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                          ></TableCell>
-                        </TableRow>
-                        {semester.monTuChon.map((course) => (
-                          <TableRow
-                            key={course.maHocPhan}
+                            Học kỳ {semester.hocKy}
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                        >
+                          <Typography
                             sx={{
-                              backgroundColor: course.isDat
-                                ? "#e7ecf0"
-                                : "inherit",
+                              color: "#da1d2d",
+                              fontSize: { xs: "10px", lg: "15px" },
+                              fontWeight: "800",
+                              textAlign: "center",
                             }}
                           >
-                            {[
-                              {
-                                value: course.tenMonHoc,
-                                extra: course.isKhongTinhTBC ? "(*)" : "",
-                                align: "left",
-                              },
-                              { value: course.maHocPhan },
-                              { value: formatConditions(course) },
-                              { value: course.soTC },
-                              { value: course.soTietLT },
-                              { value: course.soTietTH },
-                              { value: course.nhomTuChon ?? 0 },
-                              { value: course.soTCBatBuocNhom },
-                              {
-                                value:
-                                  course.isDat === true ? (
-                                    <CheckCircle
-                                      sx={{
-                                        color: "#008950",
-                                        fontSize: "20px",
-                                      }}
-                                    />
-                                  ) : course.isDat === false ? (
-                                    <Cancel
-                                      sx={{ color: "red", fontSize: "20px" }}
-                                    />
-                                  ) : (
-                                    ""
-                                  ),
-                              },
-                            ].map((cell, cellIndex) => (
-                              <TableCell
-                                key={cellIndex}
-                                align={cell.align || "center"}
+                            {semester.soTCBatBuoc + semester.soTCTuChon}
+                          </Typography>
+                        </TableCell>
+                        <TableCell
+                          colSpan={5}
+                          sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                        ></TableCell>
+                      </TableRow>
+                      {expandedSemester === index && (
+                        <>
+                          <TableRow
+                            sx={{
+                              backgroundColor: "rgba(72, 128, 255, 0.05)",
+                            }}
+                          >
+                            <TableCell
+                              colSpan={3}
+                              sx={{
+                                border: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              <Typography
                                 sx={{
-                                  border: "1px solid rgba(224, 224, 224, 1)",
+                                  color: "#da1d2d",
+                                  fontSize: { xs: "10px", lg: "15px" },
+                                  fontWeight: "700",
                                 }}
                               >
-                                <Typography
+                                Học phần bắt buộc
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                border: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  color: "#da1d2d",
+                                  fontSize: { xs: "10px", lg: "15px" },
+                                  fontWeight: "800",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {semester.soTCBatBuoc}
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              colSpan={5}
+                              sx={{
+                                border: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            ></TableCell>
+                          </TableRow>
+                          {semester.monBatBuoc.map((course) => (
+                            <TableRow
+                              key={course.maHocPhan}
+                              sx={{
+                                backgroundColor: course.isDat
+                                  ? "#e7ecf0"
+                                  : "inherit",
+                              }}
+                            >
+                              {[
+                                {
+                                  value: course.tenMonHoc,
+                                  extra: course.isKhongTinhTBC ? "(*)" : "",
+                                  align: "left",
+                                },
+                                { value: course.maHocPhan },
+                                { value: formatConditions(course) },
+                                { value: course.soTC },
+                                { value: course.soTietLT },
+                                { value: course.soTietTH },
+                                { value: course.nhomTuChon ?? 0 },
+                                { value: course.soTCBatBuocNhom },
+                                {
+                                  value:
+                                    course.isDat === true ? (
+                                      <CheckCircle
+                                        sx={{
+                                          color: "#008689",
+                                          fontSize: "20px",
+                                        }}
+                                      />
+                                    ) : course.isDat === false ? (
+                                      <Cancel
+                                        sx={{ color: "red", fontSize: "20px" }}
+                                      />
+                                    ) : (
+                                      ""
+                                    ),
+                                },
+                              ].map((cell, cellIndex) => (
+                                <TableCell
+                                  key={cellIndex}
+                                  align={cell.align || "center"}
                                   sx={{
-                                    color: "rgb(117, 117, 117)",
-                                    fontSize: { xs: "10px", lg: "15px" },
-                                    fontWeight: "600",
+                                    border: "1px solid rgba(224, 224, 224, 1)",
                                   }}
                                 >
-                                  {cell.value}
-                                  {cell.extra && (
-                                    <Typography
-                                      variant="span"
-                                      sx={{
-                                        color: "#da1d2d",
-                                        fontSize: { xs: "10px", lg: "15px" },
-                                      }}
-                                    >
-                                      {cell.extra}
-                                    </Typography>
-                                  )}
-                                </Typography>
-                              </TableCell>
-                            ))}
+                                  <Typography
+                                    sx={{
+                                      color: "rgb(117, 117, 117)",
+                                      fontSize: { xs: "10px", lg: "15px" },
+                                      fontWeight: "600",
+                                    }}
+                                  >
+                                    {cell.value}
+                                    {cell.extra && (
+                                      <Typography
+                                        variant="span"
+                                        sx={{
+                                          color: "#da1d2d",
+                                          fontSize: { xs: "10px", lg: "15px" },
+                                        }}
+                                      >
+                                        {cell.extra}
+                                      </Typography>
+                                    )}
+                                  </Typography>
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          ))}
+                          <TableRow>
+                            <TableCell
+                              colSpan={3}
+                              sx={{
+                                border: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  color: "#da1d2d",
+                                  fontSize: { xs: "10px", lg: "15px" },
+                                  fontWeight: "700",
+                                }}
+                              >
+                                Học phần tự chọn
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              sx={{
+                                border: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  color: "#da1d2d",
+                                  fontSize: { xs: "10px", lg: "15px" },
+                                  fontWeight: "800",
+                                  textAlign: "center",
+                                }}
+                              >
+                                {semester.soTCTuChon}
+                              </Typography>
+                            </TableCell>
+                            <TableCell
+                              colSpan={5}
+                              sx={{
+                                border: "1px solid rgba(224, 224, 224, 1)",
+                              }}
+                            ></TableCell>
                           </TableRow>
-                        ))}
-                      </>
-                    )}
-                  </React.Fragment>
-                ))}
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: { xs: "10px", lg: "15px" },
-                        fontWeight: "700",
-                      }}
+                          {semester.monTuChon.map((course) => (
+                            <TableRow
+                              key={course.maHocPhan}
+                              sx={{
+                                backgroundColor: course.isDat
+                                  ? "#e7ecf0"
+                                  : "inherit",
+                              }}
+                            >
+                              {[
+                                {
+                                  value: course.tenMonHoc,
+                                  extra: course.isKhongTinhTBC ? "(*)" : "",
+                                  align: "left",
+                                },
+                                { value: course.maHocPhan },
+                                { value: formatConditions(course) },
+                                { value: course.soTC },
+                                { value: course.soTietLT },
+                                { value: course.soTietTH },
+                                { value: course.nhomTuChon ?? 0 },
+                                { value: course.soTCBatBuocNhom },
+                                {
+                                  value:
+                                    course.isDat === true ? (
+                                      <CheckCircle
+                                        sx={{
+                                          color: "#008950",
+                                          fontSize: "20px",
+                                        }}
+                                      />
+                                    ) : course.isDat === false ? (
+                                      <Cancel
+                                        sx={{ color: "red", fontSize: "20px" }}
+                                      />
+                                    ) : (
+                                      ""
+                                    ),
+                                },
+                              ].map((cell, cellIndex) => (
+                                <TableCell
+                                  key={cellIndex}
+                                  align={cell.align || "center"}
+                                  sx={{
+                                    border: "1px solid rgba(224, 224, 224, 1)",
+                                  }}
+                                >
+                                  <Typography
+                                    sx={{
+                                      color: "rgb(117, 117, 117)",
+                                      fontSize: { xs: "10px", lg: "15px" },
+                                      fontWeight: "600",
+                                    }}
+                                  >
+                                    {cell.value}
+                                    {cell.extra && (
+                                      <Typography
+                                        variant="span"
+                                        sx={{
+                                          color: "#da1d2d",
+                                          fontSize: { xs: "10px", lg: "15px" },
+                                        }}
+                                      >
+                                        {cell.extra}
+                                      </Typography>
+                                    )}
+                                  </Typography>
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          ))}
+                        </>
+                      )}
+                    </React.Fragment>
+                  ))}
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                     >
-                      Tổng số tín chỉ yêu cầu
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: { xs: "10px", lg: "15px" },
-                        fontWeight: "700",
-                        textAlign: "center",
-                      }}
+                      <Typography
+                        sx={{
+                          color: "#da1d2d",
+                          fontSize: { xs: "10px", lg: "15px" },
+                          fontWeight: "700",
+                        }}
+                      >
+                        Tổng số tín chỉ yêu cầu
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                     >
-                      {soTCYeuCau}
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    colSpan={5}
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  ></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: { xs: "10px", lg: "15px" },
-                        fontWeight: "700",
-                      }}
+                      <Typography
+                        sx={{
+                          color: "#da1d2d",
+                          fontSize: { xs: "10px", lg: "15px" },
+                          fontWeight: "700",
+                          textAlign: "center",
+                        }}
+                      >
+                        {soTCYeuCau}
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      colSpan={5}
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                    ></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                     >
-                      Tổng số tín chỉ bắt buộc
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: { xs: "13px", lg: "15px" },
-                        fontWeight: "700",
-                        textAlign: "center",
-                      }}
+                      <Typography
+                        sx={{
+                          color: "#da1d2d",
+                          fontSize: { xs: "10px", lg: "15px" },
+                          fontWeight: "700",
+                        }}
+                      >
+                        Tổng số tín chỉ bắt buộc
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                     >
-                      {soTCBatBuoc}
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    colSpan={5}
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  ></TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: { xs: "10px", lg: "15px" },
-                        fontWeight: "700",
-                      }}
+                      <Typography
+                        sx={{
+                          color: "#da1d2d",
+                          fontSize: { xs: "13px", lg: "15px" },
+                          fontWeight: "700",
+                          textAlign: "center",
+                        }}
+                      >
+                        {soTCBatBuoc}
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      colSpan={5}
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                    ></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell
+                      colSpan={3}
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                     >
-                      Tổng số tín chỉ tự chọn
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  >
-                    <Typography
-                      sx={{
-                        color: "#da1d2d",
-                        fontSize: { xs: "13px", lg: "15px" },
-                        fontWeight: "700",
-                        textAlign: "center",
-                      }}
+                      <Typography
+                        sx={{
+                          color: "#da1d2d",
+                          fontSize: { xs: "10px", lg: "15px" },
+                          fontWeight: "700",
+                        }}
+                      >
+                        Tổng số tín chỉ tự chọn
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                     >
-                      {soTCTuChon}
-                    </Typography>
-                  </TableCell>
-                  <TableCell
-                    colSpan={5}
-                    sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
-                  ></TableCell>
-                </TableRow>
-              </TableBody>
+                      <Typography
+                        sx={{
+                          color: "#da1d2d",
+                          fontSize: { xs: "13px", lg: "15px" },
+                          fontWeight: "700",
+                          textAlign: "center",
+                        }}
+                      >
+                        {soTCTuChon}
+                      </Typography>
+                    </TableCell>
+                    <TableCell
+                      colSpan={5}
+                      sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
+                    ></TableCell>
+                  </TableRow>
+                </TableBody>
+              )}
             </Table>
           </TableContainer>
         </Paper>

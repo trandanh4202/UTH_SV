@@ -16,6 +16,7 @@ import {
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTranscript } from "~/features/transcriptSlice/TranscriptSlice";
+import Spinner from "../../../components/Spinner/Spinner";
 
 const columns = [
   {
@@ -134,19 +135,7 @@ const Transcript = () => {
                 </TableRow>
               </TableHead>
               {loading ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    position: "absolute",
-                  }}
-                >
-                  <CircularProgress />
-                </Box>
+                <Spinner />
               ) : (
                 <TableBody>
                   {transcript?.map((hocKy, hocKyIndex) => (

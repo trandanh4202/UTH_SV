@@ -19,7 +19,7 @@ const Certification = () => {
     dispatch(getCertification());
   }, [dispatch]);
   const certification = useSelector(
-    (state) => state.certification?.certification.data
+    (state) => state.certification.certification
   );
 
   return (

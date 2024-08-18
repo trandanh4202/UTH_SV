@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { updateEmail } from "../../features/profileSlice/ProfileSlice";
+import Spinner from "../Spinner/Spinner";
 
 const UpdatePhone = () => {
   const {
@@ -53,88 +54,84 @@ const UpdatePhone = () => {
 
   return (
     <>
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <Modal open={!!email}>
-          <Box
+      <Modal open={!!email}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: "20px",
+          }}
+        >
+          <Typography
             sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              p: 4,
-              borderRadius: "20px",
+              textAlign: "center",
+              marginBottom: "20px",
+              color: "black",
+              fontWeight: "600",
+              fontSize: "20px",
             }}
           >
-            <Typography
+            Cập nhật số điện thoại
+          </Typography>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <TextField
+              label="Số điện thoại mới (*)"
+              type={"tel"}
+              {...register("updatephone", {
+                required: "Cập nhật số điện thoại là bắt buộc",
+              })}
+              error={!!errors.updatephone}
+              helperText={errors.updatephone?.message}
+              fullWidth
+              InputProps={{
+                sx: {
+                  backgroundColor: "white",
+                  fontSize: "1.4rem", // Increase font size for input
+                },
+              }}
+              InputLabelProps={{
+                sx: {
+                  fontStyle: "italic",
+                  fontSize: "1.4rem", // Increase font size for label
+                  color: "gray",
+                },
+              }}
               sx={{
-                textAlign: "center",
-                marginBottom: "20px",
-                color: "black",
-                fontWeight: "600",
-                fontSize: "20px",
+                "& fieldset": {
+                  borderColor: "#008689 !important", // Thiết lập màu viền khi trường được focus
+                },
+              }}
+            />
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{
+                backgroundColor: "#008689",
+                padding: "10px",
+                "&:hover": {
+                  backgroundColor: "#008699",
+                },
               }}
             >
-              Cập nhật số điện thoại
-            </Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit(onSubmit)}
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-              }}
-            >
-              <TextField
-                label="Số điện thoại mới (*)"
-                type={"tel"}
-                {...register("updatephone", {
-                  required: "Cập nhật số điện thoại là bắt buộc",
-                })}
-                error={!!errors.updatephone}
-                helperText={errors.updatephone?.message}
-                fullWidth
-                InputProps={{
-                  sx: {
-                    backgroundColor: "white",
-                    fontSize: "1.4rem", // Increase font size for input
-                  },
-                }}
-                InputLabelProps={{
-                  sx: {
-                    fontStyle: "italic",
-                    fontSize: "1.4rem", // Increase font size for label
-                    color: "gray",
-                  },
-                }}
-                sx={{
-                  "& fieldset": {
-                    borderColor: "#008689 !important", // Thiết lập màu viền khi trường được focus
-                  },
-                }}
-              />
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  backgroundColor: "#008689",
-                  padding: "10px",
-                  "&:hover": {
-                    backgroundColor: "#008699",
-                  },
-                }}
-              >
-                Cập nhật
-              </Button>
-            </Box>
+              Cập nhật
+            </Button>
           </Box>
-        </Modal>
-      )}
+        </Box>
+      </Modal>
     </>
   );
 };
