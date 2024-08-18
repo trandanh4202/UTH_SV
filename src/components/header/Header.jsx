@@ -1,5 +1,6 @@
 /* eslint-disable react/jsx-key */
 import {
+  Article,
   ContactEmergency,
   ExpandMore,
   KeyboardArrowDown,
@@ -50,7 +51,6 @@ const Header = () => {
     setOpenDrawer(newOpen);
   };
 
-  
   const handleClick = (event) => {
     event.preventDefault();
     setAnchorEl(event.currentTarget);
@@ -144,6 +144,16 @@ const Header = () => {
       name: "Hỗ trợ trực tuyến",
       icon: <SupportAgent sx={{ fontSize: "25px" }} />,
       route: `https://support.ut.edu.vn/login.php?token=${token}`,
+    },
+    {
+      name: "Giấy sinh viên",
+      icon: <Article sx={{ fontSize: "25px" }} />,
+      children: [
+        {
+          name: "Giấy báo trúng tuyển",
+          route: `/certification`,
+        },
+      ],
     },
   ];
 

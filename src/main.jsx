@@ -134,7 +134,7 @@ const router = createBrowserRouter([
             element: <StudentCertificate />,
           },
           {
-            path: "giaysinhvien",
+            path: "certification",
             element: <Certification />,
           },
         ],

@@ -43,5 +43,5 @@ export const store = configureStore({
     viettel: viettelReducer,
     certification: certificationReducer,
   },
-  devTools: false,
+  // devTools: false,
 });
