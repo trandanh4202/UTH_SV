@@ -18,7 +18,7 @@ export const getCertification = createAsyncThunk(
       }
       console.log(token);
       const response = await axios.get(
-        `https://ts24.ut.edu.vn/api/getdatanhaphoc.php/getdatanhaphoc.php?token=${token}`
+        `https://ts24.ut.edu.vn/api/getdatanhaphoc.php?token=${token}`
       );
 
       return response.data;

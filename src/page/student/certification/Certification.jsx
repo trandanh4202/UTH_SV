@@ -10,7 +10,7 @@ const Certification = () => {
   const courses = useSelector((state) => state.profile.profile.body?.khoaHoc);
   const navigate = useNavigate();
   useEffect(() => {
-    if (courses !== "2024") {
+    if (courses !== 2024) {
       navigate("/dashboard");
     }
   }, [navigate, courses]);
