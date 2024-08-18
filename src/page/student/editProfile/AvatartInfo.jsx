@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 const AvatarInfo = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const loading = useSelector((state) => state.profile.loading);
   const dispatch = useDispatch();
   const studentPhoto = useSelector(
     (state) => state.profile.profile.body?.image
@@ -24,7 +25,6 @@ const AvatarInfo = () => {
       reader.readAsDataURL(file);
     }
   };
-  const [isAvatarChanged, setIsAvatarChanged] = useState(false);
 
   const handleUpload = () => {
     if (!selectedFile) {
@@ -36,26 +36,24 @@ const AvatarInfo = () => {
     formData.append("avatar", selectedFile);
 
     dispatch(uploadAvatar(formData));
-    setIsAvatarChanged(true);
   };
 
   const status = useSelector((state) => state.profile.avatar?.status);
   const message = useSelector((state) => state.profile.avatar?.message);
 
   useEffect(() => {
-    if (isAvatarChanged && message) {
-      if (status === 200) {
+    if (!loading) {
+      if (status === 200 && message) {
         toast.success(message);
 
         setTimeout(() => {
           window.location.reload();
         }, 2000);
-      } else if (status === 400) {
+      } else if (status !== 200) {
         toast.error(message);
       }
-      setIsAvatarChanged(false);
     }
-  }, [isAvatarChanged, message, status]);
+  }, [loading, message, status]);
 
   return (
     <Box
@@ -63,6 +61,23 @@ const AvatarInfo = () => {
         padding: "10px",
       }}
     >
+      <Box
+        sx={{
+          marginBottom: "20px",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: "15px",
+            color: "red",
+            fontWeight: "600",
+          }}
+        >
+          Sinh viên được phép cập nhật ảnh, ảnh sinh viên sẽ dùng làm hồ sơ tại
+          trường và thẻ sinh viên tích hợp ngân hàng. Vui lòng dùng hình ảnh
+          nghiêm túc (nền trắng)
+        </Typography>
+      </Box>
       <Grid container spacing={2}>
         <Grid item xs={12} lg={6}>
           <Box>

@@ -29,7 +29,6 @@ const UpdatePhone = () => {
   const phone = useSelector((state) => state.profile.profile.body?.phone || "");
   const loading = useSelector((state) => state.profile.loading || "");
 
-  console.log(phone);
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     await dispatch(updatePhone(data));

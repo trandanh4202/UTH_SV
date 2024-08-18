@@ -36,7 +36,7 @@ const TuitionTable = () => {
   // Filter data into three arrays based on LoaiHocPhi
 
   const dispatch = useDispatch();
-  const select = useSelector((state) => state.profile?.select);
+  const select = useSelector((state) => state.program?.select);
 
   useEffect(() => {
     dispatch(getSelect());

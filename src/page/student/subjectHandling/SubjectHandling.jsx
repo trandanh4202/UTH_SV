@@ -68,13 +68,11 @@ const SubjectHandling = () => {
   const handleSubjectClick = () => {
     // Lọc dựa trên maHocPhan từ data2
 
-    console.log("Fetched class sections:", data2);
     setClassSections(data2);
     setSelectedClassDetails(null); // Clear class details when subject changes
   };
 
   const handleClassSectionClick = () => {
-    console.log("Fetched class details:", data3);
     setSelectedClassDetails(data3);
   };
 

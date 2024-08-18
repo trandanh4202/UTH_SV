@@ -53,13 +53,14 @@ export const addToCart = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.post(
+      const message = await axios.post(
         `${API_BASE_URL}/cart`,
         formData,
         config
       );
+      const response = await axios.get(`${API_BASE_URL}/cart`, config);
 
-      return response.data;
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -75,7 +76,7 @@ export const addToCart = createAsyncThunk(
 
 export const updateCart = createAsyncThunk(
   "cart/updateCart",
-  async ({ formData, id }, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -88,18 +89,13 @@ export const updateCart = createAsyncThunk(
         },
       };
       const message = await axios.put(
-        `${API_BASE_URL}/cart/${id}`,
+        `${API_BASE_URL}/cart/${formData.productId}`,
         formData,
         config
       );
+      const response = await axios.get(`${API_BASE_URL}/cart`, config);
 
-      const response = await axios.post(
-        `${API_BASE_URL}/cart`,
-        formData,
-        config
-      );
-
-      return response.data;
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -136,7 +132,8 @@ const cartSlice = createSlice({
       })
       .addCase(addToCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.addToCart = action.payload;
+        state.addToCartMessage = action.payload.message;
+        state.cart = action.payload.response;
       })
       .addCase(addToCart.rejected, (state, action) => {
         state.loading = false;
@@ -148,7 +145,8 @@ const cartSlice = createSlice({
       })
       .addCase(updateCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.cart = action.payload;
+        state.updateCartMessage = action.payload.message;
+        state.cart = action.payload.response;
       })
       .addCase(updateCart.rejected, (state, action) => {
         state.loading = false;

@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-key */
-import { CloudDownload, Receipt } from "@mui/icons-material";
+import { CloudDownload } from "@mui/icons-material";
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Divider,
   Grid,
@@ -18,18 +19,14 @@ import {
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getReceiptDetail,
-  getReceipts,
-} from "~/features/tuitionSlice/TuitionSlice";
-import ReceiptDetailPopup from "../tuitionFees/generalReceipts/ReceiptDetailPopup";
-import AddFamily from "../../../components/addFamily/AddFamily";
-import AddKTX from "../../../components/addKTX/AddKTX";
+import AddAddress from "../../../components/addAddress/AddAddress";
+import DeleteAddress from "../../../components/deleteAddress/DeleteAddress";
+import EditAddress from "../../../components/editAddress/EditAddress";
+import { getAddress } from "../../../features/addressSlice/AddressSlice";
+import { addToCart } from "../../../features/cartSlice/CartSlice";
 import { getAllOrder } from "../../../features/orderSlice/OrderSlice";
 import { getAllProduct } from "../../../features/productSlice/ProductSlice";
-import { addToCart } from "../../../features/cartSlice/CartSlice";
-import { getAddress } from "../../../features/addressSlice/AddressSlice";
-import AddAddress from "../../../components/addAddress/AddAddress";
+import { getProvinceViettel } from "../../../features/viettelSlice/ViettelSlice";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -76,6 +73,9 @@ const StudentCertificate = () => {
   const receipts = useSelector((state) => state.order.order?.body);
   const products = useSelector((state) => state.product.product?.body);
   const address = useSelector((state) => state.address.address?.body);
+  const addresses = useSelector((state) => state.address.addresses?.body);
+
+  const loading = useSelector((state) => state.address.loading);
 
   const [modalKTXOpen, setModalKTXOpen] = useState(false);
 
@@ -112,6 +112,7 @@ const StudentCertificate = () => {
   const handleModalAddressClose = () => {
     setModalAddressOpen(false);
   };
+
   return (
     <Box>
       <Container sx={{}}>
@@ -257,7 +258,7 @@ const StudentCertificate = () => {
                   },
                 }}
               >
-                Đăng ký KTX
+                Thêm địa chỉ
               </Button>
             </Box>
           </Box>
@@ -309,104 +310,108 @@ const StudentCertificate = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {address?.map((row, index) => (
-                  <TableRow
-                    key={row.soPhieu}
-                    sx={{
-                      cursor: "pointer",
-                      backgroundColor:
-                        selectedRow === index ? "#006b89x" : "inherit",
-                    }}
-                    onClick={() => handleRowClick(index)}
-                  >
-                    <TableCell
-                      align="center"
+                {loading ? (
+                  <CircularProgress />
+                ) : (
+                  address?.map((item, index) => (
+                    <TableRow
+                      key={item.soPhieu}
                       sx={{
-                        border: "1px solid rgb(221, 221, 221)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
+                        cursor: "pointer",
+                        backgroundColor:
+                          selectedRow === index ? "#006b89x" : "inherit",
                       }}
+                      onClick={() => handleRowClick(index)}
                     >
-                      {index + 1}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgb(221, 221, 221)",
 
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.soPhieu}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {index + 1}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
 
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.maHoaDon}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {item.PROVINCE_NAME}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
 
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {formatDate(row.ngayThu)}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {item.DISTRICT_NAME}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
 
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.daNop}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {item.WARDS_NAME}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
 
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.nguoiTao}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {item.detail}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
 
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.hoaDonDienTu ? <CloudDownload /> : ""}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {item.phoneNumber ? item.phoneNumber : "Chưa có"}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
 
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    ></TableCell>
-                  </TableRow>
-                ))}
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <DeleteAddress item={item} />
+                          <EditAddress editData={item} />
+                        </Box>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

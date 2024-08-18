@@ -121,7 +121,6 @@ const EditFamily = ({ open, onClose, editData }) => {
       reset(); // Đặt lại form nếu không có dữ liệu chỉnh sửa
     }
   }, [editData, setValue, reset]);
-  console.log(editData);
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {

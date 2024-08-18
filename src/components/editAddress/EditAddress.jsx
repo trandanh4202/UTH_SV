@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   MenuItem,
   Modal,
   Select,
@@ -15,12 +16,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { addAddress } from "../../features/addressSlice/AddressSlice";
+// import { EditAddress } from "../../features/addressSlice/AddressSlice";
 import {
   getDistrictViettel,
   getProvinceViettel,
   getWardViettel,
 } from "../../features/viettelSlice/ViettelSlice";
+import { EditOutlined } from "@mui/icons-material";
+import { updateAddress } from "../../features/addressSlice/AddressSlice";
 const inputStyles = {
   "& .MuiInputBase-root": {
     borderRadius: "8px",
@@ -182,7 +185,7 @@ const TextFieldWrapper = ({
   );
 };
 
-const AddAddress = ({ open, onClose }) => {
+const EditAddress = ({ editData }) => {
   const {
     register,
     handleSubmit,
@@ -191,12 +194,13 @@ const AddAddress = ({ open, onClose }) => {
   } = useForm();
 
   const [formData, setFormData] = useState({
-    provinceId: 0,
-    districtId: 0,
-    wardId: 0,
-    detail: "",
-    phoneNumber: "",
+    provinceId: editData.PROVINCE_ID || 0,
+    districtId: editData.DISTRICT_ID || 0,
+    wardId: editData.WARDS_ID || 0,
+    detail: editData.detail || 0,
+    phoneNumber: editData.phoneNumber || 0,
   });
+  const [id, setId] = useState(editData.id);
   const dispatch = useDispatch();
   const addMessage = useSelector(
     (state) => state.address.addAddressMessage?.message
@@ -212,31 +216,43 @@ const AddAddress = ({ open, onClose }) => {
   const districts = useSelector((state) => state.viettel.district.data) || [];
   const wards = useSelector((state) => state.viettel.ward?.data) || [];
   const loading = useSelector((state) => state.viettel.loading);
-
-  // useEffect(() => {
-  //   dispatch(getProvinceViettel());
-  // }, [dispatch]);
+  const [editAddressPopUpOpen, setEditAddressPopUpOpen] = useState(false);
+  useEffect(() => {
+    if (editAddressPopUpOpen) {
+      dispatch(getProvinceViettel());
+      if (editData.PROVINCE_ID) {
+        dispatch(getDistrictViettel(editData.PROVINCE_ID));
+        if (editData.DISTRICT_ID) {
+          dispatch(getWardViettel(editData.DISTRICT_ID));
+        }
+      }
+    }
+  }, [dispatch, editData, editAddressPopUpOpen]);
 
   useEffect(() => {
-    if (formData.provinceId) {
-      dispatch(getDistrictViettel(formData.provinceId)).then(() => {
-        setFormData((prev) => ({
-          ...prev,
-          districtId: 0,
-          wardId: 0,
-        }));
-      });
+    if (editAddressPopUpOpen) {
+      if (formData.provinceId) {
+        dispatch(getDistrictViettel(formData.provinceId)).then(() => {
+          setFormData((prev) => ({
+            ...prev,
+            districtId: 0,
+            wardId: 0,
+          }));
+        });
+      }
     }
   }, [dispatch, formData.provinceId]);
 
   useEffect(() => {
-    if (formData.districtId) {
-      dispatch(getWardViettel(formData.districtId)).then(() => {
-        setFormData((prev) => ({
-          ...prev,
-          wardId: 0,
-        }));
-      });
+    if (editAddressPopUpOpen) {
+      if (formData.districtId) {
+        dispatch(getWardViettel(formData.districtId)).then(() => {
+          setFormData((prev) => ({
+            ...prev,
+            wardId: 0,
+          }));
+        });
+      }
     }
   }, [dispatch, formData.districtId]);
 
@@ -249,9 +265,9 @@ const AddAddress = ({ open, onClose }) => {
   }, []);
 
   const onSubmit = async () => {
-    await dispatch(addAddress(formData));
+    await dispatch(updateAddress({ formData, id }));
     setIsAddAddress(true);
-    onClose();
+    // onClose();
   };
   useEffect(() => {
     if (isAddAddress && addMessage) {
@@ -264,9 +280,39 @@ const AddAddress = ({ open, onClose }) => {
       setIsAddAddress(false);
     }
   }, [isAddAddress, addMessage, addStatus]);
+  const handleEditClick = () => {
+    setEditAddressPopUpOpen(true);
+  };
+
+  const handleEditCancel = () => {
+    setEditAddressPopUpOpen(false);
+  };
   return (
     <>
-      <Modal open={open} onClose={onClose}>
+      <IconButton
+        onClick={handleEditClick}
+        variant="contained"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "15px",
+          backgroundColor: "#008588",
+          color: "white",
+          borderRadius: "8px",
+          border: "3px solid #0085885a",
+          transition: "all ease 0.4s",
+          "&:hover": {
+            borderColor: "#008689",
+            backgroundColor: "white",
+            color: "red",
+            boxShadow: "0 0 10px #008689",
+          },
+        }}
+      >
+        <EditOutlined sx={{ fontSize: "30px" }} />
+      </IconButton>
+      <Modal open={editAddressPopUpOpen} onClose={handleEditCancel}>
         <Box
           sx={{
             position: "absolute",
@@ -289,7 +335,7 @@ const AddAddress = ({ open, onClose }) => {
               fontSize: "20px",
             }}
           >
-            Thêm Địa chỉ giao hàng
+            Sửa địa chỉ nhận đơn
           </Typography>
           <Box
             component="form"
@@ -385,4 +431,4 @@ const AddAddress = ({ open, onClose }) => {
   );
 };
 
-export default AddAddress;
+export default EditAddress;

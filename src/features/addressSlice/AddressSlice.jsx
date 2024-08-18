@@ -2,10 +2,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  cart: [],
-  // : [],
   loading: false,
   error: null,
+  address: [],
+  deleteMessage: [],
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -60,7 +60,7 @@ export const addAddress = createAsyncThunk(
       );
       const response = await axios.get(`${API_BASE_URL}/address`, config);
 
-      return response.data;
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -89,18 +89,14 @@ export const updateAddress = createAsyncThunk(
         },
       };
       const message = await axios.put(
-        `${API_BASE_URL}/Address/${id}`,
+        `${API_BASE_URL}/address/${id}`,
         formData,
         config
       );
 
-      const response = await axios.get(
-        `${API_BASE_URL}/Address`,
-        formData,
-        config
-      );
+      const response = await axios.get(`${API_BASE_URL}/address`, config);
 
-      return response.data;
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -129,13 +125,13 @@ export const deleteAddress = createAsyncThunk(
         },
       };
       const message = await axios.delete(
-        `${API_BASE_URL}/Address/${id}`,
+        `${API_BASE_URL}/address/${id}`,
         config
       );
 
-      const response = await axios.get(`${API_BASE_URL}/Address`, config);
+      const response = await axios.get(`${API_BASE_URL}/address`, config);
 
-      return response.data;
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -172,7 +168,8 @@ const AddressSlice = createSlice({
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.addAddress = action.payload;
+        state.addAddressMessage = action.payload.message;
+        state.address = action.payload.response;
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.loading = false;
@@ -184,7 +181,8 @@ const AddressSlice = createSlice({
       })
       .addCase(updateAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.Address = action.payload;
+        state.updateMessage = action.payload.message;
+        state.address = action.payload.response;
       })
       .addCase(updateAddress.rejected, (state, action) => {
         state.loading = false;
@@ -196,7 +194,8 @@ const AddressSlice = createSlice({
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.Address = action.payload;
+        state.deleteMessage = action.payload.message;
+        state.address = action.payload.response;
       })
       .addCase(deleteAddress.rejected, (state, action) => {
         state.loading = false;

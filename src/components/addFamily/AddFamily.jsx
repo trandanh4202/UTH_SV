@@ -114,7 +114,6 @@ const AddFamily = ({ open, onClose }) => {
   }, [dispatch]);
   const onSubmit = async (data) => {
     // Thay đổi logic để xử lý thông tin thành viên gia đình
-    console.log(data);
     await dispatch(addFamily(data));
     setIsAddFamily(true);
     onClose(); // Close the modal after successful submission

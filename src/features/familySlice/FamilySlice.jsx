@@ -57,7 +57,6 @@ export const addFamily = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log(formData);
       const message = await axios.post(
         `${API_BASE_URL}/quanHeGiaDinh`,
         formData, // Gửi FormData
@@ -172,7 +171,6 @@ export const categoryFamily = createAsyncThunk(
 
       const response = await axios.get(
         `${API_BASE_URL}/quanHeGiaDinh/category`,
-
         config
       );
 

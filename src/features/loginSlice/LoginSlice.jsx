@@ -26,7 +26,6 @@ export const loginPage = createAsyncThunk(
           password: loginData.password,
         }
       );
-      console.log(loginData);
 
       const { token, body } = response.data;
       if (token) {
@@ -82,7 +81,6 @@ export const changePassword = createAsyncThunk(
 export const getOtp = createAsyncThunk(
   "auth/getOtp",
   async (forgotPasswordData, { rejectWithValue }) => {
-    console.log(forgotPasswordData);
     try {
       const params = {
         username: forgotPasswordData.username,
@@ -116,7 +114,6 @@ export const getOtp = createAsyncThunk(
 export const validateOTP = createAsyncThunk(
   "auth/validateOTP",
   async (validateOTPData, { rejectWithValue }) => {
-    console.log(validateOTPData);
     try {
       const params = {
         username: validateOTPData.username,
@@ -150,7 +147,6 @@ export const resetPassword = createAsyncThunk(
         "g-recaptcha-response": resetPasswordData.recaptcha,
         password: resetPasswordData.password,
       };
-      console.log(params);
       const response = await axios.post(
         `${API_BASE_URL}/user/resetPassword`,
         params

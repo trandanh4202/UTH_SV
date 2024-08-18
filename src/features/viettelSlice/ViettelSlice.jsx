@@ -40,7 +40,6 @@ export const getDistrictViettel = createAsyncThunk(
   "viettel/getDistrictViettel",
   async (provinceId, { rejectWithValue }) => {
     try {
-      console.log(provinceId);
       const token = localStorage.getItem("account");
       if (!token) {
         throw new Error("No token found");

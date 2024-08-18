@@ -372,6 +372,18 @@ const PersonalInfo = () => {
   return (
     <>
       <Box>
+        <Box>
+          <Typography
+            sx={{
+              fontSize: "13px",
+              color: "red",
+              fontWeight: "600",
+            }}
+          >
+            Chưa có đợt cập nhật thông tin, sinh viên vui lòng theo dõi thông
+            báo sau
+          </Typography>
+        </Box>
         <Box sx={{ padding: "10px 20px" }}>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={4}>
@@ -868,6 +880,7 @@ const PersonalInfo = () => {
               <Button
                 type="submit"
                 variant="contained"
+                disabled
                 sx={{
                   display: "flex",
                   justifyContent: "center",

@@ -18,6 +18,7 @@ import cartReducer from "./cartSlice/CartSlice";
 import productReducer from "./productSlice/ProductSlice";
 import addressReducer from "./addressSlice/AddressSlice";
 import viettelReducer from "./viettelSlice/ViettelSlice";
+import certificationReducer from "./certificationSlice/CertificationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ export const store = configureStore({
     product: productReducer,
     address: addressReducer,
     viettel: viettelReducer,
+    certification: certificationReducer,
   },
   // devTools: false,
 });

@@ -64,6 +64,18 @@ const FamilyProfile = () => {
   return (
     <>
       <Box>
+        <Box>
+          <Typography
+            sx={{
+              fontSize: "13px",
+              color: "red",
+              fontWeight: "600",
+            }}
+          >
+            Chưa có đợt cập nhật thông tin, sinh viên vui lòng theo dõi thông
+            báo sau
+          </Typography>
+        </Box>
         {family.map((member) => (
           <Paper
             key={member.id}
@@ -362,6 +374,7 @@ const FamilyProfile = () => {
           <Button
             variant="contained"
             onClick={handleModalOpenAdd}
+            disabled
             sx={{
               display: "flex",
               justifyContent: "center",
