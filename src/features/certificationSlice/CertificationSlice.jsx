@@ -16,10 +16,10 @@ export const getCertification = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-      const response = await axios.get(
-        `/ts24/getdatanhaphoc.php?token=${token}`
-      );
+      const response = await axios.get(`/ts24/getdatanhaphoc.php?${token}`);
+      const a = `/ts24/getdatanhaphoc.php?${token}`;
 
+      console.log(a);
       return response.data;
     } catch (error) {
       if (
