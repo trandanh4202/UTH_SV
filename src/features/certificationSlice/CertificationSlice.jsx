@@ -16,9 +16,8 @@ export const getCertification = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-      console.log(token);
       const response = await axios.get(
-        `https://ts24.ut.edu.vn/api/getdatanhaphoc.php?token=${token}`
+        `/ts24/getdatanhaphoc.php?token=${token}`
       );
 
       return response.data;

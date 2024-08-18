@@ -8,10 +8,11 @@ import { useNavigate } from "react-router-dom";
 const Certification = () => {
   const dispatch = useDispatch();
   const courses = useSelector((state) => state.profile.profile.body?.khoaHoc);
+  console.log(courses);
   const navigate = useNavigate();
   useEffect(() => {
     if (courses !== 2024) {
-      navigate("/dashboard");
+      console.log(courses);
     }
   }, [navigate, courses]);
   useEffect(() => {
