@@ -42,6 +42,8 @@ const Certification = () => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          gap: "50px",
+          marginTop: "50px",
         }}
       >
         {certification?.map((c) => (
@@ -69,8 +71,22 @@ const Certification = () => {
                 {c.name}
               </Typography>
             </Box>
-            <Box>
-              <img src={c.base64} alt={c.name} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={c.base64}
+                alt={c.name}
+                style={{
+                  width: "60%",
+                  height: "60%",
+                  objectFit: "contain",
+                }}
+              />
             </Box>
           </Box>
         ))}
