@@ -143,15 +143,14 @@ const Header = () => {
     {
       name: "Hỗ trợ trực tuyến",
       icon: <SupportAgent sx={{ fontSize: "25px" }} />,
-      route: `https://support.ut.edu.vn/login.php?token=${token}`,
-    },
-    {
-      name: "Giấy sinh viên",
-      icon: <Article sx={{ fontSize: "25px" }} />,
       children: [
         {
-          name: "Giấy báo trúng tuyển",
+          name: "Giấy báo tân sinh viên",
           route: `/certification`,
+        },
+        {
+          name: "Trạng hỗ trợ trực tuyến",
+          route: `https://support.ut.edu.vn/login.php?token=${token}`,
         },
       ],
     },
@@ -338,7 +337,7 @@ const Header = () => {
                   gap: { xs: "0px", lg: "40px" },
                 }}
               >
-                <Cart />
+                {/* <Cart /> */}
 
                 {/* Avatar with Menu */}
                 <Box
