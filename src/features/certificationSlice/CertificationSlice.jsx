@@ -17,10 +17,10 @@ export const getCertification = createAsyncThunk(
         throw new Error("No token found");
       }
       const response = await axios.get(
-        `/ts24/getdatanhaphoc_copy.php?token=${token}`
+        `https://ts24.ut.edu.vn/api/getdatanhaphoc_copy.php?token=${token}`
       );
 
-      return response.data;
+      return response.data.data;
     } catch (error) {
       if (
         error.response &&
