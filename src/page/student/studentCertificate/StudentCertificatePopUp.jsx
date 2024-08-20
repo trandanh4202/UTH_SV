@@ -13,16 +13,24 @@ import {
   Typography,
   Paper,
 } from "@mui/material";
+import { format } from "date-fns";
+const formatDate = (dateString) => {
+  if (!dateString) return ""; // Handle null or undefined dateString
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ""; // Handle invalid date strings
+  return format(date, "dd/MM/yyyy");
+};
 
 const tableCell = ["STT", "Mã", "Nội dung thu", "Năm học", "Số tiền"];
 const StudentCertificatePopUp = ({
   open,
   onClose,
-  receiptDetail,
+  item,
   soPhieu,
   maHoaDon,
   ngayThu,
 }) => {
+  console.log(item);
   return (
     <Modal open={open} onClose={onClose} sx={{ padding: "10px" }}>
       <Paper
@@ -52,7 +60,7 @@ const StudentCertificatePopUp = ({
             <Typography
               sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "20px" }}
             >
-              Chi tiết phiếu thu
+              Chi tiết đăng ký
             </Typography>
           </Box>
         </Box>
@@ -77,7 +85,7 @@ const StudentCertificatePopUp = ({
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Số phiếu: {soPhieu}
+                Tổng cộng: {item.productFee}
               </Typography>
             </Box>
           </Box>
@@ -95,7 +103,7 @@ const StudentCertificatePopUp = ({
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Mã hóa đơn: {maHoaDon}
+                Ngày đăng ký: {formatDate(item.orderDate)}
               </Typography>
             </Box>
           </Box>
@@ -113,7 +121,8 @@ const StudentCertificatePopUp = ({
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Ngày thu: {ngayThu}
+                Trạng thái:{" "}
+                {item?.historyOrders[item.historyOrders.length - 1]?.status}
               </Typography>
             </Box>
           </Box>
@@ -162,7 +171,7 @@ const StudentCertificatePopUp = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {receiptDetail?.map((row, index) => (
+              {item.orderDetails?.map((row, index) => (
                 <TableRow key={row.maKhoanThuKhac}>
                   <TableCell
                     align="center"
@@ -182,7 +191,7 @@ const StudentCertificatePopUp = ({
                       fontSize: "15px",
                     }}
                   >
-                    {row.maKhoanThuKhac}
+                    {row.id}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -192,7 +201,7 @@ const StudentCertificatePopUp = ({
                       fontSize: "15px",
                     }}
                   >
-                    {row.noiDung}
+                    {row.product.name}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -202,7 +211,7 @@ const StudentCertificatePopUp = ({
                       fontSize: "15px",
                     }}
                   >
-                    {row.nienHoc}
+                    {row.product.price}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -212,7 +221,7 @@ const StudentCertificatePopUp = ({
                       fontSize: "15px",
                     }}
                   >
-                    {row.soTien.toLocaleString()}
+                    {row.quantity}
                   </TableCell>
                 </TableRow>
               ))}

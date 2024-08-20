@@ -337,7 +337,7 @@ const Header = () => {
                   gap: { xs: "0px", lg: "40px" },
                 }}
               >
-                {/* <Cart /> */}
+                {location.pathname === "/StudentCertificate" && <Cart />}
 
                 {/* Avatar with Menu */}
                 <Box

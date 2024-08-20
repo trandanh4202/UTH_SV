@@ -29,6 +29,7 @@ import { getAllOrder } from "../../../features/orderSlice/OrderSlice";
 import { getAllProduct } from "../../../features/productSlice/ProductSlice";
 import { getProvinceViettel } from "../../../features/viettelSlice/ViettelSlice";
 import Spinner from "../../../components/Spinner/Spinner";
+import StudentCertificatePopUp from "./StudentCertificatePopUp";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -257,7 +258,15 @@ const StudentCertificate = () => {
                   },
                 }}
               >
-                Thêm địa chỉ
+                <Typography
+                  sx={{
+                    fontWeight: "700",
+                    fontSize: "16px",
+                    textAlign: "center",
+                  }}
+                >
+                  Thêm địa chỉ
+                </Typography>
               </Button>
             </Box>
           </Box>
@@ -547,7 +556,7 @@ const StudentCertificate = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {formatDate(row.ngayThu)}
+                      {row.address}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -594,18 +603,42 @@ const StudentCertificate = () => {
                       }}
                     >
                       <IconButton
-                        open={openModal}
-                        onClose={handleCloseDetailPopUp}
+                        onClick={handleCloseDetailPopUp}
+                        variant="contained"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontSize: "15px",
+                          backgroundColor: "#008588",
+                          color: "white",
+                          borderRadius: "8px",
+                          border: "3px solid #0085885a",
+                          transition: "all ease 0.4s",
+                          "&:hover": {
+                            borderColor: "#008689",
+                            backgroundColor: "white",
+                            color: "red",
+                            boxShadow: "0 0 10px #008689",
+                          },
+                        }}
                       >
-                        <EditOutlined />
+                        <EditOutlined sx={{ fontSize: "35px" }} />
                       </IconButton>
-                    </TableCell>
+                    </TableCell>{" "}
+                    <StudentCertificatePopUp
+                      open={openModal}
+                      onClose={() => setOpenModal(false)}
+                      item={row}
+                      // onClose={handleCloseDetailPopUp}
+                    />
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
         </Box>
+
         <AddAddress open={modalAddressOpen} onClose={handleModalAddressClose} />
       </Container>
     </Box>

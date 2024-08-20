@@ -321,7 +321,15 @@ const EditFamily = ({ open, onClose, editData }) => {
                   },
                 }}
               >
-                {isSubmitting ? "Đang lưu..." : "Lưu"}
+                <Typography
+                  sx={{
+                    fontWeight: "700",
+                    fontSize: "16px",
+                    textAlign: "center",
+                  }}
+                >
+                  {isSubmitting ? "Đang lưu..." : "Lưu"}
+                </Typography>{" "}
               </Button>
             </Box>
           </Box>

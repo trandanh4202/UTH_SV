@@ -24,15 +24,15 @@ export const getCart = createAsyncThunk(
         },
       };
       const response = await axios.get(`${API_BASE_URL}/cart`, config);
-
+      console.log("A");
       return response.data;
     } catch (error) {
       if (
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -91,7 +91,7 @@ export const updateCart = createAsyncThunk(
       const message = await axios.put(
         `${API_BASE_URL}/cart/${formData.cartId}`,
         {
-          quantity: formData.quantity ,
+          quantity: formData.quantity,
           optionId: formData.optionId,
         },
         config

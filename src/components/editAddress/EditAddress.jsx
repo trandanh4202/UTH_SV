@@ -419,7 +419,15 @@ const EditAddress = ({ editData }) => {
                 },
               }}
             >
-              Lưu
+              <Typography
+                sx={{
+                  fontWeight: "700",
+                  fontSize: "16px",
+                  textAlign: "center",
+                }}
+              >
+                Lưu
+              </Typography>
             </Button>
           </Box>
         </Box>
