@@ -85,7 +85,7 @@ export const getOtp = createAsyncThunk(
       const params = {
         username: forgotPasswordData.username,
         "g-recaptcha-response": forgotPasswordData.recaptcha,
-        isEmail: forgotPasswordData.authMethod,
+        type: forgotPasswordData.authMethod,
       };
 
       if (forgotPasswordData.authMethod === "0") {

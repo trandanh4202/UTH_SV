@@ -37,7 +37,7 @@ const FormLogin2 = () => {
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
-  const [authMethod, setAuthMethod] = useState("0");
+  const [authMethod, setAuthMethod] = useState("phone");
   const [otp, setOtp] = useState("");
   const [username, setUsername] = useState("");
   const [recallOtp, setRecallOtp] = useState(false);
@@ -122,37 +122,37 @@ const FormLogin2 = () => {
         position: "relative",
       }}
     >
-      {loading ? (
-        <Spinner />
-      ) : (
-        <>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              margin: "10px 0",
-            }}
-            component={Link}
-            to="dashboard"
-          >
-            <img
-              src="./images/logo_uth.png"
-              alt="logo_uth"
-              style={{ width: "100%", height: "100%", objectFit: "contain" }}
-            />
-          </Box>
-          <Typography
-            variant="h4"
-            sx={{
-              textAlign: "center",
-              color: "#da1c2d",
-              fontWeight: "700",
-              margin: "20px 0 10px 0",
-            }}
-          >
-            {isForgotPassword ? "KHÔI PHỤC MẬT KHẨU" : "ĐĂNG NHẬP HỆ THỐNG"}
-          </Typography>
+      <>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            margin: "10px 0",
+          }}
+          component={Link}
+          to="dashboard"
+        >
+          <img
+            src="./images/logo_uth.png"
+            alt="logo_uth"
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        </Box>
+        <Typography
+          variant="h4"
+          sx={{
+            textAlign: "center",
+            color: "#da1c2d",
+            fontWeight: "700",
+            margin: "20px 0 10px 0",
+          }}
+        >
+          {isForgotPassword ? "KHÔI PHỤC MẬT KHẨU" : "ĐĂNG NHẬP HỆ THỐNG"}
+        </Typography>
+        {loading ? (
+          <Spinner />
+        ) : (
           <Box
             component="form"
             onSubmit={handleSubmit(
@@ -373,7 +373,7 @@ const FormLogin2 = () => {
                     sx={{ alignItems: "center", justifyContent: "center" }}
                   >
                     <FormControlLabel
-                      value="0"
+                      value="phone"
                       control={
                         <Radio
                           sx={{
@@ -398,7 +398,7 @@ const FormLogin2 = () => {
                       }}
                     />
                     <FormControlLabel
-                      value="1"
+                      value="email"
                       control={
                         <Radio
                           sx={{
@@ -449,7 +449,7 @@ const FormLogin2 = () => {
                     },
                   }}
                 />
-                {authMethod === "0" ? (
+                {authMethod === "phone" ? (
                   <TextField
                     label="Số điện thoại"
                     variant="outlined"
@@ -648,8 +648,8 @@ const FormLogin2 = () => {
               {isForgotPassword ? "Đăng nhập" : "Quên mật khẩu?"}
             </Button>
           </Box>
-        </>
-      )}
+        )}
+      </>
     </Paper>
   );
 };

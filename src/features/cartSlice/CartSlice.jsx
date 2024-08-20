@@ -82,15 +82,18 @@ export const updateCart = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-
+      console.log(formData);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
       const message = await axios.put(
-        `${API_BASE_URL}/cart/${formData.productId}`,
-        formData,
+        `${API_BASE_URL}/cart/${formData.cartId}`,
+        {
+          quantity: formData.quantity ,
+          optionId: formData.optionId,
+        },
         config
       );
       const response = await axios.get(`${API_BASE_URL}/cart`, config);

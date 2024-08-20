@@ -19,8 +19,15 @@ import {
   updateCart,
 } from "../../features/cartSlice/CartSlice";
 import { getAddress } from "../../features/addressSlice/AddressSlice";
-import { getEstimateTotalAmount } from "../../features/orderSlice/OrderSlice";
+import {
+  createOrder,
+  getEstimateTotalAmount,
+} from "../../features/orderSlice/OrderSlice";
 import Spinner from "../Spinner/Spinner";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Link } from "react-router-dom";
+
 const formatCurrency = (number) => {
   return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 };
@@ -42,6 +49,12 @@ const Cart = () => {
   const carts = useSelector((state) => state.cart.cart?.body);
   const address = useSelector((state) => state.address.address?.body);
   const loading = useSelector((state) => state.cart.loading);
+  const updateCartMessage = useSelector(
+    (state) => state.cart.updateCartMessage?.message
+  );
+  const updateCartSuccess = useSelector(
+    (state) => state.cart.updateCartMessage?.success
+  );
   const total = useSelector(
     (state) => state.order.getEstimateTotalAmount?.body
   );
@@ -49,6 +62,10 @@ const Cart = () => {
     dispatch(deleteCart());
   };
 
+  const handleChange = (item) => (event) => {
+    const newSize = event.target.value;
+    handleSizeChange(item, newSize);
+  };
   const handleSizeChange = (item, newSize) => {
     // Kiểm tra xem newSize có nằm trong các giá trị hợp lệ không
     const validOptions = item.product.options?.map((option) => option.id);
@@ -56,7 +73,7 @@ const Cart = () => {
       setSize(newSize);
       dispatch(
         updateCart({
-          productId: item.product.id,
+          cartId: item.id,
           quantity: item.quantity,
           optionId: newSize,
         })
@@ -65,12 +82,6 @@ const Cart = () => {
       console.warn(`Invalid size selected: ${newSize}`);
     }
   };
-
-  const handleChange = (item) => (event) => {
-    const newSize = event.target.value;
-    handleSizeChange(item, newSize);
-  };
-
   const addCombo1 = () => {
     dispatch(addToCart("6"));
   };
@@ -81,8 +92,16 @@ const Cart = () => {
   const changeCampus = (e) => {
     setCampus(e.target.value);
   };
+  const handleCreateOrder = () => {
+    const formData = {
+      addressId: null,
+      isShip: false,
+      shipServiceCode: null,
+    };
+    dispatch(createOrder(formData));
+  };
   useEffect(() => {
-    if (openDrawerCart) {
+    if (openDrawerCart && !loading) {
       const formData =
         campus === 1
           ? {
@@ -98,7 +117,16 @@ const Cart = () => {
 
       dispatch(getEstimateTotalAmount(formData));
     }
-  }, [dispatch, openDrawerCart, campus, address]);
+  }, [dispatch, openDrawerCart, campus, address, loading]);
+  useEffect(() => {
+    if (!loading) {
+      if (updateCartSuccess === true && updateCartMessage) {
+        toast.success(updateCartMessage);
+      } else if (updateCartSuccess === false) {
+        toast.error(updateCartMessage);
+      }
+    }
+  }, [loading, updateCartMessage, updateCartSuccess]);
 
   return (
     <>
@@ -118,7 +146,7 @@ const Cart = () => {
         sx={{
           "& .MuiDrawer-paper": {
             width: {
-              lg: "30%",
+              lg: "50%",
               xs: "100%",
             },
           },
@@ -126,7 +154,7 @@ const Cart = () => {
       >
         <Box
           sx={{
-            minWidth: { lg: "40%", xs: "100%" },
+            minWidth: { lg: "70%", xs: "100%" },
             padding: "20px",
           }}
         >
@@ -161,7 +189,7 @@ const Cart = () => {
                 textAlign: "center",
               }}
             >
-              Cơ sở nhận
+              Nơi nhận
             </Typography>
             <Select
               value={campus}
@@ -183,7 +211,7 @@ const Cart = () => {
             <Spinner />
           ) : (
             <Box>
-              <Grid container spacing={2}>
+              <Grid container spacing={3} sx={{ marginBottom: "30px" }}>
                 <Grid item xs={2}>
                   <Typography
                     sx={{
@@ -255,28 +283,86 @@ const Cart = () => {
                   </Typography>
                 </Grid>
               </Grid>
-              {carts?.map((item) => (
-                <Grid container spacing={2} alignItems="center" key={item.id}>
-                  <Grid item xs={2}>
-                    <img
-                      src="/images/giayxacnhan.png"
-                      alt={item.product.name}
-                      style={{
-                        width: "100%",
-                        objectFit: "contain",
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexDirection: "column",
-                        gap: "5px",
-                      }}
-                    >
+              <Grid container spacing={5}>
+                {carts?.map((item) => (
+                  <>
+                    <Grid item xs={2}>
+                      <img
+                        src={item.product.image}
+                        alt={item.product.name}
+                        style={{
+                          width: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          gap: "5px",
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            color: "#333333",
+                            fontWeight: "500",
+                            fontSize: {
+                              xs: "11px",
+                              lg: "16px",
+                            },
+                            textAlign: "center",
+                          }}
+                        >
+                          {item.product.name}
+                        </Typography>
+                        <Select
+                          value={item.option?.id || size || ""}
+                          onChange={handleChange(item)}
+                          displayEmpty
+                          inputProps={{ "aria-label": "Without label" }}
+                          sx={{
+                            padding: "0",
+                            "& .MuiInputBase-input": {
+                              padding: "3px",
+                            },
+                          }}
+                          defaultValue={item.option?.id || size || ""}
+                        >
+                          <MenuItem value="">
+                            <Typography>None</Typography>
+                          </MenuItem>
+                          {item.product.options?.map((option) => (
+                            <MenuItem value={option.id} key={option.id}>
+                              <Typography>{option.name}</Typography>
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        <TextField
+                          value={item.quantity}
+                          inputProps={{
+                            min: 1,
+                            max: 20,
+                            style: { textAlign: "center" },
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                    <Grid item xs={2}>
                       <Typography
                         sx={{
                           color: "#333333",
@@ -288,83 +374,34 @@ const Cart = () => {
                           textAlign: "center",
                         }}
                       >
-                        {item.product.name}
+                        {formatCurrency(item.product.price)}
                       </Typography>
-                      <Select
-                        value={item.product.optionId || size || ""}
-                        onChange={handleChange(item)}
-                        displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography
                         sx={{
-                          padding: "0",
-                          "& .MuiInputBase-input": {
-                            padding: "3px",
+                          color: "#333333",
+                          fontWeight: "500",
+                          fontSize: {
+                            xs: "11px",
+                            lg: "16px",
                           },
+                          textAlign: "center",
                         }}
                       >
-                        <MenuItem value="">
-                          <Typography>None</Typography>
-                        </MenuItem>
-                        {item.product.options?.map((option) => (
-                          <MenuItem value={option.id} key={option.id}>
-                            <Typography>{option.name}</Typography>
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        textAlign: "center",
-                      }}
-                    >
-                      <TextField
-                        value={item.quantity}
-                        inputProps={{
-                          min: 1,
-                          max: 20,
-                          style: { textAlign: "center" },
-                        }}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography
-                      sx={{
-                        color: "#333333",
-                        fontWeight: "500",
-                        fontSize: {
-                          xs: "11px",
-                          lg: "16px",
-                        },
-                        textAlign: "center",
-                      }}
-                    >
-                      {formatCurrency(item.product.price)}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography
-                      sx={{
-                        color: "#333333",
-                        fontWeight: "500",
-                        fontSize: {
-                          xs: "11px",
-                          lg: "16px",
-                        },
-                        textAlign: "center",
-                      }}
-                    >
-                      {formatCurrency(item.product.price * item.quantity)}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              ))}
-              <Grid container>
+                        {formatCurrency(item.product.price * item.quantity)}
+                      </Typography>
+                    </Grid>
+                  </>
+                ))}
+              </Grid>
+
+              <Grid
+                container
+                sx={{
+                  margin: "20px 0",
+                }}
+              >
                 <Grid item xs={10}>
                   <Typography
                     sx={{
@@ -396,92 +433,151 @@ const Cart = () => {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "10px",
-                }}
-              >
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontSize: "15px",
-                    backgroundColor: "#008588",
-                    color: "white",
-                    borderRadius: "8px",
-                    border: "3px solid #0085885a",
-                    transition: "all ease 0.4s",
-                    padding: "9px 14px",
-                    width: "100%",
-                    "&:hover": {
-                      borderColor: "#008689",
-                      backgroundColor: "white",
-                      color: "#008689",
-                      boxShadow: "0 0 10px #008689",
-                    },
-                  }}
-                  onClick={addCombo1}
-                >
-                  <Typography>Thêm combo 1</Typography>
-                </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontSize: "15px",
-                    backgroundColor: "#008588",
-                    color: "white",
-                    borderRadius: "8px",
-                    border: "3px solid #0085885a",
-                    transition: "all ease 0.4s",
-                    width: "100%",
-                    padding: "9px 14px",
-                    "&:hover": {
-                      borderColor: "#008689",
-                      backgroundColor: "white",
-                      color: "#008689",
-                      boxShadow: "0 0 10px #008689",
-                    },
-                  }}
-                  onClick={addCombo2}
-                >
-                  <Typography>Thêm combo 2</Typography>
-                </Button>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    fontSize: "15px",
-                    backgroundColor: "#008588",
-                    color: "white",
-                    borderRadius: "8px",
-                    border: "3px solid #0085885a",
-                    transition: "all ease 0.4s",
-                    width: "50%",
-                    padding: "9px 14px",
-                    "&:hover": {
-                      borderColor: "#008689",
-                      backgroundColor: "white",
-                      color: "#008689",
-                      boxShadow: "0 0 10px #008689",
-                    },
-                  }}
-                  onClick={deleleAllCart}
-                >
-                  <Typography>Xóa hết</Typography>
-                </Button>
+              <Grid container spacing={2}>
+                <Grid item xs={5}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "15px",
+                      backgroundColor: "#008588",
+                      color: "white",
+                      borderRadius: "8px",
+                      border: "3px solid #0085885a",
+                      transition: "all ease 0.4s",
+                      padding: "9px 14px",
+                      width: "100%",
+                      "&:hover": {
+                        borderColor: "#008689",
+                        backgroundColor: "white",
+                        color: "#008689",
+                        boxShadow: "0 0 10px #008689",
+                      },
+                    }}
+                    onClick={addCombo1}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "700",
+                        fontSize: "16px",
+                        textAlign: "center",
+                      }}
+                    >
+                      Thêm combo Đồng phục 1
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={5}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "15px",
+                      backgroundColor: "#008588",
+                      color: "white",
+                      borderRadius: "8px",
+                      border: "3px solid #0085885a",
+                      transition: "all ease 0.4s",
+                      width: "100%",
+                      padding: "9px 14px",
+                      "&:hover": {
+                        borderColor: "#008689",
+                        backgroundColor: "white",
+                        color: "#008689",
+                        boxShadow: "0 0 10px #008689",
+                      },
+                    }}
+                    onClick={addCombo2}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "700",
+                        fontSize: "16px",
+                        textAlign: "center",
+                      }}
+                    >
+                      Thêm combo Đồng phục 2
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={2}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "15px",
+                      backgroundColor: "#008588",
+                      color: "white",
+                      borderRadius: "8px",
+                      border: "3px solid #0085885a",
+                      transition: "all ease 0.4s",
+                      width: "100%",
+                      padding: "9px 14px",
+                      "&:hover": {
+                        borderColor: "#008689",
+                        backgroundColor: "white",
+                        color: "#008689",
+                        boxShadow: "0 0 10px #008689",
+                      },
+                    }}
+                    onClick={deleleAllCart}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "700",
+                        fontSize: "16px",
+                        textAlign: "center",
+                      }}
+                    >
+                      Xóa hết
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      fontSize: "15px",
+                      backgroundColor: "#008588",
+                      color: "white",
+                      borderRadius: "8px",
+                      border: "3px solid #0085885a",
+                      transition: "all ease 0.4s",
+                      width: "100%",
+                      padding: "9px 14px",
+                      "&:hover": {
+                        borderColor: "#008689",
+                        backgroundColor: "white",
+                        color: "#008689",
+                        boxShadow: "0 0 10px #008689",
+                      },
+                    }}
+                    onClick={handleCreateOrder}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "700",
+                        fontSize: "16px",
+                        textAlign: "center",
+                      }}
+                    >
+                      Đăng ký
+                    </Typography>
+                  </Button>
+                </Grid>
               </Grid>
             </Box>
           )}

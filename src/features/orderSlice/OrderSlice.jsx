@@ -39,6 +39,40 @@ export const getAllOrder = createAsyncThunk(
   }
 );
 
+export const createOrder = createAsyncThunk(
+  "order/createOrder",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.post(
+        `${API_BASE_URL}/order/createOrder`,
+        formData,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getAllToShip = createAsyncThunk(
   "order/getAllToShip",
   async (_, { rejectWithValue }) => {

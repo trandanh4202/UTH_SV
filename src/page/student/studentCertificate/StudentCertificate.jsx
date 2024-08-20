@@ -39,7 +39,7 @@ const tableCell = [
   "STT",
   "Số phiếu",
   "Mã hoá đơn",
-  "Cơ sở",
+  "Nơi nhận",
   "Ngày yêu cầu",
   "Trạng thái",
   "Ngày xử lý",
@@ -491,7 +491,7 @@ const StudentCertificate = () => {
               <TableBody>
                 {receipts?.map((row, index) => (
                   <TableRow
-                    key={row.soPhieu}
+                    key={row.id}
                     sx={{
                       cursor: "pointer",
                       backgroundColor:
@@ -519,7 +519,7 @@ const StudentCertificate = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.soPhieu}
+                      {row.id}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -530,7 +530,7 @@ const StudentCertificate = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.maHoaDon}
+                      {row.historyOrders[row.historyOrders.length - 1]?.id}
                     </TableCell>
                     <TableCell
                       align="center"

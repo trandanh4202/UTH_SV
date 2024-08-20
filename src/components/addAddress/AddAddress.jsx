@@ -204,9 +204,7 @@ const AddAddress = ({ open, onClose }) => {
   const addStatus = useSelector(
     (state) => state.address.addAddressMessage?.status
   );
-  const [isAddAddress, setIsAddAddress] = useState(false);
 
-  const navigate = useNavigate();
 
   const provinces = useSelector((state) => state.viettel.province.data);
   const districts = useSelector((state) => state.viettel.district.data) || [];
@@ -250,20 +248,18 @@ const AddAddress = ({ open, onClose }) => {
 
   const onSubmit = async () => {
     await dispatch(addAddress(formData));
-    setIsAddAddress(true);
     onClose();
   };
   useEffect(() => {
-    if (isAddAddress && addMessage) {
+    if (loading && addMessage) {
       if (addMessage && addStatus === 200) {
         toast.success(addMessage);
         // localStorage.clear();
       } else if (addStatus === 400) {
         toast.error(addMessage);
       }
-      setIsAddAddress(false);
     }
-  }, [isAddAddress, addMessage, addStatus]);
+  }, [loading, addMessage, addStatus]);
   return (
     <>
       <Modal open={open} onClose={onClose}>

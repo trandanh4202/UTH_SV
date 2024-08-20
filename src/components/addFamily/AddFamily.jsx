@@ -100,8 +100,6 @@ const AddFamily = ({ open, onClose }) => {
     control,
   } = useForm();
 
-  const [isAddFamily, setIsAddFamily] = useState(false);
-
   const dispatch = useDispatch();
   const message = useSelector((state) => state.family.addFamily?.message);
   const status = useSelector((state) => state.family.addFamily?.status);
@@ -116,13 +114,12 @@ const AddFamily = ({ open, onClose }) => {
   const onSubmit = async (data) => {
     // Thay đổi logic để xử lý thông tin thành viên gia đình
     await dispatch(addFamily(data));
-    setIsAddFamily(true);
     onClose(); // Close the modal after successful submission
   };
 
   // Hiển thị toast message và chuyển hướng về trang Đăng nhập sau khi thành công
   useEffect(() => {
-    if (isAddFamily && message) {
+    if (loading && message) {
       if (status === 200) {
         toast.success(message);
 
@@ -132,9 +129,8 @@ const AddFamily = ({ open, onClose }) => {
       } else if (status === 400) {
         toast.error(message);
       }
-      setIsAddFamily(false);
     }
-  }, [isAddFamily, message, status, navigate]);
+  }, [loading, message, status, navigate]);
 
   return (
     <>
