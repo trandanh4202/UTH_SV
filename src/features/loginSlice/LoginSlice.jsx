@@ -88,7 +88,7 @@ export const getOtp = createAsyncThunk(
         type: forgotPasswordData.authMethod,
       };
 
-      if (forgotPasswordData.authMethod === "0") {
+      if (forgotPasswordData.authMethod === "phone") {
         params.info = forgotPasswordData.phone;
       } else {
         params.info = forgotPasswordData.email;
