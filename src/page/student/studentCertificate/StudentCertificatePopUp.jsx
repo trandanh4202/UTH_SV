@@ -30,7 +30,6 @@ const StudentCertificatePopUp = ({
   maHoaDon,
   ngayThu,
 }) => {
-  console.log(item);
   return (
     <Modal open={open} onClose={onClose} sx={{ padding: "10px" }}>
       <Paper
@@ -121,8 +120,7 @@ const StudentCertificatePopUp = ({
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Trạng thái:{" "}
-                {item?.historyOrders[item.historyOrders.length - 1]?.status}
+                Trạng thái: {item?.lastHistoryOrder.status}
               </Typography>
             </Box>
           </Box>

@@ -12,7 +12,7 @@ const Certification = () => {
   const navigate = useNavigate();
   useEffect(() => {
     if (courses !== 2024) {
-      console.log(courses);
+      navigate("/dashboard");
     }
   }, [navigate, courses]);
   useEffect(() => {

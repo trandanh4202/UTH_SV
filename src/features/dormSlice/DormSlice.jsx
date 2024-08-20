@@ -41,23 +41,22 @@ export const getDorm = createAsyncThunk(
 
 export const cancelDorm = createAsyncThunk(
   "dorm/cencelDorm",
-  async (formData, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
         throw new Error("No token found");
       }
-      console.log(formData);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
       const message = await axios.get(
-        `${API_BASE_URL}/dorm/cancel/${formData}`,
+        `${API_BASE_URL}/dorm/cancel/${id}`,
         config
       );
-      const response = await axios.get(`${API_BASE_URL}/dorm/getall`, config);
+      const response = await axios.get(`${API_BASE_URL}/dorm/getAll`, config);
 
       return { message: message.data, response: response.data };
     } catch (error) {
@@ -105,20 +104,19 @@ export const getInforDorm = createAsyncThunk(
 
 export const registerDorm = createAsyncThunk(
   "dorm/registerDorm",
-  async ({ formData, id }, { rejectWithValue }) => {
+  async ({ campusId, formData }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
         throw new Error("No token found");
       }
-
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
       const response = await axios.post(
-        `${API_BASE_URL}/dorm/register?campusId=${id}`,
+        `${API_BASE_URL}/dorm/register?campusId=${campusId}`,
         formData,
         config
       );
@@ -149,7 +147,7 @@ const dormSlice = createSlice({
       })
       .addCase(getDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.dorm = action.payload;
+        state.dorms = action.payload;
       })
       .addCase(getDorm.rejected, (state, action) => {
         state.loading = false;
@@ -161,8 +159,8 @@ const dormSlice = createSlice({
       })
       .addCase(registerDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.registerDormMessage = action.payload.message;
-        state.dorm = action.payload.response;
+        state.registerDormMessage = action.payload;
+        state.dorms = action.payload.response;
       })
       .addCase(registerDorm.rejected, (state, action) => {
         state.loading = false;
@@ -174,7 +172,7 @@ const dormSlice = createSlice({
       })
       .addCase(getInforDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.getInforDormMessage = action.payload.message;
+        state.getInforDorm = action.payload;
         state.dorm = action.payload.response;
       })
       .addCase(getInforDorm.rejected, (state, action) => {
@@ -187,8 +185,8 @@ const dormSlice = createSlice({
       })
       .addCase(cancelDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.cancelDormMessage = action.payload.message;
-        state.dorm = action.payload.response;
+        state.cancelDormMessage = action.payload;
+        state.dorms = action.payload.response;
       })
       .addCase(cancelDorm.rejected, (state, action) => {
         state.loading = false;

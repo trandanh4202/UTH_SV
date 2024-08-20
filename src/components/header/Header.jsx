@@ -152,6 +152,14 @@ const Header = () => {
           name: "Trang hỗ trợ trực tuyến",
           route: `https://support.ut.edu.vn/login.php?token=${token}`,
         },
+        {
+          name: "Đăng ký Ký túc xá",
+          route: `/dormitory`,
+        },
+        // {
+        //   name: "Đăng ký Đồng phục",
+        //   route: `/uniform`,
+        // },
       ],
     },
   ];

@@ -129,10 +129,10 @@ const router = createBrowserRouter([
             path: "Dormitory",
             element: <Dormitory />,
           },
-          {
-            path: "studentCertificate",
-            element: <StudentCertificate />,
-          },
+          // {
+          //   path: "uniform",
+          //   element: <StudentCertificate />,
+          // },
           {
             path: "certification",
             element: <Certification />,
@@ -155,10 +155,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  {
-    path: "test",
-    element: <Test />,
-  },
+  // {
+  //   path: "test",
+  //   element: <Test />,
+  // },
 ]);
 
 const theme = createTheme({

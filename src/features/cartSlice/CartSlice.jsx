@@ -24,7 +24,6 @@ export const getCart = createAsyncThunk(
         },
       };
       const response = await axios.get(`${API_BASE_URL}/cart`, config);
-      console.log("A");
       return response.data;
     } catch (error) {
       if (
@@ -47,7 +46,6 @@ export const addToCart = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-      console.log(formData);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -82,7 +80,6 @@ export const updateCart = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-      console.log(formData);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,

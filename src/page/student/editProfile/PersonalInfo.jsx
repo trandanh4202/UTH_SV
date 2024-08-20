@@ -187,7 +187,6 @@ const PersonalInfo = () => {
     idtinhCapCMND: 0,
   });
   const debouncedFormData = useDebounce(formData, 500);
-  console.log(debouncedFormData);
   const [provinces, setProvinces] = useState([]);
   const [districtsByLocation, setDistrictsByLocation] = useState({
     queQuan: [],

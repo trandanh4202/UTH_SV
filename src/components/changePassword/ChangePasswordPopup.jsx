@@ -245,7 +245,14 @@ const ChangePasswordPopup = ({ open, onClose }) => {
               },
             }}
           >
-            Đổi mật khẩu
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontWeight: "700",
+              }}
+            >
+              Đổi mật khẩu
+            </Typography>
           </Button>
         </Box>
       </Box>

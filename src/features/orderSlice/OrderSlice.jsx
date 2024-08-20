@@ -246,7 +246,6 @@ export const getEstimateTotalAmount = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-      console.log(formData);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,

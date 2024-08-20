@@ -1,60 +1,23 @@
+/* eslint-disable no-dupe-else-if */
 /* eslint-disable react/prop-types */
 import {
   Box,
-  CircularProgress,
-  Modal,
-  Typography,
-  Grid,
-  TextField,
-  Select,
-  MenuItem,
   Button,
+  Grid,
+  MenuItem,
+  Modal,
+  Select,
+  TextField,
+  Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
+import { getInforDorm, registerDorm } from "../../features/dormSlice/DormSlice";
 import { categoryFamily } from "../../features/familySlice/FamilySlice";
 import Spinner from "../Spinner/Spinner";
-const inputStyles = {
-  "& .MuiInputBase-root": {
-    borderRadius: "8px",
-  },
-  "& .MuiInputLabel-root": {
-    fontStyle: "italic",
-    color: "grey",
-    fontSize: "14px",
-    "&.Mui-focused": {
-      color: "#008588",
-    },
-  },
-  "& .MuiInputBase-input": {
-    fontSize: "15px",
-    backgroundColor: "white",
-    color: "black",
-    borderRadius: "8px",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    transition: "all ease 0.4s",
-    padding: { xs: "10px", lg: " 14px" },
-    "&:hover": {
-      borderColor: "#008588",
-    },
-  },
-  "& .MuiOutlinedInput-notchedOutline": {
-    borderColor: "#008588 !important",
-  },
-  "&:hover .MuiOutlinedInput-notchedOutline": {
-    border: "2px solid #008588",
-  },
-
-  "& .MuiSvgIcon-root": {
-    color: "green",
-    backgroundSize: "cover",
-  },
-};
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const selectStyles = {
   "&:focus": {
@@ -89,42 +52,65 @@ const selectStyles = {
 };
 const AddKTX = ({ open, onClose }) => {
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile.profile || "");
-  const loading = useSelector((state) => state.family.loading || "");
-  const [campus, setCampus] = useState("2");
-  const [mongMuonGiaCanh, setMongMuonGiaCanh] = useState(
-    profile.mongMuonGiaCanh || ""
-  );
+  const [campusId, setCampusId] = useState("2");
 
   useEffect(() => {
     dispatch(categoryFamily());
   }, [dispatch]);
 
   const campusChange = (e) => {
-    setCampus(e.target.value);
+    setCampusId(e.target.value);
   };
 
-  const handleSave = () => {
-    // dispatch(updateProfile({ ...profile, mongMuonGiaCanh }));
-    onClose();
-  };
   const [selectedFile, setSelectedFile] = useState(null);
-  const [preview, setPreview] = useState(null);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       setSelectedFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreview(reader.result);
-      };
+
       reader.readAsDataURL(file);
     }
   };
-  const handleChange = (e) => {
-    setMongMuonGiaCanh(e.target.value);
+
+  useEffect(() => {
+    if (open) {
+      dispatch(getInforDorm());
+    }
+  }, [dispatch, open]);
+  const selectCampus = useSelector(
+    (state) => state.dorm.getInforDorm?.body?.campuses
+  );
+  const priority = useSelector((state) => state.dorm.getInforDorm?.body);
+
+  const handleRegisterDorm = () => {
+    if (!selectedFile) {
+      console.error("No file selected");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("avatar", selectedFile);
+    dispatch(registerDorm({ campusId, formData }));
   };
+  const loading = useSelector((state) => state.dorm.loading);
+  const registerDormMessage = useSelector(
+    (state) => state.dorm.registerDormMessage?.message
+  );
+  const registerDormSuccess = useSelector(
+    (state) => state.dorm.registerDormsuccess?.success
+  );
+
+  useEffect(() => {
+    if (!loading && registerDormMessage) {
+      if (registerDormMessage && registerDormSuccess) {
+        toast.success(registerDormMessage);
+      } else if (!registerDormSuccess) {
+        toast.error(registerDormMessage);
+      }
+    }
+  }, [loading, registerDormMessage, registerDormSuccess]);
+
   return (
     <>
       {loading ? (
@@ -141,6 +127,7 @@ const AddKTX = ({ open, onClose }) => {
               boxShadow: 24,
               p: 4,
               borderRadius: "20px",
+              width: { lg: "40%", xs: "80%" },
             }}
           >
             <Typography
@@ -152,135 +139,83 @@ const AddKTX = ({ open, onClose }) => {
                 fontSize: "20px",
               }}
             >
-              Thông tin đăng ký KTX
+              Thông tin đăng ký Ký túc xá
             </Typography>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: 2,
-                marginTop: "40px",
+                margin: "40px 0",
               }}
             >
               <Grid container spacing={{ xs: 2, lg: 3 }}>
-                {/* <Grid item xs={12} lg={4}>
-                  <TextField
-                    label="Họ và tên"
-                    value={profile.hoTen || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: "20px",
+                    width: "100%",
+                    flexDirection: { xs: "column", lg: "row" },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={6} lg={4}>
-                  <TextField
-                    label="Năm sinh"
-                    value={profile.namSinh || "1"}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: "600",
+                        fontSize: "15px",
+                      }}
+                    >
+                      Đối tượng:
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        color: "red",
+                      }}
+                    >
+                      {" "}
+                      {priority && priority.doiTuong
+                        ? priority.doiTuong
+                        : "Không thuộc ĐTƯT"}
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={6} lg={4}>
-                  <TextField
-                    label="Quốc tịch"
-                    value={profile.quocTich || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={6} lg={4}>
-                  <TextField
-                    label="Dân tộc"
-                    value={profile.danToc || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    readOnly
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={6} lg={4}>
-                  <TextField
-                    label="Tôn giáo"
-                    value={profile.tonGiao || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    readOnly
-                    sx={inputStyles}
-                  />
-                </Grid>
-
-                <Grid item xs={12} lg={4}>
-                  <TextField
-                    label="Khu vực ưu tiên"
-                    value={profile.KhuVuc || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    readOnly
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <TextField
-                    label="Đối tượng ưu tiên"
-                    value={profile.DoiTuong || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    readOnly
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <TextField
-                    label="Địa chỉ thường trú"
-                    value={profile.DiaChiThuongTru || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    readOnly
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <TextField
-                    label="Số điện thoại"
-                    value={profile.soDienThoai || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    readOnly
-                    sx={inputStyles}
-                  />
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <TextField
-                    label="Email"
-                    value={profile.email || ""}
-                    fullWidth
-                    InputProps={{
-                      disabled: true,
-                    }}
-                    readOnly
-                    sx={inputStyles}
-                  />
-                </Grid> */}
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "600",
+                      }}
+                    >
+                      Đối tượng:
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        color: "red",
+                      }}
+                    >
+                      {priority && priority.khuVuc
+                        ? priority.khuVuc
+                        : "Không thuộc KVƯT"}
+                    </Typography>
+                  </Box>
+                </Box>
                 <Box
                   sx={{
                     display: "flex",
@@ -288,6 +223,7 @@ const AddKTX = ({ open, onClose }) => {
                     justifyContent: "center",
                     flexDirection: "column",
                     gap: "5px",
+                    margin: "10px 0",
                     width: "100%",
                   }}
                 >
@@ -302,34 +238,29 @@ const AddKTX = ({ open, onClose }) => {
                       textAlign: "center",
                     }}
                   >
-                    Cơ sở nhận
+                    Cơ sở Ký túc xá
                   </Typography>
                   <Select
-                    value={campus}
+                    value={campusId}
                     onChange={campusChange}
                     displayEmpty
                     sx={selectStyles}
+                    defaultValue="0"
                   >
-                    <MenuItem value="" disabled>
+                    <MenuItem value="0" disabled>
                       Chọn cơ sở
                     </MenuItem>
 
-                    <MenuItem
-                      key="2"
-                      value="2"
-                      index="1"
-                      sx={{ fontSize: "13px" }}
-                    >
-                      Cơ sở 2
-                    </MenuItem>
-                    <MenuItem
-                      key="3"
-                      value="Cơ sở 3"
-                      index="1"
-                      sx={{ fontSize: "13px" }}
-                    >
-                      Cơ sở 3
-                    </MenuItem>
+                    {selectCampus?.map((campus, index) => (
+                      <MenuItem
+                        key={campus.id}
+                        value={campus.id}
+                        index={index}
+                        sx={{ fontSize: "13px" }}
+                      >
+                        {campus.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </Box>
 
@@ -368,20 +299,9 @@ const AddKTX = ({ open, onClose }) => {
                     }}
                   />
                 </Grid>
-                <Grid item xs={12} lg={12}>
-                  <TextField
-                    label="Trình bày mong muốn, gia cảnh"
-                    value={mongMuonGiaCanh}
-                    onChange={campusChange}
-                    fullWidth
-                    sx={inputStyles}
-                    multiline
-                    rows={4}
-                  />
-                </Grid>
               </Grid>
               <Button
-                onClick={onClose}
+                onClick={handleRegisterDorm}
                 variant="contained"
                 sx={{
                   display: "flex",
@@ -401,7 +321,7 @@ const AddKTX = ({ open, onClose }) => {
                   },
                 }}
               >
-                Đăng ký KTX
+                Đăng ký Ký túc xá
               </Button>
             </Box>
           </Box>

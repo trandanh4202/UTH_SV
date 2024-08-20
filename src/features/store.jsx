@@ -19,6 +19,7 @@ import productReducer from "./productSlice/ProductSlice";
 import addressReducer from "./addressSlice/AddressSlice";
 import viettelReducer from "./viettelSlice/ViettelSlice";
 import certificationReducer from "./certificationSlice/CertificationSlice";
+import dormReducer from "./dormSlice/DormSlice";
 
 export const store = configureStore({
   reducer: {
@@ -42,6 +43,7 @@ export const store = configureStore({
     address: addressReducer,
     viettel: viettelReducer,
     certification: certificationReducer,
+    dorm: dormReducer,
   },
-  // devTools: false,
+  devTools: false,
 });

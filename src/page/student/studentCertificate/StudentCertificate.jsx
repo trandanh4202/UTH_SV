@@ -125,6 +125,11 @@ const StudentCertificate = () => {
                   borderRadius: "10px",
                   overflow: "hidden",
                   transition: "ease all 0.5s",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  // alignItems: "center",
+                  flexDirection: "column",
+                  height: "100%",
                   "&:hover": {
                     textAlign: "center",
                     fontSize: "20px",
@@ -504,136 +509,135 @@ const StudentCertificate = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {receipts?.map((row, index) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{
-                      cursor: "pointer",
-                      backgroundColor:
-                        selectedRow === index ? "#006b89x" : "inherit",
-                    }}
-                    onClick={() => handleRowClick(index)}
-                  >
-                    <TableCell
-                      align="center"
+                {receipts &&
+                  receipts?.map((row, index) => (
+                    <TableRow
+                      key={row.id}
                       sx={{
-                        border: "1px solid rgb(221, 221, 221)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
+                        cursor: "pointer",
+                        backgroundColor:
+                          selectedRow === index ? "#006b89x" : "inherit",
                       }}
+                      onClick={() => handleRowClick(index)}
                     >
-                      {index + 1}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.id}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.historyOrders[row.historyOrders.length - 1]?.id}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.address}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {formatDate(row.orderDate)}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {row.historyOrders[row.historyOrders.length - 1]?.status}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      {formatDate(
-                        row.historyOrders[row.historyOrders.length - 1]?.date
-                      )}
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-
-                        fontWeight: "500",
-                        fontSize: "14px",
-                      }}
-                    >
-                      <IconButton
-                        onClick={handleCloseDetailPopUp}
-                        variant="contained"
+                      <TableCell
+                        align="center"
                         sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          fontSize: "15px",
-                          backgroundColor: "#008588",
-                          color: "white",
-                          borderRadius: "8px",
-                          border: "3px solid #0085885a",
-                          transition: "all ease 0.4s",
-                          "&:hover": {
-                            borderColor: "#008689",
-                            backgroundColor: "white",
-                            color: "red",
-                            boxShadow: "0 0 10px #008689",
-                          },
+                          border: "1px solid rgb(221, 221, 221)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
                         }}
                       >
-                        <EditOutlined sx={{ fontSize: "35px" }} />
-                      </IconButton>
-                    </TableCell>{" "}
-                    <StudentCertificatePopUp
-                      open={openModal}
-                      onClose={() => setOpenModal(false)}
-                      item={row}
-                      // onClose={handleCloseDetailPopUp}
-                    />
-                  </TableRow>
-                ))}
+                        {index + 1}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {row.id}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {row.lastHistoryOrder.id}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {row.address}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {formatDate(row.orderDate)}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {row.lastHistoryOrder.status}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        {formatDate(row.lastHistoryOrder.date)}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+
+                          fontWeight: "500",
+                          fontSize: "14px",
+                        }}
+                      >
+                        <IconButton
+                          onClick={handleCloseDetailPopUp}
+                          variant="contained"
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            fontSize: "15px",
+                            backgroundColor: "#008588",
+                            color: "white",
+                            borderRadius: "8px",
+                            border: "3px solid #0085885a",
+                            transition: "all ease 0.4s",
+                            "&:hover": {
+                              borderColor: "#008689",
+                              backgroundColor: "white",
+                              color: "red",
+                              boxShadow: "0 0 10px #008689",
+                            },
+                          }}
+                        >
+                          <EditOutlined sx={{ fontSize: "35px" }} />
+                        </IconButton>
+                      </TableCell>{" "}
+                      <StudentCertificatePopUp
+                        open={openModal}
+                        onClose={() => setOpenModal(false)}
+                        item={row}
+                        // onClose={handleCloseDetailPopUp}
+                      />
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>

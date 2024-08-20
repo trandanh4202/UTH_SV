@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-key */
-import { CloudDownload, Receipt } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -17,13 +16,10 @@ import {
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getReceiptDetail,
-  getReceipts,
-} from "~/features/tuitionSlice/TuitionSlice";
-import ReceiptDetailPopup from "../tuitionFees/generalReceipts/ReceiptDetailPopup";
-import AddFamily from "../../../components/addFamily/AddFamily";
+import { getReceipts } from "~/features/tuitionSlice/TuitionSlice";
 import AddKTX from "../../../components/addKTX/AddKTX";
+import { getDorm, getInforDorm } from "../../../features/dormSlice/DormSlice";
+import DeleteKTX from "../../../components/deleteKTX/DeleteKTX";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -33,13 +29,13 @@ const formatDate = (dateString) => {
 
 const tableCell = [
   "STT",
-  "Số phiếu",
-  "Mã hoá đơn",
+  "Mã đăng ký",
+  "Học kỳ đăng ký",
   "Cơ sở",
   "Ngày yêu cầu",
   "Trạng thái",
   "Ngày xử lý",
-  "Chi tiết",
+  "Thao tác",
 ];
 
 const Dormitory = () => {
@@ -55,13 +51,6 @@ const Dormitory = () => {
     dispatch(getReceipts());
   }, [dispatch]);
 
-  const receipts = useSelector((state) => state.tuition?.receipts);
-
-  const handleReceiptClick = (soPhieu, maHoaDon, ngayThu) => {
-    dispatch(getReceiptDetail({ soPhieu }));
-  };
-
-  const receiptDetail = useSelector((state) => state.tuition?.receiptDetail);
   const [modalKTXOpen, setModalKTXOpen] = useState(false);
 
   const handleModalKTXOpen = () => {
@@ -71,6 +60,12 @@ const Dormitory = () => {
   const handleModalKTXClose = () => {
     setModalKTXOpen(false);
   };
+  useEffect(() => {
+    dispatch(getDorm());
+    dispatch(getInforDorm());
+  }, [dispatch]);
+  const dorms = useSelector((state) => state.dorm.dorms?.body);
+  const hidden = useSelector((state) => state.dorm.dorms.body);
   return (
     <Box>
       <Container sx={{ backgroundColor: "white" }}>
@@ -173,7 +168,7 @@ const Dormitory = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {receipts?.map((row, index) => (
+                {dorms?.map((row, index) => (
                   <TableRow
                     key={row.soPhieu}
                     sx={{
@@ -203,7 +198,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.soPhieu}
+                      KTX{row.id}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -214,7 +209,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.maHoaDon}
+                      {row.period?.name}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -225,7 +220,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {formatDate(row.ngayThu)}
+                      {row.campus?.name}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -236,7 +231,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.daNop}
+                      {formatDate(row.createdAt)}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -247,7 +242,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.nguoiTao}
+                      {row.status}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -258,7 +253,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.hoaDonDienTu ? <CloudDownload /> : ""}
+                      {formatDate(row.updatedAt)}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -269,7 +264,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      <Receipt
+                      {/* <Receipt
                         onClick={() =>
                           handleReceiptClick(
                             row.soPhieu,
@@ -277,7 +272,8 @@ const Dormitory = () => {
                             row.ngayThu
                           )
                         }
-                      />
+                      /> */}
+                      {row.status !== "Hủy" ? <DeleteKTX item={row} /> : ""}
                     </TableCell>
                   </TableRow>
                 ))}
