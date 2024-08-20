@@ -149,7 +149,7 @@ const Header = () => {
           route: `/certification`,
         },
         {
-          name: "Trạng hỗ trợ trực tuyến",
+          name: "Trang hỗ trợ trực tuyến",
           route: `https://support.ut.edu.vn/login.php?token=${token}`,
         },
       ],
@@ -337,7 +337,7 @@ const Header = () => {
                   gap: { xs: "0px", lg: "40px" },
                 }}
               >
-                <Cart />
+                {/* <Cart /> */}
 
                 {/* Avatar with Menu */}
                 <Box

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-key */
-import { CloudDownload } from "@mui/icons-material";
+import { CloudDownload, EditOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -7,6 +7,7 @@ import {
   Container,
   Divider,
   Grid,
+  IconButton,
   Paper,
   Table,
   TableBody,
@@ -70,6 +71,11 @@ const StudentCertificate = () => {
     dispatch(getAllProduct());
     dispatch(getAddress());
   }, [dispatch]);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleCloseDetailPopUp = () => {
+    setOpenModal(true);
+  };
 
   const receipts = useSelector((state) => state.order.order?.body);
   const products = useSelector((state) => state.product.product?.body);
@@ -437,7 +443,7 @@ const StudentCertificate = () => {
               <Typography
                 sx={{ color: "#008588", fontWeight: "700", fontSize: "16px" }}
               >
-                Giấy xác nhận sinh viên
+                Lịch sử đăng ký nhận
               </Typography>
             </Box>
           </Box>
@@ -552,7 +558,7 @@ const StudentCertificate = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.daNop}
+                      {formatDate(row.orderDate)}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -563,7 +569,7 @@ const StudentCertificate = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.nguoiTao}
+                      {row.historyOrders[row.historyOrders.length - 1]?.status}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -574,7 +580,9 @@ const StudentCertificate = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.hoaDonDienTu ? <CloudDownload /> : ""}
+                      {formatDate(
+                        row.historyOrders[row.historyOrders.length - 1]?.date
+                      )}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -584,7 +592,14 @@ const StudentCertificate = () => {
                         fontWeight: "500",
                         fontSize: "14px",
                       }}
-                    ></TableCell>
+                    >
+                      <IconButton
+                        open={openModal}
+                        onClose={handleCloseDetailPopUp}
+                      >
+                        <EditOutlined />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
