@@ -126,7 +126,7 @@ const router = createBrowserRouter([
             element: <SubjectHandling />,
           },
           {
-            path: "Dormitory",
+            path: "Dormitory1",
             element: <Dormitory />,
           },
           {

@@ -14,6 +14,9 @@ import {
   Paper,
 } from "@mui/material";
 import { format } from "date-fns";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDetailOrder } from "../../../features/orderSlice/OrderSlice";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -21,15 +24,25 @@ const formatDate = (dateString) => {
   return format(date, "dd/MM/yyyy");
 };
 
-const tableCell = ["STT", "Mã", "Nội dung thu", "Năm học", "Số tiền"];
+const formatCurrency = (number) => {
+  return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+};
+const tableCell = ["STT", "Mã", "Nội dung thu", "Thanh toán", "Số lượng"];
 const StudentCertificatePopUp = ({
   open,
   onClose,
-  item,
+  id,
   soPhieu,
   maHoaDon,
   ngayThu,
 }) => {
+  console.log(id);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (open) dispatch(getDetailOrder(id));
+  }, [dispatch, open]);
+  const item = useSelector((state) => state.order.getDetailOrder?.body);
+
   return (
     <Modal open={open} onClose={onClose} sx={{ padding: "10px" }}>
       <Paper
@@ -84,7 +97,7 @@ const StudentCertificatePopUp = ({
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Tổng cộng: {item.productFee}
+                Tổng cộng: {formatCurrency(item?.productFee)}
               </Typography>
             </Box>
           </Box>
@@ -102,7 +115,7 @@ const StudentCertificatePopUp = ({
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Ngày đăng ký: {formatDate(item.orderDate)}
+                Ngày đăng ký: {formatDate(item?.orderDate)}
               </Typography>
             </Box>
           </Box>
@@ -120,7 +133,7 @@ const StudentCertificatePopUp = ({
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Trạng thái: {item?.lastHistoryOrder.status}
+                Trạng thái: {item?.lastHistoryOrder?.status}
               </Typography>
             </Box>
           </Box>
@@ -151,7 +164,7 @@ const StudentCertificatePopUp = ({
           <Table sx={{ minWidth: 500 }} aria-label="simple table" stickyHeader>
             <TableHead>
               <TableRow>
-                {tableCell.map((cell) => (
+                {tableCell?.map((cell) => (
                   <TableCell
                     key={cell}
                     align="center"
@@ -169,7 +182,7 @@ const StudentCertificatePopUp = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {item.orderDetails?.map((row, index) => (
+              {item?.orderDetails?.map((row, index) => (
                 <TableRow key={row.maKhoanThuKhac}>
                   <TableCell
                     align="center"
@@ -189,7 +202,17 @@ const StudentCertificatePopUp = ({
                       fontSize: "15px",
                     }}
                   >
-                    {row.id}
+                    {row?.id}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                      fontWeight: "600",
+                      fontSize: "15px",
+                    }}
+                  >
+                    {row?.product?.name}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -199,7 +222,7 @@ const StudentCertificatePopUp = ({
                       fontSize: "15px",
                     }}
                   >
-                    {row.product.name}
+                    {formatCurrency(row?.product?.price)}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -209,17 +232,7 @@ const StudentCertificatePopUp = ({
                       fontSize: "15px",
                     }}
                   >
-                    {row.product.price}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontWeight: "600",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {row.quantity}
+                    {row?.quantity}
                   </TableCell>
                 </TableRow>
               ))}

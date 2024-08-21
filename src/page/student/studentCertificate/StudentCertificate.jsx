@@ -30,6 +30,9 @@ import { getAllProduct } from "../../../features/productSlice/ProductSlice";
 import { getProvinceViettel } from "../../../features/viettelSlice/ViettelSlice";
 import Spinner from "../../../components/Spinner/Spinner";
 import StudentCertificatePopUp from "./StudentCertificatePopUp";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -73,9 +76,11 @@ const StudentCertificate = () => {
     dispatch(getAddress());
   }, [dispatch]);
   const [openModal, setOpenModal] = useState(false);
+  const [id, setId] = useState("");
 
-  const handleCloseDetailPopUp = () => {
+  const handleCloseDetailPopUp = (row) => {
     setOpenModal(true);
+    setId(row.id);
   };
 
   const receipts = useSelector((state) => state.order.order?.body);
@@ -113,6 +118,24 @@ const StudentCertificate = () => {
   const addCombo = (item) => {
     dispatch(addToCart({ productId: item.id, quantity: 1 }));
   };
+  const loadingCart = useSelector((state) => state.cart?.loading);
+  const addToCartMesssage = useSelector(
+    (state) => state.dorm.addToCartMesssage?.message
+  );
+  const addToCartSuccess = useSelector(
+    (state) => state.dorm.addToCartMesssage?.success
+  );
+
+  useEffect(() => {
+    if (!loadingCart && addToCartMesssage) {
+      if (addToCartMesssage && addToCartSuccess) {
+        toast.success(addToCartMesssage);
+      } else if (!addToCartSuccess) {
+        toast.error(addToCartMesssage);
+      }
+    }
+  }, [loadingCart, addToCartMesssage, addToCartSuccess]);
+
   return (
     <Box>
       <Container sx={{}}>
@@ -147,7 +170,7 @@ const StudentCertificate = () => {
               >
                 <Box>
                   <img
-                    src="/images/giayxacnhan.png"
+                    src={product.image}
                     alt={product.name}
                     style={{
                       objectFit: "contain",
@@ -305,7 +328,7 @@ const StudentCertificate = () => {
             >
               <TableHead>
                 <TableRow>
-                  {tableCell2.map((item) => (
+                  {tableCell2?.map((item) => (
                     <TableCell
                       key={item}
                       align="center"
@@ -491,7 +514,7 @@ const StudentCertificate = () => {
             >
               <TableHead>
                 <TableRow>
-                  {tableCell.map((item) => (
+                  {tableCell?.map((item) => (
                     <TableCell
                       key={item}
                       align="center"
@@ -607,7 +630,7 @@ const StudentCertificate = () => {
                         }}
                       >
                         <IconButton
-                          onClick={handleCloseDetailPopUp}
+                          onClick={() => handleCloseDetailPopUp(row)} // Sử dụng callback để truyền tham số
                           variant="contained"
                           sx={{
                             display: "flex",
@@ -630,14 +653,14 @@ const StudentCertificate = () => {
                           <EditOutlined sx={{ fontSize: "35px" }} />
                         </IconButton>
                       </TableCell>{" "}
-                      <StudentCertificatePopUp
-                        open={openModal}
-                        onClose={() => setOpenModal(false)}
-                        item={row}
-                        // onClose={handleCloseDetailPopUp}
-                      />
                     </TableRow>
                   ))}
+                <StudentCertificatePopUp
+                  open={openModal}
+                  onClose={() => setOpenModal(false)}
+                  id={id}
+                  // onClose={handleCloseDetailPopUp}
+                />
               </TableBody>
             </Table>
           </TableContainer>

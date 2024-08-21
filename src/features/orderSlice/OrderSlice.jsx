@@ -139,6 +139,39 @@ export const getAllToHandle = createAsyncThunk(
   }
 );
 
+export const getDetailOrder = createAsyncThunk(
+  "order/getDetailOrder",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getDetail/${id}`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getAllToDeliverWithoutShip = createAsyncThunk(
   "order/getAllToDeliverWithoutShip",
   async (_, { rejectWithValue }) => {
@@ -370,6 +403,18 @@ const orderSlice = createSlice({
         state.createOrder = action.payload;
       })
       .addCase(createOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getDetailOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getDetailOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getDetailOrder = action.payload;
+      })
+      .addCase(getDetailOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

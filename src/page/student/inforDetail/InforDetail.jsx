@@ -196,7 +196,7 @@ const InforDetail = () => {
                   <Grid container>
                     <InfoField
                       label="Nơi sinh: "
-                      value={profile?.noiSinhText}
+                      value={profile?.noiSinhTinh}
                       column={6}
                     />
                     <InfoField
@@ -266,7 +266,7 @@ const InforDetail = () => {
                     />
                     <InfoField
                       label="Nơi sinh: "
-                      value={profile?.noiSinhText}
+                      value={profile?.noiSinhTinh}
                     />
                   </Grid>
                   <Grid container>
@@ -302,16 +302,16 @@ const InforDetail = () => {
                       label="Ngày cấp: "
                       value={formatDate(profile?.ngayCap)}
                     />
-                    <InfoField label="Nơi cấp: " value={profile?.noiCap} />
+                    <InfoField label="Nơi cấp: " value={profile?.tinhCapCMND} />
                   </Grid>
                   <Grid container>
                     <InfoField
                       label="Địa chỉ thường trú: "
-                      value={profile?.diaChiThuongTru}
+                      value={profile?.hkttTinh}
                     />
                     <InfoField
                       label="Địa chỉ liên lạc: "
-                      value={profile?.diaChiLienLac}
+                      value={profile?.dcllTinh}
                     />
                   </Grid>
                 </Grid>

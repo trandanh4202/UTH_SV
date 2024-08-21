@@ -32,6 +32,37 @@ const formatCurrency = (number) => {
   return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
 };
 
+const selectStyles = {
+  "&:focus": {
+    borderRadius: "8px",
+  },
+  borderRadius: "8px",
+  "& .MuiInputBase-input": {
+    fontSize: "15px",
+    backgroundColor: "white",
+    color: "black",
+    borderRadius: "8px",
+    border: "3px solid #0085885a",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: "9px 14px",
+    transition: "all ease 0.4s",
+  },
+  "& .MuiSvgIcon-root": {
+    color: "#0085885a",
+  },
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#0085885a",
+  },
+  "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#0085885a",
+  },
+  "& .MuiSelect-select:focus": {
+    borderRadius: "8px",
+    borderColor: "#008588",
+  },
+};
 const Cart = () => {
   const [openDrawerCart, setOpenDrawerCart] = useState(false);
   const [size, setSize] = useState("");
@@ -84,12 +115,13 @@ const Cart = () => {
     }
   };
   const addCombo1 = () => {
-    dispatch(addToCart("6"));
+    dispatch(addToCart({ productId: 6 }));
   };
 
   const addCombo2 = () => {
-    dispatch(addToCart("7"));
+    dispatch(addToCart({ productId: 7 }));
   };
+
   const changeCampus = (e) => {
     setCampus(e.target.value);
   };
@@ -213,6 +245,7 @@ const Cart = () => {
               displayEmpty
               inputProps={{ "aria-label": "Without label" }}
               defaultValue="0"
+              sx={selectStyles}
             >
               <MenuItem value="0" disabled>
                 <Typography disabled> Vui lòng chọn </Typography>
@@ -228,20 +261,6 @@ const Cart = () => {
           ) : (
             <Box>
               <Grid container spacing={3} sx={{ marginBottom: "30px" }}>
-                <Grid item xs={2}>
-                  <Typography
-                    sx={{
-                      fontWeight: "700",
-                      textAlign: "center",
-                      fontSize: {
-                        xs: "11px",
-                        lg: "16px",
-                      },
-                    }}
-                  >
-                    Hình ảnh
-                  </Typography>
-                </Grid>
                 <Grid item xs={4}>
                   <Typography
                     sx={{
@@ -254,6 +273,20 @@ const Cart = () => {
                     }}
                   >
                     Nội dung
+                  </Typography>
+                </Grid>
+                <Grid item xs={1}>
+                  <Typography
+                    sx={{
+                      fontWeight: "700",
+                      textAlign: "center",
+                      fontSize: {
+                        xs: "11px",
+                        lg: "16px",
+                      },
+                    }}
+                  >
+                    Kích cở
                   </Typography>
                 </Grid>
                 <Grid item xs={2}>
@@ -270,7 +303,7 @@ const Cart = () => {
                     Số lượng
                   </Typography>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={2.5}>
                   <Typography
                     sx={{
                       fontWeight: "700",
@@ -284,7 +317,7 @@ const Cart = () => {
                     Đơn giá
                   </Typography>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={2.5}>
                   <Typography
                     sx={{
                       fontWeight: "700",
@@ -302,16 +335,6 @@ const Cart = () => {
               <Grid container spacing={5}>
                 {carts?.map((item) => (
                   <>
-                    <Grid item xs={2}>
-                      <img
-                        src={item.product.image}
-                        alt={item.product.name}
-                        style={{
-                          width: "100%",
-                          objectFit: "contain",
-                        }}
-                      />
-                    </Grid>
                     <Grid item xs={4}>
                       <Box
                         sx={{
@@ -335,29 +358,26 @@ const Cart = () => {
                         >
                           {item.product.name}
                         </Typography>
-                        <Select
-                          value={item.option?.id || size || ""}
-                          onChange={handleChange(item)}
-                          displayEmpty
-                          inputProps={{ "aria-label": "Without label" }}
-                          sx={{
-                            padding: "0",
-                            "& .MuiInputBase-input": {
-                              padding: "3px",
-                            },
-                          }}
-                          defaultValue={item.option?.id || size || ""}
-                        >
-                          <MenuItem value="">
-                            <Typography>None</Typography>
-                          </MenuItem>
-                          {item.product.options?.map((option) => (
-                            <MenuItem value={option.id} key={option.id}>
-                              <Typography>{option.name}</Typography>
-                            </MenuItem>
-                          ))}
-                        </Select>
                       </Box>
+                    </Grid>
+                    <Grid item xs={1}>
+                      <Select
+                        value={item.option?.id || size || ""}
+                        onChange={handleChange(item)}
+                        displayEmpty
+                        inputProps={{ "aria-label": "Without label" }}
+                        sx={selectStyles}
+                        defaultValue={item.option?.id || size || ""}
+                      >
+                        <MenuItem value="">
+                          <Typography>None</Typography>
+                        </MenuItem>
+                        {item.product.options?.map((option) => (
+                          <MenuItem value={option.id} key={option.id}>
+                            <Typography>{option.name}</Typography>
+                          </MenuItem>
+                        ))}
+                      </Select>
                     </Grid>
                     <Grid item xs={2}>
                       <Box
@@ -378,7 +398,7 @@ const Cart = () => {
                         />
                       </Box>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2.5}>
                       <Typography
                         sx={{
                           color: "#333333",
@@ -393,7 +413,7 @@ const Cart = () => {
                         {formatCurrency(item.product.price)}
                       </Typography>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2.5}>
                       <Typography
                         sx={{
                           color: "#333333",

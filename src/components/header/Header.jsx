@@ -152,10 +152,10 @@ const Header = () => {
           name: "Trang hỗ trợ trực tuyến",
           route: `https://support.ut.edu.vn/login.php?token=${token}`,
         },
-        {
-          name: "Đăng ký Ký túc xá",
-          route: `/dormitory`,
-        },
+        // {
+        //   name: "Đăng ký Ký túc xá",
+        //   route: `/dormitory`,
+        // },
         // {
         //   name: "Đăng ký Đồng phục",
         //   route: `/uniform`,
@@ -345,7 +345,7 @@ const Header = () => {
                   gap: { xs: "0px", lg: "40px" },
                 }}
               >
-                {location.pathname === "/StudentCertificate" && <Cart />}
+                {location.pathname === "/uniform1" && <Cart />}
 
                 {/* Avatar with Menu */}
                 <Box
