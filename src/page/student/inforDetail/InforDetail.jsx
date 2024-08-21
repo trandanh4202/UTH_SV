@@ -311,7 +311,7 @@ const InforDetail = () => {
                     <InfoField
                       label="Địa chỉ liên lạc: "
                       value={` ${profile?.hkttPhuongXa || ""}, ${
-                        profile?.dcllHuyen || ""  
+                        profile?.dcllHuyen || ""
                       }, ${profile?.dcllTinh || ""}`}
                     />
                   </Grid>

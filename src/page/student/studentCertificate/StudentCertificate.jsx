@@ -32,6 +32,14 @@ import Spinner from "../../../components/Spinner/Spinner";
 import StudentCertificatePopUp from "./StudentCertificatePopUp";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+
+// import required modules
+import { Pagination } from "swiper/modules";
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
@@ -120,533 +128,629 @@ const StudentCertificate = () => {
   return (
     <Box>
       <Container sx={{}}>
-        <Grid container spacing={3}>
-          {products?.map((product) => (
-            <Grid item lg={3} xs={12}>
-              <Paper
-                elevation={4}
-                sx={{
-                  borderRadius: "10px",
-                  overflow: "hidden",
-                  transition: "ease all 0.5s",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  // alignItems: "center",
-                  flexDirection: "column",
-                  height: "100%",
-                  "&:hover": {
-                    textAlign: "center",
-                    fontSize: "20px",
-                    fontWeight: "600",
-                    whiteSpace: "2",
-                    backgroundColor: "#008689",
-                    color: "white",
-                    boxShadow: "0 0 10px #008689",
-                    padding: "5px",
-                    "& .product-name": {
-                      color: "white",
-                    },
-                  },
+        <Grid container spacing={5}>
+          <Grid container spacing={5}>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <iframe
+                width="1048"
+                height="590"
+                src="https://www.youtube.com/embed/CdABTFMe8bM"
+                title="Hướng dẫn chọn size đồng phục cho tân sinh viên UTH"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen
+              ></iframe>{" "}
+            </Grid>
+            <Grid item xs={12}>
+              <Swiper
+                slidesPerView={2}
+                spaceBetween={30}
+                freeMode={true}
+                pagination={{
+                  clickable: true,
                 }}
+                modules={[Pagination]}
+                className="mySwiper"
               >
-                {/* <Box>
+                <SwiperSlide>
                   <img
-                    src={product.image}
-                    alt={product.name}
+                    src="/images/AnhSize.png"
+                    alt=""
                     style={{
-                      objectFit: "contain",
                       width: "100%",
-                      height: "300x",
-                      borderTopRightRadius: "10px",
-                      borderTopLeftRadius: "10px",
+                      objectFit: "contain",
                     }}
                   />
-                </Box> */}
-                <Divider />
-                <Box>
-                  <Typography
-                    sx={{
-                      color: "#008588",
-                      fontWeight: "700",
-                      fontSize: "16px",
-                      textAlign: "center",
-                    }}
-                    className="product-name"
-                  >
-                    {product.name}
-                  </Typography>
-                </Box>
-                <Divider />
-                <Box>
-                  <Button
-                    variant="contained"
-                    onClick={() => addCombo(product)} // Truyền product vào hàm addCombo
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      backgroundColor: "#008588",
-                      borderRadius: "8px",
-                      border: "3px solid #0085885a",
-                      transition: "all ease 0.4s",
-                      padding: "4px",
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src="/images/AnhSize2.png"
+                    alt=""
+                    style={{
                       width: "100%",
-                      "&:hover": {
-                        borderColor: "#008689",
-                        backgroundColor: "white",
-                        color: "#008689",
-                        boxShadow: "0 0 10px #008689",
-                      },
+                      objectFit: "contain",
                     }}
-                  >
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src="/images/AnhSize3.png"
+                    alt=""
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src="/images/AnhSize4.png"
+                    alt=""
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src="/images/AnhSize5.png"
+                    alt=""
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src="/images/AnhSize6.png"
+                    alt=""
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                </SwiperSlide>
+                <SwiperSlide>
+                  <img
+                    src="/images/AnhSize7.png"
+                    alt=""
+                    style={{
+                      width: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                </SwiperSlide>
+              </Swiper>
+            </Grid>
+            {products?.map((product) => (
+              <Grid item lg={3} xs={12}>
+                <Paper
+                  elevation={4}
+                  sx={{
+                    borderRadius: "10px",
+                    overflow: "hidden",
+                    transition: "ease all 0.5s",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    // alignItems: "center",
+                    flexDirection: "column",
+                    height: "100%",
+                    "&:hover": {
+                      textAlign: "center",
+                      fontSize: "20px",
+                      fontWeight: "600",
+                      whiteSpace: "2",
+                      backgroundColor: "#008689",
+                      color: "white",
+                      boxShadow: "0 0 10px #008689",
+                      padding: "5px",
+                      "& .product-name": {
+                        color: "white",
+                      },
+                    },
+                  }}
+                >
+                  <Divider />
+                  <Box>
                     <Typography
                       sx={{
+                        color: "#008588",
                         fontWeight: "700",
                         fontSize: "16px",
                         textAlign: "center",
                       }}
+                      className="product-name"
                     >
-                      Đăng ký nhận
+                      {product.name}
                     </Typography>
-                  </Button>
-                </Box>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-        <Box
-          sx={{
-            padding: "10px 5px",
-            backgroundColor: "white",
-            margin: "20px 0",
-          }}
-        >
-          <Box
+                  </Box>
+                  <Divider />
+                  <Box>
+                    <Button
+                      variant="contained"
+                      onClick={() => addCombo(product)} // Truyền product vào hàm addCombo
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "#008588",
+                        borderRadius: "8px",
+                        border: "3px solid #0085885a",
+                        transition: "all ease 0.4s",
+                        padding: "4px",
+                        width: "100%",
+                        "&:hover": {
+                          borderColor: "#008689",
+                          backgroundColor: "white",
+                          color: "#008689",
+                          boxShadow: "0 0 10px #008689",
+                        },
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: "700",
+                          fontSize: "16px",
+                          textAlign: "center",
+                        }}
+                      >
+                        Đăng ký nhận
+                      </Typography>
+                    </Button>
+                  </Box>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+          <Grid
             sx={{
-              margin: "15px 0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
+              padding: "10px 5px",
+              backgroundColor: "white",
+              margin: "20px 0",
             }}
+            container
           >
-            <Box sx={{ display: "flex" }}>
-              <Divider
-                orientation="vertical"
-                sx={{
-                  color: "red",
-                  border: "3px solid",
-                  height: "20px",
-                  marginRight: "5px",
-                }}
-              />
-              <Typography
-                sx={{ color: "#008588", fontWeight: "700", fontSize: "16px" }}
-              >
-                Địa chỉ nhận hàng
-              </Typography>
-            </Box>
-            <Box>
-              <Button
-                variant="contained"
-                onClick={handleModalAddressOpen}
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  fontSize: "15px",
-                  backgroundColor: "#008588",
-                  color: "white",
-                  borderRadius: "8px",
-                  border: "3px solid #0085885a",
-                  transition: "all ease 0.4s",
-                  "&:hover": {
-                    borderColor: "#008689",
-                    backgroundColor: "white",
-                    color: "#008689",
-                    boxShadow: "0 0 10px #008689",
-                  },
-                }}
-              >
-                <Typography
+            <Grid
+              item
+              xs={12}
+              sx={{
+                margin: "15px 0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <Divider
+                  orientation="vertical"
                   sx={{
-                    fontWeight: "700",
-                    fontSize: "16px",
-                    textAlign: "center",
+                    color: "red",
+                    border: "3px solid",
+                    height: "20px",
+                    marginRight: "5px",
+                  }}
+                />
+                <Typography
+                  sx={{ color: "#008588", fontWeight: "700", fontSize: "20px" }}
+                >
+                  Địa chỉ nhận hàng
+                </Typography>
+              </Box>
+              <Box>
+                <Button
+                  variant="contained"
+                  onClick={handleModalAddressOpen}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    fontSize: "15px",
+                    backgroundColor: "#008588",
+                    color: "white",
+                    borderRadius: "8px",
+                    border: "3px solid #0085885a",
+                    transition: "all ease 0.4s",
+                    "&:hover": {
+                      borderColor: "#008689",
+                      backgroundColor: "white",
+                      color: "#008689",
+                      boxShadow: "0 0 10px #008689",
+                    },
                   }}
                 >
-                  Thêm địa chỉ
-                </Typography>
-              </Button>
-            </Box>
-          </Box>
-          <TableContainer
-            component={Paper}
-            sx={{
-              maxHeight: "78vh",
-              "&::-webkit-scrollbar": {
-                width: "10px",
-                height: "10px",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "#008689",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-thumb:hover": {
-                backgroundColor: "#008950",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-track": {
-                backgroundColor: "#f1f1f1",
-                borderRadius: "10px",
-              },
-            }}
-          >
-            <Table
-              sx={{ minWidth: 650 }}
-              aria-label="simple table"
-              stickyHeader
+                  <Typography
+                    sx={{
+                      fontWeight: "700",
+                      fontSize: "16px",
+                      textAlign: "center",
+                    }}
+                  >
+                    Thêm địa chỉ
+                  </Typography>
+                </Button>
+              </Box>
+            </Grid>
+            <TableContainer
+              component={Paper}
+              sx={{
+                maxHeight: "78vh",
+                "&::-webkit-scrollbar": {
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#008689",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb:hover": {
+                  backgroundColor: "#008950",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  backgroundColor: "#f1f1f1",
+                  borderRadius: "10px",
+                },
+              }}
             >
-              <TableHead>
-                <TableRow>
-                  {tableCell2?.map((item) => (
-                    <TableCell
-                      key={item}
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-                        backgroundColor: "#008689",
-                        color: "white",
-                        fontWeight: "600",
-                        fontSize: "18px",
-                      }}
-                    >
-                      {item}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loadingAddress ? (
-                  <Spinner />
-                ) : (
-                  address?.map((item, index) => (
-                    <TableRow
-                      key={item.soPhieu}
-                      sx={{
-                        cursor: "pointer",
-                        backgroundColor:
-                          selectedRow === index ? "#006b89x" : "inherit",
-                      }}
-                      onClick={() => handleRowClick(index)}
-                    >
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgb(221, 221, 221)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {index + 1}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {item.PROVINCE_NAME}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {item.DISTRICT_NAME}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {item.WARDS_NAME}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {item.detail}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {item.phoneNumber ? item.phoneNumber : "Chưa có"}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            gap: "10px",
-                          }}
-                        >
-                          <DeleteAddress item={item} />
-                          <EditAddress editData={item} />
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-        <Box
-          sx={{
-            padding: "10px 5px",
-            backgroundColor: "white",
-            margin: "20px 0",
-          }}
-        >
-          <Box
-            sx={{
-              margin: "15px 0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box sx={{ display: "flex" }}>
-              <Divider
-                orientation="vertical"
-                sx={{
-                  color: "red",
-                  border: "3px solid",
-                  height: "20px",
-                  marginRight: "5px",
-                }}
-              />
-              <Typography
-                sx={{ color: "#008588", fontWeight: "700", fontSize: "16px" }}
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+                stickyHeader
               >
-                Lịch sử đăng ký nhận
-              </Typography>
-            </Box>
-          </Box>
-          <TableContainer
-            component={Paper}
-            sx={{
-              maxHeight: "78vh",
-              "&::-webkit-scrollbar": {
-                width: "10px",
-                height: "10px",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                backgroundColor: "#008689",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-thumb:hover": {
-                backgroundColor: "#008950",
-                borderRadius: "10px",
-              },
-              "&::-webkit-scrollbar-track": {
-                backgroundColor: "#f1f1f1",
-                borderRadius: "10px",
-              },
-            }}
-          >
-            <Table
-              sx={{ minWidth: 650 }}
-              aria-label="simple table"
-              stickyHeader
-            >
-              <TableHead>
-                <TableRow>
-                  {tableCell?.map((item) => (
-                    <TableCell
-                      key={item}
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-                        backgroundColor: "#008689",
-                        color: "white",
-                        fontWeight: "600",
-                        fontSize: "18px",
-                      }}
-                    >
-                      {item}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {receipts &&
-                  receipts?.map((row, index) => (
-                    <TableRow
-                      key={row.id}
-                      sx={{
-                        cursor: "pointer",
-                        backgroundColor:
-                          selectedRow === index ? "#006b89x" : "inherit",
-                      }}
-                      onClick={() => handleRowClick(index)}
-                    >
+                <TableHead>
+                  <TableRow>
+                    {tableCell2?.map((item) => (
                       <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgb(221, 221, 221)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {index + 1}
-                      </TableCell>
-                      <TableCell
+                        key={item}
                         align="center"
                         sx={{
                           border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
+                          backgroundColor: "#008689",
+                          color: "white",
+                          fontWeight: "600",
+                          fontSize: "18px",
                         }}
                       >
-                        {row.id}
+                        {item}
                       </TableCell>
-                      <TableCell
-                        align="center"
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {loadingAddress ? (
+                    <Spinner />
+                  ) : (
+                    address?.map((item, index) => (
+                      <TableRow
+                        key={item.soPhieu}
                         sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
+                          cursor: "pointer",
+                          backgroundColor:
+                            selectedRow === index ? "#006b89x" : "inherit",
                         }}
+                        onClick={() => handleRowClick(index)}
                       >
-                        {row.lastHistoryOrder.id}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.address}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {formatDate(row.orderDate)}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {row.lastHistoryOrder.status}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {formatDate(row.lastHistoryOrder.date)}
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-
-                          fontWeight: "500",
-                          fontSize: "14px",
-                        }}
-                      >
-                        <IconButton
-                          onClick={() => handleCloseDetailPopUp(row)} // Sử dụng callback để truyền tham số
-                          variant="contained"
+                        <TableCell
+                          align="center"
                           sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            fontSize: "15px",
-                            backgroundColor: "#008588",
-                            color: "white",
-                            borderRadius: "8px",
-                            border: "3px solid #0085885a",
-                            transition: "all ease 0.4s",
-                            "&:hover": {
-                              borderColor: "#008689",
-                              backgroundColor: "white",
-                              color: "red",
-                              boxShadow: "0 0 10px #008689",
-                            },
+                            border: "1px solid rgb(221, 221, 221)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
                           }}
                         >
-                          <EditOutlined sx={{ fontSize: "35px" }} />
-                        </IconButton>
-                      </TableCell>{" "}
-                    </TableRow>
-                  ))}
-                <StudentCertificatePopUp
-                  open={openModal}
-                  onClose={() => setOpenModal(false)}
-                  id={id}
-                  // onClose={handleCloseDetailPopUp}
+                          {index + 1}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {item.PROVINCE_NAME}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {item.DISTRICT_NAME}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {item.WARDS_NAME}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {item.detail}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {item.phoneNumber ? item.phoneNumber : "Chưa có"}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
+                              gap: "10px",
+                            }}
+                          >
+                            <DeleteAddress item={item} />
+                            <EditAddress editData={item} />
+                          </Box>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+          <Grid
+            sx={{
+              padding: "10px 5px",
+              backgroundColor: "white",
+              margin: "20px 0",
+            }}
+            container
+          >
+            <Box
+              sx={{
+                margin: "15px 0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex" }}>
+                <Divider
+                  orientation="vertical"
+                  sx={{
+                    color: "red",
+                    border: "3px solid",
+                    height: "20px",
+                    marginRight: "5px",
+                  }}
                 />
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+                <Typography
+                  sx={{ color: "#008588", fontWeight: "700", fontSize: "20px" }}
+                >
+                  Lịch sử đăng ký
+                </Typography>
+              </Box>
+            </Box>
+            <TableContainer
+              component={Paper}
+              sx={{
+                maxHeight: "78vh",
+                "&::-webkit-scrollbar": {
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#008689",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-thumb:hover": {
+                  backgroundColor: "#008950",
+                  borderRadius: "10px",
+                },
+                "&::-webkit-scrollbar-track": {
+                  backgroundColor: "#f1f1f1",
+                  borderRadius: "10px",
+                },
+              }}
+            >
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+                stickyHeader
+              >
+                <TableHead>
+                  <TableRow>
+                    {tableCell?.map((item) => (
+                      <TableCell
+                        key={item}
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          backgroundColor: "#008689",
+                          color: "white",
+                          fontWeight: "600",
+                          fontSize: "18px",
+                        }}
+                      >
+                        {item}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {receipts &&
+                    receipts?.map((row, index) => (
+                      <TableRow
+                        key={row.id}
+                        sx={{
+                          cursor: "pointer",
+                          backgroundColor:
+                            selectedRow === index ? "#006b89x" : "inherit",
+                        }}
+                        onClick={() => handleRowClick(index)}
+                      >
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {index + 1}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {row.id}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {row.lastHistoryOrder.id}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {row.address}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {formatDate(row.orderDate)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {row.lastHistoryOrder.status}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          {formatDate(row.lastHistoryOrder.date)}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+
+                            fontWeight: "500",
+                            fontSize: "14px",
+                          }}
+                        >
+                          <IconButton
+                            onClick={() => handleCloseDetailPopUp(row)} // Sử dụng callback để truyền tham số
+                            variant="contained"
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              fontSize: "15px",
+                              backgroundColor: "#008588",
+                              color: "white",
+                              borderRadius: "8px",
+                              border: "3px solid #0085885a",
+                              transition: "all ease 0.4s",
+                              "&:hover": {
+                                borderColor: "#008689",
+                                backgroundColor: "white",
+                                color: "red",
+                                boxShadow: "0 0 10px #008689",
+                              },
+                            }}
+                          >
+                            <EditOutlined sx={{ fontSize: "35px" }} />
+                          </IconButton>
+                        </TableCell>{" "}
+                      </TableRow>
+                    ))}
+                  <StudentCertificatePopUp
+                    open={openModal}
+                    onClose={() => setOpenModal(false)}
+                    id={id}
+                    // onClose={handleCloseDetailPopUp}
+                  />
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid>
+        </Grid>
 
         <AddAddress open={modalAddressOpen} onClose={handleModalAddressClose} />
       </Container>

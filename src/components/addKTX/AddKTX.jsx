@@ -4,6 +4,7 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  Grid,
   MenuItem,
   Modal,
   Select,
@@ -16,6 +17,7 @@ import { getInforDorm, registerDorm } from "../../features/dormSlice/DormSlice";
 import { categoryFamily } from "../../features/familySlice/FamilySlice";
 import Spinner from "../Spinner/Spinner";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const selectStyles = {
   "&:focus": {
@@ -48,11 +50,11 @@ const selectStyles = {
     borderColor: "#008588",
   },
 };
-
 const AddKTX = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const [campusId, setCampusId] = useState("2");
   const [selectedPriorities, setSelectedPriorities] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const handleCheckboxChange = (event) => {
     const { value, checked } = event.target;
@@ -64,29 +66,22 @@ const AddKTX = ({ open, onClose }) => {
       );
     }
   };
-
-  useEffect(() => {
-    dispatch(categoryFamily());
-  }, [dispatch]);
-
-  const campusChange = (e) => {
-    setCampusId(e.target.value);
-  };
-
-  const [selectedFile, setSelectedFile] = useState(null);
-
-  useEffect(() => {
-    if (open) {
-      dispatch(getInforDorm());
-    }
-  }, [dispatch, open]);
-
   const priority = useSelector(
     (state) => state.dorm.getInforDorm?.body?.objects
   );
   const campuses = useSelector(
     (state) => state.dorm.getInforDorm?.body?.campuses
   );
+
+  const campusChange = (e) => {
+    setCampusId(e.target.value);
+  };
+
+  useEffect(() => {
+    if (open) {
+      dispatch(getInforDorm());
+    }
+  }, [dispatch, open]);
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -96,45 +91,45 @@ const AddKTX = ({ open, onClose }) => {
   };
 
   const handleRegisterDorm = () => {
-    // if (!selectedFile) {
-    //   toast.error("Please select a file before submitting.");
-    //   return;
-    // }
-
     const validObjectIds = selectedPriorities
       .map(Number)
       .filter((id) => !isNaN(id));
 
+    // Tạo payload JSON
+    const jsonPayload = JSON.stringify({
+      campusId: parseInt(campusId, 10),
+      objectIds: validObjectIds,
+    });
+
+    // Tạo FormData và thêm JSON vào như một Blob
     const formData = new FormData();
     formData.append(
       "form",
-      JSON.stringify({
-        campusId: parseInt(campusId, 10),
-        objectIds: validObjectIds,
-      })
+      new Blob([jsonPayload], { type: "application/json" })
     );
-    // formData.append("proof", selectedFile);
 
+    // Thêm file vào FormData
+    if (selectedFile) {
+      formData.append("proof", selectedFile);
+    }
+
+    // Gửi FormData qua Redux action
     dispatch(registerDorm(formData));
   };
 
   const loading = useSelector((state) => state.dorm.loading);
-  const registerDormMessage = useSelector(
-    (state) => state.dorm.registerDormMessage?.message
-  );
-  const registerDormSuccess = useSelector(
-    (state) => state.dorm.registerDormsuccess?.success
-  );
+  const message = useSelector((state) => state.dorm.message);
+  const success = useSelector((state) => state.dorm.success);
 
   useEffect(() => {
-    if (!loading && registerDormMessage) {
-      if (registerDormMessage && registerDormSuccess) {
-        toast.success(registerDormMessage);
-      } else if (!registerDormSuccess) {
-        toast.error(registerDormMessage);
+    if (!loading && message) {
+      if (message && success) {
+        toast.success(message);
+      } else if (!success) {
+        toast.error(message);
       }
     }
-  }, [loading, registerDormMessage, registerDormSuccess]);
+  }, [loading, message, success]);
 
   return (
     <>
@@ -210,6 +205,12 @@ const AddKTX = ({ open, onClose }) => {
                             />
                           }
                           label={item.name}
+                          sx={{
+                            "& .MuiTypography-root": {
+                              fontSize: "15px", // Kích thước chữ cho Label
+                            },
+                            marginBottom: "10px", // Giãn cách dưới mỗi checkbox
+                          }}
                         />
                       ))}
                     </FormGroup>
@@ -231,7 +232,7 @@ const AddKTX = ({ open, onClose }) => {
                       color: "#333333",
                       fontWeight: "700",
                       fontSize: {
-                        xs: "11px",
+                        xs: "15px",
                         lg: "16px",
                       },
                       textAlign: "center",
@@ -239,6 +240,70 @@ const AddKTX = ({ open, onClose }) => {
                   >
                     Cơ sở Ký túc xá
                   </Typography>
+                  <Grid
+                    container
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "10px",
+                    }}
+                  >
+                    <Grid item xs={12} lg={6}>
+                      <Typography
+                        component={Link}
+                        to="https://maps.app.goo.gl/8EDsaSgKmqXZFCqF6"
+                        target="_blank"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontSize: "15px",
+                          color: "#008588",
+                          borderRadius: "8px",
+                          border: "3px solid #0085885a",
+                          transition: "all ease 0.4s",
+                          padding: "9px 14px",
+                          "&:hover": {
+                            borderColor: "#008689",
+                            backgroundColor: "white",
+                            color: "red",
+                            boxShadow: "0 0 10px #008689",
+                          },
+                        }}
+                      >
+                        Cơ sở 2 - KTX: Số 10, Đường số 12, KP3, P. An Khánh, TP.
+                        Thủ Đức, TP. HCM
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12} lg={6}>
+                      <Typography
+                        component={Link}
+                        target="_blank"
+                        to="https://maps.app.goo.gl/vmQMjHXWWb5xgKQF9"
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          fontSize: "15px",
+                          color: "#008588",
+                          borderRadius: "8px",
+                          border: "3px solid #0085885a",
+                          transition: "all ease 0.4s",
+                          padding: "9px 14px",
+                          "&:hover": {
+                            borderColor: "#008689",
+                            backgroundColor: "white",
+                            color: "red",
+                            boxShadow: "0 0 10px #008689",
+                          },
+                        }}
+                      >
+                        Cơ sở 3 - KTX: Số 70, Đường Tô Ký, P. Tân Chánh Hiệp, Q.
+                        12, TP. HCM
+                      </Typography>
+                    </Grid>
+                  </Grid>
                   <Select
                     value={campusId}
                     onChange={campusChange}
@@ -255,7 +320,7 @@ const AddKTX = ({ open, onClose }) => {
                         key={campus.id}
                         value={campus.id}
                         index={index}
-                        sx={{ fontSize: "13px" }}
+                        sx={{ fontSize: "15px" }}
                       >
                         {campus.name}
                       </MenuItem>
@@ -263,7 +328,7 @@ const AddKTX = ({ open, onClose }) => {
                   </Select>
                 </Box>
 
-                {/* <Box>
+                <Box>
                   <TextField
                     type="file"
                     accept="image/*"
@@ -283,7 +348,6 @@ const AddKTX = ({ open, onClose }) => {
                         justifyContent: "center",
                         alignItems: "center",
                         transition: "all ease 0.4s",
-
                         "&:hover": {
                           borderColor: "#008588",
                         },
@@ -297,7 +361,7 @@ const AddKTX = ({ open, onClose }) => {
                       },
                     }}
                   />
-                </Box> */}
+                </Box>
               </Box>
               <Button
                 onClick={handleRegisterDorm}

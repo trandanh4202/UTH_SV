@@ -6,6 +6,8 @@ const initialState = {
   // : [],
   loading: false,
   error: null,
+  message: {},
+  success: {},
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -103,53 +105,36 @@ export const getInforDorm = createAsyncThunk(
 );
 export const registerDorm = createAsyncThunk(
   "dorm/registerDorm",
-  async (_, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      // Lấy token từ localStorage
       const token = localStorage.getItem("account");
       if (!token) {
         throw new Error("No token found");
       }
-      const formData = new FormData();
 
-      // Thêm file vào FormData (thay đổi đường dẫn file cho phù hợp)
-      //  formData.append("proof", fileInput.files[0]); // fileInput là một input type="file" trong form của bạn
-
-      // Thêm dữ liệu JSON vào FormData
-      formData.append(
-        "form",
-        JSON.stringify({
-          campusId: 1,
-          objectIds: "1,2,3",
-        })
-      );
-      // Cấu hình headers cho yêu cầu
+      // Không cần thiết lập 'Content-Type' cho FormData, Axios sẽ tự động thiết lập
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
         },
       };
 
-      // Gửi yêu cầu POST bằng axios
+      // Gửi yêu cầu POST với formData
       const response = await axios.post(
         `${API_BASE_URL}/dorm/register`,
         formData,
         config
-      );
-
-      // Trả về dữ liệu nếu thành công
+      );  
+      
       return response.data;
     } catch (error) {
-      // Xử lý lỗi ủy quyền hoặc lỗi khác
       if (
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // Ví dụ: chuyển hướng đến trang đăng nhập
+        // Xử lý lỗi ủy quyền
       }
 
-      // Trả về lỗi thông qua rejectWithValue để sử dụng trong Redux
       return rejectWithValue(error.message);
     }
   }
@@ -179,12 +164,12 @@ const dormSlice = createSlice({
       })
       .addCase(registerDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.registerDormMessage = action.payload;
-        state.dorms = action.payload.response;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
       })
       .addCase(registerDorm.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = null;
       })
       .addCase(getInforDorm.pending, (state) => {
         state.loading = true;
