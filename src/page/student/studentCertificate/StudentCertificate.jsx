@@ -119,29 +119,34 @@ const StudentCertificate = () => {
     dispatch(addToCart({ productId: item.id, quantity: 1 }));
   };
   const loadingCart = useSelector((state) => state.cart?.loading);
-  const addToCartMesssage = useSelector(
-    (state) => state.dorm.addToCartMesssage?.message
+  const addToCartMessage = useSelector(
+    (state) => state.cart.addToCartMessage?.message
   );
   const addToCartSuccess = useSelector(
-    (state) => state.dorm.addToCartMesssage?.success
+    (state) => state.cart.addToCartMessage?.success
+  );
+  const timestamp = useSelector(
+    (state) => state.cart.addToCartMessage?.timestamp
   );
 
   useEffect(() => {
-    if (!loadingCart && addToCartMesssage) {
-      if (addToCartMesssage && addToCartSuccess) {
-        toast.success(addToCartMesssage);
-      } else if (!addToCartSuccess) {
-        toast.error(addToCartMesssage);
+    if (!openModal && timestamp) {
+      if (!loadingCart && addToCartMessage) {
+        if (addToCartMessage && addToCartSuccess === true) {
+          toast.success(addToCartMessage);
+        } else if (addToCartSuccess === false) {
+          toast.error(addToCartMessage);
+        }
       }
     }
-  }, [loadingCart, addToCartMesssage, addToCartSuccess]);
+  }, [loadingCart, addToCartMessage, addToCartSuccess, openModal, timestamp]);
 
   return (
     <Box>
       <Container sx={{}}>
         <Grid container spacing={3}>
           {products?.map((product) => (
-            <Grid item xs={3} sx={{}}>
+            <Grid item lg={3} xs={12}>
               <Paper
                 elevation={4}
                 sx={{
@@ -168,7 +173,7 @@ const StudentCertificate = () => {
                   },
                 }}
               >
-                <Box>
+                {/* <Box>
                   <img
                     src={product.image}
                     alt={product.name}
@@ -180,7 +185,7 @@ const StudentCertificate = () => {
                       borderTopLeftRadius: "10px",
                     }}
                   />
-                </Box>
+                </Box> */}
                 <Divider />
                 <Box>
                   <Typography
@@ -439,6 +444,7 @@ const StudentCertificate = () => {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "space-between",
+                            gap: "10px",
                           }}
                         >
                           <DeleteAddress item={item} />

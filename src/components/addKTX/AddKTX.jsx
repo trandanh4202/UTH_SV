@@ -3,6 +3,9 @@
 import {
   Box,
   Button,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
   Grid,
   MenuItem,
   Modal,
@@ -18,6 +21,7 @@ import { categoryFamily } from "../../features/familySlice/FamilySlice";
 import Spinner from "../Spinner/Spinner";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { CheckBox } from "@mui/icons-material";
 
 const selectStyles = {
   "&:focus": {
@@ -53,6 +57,18 @@ const selectStyles = {
 const AddKTX = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const [campusId, setCampusId] = useState("2");
+  const [selectedPriorities, setSelectedPriorities] = useState([]);
+
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    if (checked) {
+      setSelectedPriorities((prev) => [...prev, name]);
+    } else {
+      setSelectedPriorities((prev) =>
+        prev.filter((priority) => priority !== name)
+      );
+    }
+  };
 
   useEffect(() => {
     dispatch(categoryFamily());
@@ -79,20 +95,36 @@ const AddKTX = ({ open, onClose }) => {
       dispatch(getInforDorm());
     }
   }, [dispatch, open]);
-  const selectCampus = useSelector(
-    (state) => state.dorm.getInforDorm?.body?.campuses
-  );
-  const priority = useSelector((state) => state.dorm.getInforDorm?.body);
 
+  const priority = useSelector(
+    (state) => state.dorm.getInforDorm.body?.objects
+  );
+  const campuses = useSelector(
+    (state) => state.dorm.getInforDorm.body?.campuses
+  );
   const handleRegisterDorm = () => {
     if (!selectedFile) {
       console.error("No file selected");
       return;
     }
+
     const formData = new FormData();
-    formData.append("avatar", selectedFile);
-    dispatch(registerDorm({ campusId, formData }));
+
+    // Thêm các trường vào FormData
+    formData.append("proof", selectedFile); // Thêm file
+
+    const form = {
+      campusId: parseInt(campusId, 10),
+      objectIds: selectedPriorities.map(Number), // Chuyển danh sách selectedPriorities thành mảng số
+    };
+
+    // Thêm form dưới dạng chuỗi JSON vào formData
+    formData.append("form", JSON.stringify(form));
+
+    // Gửi dữ liệu qua API
+    dispatch(registerDorm(formData));
   };
+
   const loading = useSelector((state) => state.dorm.loading);
   const registerDormMessage = useSelector(
     (state) => state.dorm.registerDormMessage?.message
@@ -149,71 +181,41 @@ const AddKTX = ({ open, onClose }) => {
                 margin: "40px 0",
               }}
             >
-              <Grid container spacing={{ xs: 2, lg: 3 }}>
+              <Box>
                 <Box
                   sx={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    gap: "20px",
                     width: "100%",
                     flexDirection: { xs: "column", lg: "row" },
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
+                  <Box>
                     <Typography
                       sx={{
                         fontWeight: "600",
+                        textAlign: "center",
                         fontSize: "15px",
                       }}
                     >
                       Đối tượng:
                     </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        color: "red",
-                      }}
-                    >
-                      {" "}
-                      {priority && priority.doiTuong
-                        ? priority.doiTuong
-                        : "Không thuộc ĐTƯT"}
-                    </Typography>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: "5px",
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        fontWeight: "600",
-                      }}
-                    >
-                      Đối tượng:
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "15px",
-                        color: "red",
-                      }}
-                    >
-                      {priority && priority.khuVuc
-                        ? priority.khuVuc
-                        : "Không thuộc KVƯT"}
-                    </Typography>
+                    <FormGroup>
+                      {priority.map((item) => (
+                        <FormControlLabel
+                          key={item.id}
+                          control={
+                            <Checkbox
+                              checked={selectedPriorities.includes(item.name)}
+                              onChange={handleCheckboxChange}
+                              name={item.name}
+                            />
+                          }
+                          label={item.name}
+                        />
+                      ))}
+                    </FormGroup>
                   </Box>
                 </Box>
                 <Box
@@ -251,7 +253,7 @@ const AddKTX = ({ open, onClose }) => {
                       Chọn cơ sở
                     </MenuItem>
 
-                    {selectCampus?.map((campus, index) => (
+                    {campuses?.map((campus, index) => (
                       <MenuItem
                         key={campus.id}
                         value={campus.id}
@@ -264,7 +266,7 @@ const AddKTX = ({ open, onClose }) => {
                   </Select>
                 </Box>
 
-                <Grid item xs={12} lg={12}>
+                <Box>
                   <TextField
                     type="file"
                     accept="image/*"
@@ -298,8 +300,8 @@ const AddKTX = ({ open, onClose }) => {
                       },
                     }}
                   />
-                </Grid>
-              </Grid>
+                </Box>
+              </Box>
               <Button
                 onClick={handleRegisterDorm}
                 variant="contained"

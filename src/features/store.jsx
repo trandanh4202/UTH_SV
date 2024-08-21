@@ -45,5 +45,5 @@ export const store = configureStore({
     certification: certificationReducer,
     dorm: dormReducer,
   },
-  devTools: false,
+  // devTools: false,
 });

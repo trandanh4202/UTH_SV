@@ -260,10 +260,7 @@ const InforDetail = () => {
                       label="Giới tính "
                       value={profile?.gioiTinh ? "Nữ" : "Nam"}
                     />
-                    <InfoField
-                      label="Ngày sinh: "
-                      value={formatDate(profile?.ngaySinh2)}
-                    />
+                    <InfoField label="Ngày sinh: " value={profile?.ngaySinh2} />
                     <InfoField
                       label="Nơi sinh: "
                       value={profile?.noiSinhTinh}
@@ -307,11 +304,15 @@ const InforDetail = () => {
                   <Grid container>
                     <InfoField
                       label="Địa chỉ thường trú: "
-                      value={profile?.hkttTinh}
+                      value={` ${profile?.hkttPhuongXa || ""}, ${
+                        profile?.hkttHuyen || ""
+                      }, ${profile?.hkttTinh || ""}`}
                     />
                     <InfoField
                       label="Địa chỉ liên lạc: "
-                      value={profile?.dcllTinh}
+                      value={` ${profile?.hkttPhuongXa || ""}, ${
+                        profile?.dcllHuyen || ""  
+                      }, ${profile?.dcllTinh || ""}`}
                     />
                   </Grid>
                 </Grid>

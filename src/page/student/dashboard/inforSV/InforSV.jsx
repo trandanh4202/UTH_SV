@@ -136,7 +136,7 @@ const InforSV = () => {
               </Grid>
 
               <Grid container>
-                <InfoField label="Ngày sinh: " value={profile.ngaySinh2} />
+                <InfoField label="Ngày sinh: " value={profile.ngngayNhapHocySinh2} />
                 <InfoField label="Ngành: " value={profile.nganh} />
               </Grid>
               <Grid container>

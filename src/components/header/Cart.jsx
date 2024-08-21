@@ -1,10 +1,11 @@
-import { AddCardOutlined } from "@mui/icons-material";
+import { AddCardOutlined, ClearOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
   CircularProgress,
   Drawer,
   Grid,
+  IconButton,
   MenuItem,
   Select,
   TextField,
@@ -29,7 +30,10 @@ import "react-toastify/dist/ReactToastify.css";
 import { Link } from "react-router-dom";
 
 const formatCurrency = (number) => {
-  return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+  return number?.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 };
 
 const selectStyles = {
@@ -37,6 +41,9 @@ const selectStyles = {
     borderRadius: "8px",
   },
   borderRadius: "8px",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
   "& .MuiInputBase-input": {
     fontSize: "15px",
     backgroundColor: "white",
@@ -46,7 +53,7 @@ const selectStyles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "9px 14px",
+    padding: { lg: "9px 14px", xs: "2px" },
     transition: "all ease 0.4s",
   },
   "& .MuiSvgIcon-root": {
@@ -61,6 +68,46 @@ const selectStyles = {
   "& .MuiSelect-select:focus": {
     borderRadius: "8px",
     borderColor: "#008588",
+  },
+};
+const inputStyles = {
+  "& .MuiInputBase-root": {
+    borderRadius: "8px",
+  },
+  "& .MuiInputLabel-root": {
+    fontStyle: "italic",
+    color: "grey",
+    fontSize: "14px",
+    "&.Mui-focused": {
+      color: "#008588",
+    },
+  },
+  "& .MuiInputBase-input": {
+    fontSize: "15px",
+    backgroundColor: "white",
+    color: "black",
+    borderRadius: "8px",
+    display: "flex",
+    justifyContent: "center",
+    border: "3px solid #0085885a",
+    alignItems: "center",
+    transition: "all ease 0.4s",
+    padding: { lg: "9px 14px", xs: "2px" },
+    textAlign: "center",
+    "&:hover": {
+      borderColor: "#008588",
+    },
+  },
+  "& .MuiOutlinedInput-notchedOutline": {
+    borderColor: "#008588 !important",
+  },
+  "&:hover .MuiOutlinedInput-notchedOutline": {
+    border: "2px solid #008588",
+  },
+
+  "& .MuiSvgIcon-root": {
+    color: "green",
+    backgroundSize: "cover",
   },
 };
 const Cart = () => {
@@ -138,11 +185,7 @@ const Cart = () => {
 
       // Gọi lại API để cập nhật giỏ hàng sau khi đơn hàng được tạo thành công
       dispatch(getCart());
-
-      // Hiển thị thông báo thành công
-      toast.success("Đăng ký thành công!");
     } catch (error) {
-      // Hiển thị thông báo lỗi nếu có
       toast.error("Đăng ký thất bại. Vui lòng thử lại.");
     }
   };
@@ -167,14 +210,16 @@ const Cart = () => {
   }, [dispatch, openDrawerCart, campus, address, loading]);
 
   useEffect(() => {
-    if (!loading) {
-      if (updateCartSuccess === true && updateCartMessage) {
-        toast.success(updateCartMessage);
-      } else if (updateCartSuccess === false) {
-        toast.error(updateCartMessage);
+    if (!openDrawerCart) {
+      if (!loading) {
+        if (updateCartSuccess === true && updateCartMessage) {
+          toast.success(updateCartMessage);
+        } else if (updateCartSuccess === false) {
+          toast.error(updateCartMessage);
+        }
       }
     }
-  }, [loading, updateCartMessage, updateCartSuccess]);
+  }, [loading, updateCartMessage, updateCartSuccess, openDrawerCart]);
 
   return (
     <>
@@ -194,7 +239,7 @@ const Cart = () => {
         sx={{
           "& .MuiDrawer-paper": {
             width: {
-              lg: "50%",
+              lg: "60%",
               xs: "100%",
             },
           },
@@ -206,17 +251,46 @@ const Cart = () => {
             padding: "20px",
           }}
         >
-          <Typography
+          <Box
             sx={{
-              color: "#008588",
-              fontWeight: "700",
-              fontSize: "20px",
-              textAlign: "center",
-              marginBottom: "20px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
-            Danh sách đăng ký
-          </Typography>
+            <Box>
+              <Typography
+                sx={{
+                  color: "#008588",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                  textAlign: "center",
+                }}
+              >
+                Danh sách đăng ký
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                position: "absolute",
+                right: "10px",
+                top: "10px",
+              }}
+              onClick={() => setOpenDrawerCart()}
+            >
+              <IconButton
+                sx={{
+                  backgroundColor: "#ff00001f",
+                }}
+              >
+                <ClearOutlined
+                  sx={{
+                    color: "red",
+                  }}
+                />
+              </IconButton>
+            </Box>
+          </Box>
           <Box
             sx={{
               display: "flex",
@@ -260,8 +334,8 @@ const Cart = () => {
             <Spinner />
           ) : (
             <Box>
-              <Grid container spacing={3} sx={{ marginBottom: "30px" }}>
-                <Grid item xs={4}>
+              <Grid container sx={{ marginBottom: "30px" }}>
+                <Grid item xs={4} lg={5}>
                   <Typography
                     sx={{
                       fontWeight: "700",
@@ -275,7 +349,7 @@ const Cart = () => {
                     Nội dung
                   </Typography>
                 </Grid>
-                <Grid item xs={1}>
+                <Grid item xs={2} lg={1}>
                   <Typography
                     sx={{
                       fontWeight: "700",
@@ -286,24 +360,11 @@ const Cart = () => {
                       },
                     }}
                   >
-                    Kích cở
+                    Lựa chọn
                   </Typography>
                 </Grid>
-                <Grid item xs={2}>
-                  <Typography
-                    sx={{
-                      fontWeight: "700",
-                      textAlign: "center",
-                      fontSize: {
-                        xs: "11px",
-                        lg: "16px",
-                      },
-                    }}
-                  >
-                    Số lượng
-                  </Typography>
-                </Grid>
-                <Grid item xs={2.5}>
+
+                <Grid item xs={2} lg={2}>
                   <Typography
                     sx={{
                       fontWeight: "700",
@@ -317,7 +378,21 @@ const Cart = () => {
                     Đơn giá
                   </Typography>
                 </Grid>
-                <Grid item xs={2.5}>
+                <Grid item xs={2} lg={1}>
+                  <Typography
+                    sx={{
+                      fontWeight: "700",
+                      textAlign: "center",
+                      fontSize: {
+                        xs: "11px",
+                        lg: "16px",
+                      },
+                    }}
+                  >
+                    Số lượng
+                  </Typography>
+                </Grid>
+                <Grid item xs={2} lg={3}>
                   <Typography
                     sx={{
                       fontWeight: "700",
@@ -332,16 +407,20 @@ const Cart = () => {
                   </Typography>
                 </Grid>
               </Grid>
-              <Grid container spacing={5}>
+              <Grid
+                container
+                spacing={{ xs: "1", lg: "4" }}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 {carts?.map((item) => (
                   <>
-                    <Grid item xs={4}>
+                    <Grid item xs={4} lg={5}>
                       <Box
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexDirection: "column",
+                          textAlign: "left",
                           gap: "5px",
                         }}
                       >
@@ -353,33 +432,48 @@ const Cart = () => {
                               xs: "11px",
                               lg: "16px",
                             },
-                            textAlign: "center",
+                            textAlign: "left",
                           }}
                         >
-                          {item.product.name}
+                          {item?.product.name}
                         </Typography>
                       </Box>
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid item xs={2} lg={1}>
                       <Select
-                        value={item.option?.id || size || ""}
+                        value={item?.option?.id || size || ""}
                         onChange={handleChange(item)}
                         displayEmpty
                         inputProps={{ "aria-label": "Without label" }}
                         sx={selectStyles}
-                        defaultValue={item.option?.id || size || ""}
+                        defaultValue={item?.option?.id || size || ""}
                       >
                         <MenuItem value="">
                           <Typography>None</Typography>
                         </MenuItem>
-                        {item.product.options?.map((option) => (
+                        {item?.product.options?.map((option) => (
                           <MenuItem value={option.id} key={option.id}>
                             <Typography>{option.name}</Typography>
                           </MenuItem>
                         ))}
                       </Select>
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={2} lg={2}>
+                      <Typography
+                        sx={{
+                          color: "#333333",
+                          fontWeight: "500",
+                          fontSize: {
+                            xs: "11px",
+                            lg: "16px",
+                          },
+                          textAlign: "center",
+                        }}
+                      >
+                        {formatCurrency(item?.product.price)}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={2} lg={1}>
                       <Box
                         sx={{
                           display: "flex",
@@ -388,17 +482,11 @@ const Cart = () => {
                           textAlign: "center",
                         }}
                       >
-                        <TextField
-                          value={item.quantity}
-                          inputProps={{
-                            min: 1,
-                            max: 20,
-                            style: { textAlign: "center" },
-                          }}
-                        />
+                        <TextField value={item?.quantity} sx={inputStyles} />
                       </Box>
                     </Grid>
-                    <Grid item xs={2.5}>
+
+                    <Grid item xs={2} lg={3}>
                       <Typography
                         sx={{
                           color: "#333333",
@@ -410,22 +498,7 @@ const Cart = () => {
                           textAlign: "center",
                         }}
                       >
-                        {formatCurrency(item.product.price)}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={2.5}>
-                      <Typography
-                        sx={{
-                          color: "#333333",
-                          fontWeight: "500",
-                          fontSize: {
-                            xs: "11px",
-                            lg: "16px",
-                          },
-                          textAlign: "center",
-                        }}
-                      >
-                        {formatCurrency(item.product.price * item.quantity)}
+                        {formatCurrency(item?.product.price * item?.quantity)}
                       </Typography>
                     </Grid>
                   </>
@@ -465,12 +538,13 @@ const Cart = () => {
                       textAlign: "center",
                     }}
                   >
-                    {total?.map((item) => formatCurrency(item.total))}
+                    {total?.map((item) => formatCurrency(item?.total))}
                   </Typography>
                 </Grid>
               </Grid>
               <Grid container spacing={2}>
-                <Grid item xs={5}>
+                {/* {carts.product.} */}
+                <Grid item lg={5} xs={6}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -490,7 +564,7 @@ const Cart = () => {
                         borderColor: "#008689",
                         backgroundColor: "white",
                         color: "#008689",
-                        boxShadow: "0 0 10px #008689",
+                        bolghadow: "0 0 10px #008689",
                       },
                     }}
                     onClick={addCombo1}
@@ -506,7 +580,7 @@ const Cart = () => {
                     </Typography>
                   </Button>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item lg={5} xs={6}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -526,7 +600,7 @@ const Cart = () => {
                         borderColor: "#008689",
                         backgroundColor: "white",
                         color: "#008689",
-                        boxShadow: "0 0 10px #008689",
+                        bolghadow: "0 0 10px #008689",
                       },
                     }}
                     onClick={addCombo2}
@@ -542,7 +616,7 @@ const Cart = () => {
                     </Typography>
                   </Button>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item lg={2} xs={6}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -562,7 +636,7 @@ const Cart = () => {
                         borderColor: "#008689",
                         backgroundColor: "white",
                         color: "#008689",
-                        boxShadow: "0 0 10px #008689",
+                        bolghadow: "0 0 10px #008689",
                       },
                     }}
                     onClick={deleleAllCart}
@@ -578,7 +652,7 @@ const Cart = () => {
                     </Typography>
                   </Button>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item lg={12} xs={6}>
                   <Button
                     type="submit"
                     variant="contained"

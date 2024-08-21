@@ -25,7 +25,10 @@ const formatDate = (dateString) => {
 };
 
 const formatCurrency = (number) => {
-  return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+  return number?.toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
 };
 const tableCell = ["STT", "Mã", "Nội dung thu", "Thanh toán", "Số lượng"];
 const StudentCertificatePopUp = ({

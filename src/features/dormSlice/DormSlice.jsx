@@ -101,10 +101,9 @@ export const getInforDorm = createAsyncThunk(
     }
   }
 );
-
 export const registerDorm = createAsyncThunk(
   "dorm/registerDorm",
-  async ({ campusId, formData }, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -113,10 +112,12 @@ export const registerDorm = createAsyncThunk(
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
+          ...formData.getHeaders(), // Đảm bảo các headers từ formData được truyền đúng cách
         },
       };
+
       const response = await axios.post(
-        `${API_BASE_URL}/dorm/register?campusId=${campusId}`,
+        `${API_BASE_URL}/dorm/register`,
         formData,
         config
       );
@@ -127,8 +128,7 @@ export const registerDorm = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // Xử lý lỗi ủy quyền, nếu cần
       }
       return rejectWithValue(error.message);
     }
