@@ -400,7 +400,8 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.createOrder = action.payload;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;

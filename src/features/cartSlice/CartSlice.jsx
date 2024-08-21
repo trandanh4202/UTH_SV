@@ -167,7 +167,8 @@ const cartSlice = createSlice({
       })
       .addCase(addToCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.addToCartMessage = action.payload.message;
+        state.success = action.payload.message.success;
+        state.message = action.payload.message.message;
         state.cart = action.payload.response;
       })
       .addCase(addToCart.rejected, (state, action) => {
@@ -193,7 +194,8 @@ const cartSlice = createSlice({
       })
       .addCase(deleteCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.deleteCartMessage = action.payload.message;
+        state.success = action.payload.message.success;
+        state.message = action.payload.message.message;
         state.cart = action.payload.response;
       })
       .addCase(deleteCart.rejected, (state, action) => {

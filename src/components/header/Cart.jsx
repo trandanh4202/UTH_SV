@@ -126,17 +126,9 @@ const Cart = () => {
 
   const carts = useSelector((state) => state.cart.cart?.body);
   const address = useSelector((state) => state.address.address?.body);
-  const loading = useSelector((state) => state.cart.loading);
+  const loadingCart = useSelector((state) => state.cart.loadingCart);
   const loadingOrder = useSelector((state) => state.order.loading);
-  const updateCartMessage = useSelector(
-    (state) => state.cart.updateCartMessage?.message
-  );
-  const updateCartSuccess = useSelector(
-    (state) => state.cart.updateCartMessage?.success
-  );
-  const total = useSelector(
-    (state) => state.order.getEstimateTotalAmount?.body
-  );
+
   const deleleAllCart = () => {
     dispatch(deleteCart());
   };
@@ -191,7 +183,7 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (openDrawerCart && !loading) {
+    if (openDrawerCart && loadingOrder) {
       const formData =
         campus === 1
           ? {
@@ -207,19 +199,24 @@ const Cart = () => {
 
       dispatch(getEstimateTotalAmount(formData));
     }
-  }, [dispatch, openDrawerCart, campus, address, loading]);
+  }, [dispatch, openDrawerCart, campus, address, loadingOrder]);
+  const createrOrderMesssage = useSelector((state) => state.order.message);
+  const createOrderSuccess = useSelector((state) => state.order.success);
 
+  const total = useSelector(
+    (state) => state.order.getEstimateTotalAmount?.body
+  );
   useEffect(() => {
-    if (!openDrawerCart) {
-      if (!loading) {
-        if (updateCartSuccess === true && updateCartMessage) {
-          toast.success(updateCartMessage);
-        } else if (updateCartSuccess === false) {
-          toast.error(updateCartMessage);
+    if (openDrawerCart) {
+      if (!loadingOrder && createrOrderMesssage) {
+        if (createrOrderMesssage && createOrderSuccess) {
+          toast.success(createrOrderMesssage);
+        } else if (!createOrderSuccess) {
+          toast.error(createrOrderMesssage);
         }
       }
     }
-  }, [loading, updateCartMessage, updateCartSuccess, openDrawerCart]);
+  }, [openDrawerCart, loadingOrder, createrOrderMesssage, createOrderSuccess]);
 
   return (
     <>
@@ -330,7 +327,7 @@ const Cart = () => {
               </MenuItem>
             </Select>
           </Box>
-          {loading || loadingOrder ? (
+          {loadingCart || loadingOrder ? (
             <Spinner />
           ) : (
             <Box>

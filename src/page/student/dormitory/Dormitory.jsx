@@ -65,7 +65,7 @@ const Dormitory = () => {
     dispatch(getInforDorm());
   }, [dispatch]);
   const dorms = useSelector((state) => state.dorm.dorms?.body);
-  const hidden = useSelector((state) => state.dorm.dorms?.body);
+
   return (
     <Box>
       <Container sx={{ backgroundColor: "white" }}>

@@ -4,6 +4,7 @@ import {
   Button,
   Divider,
   Modal,
+  Paper,
   Table,
   TableBody,
   TableCell,
@@ -11,7 +12,6 @@ import {
   TableHead,
   TableRow,
   Typography,
-  Paper,
 } from "@mui/material";
 import { format } from "date-fns";
 import { useEffect } from "react";
@@ -20,15 +20,18 @@ import { getDetailOrder } from "../../../features/orderSlice/OrderSlice";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
-  if (isNaN(date.getTime())) return ""; // Handle invalid date strings
+  if (isNaN(date?.getTime())) return ""; // Handle invalid date strings
   return format(date, "dd/MM/yyyy");
 };
 
 const formatCurrency = (number) => {
-  return number?.toLocaleString("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  });
+  return (
+    number &&
+    number?.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    })
+  );
 };
 const tableCell = ["STT", "Mã", "Nội dung thu", "Thanh toán", "Số lượng"];
 const StudentCertificatePopUp = ({
@@ -43,7 +46,7 @@ const StudentCertificatePopUp = ({
   const dispatch = useDispatch();
   useEffect(() => {
     if (open) dispatch(getDetailOrder(id));
-  }, [dispatch, open]);
+  }, [dispatch, open, id]);
   const item = useSelector((state) => state.order.getDetailOrder?.body);
 
   return (

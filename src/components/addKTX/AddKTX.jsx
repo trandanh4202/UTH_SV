@@ -1,12 +1,9 @@
-/* eslint-disable no-dupe-else-if */
-/* eslint-disable react/prop-types */
 import {
   Box,
   Button,
   Checkbox,
   FormControlLabel,
   FormGroup,
-  Grid,
   MenuItem,
   Modal,
   Select,
@@ -15,13 +12,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import "react-toastify/dist/ReactToastify.css";
 import { getInforDorm, registerDorm } from "../../features/dormSlice/DormSlice";
 import { categoryFamily } from "../../features/familySlice/FamilySlice";
 import Spinner from "../Spinner/Spinner";
 import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { CheckBox } from "@mui/icons-material";
 
 const selectStyles = {
   "&:focus": {
@@ -54,18 +48,19 @@ const selectStyles = {
     borderColor: "#008588",
   },
 };
+
 const AddKTX = ({ open, onClose }) => {
   const dispatch = useDispatch();
   const [campusId, setCampusId] = useState("2");
   const [selectedPriorities, setSelectedPriorities] = useState([]);
 
   const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
+    const { value, checked } = event.target;
     if (checked) {
-      setSelectedPriorities((prev) => [...prev, name]);
+      setSelectedPriorities((prev) => [...prev, value]);
     } else {
       setSelectedPriorities((prev) =>
-        prev.filter((priority) => priority !== name)
+        prev.filter((priority) => priority !== value)
       );
     }
   };
@@ -80,16 +75,6 @@ const AddKTX = ({ open, onClose }) => {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      const reader = new FileReader();
-
-      reader.readAsDataURL(file);
-    }
-  };
-
   useEffect(() => {
     if (open) {
       dispatch(getInforDorm());
@@ -97,31 +82,39 @@ const AddKTX = ({ open, onClose }) => {
   }, [dispatch, open]);
 
   const priority = useSelector(
-    (state) => state.dorm.getInforDorm.body?.objects
+    (state) => state.dorm.getInforDorm?.body?.objects
   );
   const campuses = useSelector(
-    (state) => state.dorm.getInforDorm.body?.campuses
+    (state) => state.dorm.getInforDorm?.body?.campuses
   );
-  const handleRegisterDorm = () => {
-    if (!selectedFile) {
-      console.error("No file selected");
-      return;
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedFile(file);
     }
+  };
+
+  const handleRegisterDorm = () => {
+    // if (!selectedFile) {
+    //   toast.error("Please select a file before submitting.");
+    //   return;
+    // }
+
+    const validObjectIds = selectedPriorities
+      .map(Number)
+      .filter((id) => !isNaN(id));
 
     const formData = new FormData();
+    formData.append(
+      "form",
+      JSON.stringify({
+        campusId: parseInt(campusId, 10),
+        objectIds: validObjectIds,
+      })
+    );
+    // formData.append("proof", selectedFile);
 
-    // Thêm các trường vào FormData
-    formData.append("proof", selectedFile); // Thêm file
-
-    const form = {
-      campusId: parseInt(campusId, 10),
-      objectIds: selectedPriorities.map(Number), // Chuyển danh sách selectedPriorities thành mảng số
-    };
-
-    // Thêm form dưới dạng chuỗi JSON vào formData
-    formData.append("form", JSON.stringify(form));
-
-    // Gửi dữ liệu qua API
     dispatch(registerDorm(formData));
   };
 
@@ -199,17 +192,21 @@ const AddKTX = ({ open, onClose }) => {
                         fontSize: "15px",
                       }}
                     >
-                      Đối tượng:
+                      Đối tượng ưu tiên xem xét duyệt:
                     </Typography>
                     <FormGroup>
-                      {priority.map((item) => (
+                      {priority?.map((item) => (
                         <FormControlLabel
                           key={item.id}
                           control={
                             <Checkbox
-                              checked={selectedPriorities.includes(item.name)}
+                              id={`checkbox-${item.id}`}
+                              checked={selectedPriorities.includes(
+                                String(item.id)
+                              )}
                               onChange={handleCheckboxChange}
                               name={item.name}
+                              value={item.id}
                             />
                           }
                           label={item.name}
@@ -266,7 +263,7 @@ const AddKTX = ({ open, onClose }) => {
                   </Select>
                 </Box>
 
-                <Box>
+                {/* <Box>
                   <TextField
                     type="file"
                     accept="image/*"
@@ -300,7 +297,7 @@ const AddKTX = ({ open, onClose }) => {
                       },
                     }}
                   />
-                </Box>
+                </Box> */}
               </Box>
               <Button
                 onClick={handleRegisterDorm}

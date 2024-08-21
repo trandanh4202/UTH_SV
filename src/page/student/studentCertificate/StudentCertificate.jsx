@@ -87,25 +87,8 @@ const StudentCertificate = () => {
   const products = useSelector((state) => state.product.product?.body);
   const address = useSelector((state) => state.address.address?.body);
 
-  const loading = useSelector((state) => state.address.loading);
+  const loadingAddress = useSelector((state) => state.address.loadingAddress);
 
-  const handleAddToCart = (product) => {
-    // Kiểm tra nếu options rỗng thì đặt là []
-    const options =
-      product.options && product.options.length > 0
-        ? product.options[0].id
-        : null;
-
-    // Tạo formData cho việc thêm vào giỏ hàng
-    const formData = {
-      productId: product.id,
-      quantity: 1, // Mặc định là 1
-      optionId: options,
-    };
-
-    // Gọi action để thêm vào giỏ hàng
-    dispatch(addToCart(formData));
-  };
   const [modalAddressOpen, setModalAddressOpen] = useState(false);
 
   const handleModalAddressOpen = () => {
@@ -119,27 +102,20 @@ const StudentCertificate = () => {
     dispatch(addToCart({ productId: item.id, quantity: 1 }));
   };
   const loadingCart = useSelector((state) => state.cart?.loading);
-  const addToCartMessage = useSelector(
-    (state) => state.cart.addToCartMessage?.message
-  );
-  const addToCartSuccess = useSelector(
-    (state) => state.cart.addToCartMessage?.success
-  );
-  const timestamp = useSelector(
-    (state) => state.cart.addToCartMessage?.timestamp
-  );
+  const message = useSelector((state) => state.cart.message);
+  const success = useSelector((state) => state.cart.success);
 
   useEffect(() => {
-    if (!openModal && timestamp) {
-      if (!loadingCart && addToCartMessage) {
-        if (addToCartMessage && addToCartSuccess === true) {
-          toast.success(addToCartMessage);
-        } else if (addToCartSuccess === false) {
-          toast.error(addToCartMessage);
+    if (!openModal) {
+      if (!loadingCart && message) {
+        if (message && success === true) {
+          toast.success(message);
+        } else if (success === false) {
+          toast.error(message);
         }
       }
     }
-  }, [loadingCart, addToCartMessage, addToCartSuccess, openModal, timestamp]);
+  }, [loadingCart, message, success, openModal]);
 
   return (
     <Box>
@@ -351,7 +327,7 @@ const StudentCertificate = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {loading ? (
+                {loadingAddress ? (
                   <Spinner />
                 ) : (
                   address?.map((item, index) => (
