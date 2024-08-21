@@ -52,7 +52,7 @@ const selectStyles = {
 };
 const AddKTX = ({ open, onClose }) => {
   const dispatch = useDispatch();
-  const [campusId, setCampusId] = useState("2");
+  const [campusId, setCampusId] = useState("0");
   const [selectedPriorities, setSelectedPriorities] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
 
@@ -169,7 +169,13 @@ const AddKTX = ({ open, onClose }) => {
                 margin: "40px 0",
               }}
             >
-              <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -209,11 +215,113 @@ const AddKTX = ({ open, onClose }) => {
                             "& .MuiTypography-root": {
                               fontSize: "15px", // Kích thước chữ cho Label
                             },
+
                             marginBottom: "10px", // Giãn cách dưới mỗi checkbox
+                            "& span.Mui-checked": {
+                              color: "red",
+                            },
+                            display: "flex",
+                            // justifyContent: "center",
+                            alignItems: "start",
                           }}
                         />
                       ))}
                     </FormGroup>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    // justifyContent: "center",
+                    alignItems: "center",
+                    gap: "10px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      color: "#333333",
+                      fontWeight: "700",
+                      fontSize: {
+                        xs: "15px",
+                        lg: "16px",
+                      },
+                    }}
+                  >
+                    Chọn cơ sở
+                  </Typography>
+                  <Select
+                    value={campusId}
+                    onChange={campusChange}
+                    displayEmpty
+                    sx={selectStyles}
+                    defaultValue="0"
+                  >
+                    <MenuItem value="0" disabled>
+                      Chọn cơ sở
+                    </MenuItem>
+
+                    {campuses?.map((campus, index) => (
+                      <MenuItem
+                        key={campus.id}
+                        value={campus.id}
+                        index={index}
+                        sx={{ fontSize: "15px" }}
+                      >
+                        {campus.name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{
+                      color: "#333333",
+                      fontWeight: "700",
+                      fontSize: {
+                        xs: "15px",
+                        lg: "16px",
+                      },
+                    }}
+                  >
+                    Sinh viên tải minh chứng đối tượng ưu tiên tương ứng
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <TextField
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        "& .MuiInputBase-input": {
+                          fontSize: "15px",
+                          backgroundColor: "white",
+                          color: "black",
+                          borderRadius: "8px",
+                          border: "3px solid #0085885a",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          transition: "all ease 0.4s",
+                          "&:hover": {
+                            borderColor: "#008588",
+                          },
+                        },
+                        "& .MuiOutlinedInput-notchedOutline": {
+                          border: "none",
+                        },
+                        "& .MuiSvgIcon-root": {
+                          color: "green",
+                          backgroundSize: "cover",
+                        },
+                      }}
+                    />
                   </Box>
                 </Box>
                 <Box
@@ -240,15 +348,7 @@ const AddKTX = ({ open, onClose }) => {
                   >
                     Cơ sở Ký túc xá
                   </Typography>
-                  <Grid
-                    container
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: "10px",
-                    }}
-                  >
+                  <Grid container spacing={4}>
                     <Grid item xs={12} lg={6}>
                       <Typography
                         component={Link}
@@ -304,63 +404,6 @@ const AddKTX = ({ open, onClose }) => {
                       </Typography>
                     </Grid>
                   </Grid>
-                  <Select
-                    value={campusId}
-                    onChange={campusChange}
-                    displayEmpty
-                    sx={selectStyles}
-                    defaultValue="0"
-                  >
-                    <MenuItem value="0" disabled>
-                      Chọn cơ sở
-                    </MenuItem>
-
-                    {campuses?.map((campus, index) => (
-                      <MenuItem
-                        key={campus.id}
-                        value={campus.id}
-                        index={index}
-                        sx={{ fontSize: "15px" }}
-                      >
-                        {campus.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Box>
-
-                <Box>
-                  <TextField
-                    type="file"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    style={{ marginBottom: "20px" }}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      "& .MuiInputBase-input": {
-                        fontSize: "15px",
-                        backgroundColor: "white",
-                        color: "black",
-                        borderRadius: "8px",
-                        border: "3px solid #0085885a",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        transition: "all ease 0.4s",
-                        "&:hover": {
-                          borderColor: "#008588",
-                        },
-                      },
-                      "& .MuiOutlinedInput-notchedOutline": {
-                        border: "none",
-                      },
-                      "& .MuiSvgIcon-root": {
-                        color: "green",
-                        backgroundSize: "cover",
-                      },
-                    }}
-                  />
                 </Box>
               </Box>
               <Button

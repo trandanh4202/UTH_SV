@@ -126,7 +126,7 @@ const Cart = () => {
 
   const carts = useSelector((state) => state.cart.cart?.body);
   const address = useSelector((state) => state.address.address?.body);
-  const loadingCart = useSelector((state) => state.cart.loadingCart);
+  const loadingCart = useSelector((state) => state.cart.loading);
   const loadingOrder = useSelector((state) => state.order.loading);
 
   const deleleAllCart = () => {
@@ -172,10 +172,8 @@ const Cart = () => {
     };
 
     try {
-      // Tạo đơn hàng
       await dispatch(createOrder(formData));
 
-      // Gọi lại API để cập nhật giỏ hàng sau khi đơn hàng được tạo thành công
       dispatch(getCart());
     } catch (error) {
       toast.error("Đăng ký thất bại. Vui lòng thử lại.");
@@ -183,7 +181,8 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (openDrawerCart && loadingOrder) {
+    if (openDrawerCart && loadingCart) {
+      console.log(openDrawerCart);
       const formData =
         campus === 1
           ? {
@@ -199,7 +198,7 @@ const Cart = () => {
 
       dispatch(getEstimateTotalAmount(formData));
     }
-  }, [dispatch, openDrawerCart, campus, address, loadingOrder]);
+  }, [dispatch, openDrawerCart, campus, address, loadingCart]);
   const createrOrderMesssage = useSelector((state) => state.order.message);
   const createOrderSuccess = useSelector((state) => state.order.success);
 

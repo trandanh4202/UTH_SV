@@ -39,7 +39,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 // import required modules
-import { Pagination } from "swiper/modules";
+import { Pagination, Navigation, Autoplay } from "swiper/modules";
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
@@ -128,7 +128,7 @@ const StudentCertificate = () => {
   return (
     <Box>
       <Container sx={{}}>
-        <Grid container spacing={5}>
+        <Grid container>
           <Grid container spacing={5}>
             <Grid
               item
@@ -154,11 +154,16 @@ const StudentCertificate = () => {
               <Swiper
                 slidesPerView={2}
                 spaceBetween={30}
-                freeMode={true}
+                loop={true}
                 pagination={{
                   clickable: true,
                 }}
-                modules={[Pagination]}
+                autoplay={{
+                  delay: 2500,
+                  disableOnInteraction: false,
+                }}
+                navigation={true}
+                modules={[Pagination, Navigation, Autoplay]}
                 className="mySwiper"
               >
                 <SwiperSlide>

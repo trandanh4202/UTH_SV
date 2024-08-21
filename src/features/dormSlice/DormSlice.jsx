@@ -120,13 +120,14 @@ export const registerDorm = createAsyncThunk(
       };
 
       // Gửi yêu cầu POST với formData
-      const response = await axios.post(
+      const message = await axios.post(
         `${API_BASE_URL}/dorm/register`,
         formData,
         config
-      );  
-      
-      return response.data;
+      );
+      const response = await axios.get(`${API_BASE_URL}/dorm/getAll`, config);
+
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -164,8 +165,9 @@ const dormSlice = createSlice({
       })
       .addCase(registerDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.message = action.payload.message;
-        state.success = action.payload.success;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.dorms = action.payload.response;
       })
       .addCase(registerDorm.rejected, (state, action) => {
         state.loading = false;

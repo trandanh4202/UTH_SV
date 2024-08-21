@@ -210,9 +210,11 @@ const AddAddress = ({ open, onClose }) => {
   const wards = useSelector((state) => state.viettel.ward?.data) || [];
   const loading = useSelector((state) => state.viettel.loading);
 
-  // useEffect(() => {
-  //   dispatch(getProvinceViettel());
-  // }, [dispatch]);
+  useEffect(() => {
+    if (open) {
+      dispatch(getProvinceViettel());
+    }
+  }, [dispatch, open]);
 
   useEffect(() => {
     if (formData.provinceId) {
