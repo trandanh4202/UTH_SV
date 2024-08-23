@@ -80,7 +80,7 @@ const InforDetail = () => {
   const family = useSelector(
     (state) => state.profile?.profile?.body?.quanHeGiaDinhs
   );
-
+  
   return (
     <Box>
       <Container>
