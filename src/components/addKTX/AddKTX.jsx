@@ -36,7 +36,7 @@ const selectStyles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "9px 14px",
+    padding: { xs: "1px 14px", lg: "9px 14px" },
     transition: "all ease 0.4s",
   },
   "& .MuiSvgIcon-root": {
@@ -157,10 +157,10 @@ const AddKTX = ({ open, onClose }) => {
             <Typography
               sx={{
                 textAlign: "center",
-                marginBottom: "20px",
                 color: "black",
                 fontWeight: "600",
                 fontSize: "20px",
+                marginBottom: { xs: "5px", lg: "15px" },
               }}
             >
               Thông tin đăng ký Ký túc xá
@@ -191,7 +191,6 @@ const AddKTX = ({ open, onClose }) => {
                 display: "flex",
                 flexDirection: "column",
                 gap: "5px",
-                margin: { xs: "10px 0", lg: "40px 0" },
               }}
             >
               <Box
@@ -238,7 +237,7 @@ const AddKTX = ({ open, onClose }) => {
                           label={item.name}
                           sx={{
                             "& .MuiTypography-root": {
-                              fontSize: "15px", // Kích thước chữ cho Label
+                              fontSize: { xs: "11px", lg: "15px" }, // Kích thước chữ cho Label
                             },
 
                             marginBottom: "10px", // Giãn cách dưới mỗi checkbox
@@ -267,7 +266,7 @@ const AddKTX = ({ open, onClose }) => {
                       color: "#333333",
                       fontWeight: "700",
                       fontSize: {
-                        xs: "15px",
+                        xs: "11px",
                         lg: "16px",
                       },
                     }}
@@ -303,7 +302,7 @@ const AddKTX = ({ open, onClose }) => {
                       color: "#333333",
                       fontWeight: "700",
                       fontSize: {
-                        xs: "15px",
+                        xs: "11px",
                         lg: "16px",
                       },
                     }}
@@ -325,7 +324,7 @@ const AddKTX = ({ open, onClose }) => {
                         justifyContent: "center",
                         alignItems: "center",
                         "& .MuiInputBase-input": {
-                          fontSize: "15px",
+                          fontSize: { xs: "11px", lg: "15px" },
                           backgroundColor: "white",
                           color: "black",
                           borderRadius: "8px",
@@ -334,6 +333,8 @@ const AddKTX = ({ open, onClose }) => {
                           justifyContent: "center",
                           alignItems: "center",
                           transition: "all ease 0.4s",
+                          padding: { xs: "7px 14px", lg: "9px 14px" },
+
                           "&:hover": {
                             borderColor: "#008588",
                           },
@@ -365,7 +366,7 @@ const AddKTX = ({ open, onClose }) => {
                       color: "#333333",
                       fontWeight: "700",
                       fontSize: {
-                        xs: "15px",
+                        xs: "11px",
                         lg: "16px",
                       },
                       textAlign: "center",
@@ -373,7 +374,7 @@ const AddKTX = ({ open, onClose }) => {
                   >
                     Cơ sở Ký túc xá
                   </Typography>
-                  <Grid container spacing={4}>
+                  <Grid container spacing={1}>
                     <Grid item xs={12} lg={6}>
                       <Typography
                         component={Link}
@@ -383,12 +384,12 @@ const AddKTX = ({ open, onClose }) => {
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
-                          fontSize: "15px",
+                          fontSize: { xs: "11px", lg: "15px" },
                           color: "#008588",
                           borderRadius: "8px",
                           border: "3px solid #0085885a",
                           transition: "all ease 0.4s",
-                          padding: "9px 14px",
+                          padding: { xs: "3px 14px", lg: "9px 14px" },
                           "&:hover": {
                             borderColor: "#008689",
                             backgroundColor: "white",
@@ -410,12 +411,12 @@ const AddKTX = ({ open, onClose }) => {
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
-                          fontSize: "15px",
+                          fontSize: { xs: "11px", lg: "15px" },
                           color: "#008588",
                           borderRadius: "8px",
                           border: "3px solid #0085885a",
                           transition: "all ease 0.4s",
-                          padding: "9px 14px",
+                          padding: { xs: "3px 14px", lg: "9px 14px" },
                           "&:hover": {
                             borderColor: "#008689",
                             backgroundColor: "white",
@@ -444,6 +445,8 @@ const AddKTX = ({ open, onClose }) => {
                   borderRadius: "8px",
                   border: "3px solid #0085885a",
                   transition: "all ease 0.4s",
+                  padding: { xs: "3px 14px", lg: "9px 14px" },
+
                   "&:hover": {
                     borderColor: "#008689",
                     backgroundColor: "white",

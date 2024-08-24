@@ -47,18 +47,18 @@ const RoleBasedRoute = ({ studentComponent, lecturerComponent }) => {
 };
 
 const PrivateRoutes = () => {
-  return isAuthenticated() ? <Outlet /> : <Navigate to="/" />;
-  // return isAuthenticated() ? <Outlet /> : <Outlet />;
+  // return isAuthenticated() ? <Outlet /> : <Navigate to="/" />;
+  return isAuthenticated() ? <Outlet /> : <Outlet />;
 };
 
 // Component for login route
 const LoginRoute = () => {
-  return isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />;
-  // return isAuthenticated() ? (
-  //   <Navigate to="/dashboard" />
-  // ) : (
-  //   <Navigate to="/dashboard" />
-  // );
+  // return isAuthenticated() ? <Navigate to="/dashboard" /> : <Login />;
+  return isAuthenticated() ? (
+    <Navigate to="/dashboard" />
+  ) : (
+    <Navigate to="/dashboard" />
+  );
 };
 // Router configuration
 const router = createBrowserRouter([
