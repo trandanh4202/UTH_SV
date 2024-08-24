@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailOrder } from "../../../features/orderSlice/OrderSlice";
+import Spinner from "../../../components/Spinner/Spinner";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -34,19 +35,13 @@ const formatCurrency = (number) => {
   );
 };
 const tableCell = ["STT", "Mã", "Nội dung thu", "Thanh toán", "Số lượng"];
-const StudentCertificatePopUp = ({
-  open,
-  onClose,
-  id,
-  soPhieu,
-  maHoaDon,
-  ngayThu,
-}) => {
+const StudentCertificatePopUp = ({ open, onClose, id }) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (open) dispatch(getDetailOrder(id));
   }, [dispatch, open, id]);
   const item = useSelector((state) => state.order.getDetailOrder?.body);
+  const loading = useSelector((state) => state.order.loading);
 
   return (
     <Modal open={open} onClose={onClose} sx={{ padding: "10px" }}>
@@ -186,61 +181,69 @@ const StudentCertificatePopUp = ({
                 ))}
               </TableRow>
             </TableHead>
+
             <TableBody>
-              {item?.orderDetails?.map((row, index) => (
-                <TableRow key={row.maKhoanThuKhac}>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontWeight: "600",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {index + 1}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontWeight: "600",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {row?.id}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontWeight: "600",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {row?.product?.name}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontWeight: "600",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {formatCurrency(row?.product?.price)}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontWeight: "600",
-                      fontSize: "15px",
-                    }}
-                  >
-                    {row?.quantity}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {loading ? (
+                <Spinner />
+              ) : (
+                <>
+                  {" "}
+                  {item?.orderDetails?.map((row, index) => (
+                    <TableRow key={row.maKhoanThuKhac}>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "600",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {index + 1}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "600",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {row?.id}
+                      </TableCell>
+                      <TableCell
+                        align="left"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "600",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {row?.product?.name}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "600",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {formatCurrency(row?.product?.price)}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "600",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {row?.quantity}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>

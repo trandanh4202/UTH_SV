@@ -126,8 +126,13 @@ const Cart = () => {
 
   const carts = useSelector((state) => state.cart.cart?.body?.carts);
   const address = useSelector((state) => state.address.address?.body);
-  const loadingCart = useSelector((state) => state.cart.loading);
-  const loadingOrder = useSelector((state) => state.order.loading);
+  const loadingCart = useSelector((state) => state.cart?.loading);
+  const timestampCart = useSelector((state) => state.cart?.timestamp);
+  useEffect(() => {
+    if (!loadingCart && timestampCart) {
+      setOpenDrawerCart(true);
+    }
+  }, [loadingCart, timestampCart]);
 
   const deleleAllCart = () => {
     dispatch(deleteCart());
@@ -181,7 +186,7 @@ const Cart = () => {
   };
 
   useEffect(() => {
-    if (openDrawerCart && loadingCart) {
+    if (openDrawerCart && !loadingCart) {
       const formData =
         campus === 1
           ? {
@@ -190,7 +195,7 @@ const Cart = () => {
               shipServiceCode: "0",
             }
           : {
-              addressId: address?.[0]?.id || null, // Sử dụng addressId từ address nếu có
+              addressId: campus, // Sử dụng addressId từ address nếu có
               isShip: true,
               shipServiceCode: "1", // Bạn có thể điều chỉnh mã dịch vụ này tùy theo nhu cầu
             };
@@ -198,29 +203,22 @@ const Cart = () => {
       dispatch(getEstimateTotalAmount(formData));
     }
   }, [dispatch, openDrawerCart, campus, address, loadingCart]);
+  const loadingOrder = useSelector((state) => state.order?.loading);
   const createrOrderMesssage = useSelector((state) => state.order?.message);
   const createOrderSuccess = useSelector((state) => state.order?.success);
-  const timestamp = useSelector((state) => state.order?.timestamp);
+  const timestampOrder = useSelector((state) => state.order?.timestamp);
   const total = useSelector(
     (state) => state.order.getEstimateTotalAmount?.body
   );
   useEffect(() => {
-    if (openDrawerCart) {
-      if (!loadingOrder && timestamp) {
-        if (createrOrderMesssage && createOrderSuccess) {
-          toast.success(createrOrderMesssage);
-        } else if (!createOrderSuccess) {
-          toast.error(createrOrderMesssage);
-        }
+    if (!loadingOrder && timestampOrder) {
+      if (createrOrderMesssage && createOrderSuccess) {
+        toast.success(createrOrderMesssage);
+      } else if (!createOrderSuccess) {
+        toast.error(createrOrderMesssage);
       }
     }
-  }, [
-    openDrawerCart,
-    loadingOrder,
-    createrOrderMesssage,
-    createOrderSuccess,
-    timestamp,
-  ]);
+  }, [loadingOrder, createrOrderMesssage, createOrderSuccess, timestampOrder]);
 
   return (
     <>
@@ -329,6 +327,13 @@ const Cart = () => {
               <MenuItem value="1" key="1">
                 <Typography variant="span">Cơ sở 1</Typography>
               </MenuItem>
+              {address.map((item, index) => (
+                <MenuItem value={item.id} index={index} key={item.id}>
+                  <Typography variant="span">{item.PROVINCE_NAME}</Typography>
+                  <Typography variant="span">, {item.DISTRICT_NAME}</Typography>
+                  <Typography variant="span">, {item.WARDS_NAME}</Typography>
+                </MenuItem>
+              ))}
             </Select>
           </Box>
           {loadingCart || loadingOrder ? (

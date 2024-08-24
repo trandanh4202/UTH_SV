@@ -98,7 +98,6 @@ const Dashboard = () => {
       status: "loading",
     },
   ];
-
   useEffect(() => {
     if (token) {
       dispatch(getSelect());
@@ -135,6 +134,11 @@ const Dashboard = () => {
     }
   }, [dispatch, id]);
 
+  const handleSlideChange = (swiper) => {
+    const slideIndex = swiper.realIndex; // Lấy chỉ số thực của slide
+    const slide = categories[slideIndex]; // Lấy đối tượng slide từ categories dựa vào chỉ số
+    setId(slide?.id); // Cập nhật lại id
+  };
   return (
     <Container>
       <UpdatePhone />
@@ -175,38 +179,29 @@ const Dashboard = () => {
             }}
             elevation={3}
           >
-            {loadingNews ? (
-              <Spinner />
-            ) : (
-              <Swiper
-                navigation={true}
-                modules={[Navigation]}
-                className="mySwiper"
-                // loop={true}
-                onSlideChange={(swiper) => {
-                  const slide =
-                    categories[swiper.activeIndex % categories.length];
-                  setId(slide?.id);
-                }}
-              >
-                {categories.map((item) => (
-                  <SwiperSlide key={item.id}>
-                    <Box component={Link} to={`/newfeeds/${id}`}>
-                      <Typography
-                        sx={{
-                          fontSize: "15px",
-                          fontWeight: "800",
-                          color: "#008689",
-                          textAlign: "center",
-                        }}
-                      >
-                        {item.tenDanhMuc}
-                      </Typography>
-                    </Box>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
+            <Swiper
+              navigation={true}
+              modules={[Navigation]}
+              className="mySwiper"
+              onSlideChange={handleSlideChange}
+            >
+              {categories.map((item) => (
+                <SwiperSlide key={item.id}>
+                  <Box component={Link} to={`/newfeeds/${item.id}`}>
+                    <Typography
+                      sx={{
+                        fontSize: "15px",
+                        fontWeight: "800",
+                        color: "#008689",
+                        textAlign: "center",
+                      }}
+                    >
+                      {item.tenDanhMuc}
+                    </Typography>
+                  </Box>
+                </SwiperSlide>
+              ))}
+            </Swiper>
             {newfeeds && newfeeds.length > 0 && (
               <Swiper
                 centeredSlides={true}

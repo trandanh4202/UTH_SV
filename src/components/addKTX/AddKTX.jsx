@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Box,
   Button,
@@ -117,12 +118,12 @@ const AddKTX = ({ open, onClose }) => {
     dispatch(registerDorm(formData));
   };
 
-  const loading = useSelector((state) => state.dorm.loading);
-  const message = useSelector((state) => state.dorm.message);
-  const success = useSelector((state) => state.dorm.success);
-
+  const loading = useSelector((state) => state.dorm?.loading);
+  const message = useSelector((state) => state.dorm?.message);
+  const success = useSelector((state) => state.dorm?.success);
+  const timestamp = useSelector((state) => state.dorm?.timestamp);
   useEffect(() => {
-    if (!loading && message) {
+    if (!loading && timestamp) {
       if (message && success) {
         toast.success(message);
       } else if (!success) {
@@ -130,7 +131,7 @@ const AddKTX = ({ open, onClose }) => {
         setSelectedFile(null);
       }
     }
-  }, [loading, message, success]);
+  }, [loading, message, success, timestamp]);
 
   return (
     <>

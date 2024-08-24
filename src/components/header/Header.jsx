@@ -157,8 +157,8 @@ const Header = () => {
           route: `/dormitory`,
         },
         {
-          name: "Đăng ký Đồng phục",
-          route: `/uniform`,
+          name: "Đăng ký Đồng phục - Giấy sinh viên",
+          route: `/studentservice`,
         },
       ],
     },
@@ -345,7 +345,7 @@ const Header = () => {
                   gap: { xs: "0px", lg: "40px" },
                 }}
               >
-                {location.pathname === "/uniform" && <Cart />}
+                {location.pathname === "/studentservice" && <Cart />}
 
                 {/* Avatar with Menu */}
                 <Box

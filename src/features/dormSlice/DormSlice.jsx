@@ -167,6 +167,7 @@ const dormSlice = createSlice({
         state.loading = false;
         state.message = action.payload.message.message;
         state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
         state.dorms = action.payload.response;
       })
       .addCase(registerDorm.rejected, (state, action) => {
@@ -192,7 +193,9 @@ const dormSlice = createSlice({
       })
       .addCase(cancelDorm.fulfilled, (state, action) => {
         state.loading = false;
-        state.cancelDormMessage = action.payload;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
         state.dorms = action.payload.response;
       })
       .addCase(cancelDorm.rejected, (state, action) => {

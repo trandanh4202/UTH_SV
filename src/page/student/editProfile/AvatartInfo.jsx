@@ -16,7 +16,6 @@ import Spinner from "../../../components/Spinner/Spinner";
 const AvatarInfo = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
-  const loading = useSelector((state) => state.profile.loading);
   const dispatch = useDispatch();
   const studentPhoto = useSelector(
     (state) => state.profile.profile.body?.image
@@ -46,25 +45,10 @@ const AvatarInfo = () => {
     dispatch(uploadAvatar(formData));
   };
 
-  const status = useSelector((state) => state.profile.avatar?.status);
-  const message = useSelector((state) => state.profile.avatar?.message);
-
-  useEffect(() => {
-    if (!loading) {
-      if (status === 200 && message) {
-        toast.success(message);
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } else if (status !== 200) {
-        toast.error(message);
-      }
-    }
-  }, [loading, message, status]);
   const successAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.success
   );
+  const loadingAvatar = useSelector((state) => state.profile.loading);
   return (
     <Box
       sx={{
@@ -90,7 +74,7 @@ const AvatarInfo = () => {
           sai quy chuẩn sẽ bị khóa chức năng.
         </Typography>
       </Box>
-      {loading ? (
+      {loadingAvatar ? (
         <Spinner />
       ) : (
         <>

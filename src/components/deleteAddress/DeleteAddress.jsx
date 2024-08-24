@@ -19,17 +19,6 @@ import "react-toastify/dist/ReactToastify.css";
 const DeleteAddress = ({ item }) => {
   const [deleteAddressPopUpOpen, setDeleteAddressPopUpOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const deleteMessage = useSelector(
-    (state) => state.address.deleteMessage.message
-  );
-  const deleteStatus = useSelector(
-    (state) => state.address.deleteMessage.status
-  );
-  const deleteSuccess = useSelector(
-    (state) => state.address.deleteMessage.success
-  );
-
-  const loading = useSelector((state) => state.address.loading);
 
   const dispatch = useDispatch();
   const handleDeleteClick = () => {
@@ -46,15 +35,7 @@ const DeleteAddress = ({ item }) => {
       setDeleteAddressPopUpOpen(false); // Đóng pop-up sau khi xác nhận
     }
   };
-  useEffect(() => {
-    if (!loading) {
-      if (deleteMessage && deleteSuccess === true) {
-        toast.success(deleteMessage);
-      } else if (deleteSuccess === false) {
-        toast.error(deleteMessage);
-      }
-    }
-  }, [loading, deleteMessage, deleteSuccess]);
+
   return (
     <>
       <IconButton

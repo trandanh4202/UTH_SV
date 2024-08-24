@@ -10,16 +10,10 @@ import { cancelDorm } from "../../features/dormSlice/DormSlice";
 const DeleteKTX = ({ item }) => {
   const [deleteKTXPopUpOpen, setDeleteKTXPopUpOpen] = useState(false);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const deleteMessage = useSelector(
-    (state) => state.address.deleteMessage.message
-  );
-  const deleteStatus = useSelector(
-    (state) => state.address.deleteMessage.status
-  );
-  const deleteSuccess = useSelector(
-    (state) => state.address.deleteMessage.success
-  );
-
+  const deleteMessage = useSelector((state) => state.address.message);
+  const deleteStatus = useSelector((state) => state.address.status);
+  const deleteSuccess = useSelector((state) => state.address.success);
+  const deleteTimeStamp = useSelector((state) => state.address.timeStamp);
   const loading = useSelector((state) => state.address.loading);
 
   const dispatch = useDispatch();
@@ -39,13 +33,13 @@ const DeleteKTX = ({ item }) => {
   };
   useEffect(() => {
     if (!loading) {
-      if (deleteMessage && deleteSuccess === true) {
+      if (deleteTimeStamp && deleteSuccess === true) {
         toast.success(deleteMessage);
       } else if (deleteSuccess === false) {
         toast.error(deleteMessage);
       }
     }
-  }, [loading, deleteMessage, deleteSuccess]);
+  }, [loading, deleteMessage, deleteSuccess, deleteTimeStamp]);
   return (
     <>
       <IconButton

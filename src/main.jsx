@@ -130,7 +130,7 @@ const router = createBrowserRouter([
             element: <Dormitory />,
           },
           {
-            path: "uniform",
+            path: "studentservice",
             element: <StudentCertificate />,
           },
           {

@@ -92,38 +92,56 @@ const StudentCertificate = () => {
   };
 
   const receipts = useSelector((state) => state.order.order?.body);
+
   const products = useSelector((state) => state.product.product?.body);
+
   const address = useSelector((state) => state.address.address?.body);
-
-  const loadingAddress = useSelector((state) => state.address.loadingAddress);
-
+  const loadingAddress = useSelector((state) => state.address.loading);
+  const messageAddress = useSelector((state) => state.address.message);
+  const successAddress = useSelector((state) => state.address.success);
+  const timestampAddress = useSelector((state) => state.address.timestamp);
   const [modalAddressOpen, setModalAddressOpen] = useState(false);
-
   const handleModalAddressOpen = () => {
     setModalAddressOpen(true);
   };
-
   const handleModalAddressClose = () => {
     setModalAddressOpen(false);
   };
-  const addCombo = (item) => {
-    dispatch(addToCart({ productId: item.id, quantity: 1 }));
-  };
-  const loadingCart = useSelector((state) => state.cart?.loading);
-  const message = useSelector((state) => state.cart.message);
-  const success = useSelector((state) => state.cart.success);
-
   useEffect(() => {
-    if (!openModal) {
-      if (!loadingCart && message) {
-        if (message && success === true) {
-          toast.success(message);
-        } else if (success === false) {
-          toast.error(message);
+    if (!modalAddressOpen) {
+      if (!loadingAddress && timestampAddress) {
+        if (messageAddress && successAddress === true) {
+          toast.success(messageAddress);
+        } else if (successAddress === false) {
+          toast.error(messageAddress);
         }
       }
     }
-  }, [loadingCart, message, success, openModal]);
+  }, [
+    loadingAddress,
+    messageAddress,
+    successAddress,
+    modalAddressOpen,
+    timestampAddress,
+  ]);
+
+  const loadingCart = useSelector((state) => state.cart?.loading);
+  const messageCart = useSelector((state) => state.cart?.message);
+  const successCart = useSelector((state) => state.cart?.success);
+  const timestampCart = useSelector((state) => state.cart?.timestamp);
+
+  const addCombo = (item) => {
+    dispatch(addToCart({ productId: item.id, quantity: 1 }));
+  };
+  useEffect(() => {
+    if (!loadingCart && timestampCart) {
+      if (messageCart && successCart === true) {
+        toast.success(messageCart);
+      } else if (successCart === false) {
+        toast.error(messageCart);
+      }
+    }
+  }, [loadingCart, messageCart, successCart, timestampCart]);
 
   return (
     <Box>
@@ -148,11 +166,11 @@ const StudentCertificate = () => {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allowfullscreen
-              ></iframe>{" "}
+              ></iframe>
             </Grid>
             <Grid item xs={12}>
               <Swiper
-                slidesPerView={2}
+                slidesPerView={1}
                 spaceBetween={30}
                 loop={true}
                 pagination={{
@@ -165,6 +183,16 @@ const StudentCertificate = () => {
                 navigation={true}
                 modules={[Pagination, Navigation, Autoplay]}
                 className="mySwiper"
+                breakpoints={{
+                  640: {
+                    slidesPerView: 1,
+                    spaceBetween: 30,
+                  },
+                  1024: {
+                    slidesPerView: 2,
+                    spaceBetween: 30,
+                  },
+                }}
               >
                 <SwiperSlide>
                   <img
@@ -318,7 +346,7 @@ const StudentCertificate = () => {
               </Grid>
             ))}
           </Grid>
-          {/* <Grid
+          <Grid
             sx={{
               padding: "10px 5px",
               backgroundColor: "white",
@@ -540,7 +568,7 @@ const StudentCertificate = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Grid> */}
+          </Grid>
           <Grid
             sx={{
               padding: "10px 5px",

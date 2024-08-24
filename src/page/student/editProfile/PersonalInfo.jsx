@@ -106,15 +106,15 @@ const SelectField = ({
       value={value || ""}
       onChange={onChange}
       displayEmpty
-      disabled={disabled}
+      disabled={!successAccess ? !successAccess : disabled}
       sx={selectStyles}
     >
       <MenuItem value="">
         <em>Chọn {label}</em>
       </MenuItem>
       {options &&
-        options.map((option) => (
-          <MenuItem key={option.id} value={option.id} disabled={!successAccess}>
+        options?.map((option) => (
+          <MenuItem key={option.id} value={option.id}>
             {optionType === "province"
               ? option.tenTinh
               : optionType === "district"
@@ -425,32 +425,15 @@ const PersonalInfo = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateProfile(formData)); // Dispatch the updateProfile action with formData
-    setIsUpdateProfile(true);
   };
-  const [isUpdateProfile, setIsUpdateProfile] = useState(false);
-  const message = useSelector((state) => state.profile.updateProfile?.message);
-  const status = useSelector((state) => state.profile.updateProfile?.status);
 
-  useEffect(() => {
-    if (isUpdateProfile && message) {
-      if (status === 200) {
-        toast.success(message);
-
-        setTimeout(() => {
-          window.location.reload(); // Thay đổi từ window.locatiion.clear() thành window.location.reload()
-        }, 2000);
-      } else if (status === 400) {
-        toast.error(message);
-      }
-      setIsUpdateProfile(false);
-    }
-  }, [isUpdateProfile, message, status]);
   const messageAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.message
   );
-  const successAccess = useSelector(
-    (state) => state.profile.getCheckUpdateProfile?.success
-  );
+  // const successAccess = useSelector(
+  //   (state) => state.profile.getCheckUpdateProfile?.success
+  // );
+  const successAccess = true;
   return (
     <>
       <Box>
@@ -565,7 +548,6 @@ const PersonalInfo = () => {
                     onChange={handleChange}
                     options={provinces}
                     label="Quê quán Tỉnh (CCCD)"
-                    disabled={successAccess}
                     successAccess={successAccess}
                     optionType="province"
                   />
@@ -663,7 +645,8 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Nguyên quán
                   </Typography>
-                  <TextField
+
+                  <TextFieldWrapper
                     name="nguyenQuan"
                     value={formData.nguyenQuan || ""}
                     onChange={handleChange}
@@ -715,7 +698,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Hộ khẩu thường trú cụ thể
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="hkttThonxom"
                     value={formData.hkttThonxom || ""}
                     onChange={handleChange}
@@ -766,7 +749,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Địa chỉ liên lạc cụ thể
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="dcllSonha"
                     value={formData.dcllSonha || ""}
                     onChange={handleChange}
@@ -782,7 +765,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Căn cước công dân
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="soCMND"
                     value={formData.soCMND || ""}
                     onChange={handleChange}
@@ -799,7 +782,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Ngày cấp
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="ngayCap"
                     type="date"
                     value={formData.ngayCap || ""}
@@ -827,7 +810,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Quốc tịch
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="quocTich"
                     value={formData.nation}
                     onChange={handleChange}
@@ -843,7 +826,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Ngày vào Đảng
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="ngayVaoDang"
                     type="date"
                     value={formData.ngayVaoDang}
@@ -860,7 +843,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Ngày vào Đoàn
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="ngayVaoDoan"
                     type="date"
                     value={formData.ngayVaoDoan}
@@ -877,7 +860,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Email cá nhân
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
@@ -893,7 +876,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Email sinh viên
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="schoolEmail"
                     value={formData.schoolEmail}
                     onChange={handleChange}
@@ -909,7 +892,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Số điện thoại 1
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="soDienThoai"
                     value={formData.soDienThoai}
                     onChange={handleChange}
@@ -925,7 +908,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Số điện thoại 2
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="soDienThoai2"
                     value={formData.soDienThoai2}
                     onChange={handleChange}
@@ -941,7 +924,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Chiều cao (cm)
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="height"
                     value={formData.height}
                     onChange={handleChange}
@@ -957,7 +940,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Căn nặng (kg)
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="weight"
                     value={formData.weight}
                     onChange={handleChange}
@@ -973,7 +956,7 @@ const PersonalInfo = () => {
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
                     Mã Bảo hiểm xã hội
                   </Typography>
-                  <TextField
+                  <TextFieldWrapper
                     name="mabhxhYt"
                     value={formData.mabhxhYt}
                     onChange={handleChange}

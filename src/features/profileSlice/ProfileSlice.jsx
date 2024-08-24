@@ -282,6 +282,10 @@ const profileSlice = createSlice({
       .addCase(uploadAvatar.fulfilled, (state, action) => {
         state.loading = false;
         state.avatar = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(uploadAvatar.rejected, (state, action) => {
         state.loading = false;
@@ -294,6 +298,10 @@ const profileSlice = createSlice({
       .addCase(updateEmail.fulfilled, (state, action) => {
         state.loading = false;
         state.updateEmail = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(updateEmail.rejected, (state, action) => {
         state.loading = false;
@@ -306,6 +314,10 @@ const profileSlice = createSlice({
       .addCase(updatePhone.fulfilled, (state, action) => {
         state.loading = false;
         state.updatePhone = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(updatePhone.rejected, (state, action) => {
         state.loading = false;
@@ -330,6 +342,10 @@ const profileSlice = createSlice({
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.updateProfile = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(updateProfile.rejected, (state, action) => {
         state.loading = false;

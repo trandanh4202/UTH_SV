@@ -63,6 +63,9 @@ const FamilyProfile = () => {
   const successAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.success
   );
+  const message = useSelector(
+    (state) => state.profile.getCheckUpdateProfile.message
+  );
   return (
     <>
       <Box>
@@ -74,8 +77,7 @@ const FamilyProfile = () => {
               fontWeight: "600",
             }}
           >
-            Chưa có đợt cập nhật thông tin, sinh viên vui lòng theo dõi thông
-            báo sau
+            {message}
           </Typography>
         </Box>
         {family.map((member) => (

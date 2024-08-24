@@ -5,7 +5,9 @@ const initialState = {
   loading: false,
   error: null,
   address: [],
-  deleteMessage: [],
+  message: "",
+  success: "",
+  timestamp: "",
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -157,6 +159,8 @@ const AddressSlice = createSlice({
       .addCase(getAddress.fulfilled, (state, action) => {
         state.loading = false;
         state.address = action.payload;
+        state.timestamp = action.payload.timestamp;
+        state.success = action.payload.success;
       })
       .addCase(getAddress.rejected, (state, action) => {
         state.loading = false;
@@ -168,8 +172,10 @@ const AddressSlice = createSlice({
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.addAddressMessage = action.payload.message;
+        state.message = action.payload.message.message;
         state.address = action.payload.response;
+        state.timestamp = action.payload.message.timestamp;
+        state.success = action.payload.message.success;
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.loading = false;
@@ -181,8 +187,10 @@ const AddressSlice = createSlice({
       })
       .addCase(updateAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.updateMessage = action.payload.message;
+        state.message = action.payload.message.message;
         state.address = action.payload.response;
+        state.timestamp = action.payload.message.timestamp;
+        state.success = action.payload.message.success;
       })
       .addCase(updateAddress.rejected, (state, action) => {
         state.loading = false;
@@ -194,8 +202,10 @@ const AddressSlice = createSlice({
       })
       .addCase(deleteAddress.fulfilled, (state, action) => {
         state.loading = false;
-        state.deleteMessage = action.payload.message;
+        state.message = action.payload.message.message;
         state.address = action.payload.response;
+        state.timestamp = action.payload.message.timestamp;
+        state.success = action.payload.message.success;
       })
       .addCase(deleteAddress.rejected, (state, action) => {
         state.loading = false;

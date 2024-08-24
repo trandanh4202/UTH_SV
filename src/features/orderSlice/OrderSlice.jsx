@@ -391,6 +391,7 @@ const orderSlice = createSlice({
         state.message = action.payload.message;
         state.success = action.payload.success;
         state.timestamp = action.payload.timestamp;
+        state.getEstimateTotalAmount = action.payload;
       })
       .addCase(getEstimateTotalAmount.rejected, (state, action) => {
         state.loading = false;

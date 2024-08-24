@@ -9,6 +9,7 @@ const Spinner = () => {
         left: "50%",
         transform: "translate(-50%, -50%)",
         color: "#008689",
+        zIndex: "10000",
       }}
     />
   );

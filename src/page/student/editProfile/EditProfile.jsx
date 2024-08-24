@@ -16,6 +16,8 @@ import AvatartInfo from "./AvatartInfo";
 import FamilyProfile from "./FamilyProfile";
 import { useDispatch, useSelector } from "react-redux";
 import { getCheckUpdateProfile } from "../../../features/profileSlice/ProfileSlice";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EditProfile = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -29,8 +31,27 @@ const EditProfile = () => {
   useEffect(() => {
     dispatch(getCheckUpdateProfile());
   }, [dispatch]);
-  
- 
+  const loading = useSelector((state) => state.profile.loading);
+  const success = useSelector((state) => state.profile?.success);
+  const message = useSelector((state) => state.profile?.message);
+  const timestamp = useSelector((state) => state.profile?.timestamp);
+  useEffect(() => {
+    if (!loading) {
+      if (success && timestamp) {
+        toast.success(message);
+
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } else if (!success) {
+        toast.error(message);
+      }
+    }
+  }, [loading, message, success, timestamp]);
+  const successAccess = useSelector(
+    (state) => state.profile.getCheckUpdateProfile?.success
+  );
+
   return (
     <Container>
       <Paper
