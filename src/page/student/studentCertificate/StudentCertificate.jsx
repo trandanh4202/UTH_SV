@@ -354,7 +354,7 @@ const StudentCertificate = () => {
             }}
             container
           >
-            <Grid
+            {/* <Grid
               item
               xs={12}
               sx={{
@@ -413,7 +413,7 @@ const StudentCertificate = () => {
                   </Typography>
                 </Button>
               </Box>
-            </Grid>
+            </Grid> */}
             <TableContainer
               component={Paper}
               sx={{

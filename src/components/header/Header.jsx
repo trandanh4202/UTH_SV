@@ -157,7 +157,7 @@ const Header = () => {
           route: `/dormitory`,
         },
         {
-          name: "Đăng ký Đồng phục - Giấy sinh viên",
+          name: "Đăng ký Đồng phục",
           route: `/studentservice`,
         },
       ],
