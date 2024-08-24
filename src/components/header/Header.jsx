@@ -215,7 +215,7 @@ const Header = () => {
                               zIndex: 1000,
                             }}
                           >
-                            {menu.map((menuItem, index) =>
+                            {menu?.map((menuItem, index) =>
                               menuItem.children !== null ? (
                                 <Accordion
                                   key={index}
@@ -262,7 +262,7 @@ const Header = () => {
                                     }}
                                   >
                                     {menuItem.children &&
-                                      menuItem.children.map(
+                                      menuItem.children?.map(
                                         (child, childIndex) => (
                                           <Typography
                                             key={childIndex}

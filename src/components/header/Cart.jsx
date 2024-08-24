@@ -327,7 +327,7 @@ const Cart = () => {
               <MenuItem value="1" key="1">
                 <Typography variant="span">Cơ sở 1</Typography>
               </MenuItem>
-              {address.map((item, index) => (
+              {address?.map((item, index) => (
                 <MenuItem value={item.id} index={index} key={item.id}>
                   <Typography variant="span">{item.PROVINCE_NAME}</Typography>
                   <Typography variant="span">, {item.DISTRICT_NAME}</Typography>
