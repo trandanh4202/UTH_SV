@@ -150,7 +150,7 @@ const Dormitory = () => {
             >
               <TableHead>
                 <TableRow>
-                  {tableCell.map((item) => (
+                  {tableCell?.map((item) => (
                     <TableCell
                       key={item}
                       align="center"
@@ -170,7 +170,7 @@ const Dormitory = () => {
               <TableBody>
                 {dorms?.map((row, index) => (
                   <TableRow
-                    key={row.soPhieu}
+                    key={row?.soPhieu}
                     sx={{
                       cursor: "pointer",
                       backgroundColor:
@@ -198,7 +198,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      KTX{row.id}
+                      KTX{row?.id}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -209,7 +209,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.period?.name}
+                      {row?.period?.name}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -220,7 +220,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.campus?.name}
+                      {row?.campus?.name}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -231,7 +231,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {formatDate(row.createdAt)}
+                      {formatDate(row?.createdAt)}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -242,7 +242,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {row.status}
+                      {row?.status}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -253,7 +253,7 @@ const Dormitory = () => {
                         fontSize: "14px",
                       }}
                     >
-                      {formatDate(row.updatedAt)}
+                      {formatDate(row?.updatedAt)}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -267,13 +267,13 @@ const Dormitory = () => {
                       {/* <Receipt
                         onClick={() =>
                           handleReceiptClick(
-                            row.soPhieu,
-                            row.maHoaDon,
-                            row.ngayThu
+                            row?.soPhieu,
+                            row?.maHoaDon,
+                            row?.ngayThu
                           )
                         }
                       /> */}
-                      {row.status !== "Hủy" ? <DeleteKTX item={row} /> : ""}
+                      {row?.status !== "Hủy" ? <DeleteKTX item={row} /> : ""}
                     </TableCell>
                   </TableRow>
                 ))}
