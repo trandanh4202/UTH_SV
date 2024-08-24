@@ -155,6 +155,9 @@ const cartSlice = createSlice({
       .addCase(getCart.fulfilled, (state, action) => {
         state.loading = false;
         state.cart = action.payload;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(getCart.rejected, (state, action) => {
         state.loading = false;
@@ -168,6 +171,7 @@ const cartSlice = createSlice({
         state.loading = false;
         state.success = action.payload.message.success;
         state.message = action.payload.message.message;
+        state.timestamp = action.payload.message.timestamp;
         state.cart = action.payload.response;
       })
       .addCase(addToCart.rejected, (state, action) => {
@@ -180,7 +184,9 @@ const cartSlice = createSlice({
       })
       .addCase(updateCart.fulfilled, (state, action) => {
         state.loading = false;
-        state.updateCartMessage = action.payload.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.message = action.payload.message.message;
         state.cart = action.payload.response;
       })
       .addCase(updateCart.rejected, (state, action) => {
@@ -195,6 +201,7 @@ const cartSlice = createSlice({
         state.loading = false;
         state.success = action.payload.message.success;
         state.message = action.payload.message.message;
+        state.timestamp = action.payload.message.timestamp;
         state.cart = action.payload.response;
       })
       .addCase(deleteCart.rejected, (state, action) => {

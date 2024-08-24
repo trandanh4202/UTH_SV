@@ -124,7 +124,7 @@ const Cart = () => {
     }
   };
 
-  const carts = useSelector((state) => state.cart.cart?.body);
+  const carts = useSelector((state) => state.cart.cart?.body?.carts);
   const address = useSelector((state) => state.address.address?.body);
   const loadingCart = useSelector((state) => state.cart.loading);
   const loadingOrder = useSelector((state) => state.order.loading);
@@ -198,15 +198,15 @@ const Cart = () => {
       dispatch(getEstimateTotalAmount(formData));
     }
   }, [dispatch, openDrawerCart, campus, address, loadingCart]);
-  const createrOrderMesssage = useSelector((state) => state.order.message);
-  const createOrderSuccess = useSelector((state) => state.order.success);
-
+  const createrOrderMesssage = useSelector((state) => state.order?.message);
+  const createOrderSuccess = useSelector((state) => state.order?.success);
+  const timestamp = useSelector((state) => state.order?.timestamp);
   const total = useSelector(
     (state) => state.order.getEstimateTotalAmount?.body
   );
   useEffect(() => {
     if (openDrawerCart) {
-      if (!loadingOrder && createrOrderMesssage) {
+      if (!loadingOrder && timestamp) {
         if (createrOrderMesssage && createOrderSuccess) {
           toast.success(createrOrderMesssage);
         } else if (!createOrderSuccess) {
@@ -214,7 +214,13 @@ const Cart = () => {
         }
       }
     }
-  }, [openDrawerCart, loadingOrder, createrOrderMesssage, createOrderSuccess]);
+  }, [
+    openDrawerCart,
+    loadingOrder,
+    createrOrderMesssage,
+    createOrderSuccess,
+    timestamp,
+  ]);
 
   return (
     <>

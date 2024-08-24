@@ -65,8 +65,8 @@ export const createOrder = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -388,7 +388,9 @@ const orderSlice = createSlice({
       })
       .addCase(getEstimateTotalAmount.fulfilled, (state, action) => {
         state.loading = false;
-        state.getEstimateTotalAmount = action.payload;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(getEstimateTotalAmount.rejected, (state, action) => {
         state.loading = false;
@@ -402,6 +404,7 @@ const orderSlice = createSlice({
         state.loading = false;
         state.message = action.payload.message;
         state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;
