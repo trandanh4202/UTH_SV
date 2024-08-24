@@ -10,10 +10,12 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PersonalInfo from "./PersonalInfo";
 import AvatartInfo from "./AvatartInfo";
 import FamilyProfile from "./FamilyProfile";
+import { useDispatch, useSelector } from "react-redux";
+import { getCheckUpdateProfile } from "../../../features/profileSlice/ProfileSlice";
 
 const EditProfile = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -23,7 +25,12 @@ const EditProfile = () => {
   const handleChangeTab = (event, newValue) => {
     setSelectedTab(newValue);
   };
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCheckUpdateProfile());
+  }, [dispatch]);
+  
+ 
   return (
     <Container>
       <Paper

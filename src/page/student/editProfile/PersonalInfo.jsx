@@ -17,7 +17,11 @@ import useDebounce from "../../../components/hooks/UseDebounce";
 import { getDistrict } from "../../../features/districtSlice/DistrictSlice";
 import { getProvince } from "../../../features/provinceSlice/ProvinceSlice";
 import { getWard } from "../../../features/wardSlice/WardSlice";
-import { updateProfile } from "../../../features/profileSlice/ProfileSlice";
+import {
+  getProfile,
+  getUpdateProfile,
+  updateProfile,
+} from "../../../features/profileSlice/ProfileSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -78,6 +82,11 @@ const selectStyles = {
     borderColor: "#008588",
   },
 };
+
+const validateOption = (value, options) => {
+  return options.includes(value) ? value : "";
+};
+
 const SelectField = ({
   name,
   value,
@@ -86,6 +95,7 @@ const SelectField = ({
   options,
   label,
   optionType,
+  successAccess,
 }) => (
   <Box sx={{ display: "flex", flexDirection: "column", gap: "2px" }}>
     <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
@@ -93,7 +103,7 @@ const SelectField = ({
     </Typography>
     <Select
       name={name}
-      value={value}
+      value={value || ""}
       onChange={onChange}
       displayEmpty
       disabled={disabled}
@@ -104,7 +114,7 @@ const SelectField = ({
       </MenuItem>
       {options &&
         options.map((option) => (
-          <MenuItem key={option.id} value={option.id}>
+          <MenuItem key={option.id} value={option.id} disabled={!successAccess}>
             {optionType === "province"
               ? option.tenTinh
               : optionType === "district"
@@ -123,7 +133,14 @@ const SelectField = ({
 );
 
 // Component TextFieldWrapper
-const TextFieldWrapper = ({ name, value, onChange, label, type = "text" }) => {
+const TextFieldWrapper = ({
+  name,
+  value,
+  onChange,
+  label,
+  type = "text",
+  successAccess,
+}) => {
   // Xử lý thay đổi giá trị cho trường hợp loại ngày tháng
   const handleChange = (event) => {
     onChange({ target: { name, value: event.target.value } });
@@ -139,6 +156,7 @@ const TextFieldWrapper = ({ name, value, onChange, label, type = "text" }) => {
         value={value}
         onChange={handleChange}
         type={type}
+        disabled={!successAccess}
         sx={{ ...inputStyles, width: "100%" }} // Adjust `inputStyles` as needed
       />
     </Box>
@@ -149,7 +167,14 @@ const PersonalInfo = () => {
   const dispatch = useDispatch();
   const ethnicity = useSelector((state) => state.nation.nations) || [];
   const religions = useSelector((state) => state.religion.religions) || [];
-
+  useEffect(() => {
+    dispatch(getNation());
+    dispatch(getReligion());
+    dispatch(getProvince()).then((action) => {
+      setProvinces(action.payload);
+    });
+    dispatch(getUpdateProfile());
+  }, [dispatch]);
   const [formData, setFormData] = useState({
     hoDem: "",
     ten: "",
@@ -186,6 +211,66 @@ const PersonalInfo = () => {
     idphuongXa: 0,
     idtinhCapCMND: 0,
   });
+  const profile = useSelector((state) => state.profile.getUpdateProfile?.body);
+  const successUpdate = useSelector(
+    (state) => state.profile.getUpdateProfile?.successUpdate
+  );
+  const messageUpdate = useSelector(
+    (state) => state.profile.getUpdateProfile?.messageUpdate
+  );
+  useEffect(() => {
+    if (profile) {
+      setFormData({
+        hoDem: profile.hoDem || "",
+        ten: profile.ten || "",
+        gioiTinh: profile.gioiTinh || true,
+        ngaySinh2: profile.ngaySinh2 || "",
+        noiSinh:
+          validateOption(
+            profile.noiSinh,
+            provinces.map((province) => province.id)
+          ) || "",
+        noisinhIdhuyen:
+          validateOption(
+            profile.noisinhIdhuyen,
+            districtsByLocation.noiSinh.map((district) => district.id)
+          ) || "",
+        noisinhIdphuongxa:
+          validateOption(
+            profile.noisinhIdphuongxa,
+            wardsByLocation.noiSinh.map((ward) => ward.id)
+          ) || "",
+        soCMND: profile.soCMND || "",
+        ngayCap: profile.ngayCap || "",
+        email: profile.email || "",
+        soDienThoai: profile.soDienThoai || "",
+        soDienThoai2: profile.soDienThoai2 || "",
+        quocTich: profile.quocTich || "",
+        mabhxhYt: profile.mabhxhYt || "",
+        nguyenQuan: profile.nguyenQuan || "",
+        hkttIdhuyen: profile.hkttIdhuyen || "",
+        hkttIdtinh: profile.hkttIdtinh || "",
+        hkttIdphuongxa: profile.hkttIdphuongxa || "",
+        hkttThonxom: profile.hkttThonxom || "",
+        dcllIdtinh: profile.dcllIdtinh || "",
+        dcllIdhuyen: profile.dcllIdhuyen || "",
+        dcllIdphuongxa: profile.dcllIdphuongxa || "",
+        dcllSonha: profile.dcllSonha || "",
+        ngayVaoDoan: profile.ngayVaoDoan || "",
+        ngayVaoDang: profile.ngayVaoDang || "",
+        height: profile.height || 0,
+        weight: profile.weight || 0,
+        schoolEmail: profile.schoolEmail || "",
+        iddanToc: profile.iddanToc || "",
+        idtonGiao: profile.idtonGiao || "",
+        idtinh: profile.idtinh || "",
+        idhuyen: profile.idhuyen || "",
+        idphuongXa: profile.idphuongXa || "",
+        idtinhCapCMND: profile.idtinhCapCMND || "",
+      });
+    }
+  }, [profile]);
+
   const debouncedFormData = useDebounce(formData, 500);
   const [provinces, setProvinces] = useState([]);
   const [districtsByLocation, setDistrictsByLocation] = useState({
@@ -200,14 +285,6 @@ const PersonalInfo = () => {
     hktt: [],
     dcll: [],
   });
-
-  useEffect(() => {
-    dispatch(getNation());
-    dispatch(getReligion());
-    dispatch(getProvince()).then((action) => {
-      setProvinces(action.payload);
-    });
-  }, [dispatch]);
 
   // Handle changes for the "Quê quán" fields
   useEffect(() => {
@@ -368,6 +445,12 @@ const PersonalInfo = () => {
       setIsUpdateProfile(false);
     }
   }, [isUpdateProfile, message, status]);
+  const messageAccess = useSelector(
+    (state) => state.profile.getCheckUpdateProfile?.message
+  );
+  const successAccess = useSelector(
+    (state) => state.profile.getCheckUpdateProfile?.success
+  );
   return (
     <>
       <Box>
@@ -379,8 +462,7 @@ const PersonalInfo = () => {
               fontWeight: "600",
             }}
           >
-            Chưa có đợt cập nhật thông tin, sinh viên vui lòng theo dõi thông
-            báo sau
+            {messageAccess}
           </Typography>
         </Box>
         <Box sx={{ padding: "10px 20px" }}>
@@ -395,6 +477,7 @@ const PersonalInfo = () => {
                     value={formData.hoDem}
                     onChange={handleChange}
                     label="Họ đệm"
+                    successAccess={successAccess}
                   />
                 </Box>
               </Grid>
@@ -406,6 +489,7 @@ const PersonalInfo = () => {
                     name="ten"
                     value={formData.ten}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     label="Tên"
                   />
                 </Box>
@@ -422,9 +506,10 @@ const PersonalInfo = () => {
                     value={formData.gioiTinh}
                     onChange={handleChange}
                     displayEmpty
+                    successAccess={successAccess}
                     sx={selectStyles}
                   >
-                    <MenuItem value="0">
+                    <MenuItem value="">
                       <em>Chọn giới tính</em>
                     </MenuItem>
                     <MenuItem value="false">Nam</MenuItem>
@@ -443,6 +528,7 @@ const PersonalInfo = () => {
                     onChange={handleChange}
                     label="Ngày sinh"
                     type="date"
+                    successAccess={successAccess}
                     id="date-picker"
                   />
                 </Box>
@@ -455,6 +541,7 @@ const PersonalInfo = () => {
                   options={ethnicity}
                   label="Dân tộc"
                   optionType="danToc"
+                  successAccess={successAccess}
                 />
               </Grid>
               <Grid item xs={12} lg={2}>
@@ -464,6 +551,7 @@ const PersonalInfo = () => {
                   onChange={handleChange}
                   options={religions}
                   label="Tôn giáo"
+                  successAccess={successAccess}
                   optionType="tonGiao"
                 />
               </Grid>
@@ -477,6 +565,8 @@ const PersonalInfo = () => {
                     onChange={handleChange}
                     options={provinces}
                     label="Quê quán Tỉnh (CCCD)"
+                    disabled={successAccess}
+                    successAccess={successAccess}
                     optionType="province"
                   />
                 </Box>
@@ -493,6 +583,7 @@ const PersonalInfo = () => {
                     disabled={!formData.idtinh}
                     options={districtsByLocation.queQuan}
                     label="Quê quán Huyện"
+                    successAccess={successAccess}
                     optionType="district"
                   />
                 </Box>
@@ -508,7 +599,8 @@ const PersonalInfo = () => {
                     onChange={handleChange}
                     disabled={!formData.idhuyen}
                     options={wardsByLocation.queQuan}
-                    label="Quê quán Huyện"
+                    label="Quê quán Phường/ xã"
+                    successAccess={successAccess}
                     optionType="ward"
                   />
                 </Box>
@@ -534,6 +626,7 @@ const PersonalInfo = () => {
                   onChange={handleChange}
                   options={provinces}
                   label="Nơi sinh Tỉnh"
+                  successAccess={successAccess}
                   optionType="province"
                 />
               </Grid>
@@ -546,6 +639,7 @@ const PersonalInfo = () => {
                   disabled={!formData.noiSinh}
                   options={districtsByLocation.noiSinh}
                   label="Nơi sinh Huyện"
+                  successAccess={successAccess}
                   optionType="district"
                 />
               </Grid>
@@ -558,6 +652,7 @@ const PersonalInfo = () => {
                   disabled={!formData.noisinhIdhuyen}
                   options={wardsByLocation.noiSinh}
                   label="Nơi sinh Phường/ xã"
+                  successAccess={successAccess}
                   optionType="ward"
                 />
               </Grid>
@@ -572,6 +667,7 @@ const PersonalInfo = () => {
                     name="nguyenQuan"
                     value={formData.nguyenQuan || ""}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -583,6 +679,7 @@ const PersonalInfo = () => {
                   onChange={handleChange}
                   options={provinces}
                   label="Hộ khẩu thường trú Tỉnh"
+                  successAccess={successAccess}
                   optionType="province"
                 />
               </Grid>
@@ -594,6 +691,7 @@ const PersonalInfo = () => {
                   disabled={!formData.hkttIdtinh}
                   options={districtsByLocation.hktt}
                   label="HKTT Huyện"
+                  successAccess={successAccess}
                   optionType="district"
                 />
               </Grid>
@@ -606,6 +704,7 @@ const PersonalInfo = () => {
                   disabled={!formData.hkttIdhuyen}
                   options={wardsByLocation.hktt}
                   label="HKTT Phường/ xã"
+                  successAccess={successAccess}
                   optionType="ward"
                 />
               </Grid>
@@ -620,6 +719,7 @@ const PersonalInfo = () => {
                     name="hkttThonxom"
                     value={formData.hkttThonxom || ""}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -631,6 +731,7 @@ const PersonalInfo = () => {
                   onChange={handleChange}
                   options={provinces}
                   label="Địa chỉ liên lạc Tỉnh"
+                  successAccess={successAccess}
                   optionType="province"
                 />
               </Grid>
@@ -642,6 +743,7 @@ const PersonalInfo = () => {
                   disabled={!formData.dcllIdtinh}
                   options={districtsByLocation.dcll}
                   label="ĐCLL Huyện"
+                  successAccess={successAccess}
                   optionType="district"
                 />
               </Grid>
@@ -654,6 +756,7 @@ const PersonalInfo = () => {
                   options={wardsByLocation.dcll}
                   label="ĐCLL Phường/ xã"
                   optionType="ward"
+                  successAccess={successAccess}
                 />
               </Grid>
               <Grid item xs={12} lg={4.5}>
@@ -667,6 +770,7 @@ const PersonalInfo = () => {
                     name="dcllSonha"
                     value={formData.dcllSonha || ""}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -682,6 +786,7 @@ const PersonalInfo = () => {
                     name="soCMND"
                     value={formData.soCMND || ""}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -699,6 +804,7 @@ const PersonalInfo = () => {
                     type="date"
                     value={formData.ngayCap || ""}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -710,6 +816,7 @@ const PersonalInfo = () => {
                   onChange={handleChange}
                   options={provinces}
                   label="Tỉnh cấp"
+                  successAccess={successAccess}
                   optionType="province"
                 />
               </Grid>
@@ -724,6 +831,7 @@ const PersonalInfo = () => {
                     name="quocTich"
                     value={formData.nation}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -740,6 +848,7 @@ const PersonalInfo = () => {
                     type="date"
                     value={formData.ngayVaoDang}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -756,6 +865,7 @@ const PersonalInfo = () => {
                     type="date"
                     value={formData.ngayVaoDoan}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -771,6 +881,7 @@ const PersonalInfo = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -786,6 +897,7 @@ const PersonalInfo = () => {
                     name="schoolEmail"
                     value={formData.schoolEmail}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -801,6 +913,7 @@ const PersonalInfo = () => {
                     name="soDienThoai"
                     value={formData.soDienThoai}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -816,6 +929,7 @@ const PersonalInfo = () => {
                     name="soDienThoai2"
                     value={formData.soDienThoai2}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -831,6 +945,7 @@ const PersonalInfo = () => {
                     name="height"
                     value={formData.height}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -846,6 +961,7 @@ const PersonalInfo = () => {
                     name="weight"
                     value={formData.weight}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -861,6 +977,7 @@ const PersonalInfo = () => {
                     name="mabhxhYt"
                     value={formData.mabhxhYt}
                     onChange={handleChange}
+                    successAccess={successAccess}
                     sx={inputStyles}
                   />
                 </Box>
@@ -879,7 +996,7 @@ const PersonalInfo = () => {
               <Button
                 type="submit"
                 variant="contained"
-                disabled
+                disabled={!successAccess}
                 sx={{
                   display: "flex",
                   justifyContent: "center",

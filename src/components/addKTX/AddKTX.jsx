@@ -127,6 +127,7 @@ const AddKTX = ({ open, onClose }) => {
         toast.success(message);
       } else if (!success) {
         toast.error(message);
+        setSelectedFile(null);
       }
     }
   }, [loading, message, success]);

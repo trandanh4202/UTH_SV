@@ -51,7 +51,6 @@ export const addToCart = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log(formData);
       const message = await axios.post(
         `${API_BASE_URL}/cart?productId=${formData.productId}`,
         {},

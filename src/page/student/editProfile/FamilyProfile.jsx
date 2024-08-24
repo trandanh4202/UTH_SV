@@ -60,7 +60,9 @@ const FamilyProfile = () => {
   };
 
   const handleChange = (id, field, value) => {};
-
+  const successAccess = useSelector(
+    (state) => state.profile.getCheckUpdateProfile?.success
+  );
   return (
     <>
       <Box>
@@ -90,6 +92,7 @@ const FamilyProfile = () => {
                 right: 10,
                 color: "red",
               }}
+              disabled={!successAccess}
             >
               <CloseIcon
                 sx={{
@@ -105,6 +108,7 @@ const FamilyProfile = () => {
                 right: 10,
                 color: "red",
               }}
+              disabled={!successAccess}
             >
               <ModeEdit
                 sx={{
@@ -374,7 +378,7 @@ const FamilyProfile = () => {
           <Button
             variant="contained"
             onClick={handleModalOpenAdd}
-            disabled
+            disabled={!successAccess}
             sx={{
               display: "flex",
               justifyContent: "center",

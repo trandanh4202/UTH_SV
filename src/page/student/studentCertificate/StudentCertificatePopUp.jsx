@@ -42,7 +42,6 @@ const StudentCertificatePopUp = ({
   maHoaDon,
   ngayThu,
 }) => {
-  console.log(id);
   const dispatch = useDispatch();
   useEffect(() => {
     if (open) dispatch(getDetailOrder(id));

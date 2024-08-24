@@ -27,6 +27,7 @@ export const getProfile = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
+
       const response = await axios.get(`${API_BASE_URL}/user/profile`, config);
 
       // Assuming the new token is in the response data, adjust as needed
@@ -43,6 +44,40 @@ export const getProfile = createAsyncThunk(
       ) {
         localStorage.clear();
         window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getCheckUpdateProfile = createAsyncThunk(
+  "profile/getCheckUpdateProfile",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        `${API_BASE_URL}/user/checkUpdateProfile`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -186,6 +221,39 @@ export const updateProfile = createAsyncThunk(
   }
 );
 
+export const getUpdateProfile = createAsyncThunk(
+  "profile/getUpdateProfile",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        `${API_BASE_URL}/user/updateInfo`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const profileSlice = createSlice({
   name: "profile",
   initialState,
@@ -243,6 +311,18 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      .addCase(getUpdateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUpdateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getUpdateProfile = action.payload;
+      })
+      .addCase(getUpdateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
       .addCase(updateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -252,6 +332,18 @@ const profileSlice = createSlice({
         state.updateProfile = action.payload;
       })
       .addCase(updateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getCheckUpdateProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCheckUpdateProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getCheckUpdateProfile = action.payload;
+      })
+      .addCase(getCheckUpdateProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

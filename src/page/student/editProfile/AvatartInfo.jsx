@@ -62,7 +62,9 @@ const AvatarInfo = () => {
       }
     }
   }, [loading, message, status]);
-
+  const successAccess = useSelector(
+    (state) => state.profile.getCheckUpdateProfile?.success
+  );
   return (
     <Box
       sx={{
@@ -81,9 +83,11 @@ const AvatarInfo = () => {
             fontWeight: "600",
           }}
         >
-          Sinh viên được phép cập nhật ảnh, ảnh sinh viên sẽ dùng làm hồ sơ tại
-          trường và thẻ sinh viên tích hợp ngân hàng. Vui lòng dùng hình ảnh
-          nghiêm túc (nền trắng)
+          Sinh viên chuẩn bị ảnh thẻ và cập nhật sau, ảnh sinh viên sẽ dùng làm
+          hồ sơ Đại học - Thẻ sinh viên. Ảnh áo sơ mi trắng hoặc đồng phục UTH,
+          phông nền trắng, tóc gọn gàng không che phủ mặt. Dung lượng ảnh dưới
+          1MB. Sinh viên vui lòng cập nhật đúng quy chuẩn hình ảnh, trường hợp
+          sai quy chuẩn sẽ bị khóa chức năng.
         </Typography>
       </Box>
       {loading ? (
@@ -212,6 +216,7 @@ const AvatarInfo = () => {
               <Button
                 variant="contained"
                 onClick={handleUpload}
+                disabled={!successAccess}
                 sx={{
                   display: "flex",
                   justifyContent: "center",

@@ -182,7 +182,6 @@ const Cart = () => {
 
   useEffect(() => {
     if (openDrawerCart && loadingCart) {
-      console.log(openDrawerCart);
       const formData =
         campus === 1
           ? {

@@ -80,7 +80,7 @@ const InforDetail = () => {
   const family = useSelector(
     (state) => state.profile?.profile?.body?.quanHeGiaDinhs
   );
-  
+
   return (
     <Box>
       <Container>
@@ -262,36 +262,47 @@ const InforDetail = () => {
                     />
                     <InfoField label="Ngày sinh: " value={profile?.ngaySinh2} />
                     <InfoField
-                      label="Nơi sinh: "
-                      value={profile?.noiSinhTinh}
+                      label="Nguyên quán: "
+                      value={profile?.nguyenQuan}
                     />
                   </Grid>
                   <Grid container>
                     <InfoField label="Dân tộc: " value={profile?.danToc} />
                     <InfoField label="Tôn giáo: " value={profile?.tonGiao} />
-                    <InfoField
-                      label="Diện chính sách: "
-                      value={profile?.doiTuongChinhSach}
-                    />
+                    <InfoField label="Quốc tịch: " value={profile?.quocTich} />
                   </Grid>
                   <Grid container>
                     <InfoField label="Khu vực: " value={profile?.khuVuc} />
                     <InfoField label="Đối tượng: " value={profile?.doiTuong} />
                     <InfoField
-                      label="Ngày vào Đoàn: "
-                      value={formatDate(profile?.ngayVaoDoan)}
+                      label="Đối tượng chính sách: "
+                      value={profile?.doiTuongChinhSach}
                     />
                   </Grid>
                   <Grid container>
+                    <InfoField
+                      label="Ngày vào Đoàn: "
+                      value={formatDate(profile?.ngayVaoDoan)}
+                    />
                     <InfoField
                       label="Ngày vào Đảng: "
                       value={formatDate(profile?.ngayVaoDang)}
                     />
                     <InfoField
-                      label="Số điện thoại: "
+                      label="Số điện thoại cá nhân: "
                       value={profile?.soDienThoai}
                     />
-                    <InfoField label="Email: " value={profile?.email} />
+                  </Grid>
+                  <Grid container>
+                    <InfoField
+                      label="Số điện thoại khẩn cấp: "
+                      value={profile?.soDienThoai2}
+                    />
+                    <InfoField label="Email cá nhân: " value={profile?.email} />
+                    <InfoField
+                      label="Email sinh viên: "
+                      value={profile?.schoolEmail}
+                    />
                   </Grid>
                   <Grid container>
                     <InfoField label="Số CCCD: " value={profile?.soCMND} />
@@ -303,16 +314,38 @@ const InforDetail = () => {
                   </Grid>
                   <Grid container>
                     <InfoField
-                      label="Địa chỉ thường trú: "
+                      label="Nơi sinh: "
+                      value={` ${profile?.noiSinhPhuongXa || ""}, ${
+                        profile?.noiSinhHuyen || ""
+                      }, ${profile?.noiSinhTinh || ""}`}
+                      column={12}
+                    />
+                  </Grid>
+                  <Grid container>
+                    <InfoField
+                      label="Quê quán: "
+                      value={` ${profile?.queQuanPhuongXa || ""}, ${
+                        profile?.queQuanHuyen || ""
+                      }, ${profile?.queQuanTinh || ""}`}
+                      column={12}
+                    />
+                  </Grid>
+                  <Grid container>
+                    <InfoField
+                      label="Hộ khẩu thường trú: "
                       value={` ${profile?.hkttPhuongXa || ""}, ${
                         profile?.hkttHuyen || ""
                       }, ${profile?.hkttTinh || ""}`}
+                      column={12}
                     />
+                  </Grid>
+                  <Grid container>
                     <InfoField
                       label="Địa chỉ liên lạc: "
                       value={` ${profile?.hkttPhuongXa || ""}, ${
                         profile?.dcllHuyen || ""
                       }, ${profile?.dcllTinh || ""}`}
+                      column={12}
                     />
                   </Grid>
                 </Grid>
@@ -405,18 +438,6 @@ const InforDetail = () => {
                         <InfoField
                           label="Nơi ở hiện tại: "
                           value={item?.hienNay}
-                          column="4"
-                        />
-                      </Grid>
-                      <Grid container>
-                        <InfoField
-                          label="Cơ quan công tác: "
-                          value={item?.coQuanCongTac}
-                          column="4"
-                        />
-                        <InfoField
-                          label="Chức vụ: "
-                          value={item?.chucVu}
                           column="4"
                         />
                       </Grid>

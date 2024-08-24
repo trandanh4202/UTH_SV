@@ -88,7 +88,7 @@ export const getInforDorm = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`${API_BASE_URL}/dorm/getInfor`, config);
+      const response = await axios.get(`${API_BASE_URL}/dorm/getInfo`, config);
 
       return response.data;
     } catch (error) {

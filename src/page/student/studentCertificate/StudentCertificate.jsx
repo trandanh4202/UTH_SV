@@ -318,7 +318,7 @@ const StudentCertificate = () => {
               </Grid>
             ))}
           </Grid>
-          <Grid
+          {/* <Grid
             sx={{
               padding: "10px 5px",
               backgroundColor: "white",
@@ -540,7 +540,7 @@ const StudentCertificate = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Grid>
+          </Grid> */}
           <Grid
             sx={{
               padding: "10px 5px",
