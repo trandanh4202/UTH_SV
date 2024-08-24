@@ -6,6 +6,7 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  IconButton,
   MenuItem,
   Modal,
   Select,
@@ -19,6 +20,7 @@ import { categoryFamily } from "../../features/familySlice/FamilySlice";
 import Spinner from "../Spinner/Spinner";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import { ClearOutlined } from "@mui/icons-material";
 
 const selectStyles = {
   "&:focus": {
@@ -147,9 +149,9 @@ const AddKTX = ({ open, onClose }) => {
               transform: "translate(-50%, -50%)",
               bgcolor: "background.paper",
               boxShadow: 24,
-              p: 4,
+              padding: { xs: "10px", lg: "20px" },
               borderRadius: "20px",
-              width: { lg: "40%", xs: "80%" },
+              width: { lg: "40%", xs: "100%" },
             }}
           >
             <Typography
@@ -165,17 +167,38 @@ const AddKTX = ({ open, onClose }) => {
             </Typography>
             <Box
               sx={{
+                position: "absolute",
+                right: "10px",
+                top: "10px",
+              }}
+              // onClick={() => setOpenDrawerCart()}
+              onClick={onClose}
+            >
+              <IconButton
+                sx={{
+                  backgroundColor: "#ff00001f",
+                }}
+              >
+                <ClearOutlined
+                  sx={{
+                    color: "red",
+                  }}
+                />
+              </IconButton>
+            </Box>
+            <Box
+              sx={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 2,
-                margin: "40px 0",
+                gap: "5px",
+                margin: { xs: "10px 0", lg: "40px 0" },
               }}
             >
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  gap: 2,
+                  gap: "5px",
                 }}
               >
                 <Box
