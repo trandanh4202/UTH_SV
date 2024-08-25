@@ -171,7 +171,7 @@ const Cart = () => {
   };
   const handleCreateOrder = async () => {
     const formData = {
-      addressId: null,
+      addressId: campus,
       isShip: false,
       shipServiceCode: null,
     };
@@ -187,18 +187,11 @@ const Cart = () => {
 
   useEffect(() => {
     if (openDrawerCart && !loadingCart) {
-      const formData =
-        campus === 1
-          ? {
-              addressId: null,
-              isShip: false,
-              shipServiceCode: "0",
-            }
-          : {
-              addressId: campus, // Sử dụng addressId từ address nếu có
-              isShip: true,
-              shipServiceCode: "1", // Bạn có thể điều chỉnh mã dịch vụ này tùy theo nhu cầu
-            };
+      const formData = {
+        addressId: campus, // Sử dụng addressId từ address nếu có
+        isShip: false,
+        shipServiceCode: "1", // Bạn có thể điều chỉnh mã dịch vụ này tùy theo nhu cầu
+      };
 
       dispatch(getEstimateTotalAmount(formData));
     }
@@ -312,9 +305,6 @@ const Cart = () => {
                 <Typography disabled> Vui lòng chọn </Typography>
               </MenuItem>
 
-              <MenuItem value="1" key="1">
-                <Typography variant="span">Cơ sở 1</Typography>
-              </MenuItem>
               {address?.map((item, index) => (
                 <MenuItem value={item.id} index={index} key={item.id}>
                   <Typography variant="span">{item.PROVINCE_NAME}</Typography>

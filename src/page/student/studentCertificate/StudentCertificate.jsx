@@ -791,7 +791,7 @@ const StudentCertificate = () => {
                             />
                           </IconButton>
 
-                          {row?.lastHistoryOrder.status === "Chờ nhận hàng" && (
+                          {row?.lastHistoryOrder.status === "NEW" && (
                             <DeleteStudentService item={row} />
                           )}
                         </TableCell>{" "}
