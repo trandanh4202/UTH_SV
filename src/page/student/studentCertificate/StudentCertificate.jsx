@@ -729,7 +729,7 @@ const StudentCertificate = () => {
                             fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
-                          {row.lastHistoryOrder.status}
+                          {row.lastHistoryOrder?.status}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -740,7 +740,7 @@ const StudentCertificate = () => {
                             fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
-                          {formatDate(row.lastHistoryOrder.date)}
+                          {formatDate(row.lastHistoryOrder?.date)}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -791,7 +791,7 @@ const StudentCertificate = () => {
                             />
                           </IconButton>
 
-                          {row?.lastHistoryOrder.status === "NEW" && (
+                          {row?.lastHistoryOrder?.statusCode === "NEW" && (
                             <DeleteStudentService item={row} />
                           )}
                         </TableCell>{" "}
