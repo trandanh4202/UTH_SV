@@ -53,13 +53,48 @@ export const createOrder = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.post(
+      const message = await axios.post(
         `${API_BASE_URL}/order/createOrder`,
         formData,
         config
       );
+      const response = await axios.get(`${API_BASE_URL}/order/getAll`, config);
 
-      return response.data;
+      return { message: message.data, response: response.data };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const cancelOrder = createAsyncThunk(
+  "order/cencelOrder",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      console.log(id);
+      const message = await axios.delete(
+        `${API_BASE_URL}/order/cancel/${id}`,
+        config
+      );
+      const response = await axios.get(`${API_BASE_URL}/order/getAll`, config);
+
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -322,6 +357,21 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
+      .addCase(cancelOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(cancelOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.order = action.payload.response;
+        state.success = action.payload.message.success;
+        state.message = action.payload.message.message;
+        state.timestamp = action.payload.message.timestamp;
+      })
+      .addCase(cancelOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
       .addCase(getAllToShip.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -403,9 +453,10 @@ const orderSlice = createSlice({
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.loading = false;
-        state.message = action.payload.message;
-        state.success = action.payload.success;
-        state.timestamp = action.payload.timestamp;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.order = action.payload.response;
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;
@@ -418,6 +469,9 @@ const orderSlice = createSlice({
       .addCase(getDetailOrder.fulfilled, (state, action) => {
         state.loading = false;
         state.getDetailOrder = action.payload;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(getDetailOrder.rejected, (state, action) => {
         state.loading = false;

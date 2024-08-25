@@ -123,17 +123,8 @@ const EditFamily = ({ open, onClose, editData }) => {
     }
   }, [editData, setValue, reset]);
   const onSubmit = async (data) => {
-    setIsSubmitting(true);
-    try {
-      // Cập nhật thông tin gia đình
-      await dispatch(updateFamily({ formData: data, id: editData.id }));
-      toast.success("Thông tin đã được lưu!");
-    } catch (error) {
-      toast.error("Có lỗi xảy ra. Vui lòng thử lại!");
-    } finally {
-      setIsSubmitting(false);
-      onClose(); // Đóng modal sau khi hoàn thành
-    }
+    await dispatch(updateFamily({ formData: data, id: editData.id }));
+    onClose(); // Đóng modal sau khi hoàn thành
   };
 
   return (

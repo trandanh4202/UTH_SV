@@ -203,22 +203,10 @@ const Cart = () => {
       dispatch(getEstimateTotalAmount(formData));
     }
   }, [dispatch, openDrawerCart, campus, address, loadingCart]);
-  const loadingOrder = useSelector((state) => state.order?.loading);
-  const createrOrderMesssage = useSelector((state) => state.order?.message);
-  const createOrderSuccess = useSelector((state) => state.order?.success);
-  const timestampOrder = useSelector((state) => state.order?.timestamp);
+
   const total = useSelector(
     (state) => state.order.getEstimateTotalAmount?.body
   );
-  useEffect(() => {
-    if (!loadingOrder && timestampOrder) {
-      if (createrOrderMesssage && createOrderSuccess) {
-        toast.success(createrOrderMesssage);
-      } else if (!createOrderSuccess) {
-        toast.error(createrOrderMesssage);
-      }
-    }
-  }, [loadingOrder, createrOrderMesssage, createOrderSuccess, timestampOrder]);
 
   return (
     <>
@@ -336,7 +324,7 @@ const Cart = () => {
               ))}
             </Select>
           </Box>
-          {loadingCart || loadingOrder ? (
+          {loadingCart ? (
             <Spinner />
           ) : (
             <Box>
@@ -516,14 +504,15 @@ const Cart = () => {
                 sx={{
                   margin: "20px 0",
                 }}
+                spacing={2}
               >
-                <Grid item xs={10}>
+                <Grid item xs={9}>
                   <Typography
                     sx={{
                       color: "#333333",
                       fontWeight: "700",
                       fontSize: {
-                        xs: "11px",
+                        xs: "14px",
                         lg: "16px",
                       },
                       textAlign: "right",
@@ -532,13 +521,13 @@ const Cart = () => {
                     Tổng cộng
                   </Typography>
                 </Grid>
-                <Grid item xs={2}>
+                <Grid item xs={3}>
                   <Typography
                     sx={{
                       color: "#333333",
                       fontWeight: "700",
                       fontSize: {
-                        xs: "11px",
+                        xs: "14px",
                         lg: "16px",
                       },
                       textAlign: "center",
@@ -578,7 +567,7 @@ const Cart = () => {
                     <Typography
                       sx={{
                         fontWeight: "700",
-                        fontSize: "16px",
+                        fontSize: { xs: "11px", lg: "15px" },
                         textAlign: "center",
                       }}
                     >
@@ -614,7 +603,7 @@ const Cart = () => {
                     <Typography
                       sx={{
                         fontWeight: "700",
-                        fontSize: "16px",
+                        fontSize: { xs: "11px", lg: "15px" },
                         textAlign: "center",
                       }}
                     >
@@ -650,7 +639,7 @@ const Cart = () => {
                     <Typography
                       sx={{
                         fontWeight: "700",
-                        fontSize: "16px",
+                        fontSize: { xs: "11px", lg: "15px" },
                         textAlign: "center",
                       }}
                     >
@@ -686,7 +675,7 @@ const Cart = () => {
                     <Typography
                       sx={{
                         fontWeight: "700",
-                        fontSize: "16px",
+                        fontSize: { xs: "11px", lg: "15px" },
                         textAlign: "center",
                       }}
                     >

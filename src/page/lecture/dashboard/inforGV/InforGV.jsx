@@ -34,7 +34,7 @@ const InfoField = ({ label, value }) => (
 
 const InforGV = () => {
   const profile = useSelector((state) => state.profile?.profile?.body);
-  const loading = useSelector((state) => state.profile?.loadingUI);
+  const loading = useSelector((state) => state.profile?.loading);
 
   const formatDate = (date) => {
     if (!date) return "";

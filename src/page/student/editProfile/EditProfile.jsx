@@ -31,7 +31,7 @@ const EditProfile = () => {
   useEffect(() => {
     dispatch(getCheckUpdateProfile());
   }, [dispatch]);
-  const loading = useSelector((state) => state.profile.loading);
+  const loading = useSelector((state) => state.profile?.loading);
   const success = useSelector((state) => state.profile?.success);
   const message = useSelector((state) => state.profile?.message);
   const timestamp = useSelector((state) => state.profile?.timestamp);
@@ -48,9 +48,6 @@ const EditProfile = () => {
       }
     }
   }, [loading, message, success, timestamp]);
-  const successAccess = useSelector(
-    (state) => state.profile.getCheckUpdateProfile?.success
-  );
 
   return (
     <Container>

@@ -1,19 +1,8 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Modal,
-  TextField,
-  Typography,
-} from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, Button, Modal, TextField, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { updateEmail } from "../../features/profileSlice/ProfileSlice";
-import Spinner from "../Spinner/Spinner";
+import { updatePhone } from "../../features/profileSlice/ProfileSlice";
 
 const UpdatePhone = () => {
   const {
@@ -22,39 +11,17 @@ const UpdatePhone = () => {
     formState: { errors },
   } = useForm();
 
-  const [isUpdateEmail, setIsUpdateEmail] = useState(false);
-
   const dispatch = useDispatch();
-  const message = useSelector((state) => state.profile.updateEmail?.message);
-  const status = useSelector((state) => state.profile.updateEmail?.status);
-  const email = useSelector((state) => state.profile.profile.body?.email || "");
-  const loading = useSelector((state) => state.profile.loading || "");
-
-  const navigate = useNavigate();
+  const phone = useSelector(
+    (state) => state.profile.summaryProfile.body?.phone || ""
+  );
   const onSubmit = async (data) => {
-    await dispatch(updateEmail(data));
-    setIsUpdateEmail(true);
+    await dispatch(updatePhone(data));
   };
-
-  // Hiển thị toast message và chuyển hướng về trang Đăng nhập sau khi thành công
-  useEffect(() => {
-    if (isUpdateEmail && message) {
-      if (status === 200) {
-        toast.success(message);
-
-        setTimeout(() => {
-          window.locatiion.clear();
-        }, 2000);
-      } else if (status === 400) {
-        toast.error(message);
-      }
-      setIsUpdateEmail(false);
-    }
-  }, [isUpdateEmail, message, status, navigate]);
 
   return (
     <>
-      <Modal open={!!email}>
+      <Modal open={!!phone}>
         <Box
           sx={{
             position: "absolute",

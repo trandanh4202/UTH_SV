@@ -28,8 +28,6 @@ const FamilyProfile = () => {
     dispatch(getReligion());
   }, [dispatch]);
 
-  const nations = useSelector((state) => state.nation.nations) || [];
-  const religions = useSelector((state) => state.religion.religions) || [];
   const family = useSelector((state) => state.family.family);
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -64,7 +62,7 @@ const FamilyProfile = () => {
     (state) => state.profile.getCheckUpdateProfile?.success
   );
   const message = useSelector(
-    (state) => state.profile.getCheckUpdateProfile.message
+    (state) => state.profile.getCheckUpdateProfile?.message
   );
   return (
     <>

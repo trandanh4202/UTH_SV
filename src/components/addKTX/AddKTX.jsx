@@ -171,7 +171,6 @@ const AddKTX = ({ open, onClose }) => {
                 right: "10px",
                 top: "10px",
               }}
-              // onClick={() => setOpenDrawerCart()}
               onClick={onClose}
             >
               <IconButton
@@ -219,7 +218,15 @@ const AddKTX = ({ open, onClose }) => {
                     >
                       Đối tượng ưu tiên xem xét duyệt:
                     </Typography>
-                    <FormGroup>
+                    <FormGroup
+                      sx={{
+                        "& .MuiFormControlLabel-root": {
+                          display: "flex",
+                          marginBottom: "2px",
+                          alignItems: "center",
+                        },
+                      }}
+                    >
                       {priority?.map((item) => (
                         <FormControlLabel
                           key={item.id}
@@ -244,9 +251,11 @@ const AddKTX = ({ open, onClose }) => {
                             "& span.Mui-checked": {
                               color: "red",
                             },
-                            display: "flex",
+                            "&x.MuiFormControlLabel-root": {
+                              display: "block",
+                            },
                             // justifyContent: "center",
-                            alignItems: "start",
+                            // alignItems: "start",
                           }}
                         />
                       ))}
@@ -455,7 +464,14 @@ const AddKTX = ({ open, onClose }) => {
                   },
                 }}
               >
-                Đăng ký Ký túc xá
+                <Typography
+                  sx={{
+                    fontSize: { xs: "11px", lg: "15px" },
+                    fontWeight: "700px",
+                  }}
+                >
+                  Đăng ký Ký túc xá
+                </Typography>
               </Button>
             </Box>
           </Box>

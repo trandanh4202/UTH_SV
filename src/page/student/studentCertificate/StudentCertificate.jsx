@@ -40,6 +40,8 @@ import "swiper/css/pagination";
 
 // import required modules
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
+import DeleteKTX from "../../../components/deleteKTX/DeleteKTX";
+import DeleteStudentService from "../../../components/DeleteStudentService/DeleteStudentService";
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
@@ -51,11 +53,11 @@ const formatDate = (dateString) => {
 const tableCell = [
   "STT",
   "Số phiếu",
-  "Mã hoá đơn",
   "Nơi nhận",
   "Ngày yêu cầu",
   "Trạng thái",
   "Ngày xử lý",
+  "Ghi chú",
   "Chi tiết",
 ];
 
@@ -96,10 +98,10 @@ const StudentCertificate = () => {
   const products = useSelector((state) => state.product.product?.body);
 
   const address = useSelector((state) => state.address.address?.body);
-  const loadingAddress = useSelector((state) => state.address.loading);
-  const messageAddress = useSelector((state) => state.address.message);
-  const successAddress = useSelector((state) => state.address.success);
-  const timestampAddress = useSelector((state) => state.address.timestamp);
+  const loadingAddress = useSelector((state) => state.address?.loading);
+  const messageAddress = useSelector((state) => state.address?.message);
+  const successAddress = useSelector((state) => state.address?.success);
+  const timestampAddress = useSelector((state) => state.address?.timestamp);
   const [modalAddressOpen, setModalAddressOpen] = useState(false);
   const handleModalAddressOpen = () => {
     setModalAddressOpen(true);
@@ -143,6 +145,19 @@ const StudentCertificate = () => {
     }
   }, [loadingCart, messageCart, successCart, timestampCart]);
 
+  const loadingOrder = useSelector((state) => state.order?.loading);
+  const messageOrder = useSelector((state) => state.order?.message);
+  const successOrder = useSelector((state) => state.order?.success);
+  const timestampOrder = useSelector((state) => state.order?.timestamp);
+  useEffect(() => {
+    if (!loadingOrder) {
+      if (timestampOrder && successOrder) {
+        toast.success(messageOrder);
+      } else if (!successOrder) {
+        toast.error(messageOrder);
+      }
+    }
+  }, [loadingOrder, messageOrder, successOrder, timestampOrder]);
   return (
     <Box>
       <Container sx={{}}>
@@ -481,7 +496,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgb(221, 221, 221)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize:{xs:'11px',lg:'14px'}
                           }}
                         >
                           {index + 1}
@@ -641,7 +656,7 @@ const StudentCertificate = () => {
                           backgroundColor: "#008689",
                           color: "white",
                           fontWeight: "600",
-                          fontSize: "18px",
+                          fontSize: { xs: "13px", lg: "15px" },
                         }}
                       >
                         {item}
@@ -667,7 +682,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgb(221, 221, 221)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           {index + 1}
@@ -678,7 +693,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgba(224, 224, 224, 1)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           {row.id}
@@ -689,18 +704,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgba(224, 224, 224, 1)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
-                          }}
-                        >
-                          {row.lastHistoryOrder.id}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-
-                            fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           {row.address}
@@ -711,7 +715,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgba(224, 224, 224, 1)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           {formatDate(row.orderDate)}
@@ -722,7 +726,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgba(224, 224, 224, 1)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           {row.lastHistoryOrder.status}
@@ -733,7 +737,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgba(224, 224, 224, 1)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           {formatDate(row.lastHistoryOrder.date)}
@@ -744,7 +748,21 @@ const StudentCertificate = () => {
                             border: "1px solid rgba(224, 224, 224, 1)",
 
                             fontWeight: "500",
-                            fontSize: "14px",
+                            fontSize: { xs: "11px", lg: "14px" },
+                          }}
+                        >
+                          {row.cancelReason}
+                        </TableCell>
+                        <TableCell
+                          align="center"
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "5px",
+                            fontWeight: "500",
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           <IconButton
@@ -768,8 +786,14 @@ const StudentCertificate = () => {
                               },
                             }}
                           >
-                            <EditOutlined sx={{ fontSize: "35px" }} />
+                            <EditOutlined
+                              sx={{ fontSize: { xs: "15px", lg: "20px" } }}
+                            />
                           </IconButton>
+
+                          {row?.lastHistoryOrder.status === "Chờ nhận hàng" && (
+                            <DeleteStudentService item={row} />
+                          )}
                         </TableCell>{" "}
                       </TableRow>
                     ))}

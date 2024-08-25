@@ -48,9 +48,9 @@ const AvatarInfo = () => {
   const successAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.success
   );
-  const loadingAvatar = useSelector((state) => state.profile.loading);
+  const loadingAvatar = useSelector((state) => state.profile?.loading);
   const message = useSelector(
-    (state) => state.profile.getCheckUpdateProfile.message
+    (state) => state.profile.getCheckUpdateProfile?.message
   );
   return (
     <Box

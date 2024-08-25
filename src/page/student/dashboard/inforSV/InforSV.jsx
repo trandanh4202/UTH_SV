@@ -32,7 +32,7 @@ const InfoField = ({ label, value }) => (
 );
 
 const InforSV = () => {
-  const profile = useSelector((state) => state.profile?.profile?.body);
+  const profile = useSelector((state) => state.profile?.summaryProfile?.body);
   const loading = useSelector((state) => state.profile.loading);
 
   return (

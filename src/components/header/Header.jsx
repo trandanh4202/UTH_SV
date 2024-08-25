@@ -1,14 +1,12 @@
 /* eslint-disable react/jsx-key */
 import {
-  Article,
   ContactEmergency,
   ExpandMore,
   KeyboardArrowDown,
   ReceiptLong,
   School,
-  ShoppingCart,
   SupportAgent,
-  ViewHeadlineRounded,
+  ViewHeadlineRounded
 } from "@mui/icons-material";
 import {
   Accordion,
@@ -27,12 +25,11 @@ import {
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import logoHome from "/images/sv_logo_dashboard.png";
-import { getProfile } from "~/features/profileSlice/ProfileSlice";
 import { getMenu } from "~/features/menuSlice/MenuSlice";
+import { getSummaryProfile } from "../../features/profileSlice/ProfileSlice";
 import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
-import { getCart } from "../../features/cartSlice/CartSlice";
 import Cart from "./Cart";
+import logoHome from "/images/sv_logo_dashboard.png";
 
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -76,13 +73,13 @@ const Header = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProfile());
+    dispatch(getSummaryProfile());
     if (role === "gv") {
       dispatch(getMenu());
     }
   }, [dispatch, role]);
 
-  const profile = useSelector((state) => state.profile?.profile.body);
+  const profile = useSelector((state) => state.profile?.summaryProfile.body);
   const menuFromStore = useSelector((state) => state.menu.menu);
 
   const studentMenu = [

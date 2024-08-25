@@ -111,7 +111,14 @@ const Dormitory = () => {
                   },
                 }}
               >
-                Đăng ký KTX
+                <Typography
+                  sx={{
+                    fontSize: { xs: "11px", lg: "15px" },
+                    fontWeight: "700",
+                  }}
+                >
+                  Đăng ký KTX
+                </Typography>
               </Button>
             </Box>
           </Box>
@@ -154,7 +161,7 @@ const Dormitory = () => {
                         backgroundColor: "#008689",
                         color: "white",
                         fontWeight: "600",
-                        fontSize: "18px",
+                        fontSize: { xs: "13px", lg: "18px" },
                       }}
                     >
                       {item}
@@ -179,7 +186,7 @@ const Dormitory = () => {
                         border: "1px solid rgb(221, 221, 221)",
 
                         fontWeight: "500",
-                        fontSize: "14px",
+                        fontSize: { xs: "11px", lg: "14px" },
                       }}
                     >
                       {index + 1}

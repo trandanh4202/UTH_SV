@@ -3,13 +3,9 @@ import axios from "axios";
 
 const initialState = {
   profile: {},
+  summaryProfile: {},
   loading: false,
   error: null,
-  select: [],
-  learningResults: [],
-  learningProgress: [],
-  courses: [],
-  loadingUI: false,
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -42,8 +38,42 @@ export const getProfile = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getSummaryProfile = createAsyncThunk(
+  "profile/getSummaryProfile",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        `${API_BASE_URL}/user/getSummaryProfile`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -77,7 +107,7 @@ export const getCheckUpdateProfile = createAsyncThunk(
         (error.response.status === 401 || error.response.status === 403)
       ) {
         // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -267,14 +297,28 @@ const profileSlice = createSlice({
       .addCase(getProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.loadingUI = true;
       })
       .addCase(getProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.profile = action.payload;
-        state.loadingUI = false;
       })
       .addCase(getProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getSummaryProfile.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getSummaryProfile.fulfilled, (state, action) => {
+        state.loading = false;
+        state.summaryProfile = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(getSummaryProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })
