@@ -118,21 +118,6 @@ const AddKTX = ({ open, onClose }) => {
     dispatch(registerDorm(formData));
   };
 
-  const loading = useSelector((state) => state.dorm?.loading);
-  const message = useSelector((state) => state.dorm?.message);
-  const success = useSelector((state) => state.dorm?.success);
-  const timestamp = useSelector((state) => state.dorm?.timestamp);
-  useEffect(() => {
-    if (!loading && timestamp) {
-      if (message && success) {
-        toast.success(message);
-      } else if (!success) {
-        toast.error(message);
-        setSelectedFile(null);
-      }
-    }
-  }, [loading, message, success, timestamp]);
-
   return (
     <>
       <Modal open={open} onClose={onClose}>

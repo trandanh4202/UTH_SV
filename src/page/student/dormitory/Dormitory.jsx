@@ -19,6 +19,8 @@ import { useDispatch, useSelector } from "react-redux";
 import AddKTX from "../../../components/addKTX/AddKTX";
 import DeleteKTX from "../../../components/deleteKTX/DeleteKTX";
 import { getDorm, getInforDorm } from "../../../features/dormSlice/DormSlice";
+import { toast } from "react-toastify";
+
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -57,10 +59,21 @@ const Dormitory = () => {
   };
   useEffect(() => {
     dispatch(getDorm());
-    dispatch(getInforDorm());
   }, [dispatch]);
   const dorms = useSelector((state) => state.dorm.dorms?.body);
-
+  const loading = useSelector((state) => state.dorm?.loading);
+  const message = useSelector((state) => state.dorm?.message);
+  const success = useSelector((state) => state.dorm?.success);
+  const timestamp = useSelector((state) => state.dorm?.timestamp);
+  useEffect(() => {
+    if (!loading && timestamp) {
+      if (message && success) {
+        toast.success(message);
+      } else if (!success) {
+        toast.error(message);
+      }
+    }
+  }, [loading, message, success, timestamp]);
   return (
     <Box>
       <Container sx={{ backgroundColor: "white" }}>
