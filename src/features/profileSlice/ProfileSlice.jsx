@@ -301,6 +301,10 @@ const profileSlice = createSlice({
       .addCase(getProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.profile = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;
@@ -378,6 +382,10 @@ const profileSlice = createSlice({
       .addCase(getUpdateProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.getUpdateProfile = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(getUpdateProfile.rejected, (state, action) => {
         state.loading = false;
@@ -406,6 +414,9 @@ const profileSlice = createSlice({
       .addCase(getCheckUpdateProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.getCheckUpdateProfile = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(getCheckUpdateProfile.rejected, (state, action) => {
         state.loading = false;

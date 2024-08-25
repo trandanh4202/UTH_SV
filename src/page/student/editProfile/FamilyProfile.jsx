@@ -17,15 +17,11 @@ import {
   deleteFamily,
   getFamily,
 } from "../../../features/familySlice/FamilySlice";
-import { getNation } from "../../../features/nationSlice/NationSlice";
-import { getReligion } from "../../../features/religionSlice/ReligionSlice";
 
 const FamilyProfile = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getFamily());
-    dispatch(getNation());
-    dispatch(getReligion());
   }, [dispatch]);
 
   const family = useSelector((state) => state.family.family);
@@ -57,13 +53,13 @@ const FamilyProfile = () => {
     dispatch(deleteFamily({ id }));
   };
 
-  const handleChange = (id, field, value) => {};
   const successAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.success
   );
   const message = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.message
   );
+
   return (
     <>
       <Box>
@@ -78,296 +74,271 @@ const FamilyProfile = () => {
             {message}
           </Typography>
         </Box>
-        {family.map((member) => (
-          <Paper
-            key={member.id}
-            elevation={8}
-            sx={{ position: "relative", marginBottom: 2, borderRadius: "8px" }}
-          >
-            <IconButton
-              onClick={() => removeFamilyMember(member.id)}
+        {family &&
+          family?.map((member) => (
+            <Paper
+              key={member.id}
+              elevation={8}
               sx={{
-                position: "absolute",
-                top: 10,
-                right: 10,
-                color: "red",
+                position: "relative",
+                marginBottom: 2,
+                borderRadius: "8px",
               }}
-              disabled={!successAccess}
             >
-              <CloseIcon
+              <IconButton
+                onClick={() => removeFamilyMember(member.id)}
                 sx={{
-                  fontSize: "30px",
+                  position: "absolute",
+                  top: 10,
+                  right: 10,
+                  color: "red",
                 }}
-              />
-            </IconButton>
-            <IconButton
-              onClick={() => handleModalOpenEdit(member)}
-              sx={{
-                position: "absolute",
-                top: 50,
-                right: 10,
-                color: "red",
-              }}
-              disabled={!successAccess}
-            >
-              <ModeEdit
-                sx={{
-                  fontSize: "30px",
-                }}
-              />
-            </IconButton>
-
-            <Box sx={{ padding: { lg: "10px 20px", xs: "5px 10px" } }}>
-              <Grid
-                container
-                spacing={{ xs: 2, lg: 3 }} // Adjust spacing based on screen size
+                disabled={!successAccess}
               >
-                <Grid item xs={6} lg={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Mối quan hệ
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.quanHe || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "quanHe", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} lg={3}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Họ tên
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.hoTen || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "hoTen", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={6} lg={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Năm sinh
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.namSinh || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "namSinh", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={6} lg={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Quốc tịch
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.quocTich || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "quocTich", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={6} lg={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Dân tộc
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.danToc || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "namSinh", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={6} lg={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Tôn giáo
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.tonGiao || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "namSinh", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
-                      }}
-                    />
-                  </Box>
-                </Grid>
+                <CloseIcon
+                  sx={{
+                    fontSize: "30px",
+                  }}
+                />
+              </IconButton>
+              <IconButton
+                onClick={() => handleModalOpenEdit(member)}
+                sx={{
+                  position: "absolute",
+                  top: 50,
+                  right: 10,
+                  color: "red",
+                }}
+                disabled={!successAccess}
+              >
+                <ModeEdit
+                  sx={{
+                    fontSize: "30px",
+                  }}
+                />
+              </IconButton>
 
-                <Grid item xs={6} lg={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Nghề nghiệp
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.ngheNghiep || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "ngheNghiep", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
+              <Box sx={{ padding: { lg: "10px 20px", xs: "5px 10px" } }}>
+                <Grid
+                  container
+                  spacing={{ xs: 2, lg: 3 }} // Adjust spacing based on screen size
+                >
+                  <Grid item xs={6} lg={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
                       }}
-                    />
-                  </Box>
-                </Grid>
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Mối quan hệ
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.quanHe || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} lg={3}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Họ tên
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.hoTen || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={6} lg={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Năm sinh
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.namSinh || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={6} lg={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Quốc tịch
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.quocTich || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={6} lg={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Dân tộc
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.danToc || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={6} lg={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Tôn giáo
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.tonGiao || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
 
-                <Grid item xs={6} lg={2}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Số điện thoại
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.soDienThoai || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "soDienThoai", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
+                  <Grid item xs={6} lg={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
                       }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} lg={6}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Địa chỉ hộ khẩu
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.hoKhau || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "hoKhau", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Nghề nghiệp
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.ngheNghiep || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={6} lg={2}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
                       }}
-                    />
-                  </Box>
-                </Grid>
-                <Grid item xs={12} lg={6}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: "2px",
-                    }}
-                  >
-                    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                      Địa chỉ liên lạc
-                    </Typography>
-                    <TextField
-                      name={`${member.id}`}
-                      value={member.hienNay || ""}
-                      onChange={(e) =>
-                        handleChange(member.id, "hienNay", e.target.value)
-                      }
-                      sx={inputStyles}
-                      InputProps={{
-                        readOnly: true,
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Số điện thoại
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.soDienThoai || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} lg={6}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
                       }}
-                    />
-                  </Box>
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Địa chỉ hộ khẩu
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.hoKhau || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} lg={6}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "2px",
+                      }}
+                    >
+                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+                        Địa chỉ liên lạc
+                      </Typography>
+                      <TextField
+                        name={`${member.id}`}
+                        value={member.hienNay || ""}
+                        sx={inputStyles}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                      />
+                    </Box>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
-          </Paper>
-        ))}
+              </Box>
+            </Paper>
+          ))}
         <Box
           sx={{
             display: "flex",

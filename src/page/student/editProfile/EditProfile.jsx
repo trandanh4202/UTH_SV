@@ -39,16 +39,24 @@ const EditProfile = () => {
     if (!loading) {
       if (success && timestamp) {
         toast.success(message);
-
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       } else if (!success) {
         toast.error(message);
       }
     }
   }, [loading, message, success, timestamp]);
-
+  const loadingFamily = useSelector((state) => state.family?.loading);
+  const successFamily = useSelector((state) => state.family?.success);
+  const messageFamily = useSelector((state) => state.family?.message);
+  const timestampFamily = useSelector((state) => state.family?.timestamp);
+  useEffect(() => {
+    if (!loadingFamily) {
+      if (successFamily && timestampFamily) {
+        toast.success(messageFamily);
+      } else if (!successFamily) {
+        toast.error(messageFamily);
+      }
+    }
+  }, [loadingFamily, messageFamily, successFamily, timestampFamily]);
   return (
     <Container>
       <Paper

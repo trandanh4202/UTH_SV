@@ -1,4 +1,5 @@
 /* eslint-disable react/prop-types */
+import { ClearOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -15,12 +16,9 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getInforDorm, registerDorm } from "../../features/dormSlice/DormSlice";
-import { categoryFamily } from "../../features/familySlice/FamilySlice";
-import Spinner from "../Spinner/Spinner";
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import { ClearOutlined } from "@mui/icons-material";
+import { toast } from "react-toastify";
+import { getInforDorm, registerDorm } from "../../features/dormSlice/DormSlice";
 
 const selectStyles = {
   "&:focus": {
@@ -137,54 +135,58 @@ const AddKTX = ({ open, onClose }) => {
 
   return (
     <>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <Modal open={open} onClose={onClose}>
+      <Modal open={open} onClose={onClose}>
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            padding: { xs: "10px", lg: "20px" },
+            borderRadius: "20px",
+            width: { lg: "40%", xs: "100%" },
+          }}
+        >
+          <Typography
+            sx={{
+              textAlign: "center",
+              color: "black",
+              fontWeight: "600",
+              fontSize: "20px",
+              marginBottom: { xs: "5px", lg: "15px" },
+            }}
+          >
+            Thông tin đăng ký Ký túc xá
+          </Typography>
           <Box
             sx={{
               position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              bgcolor: "background.paper",
-              boxShadow: 24,
-              padding: { xs: "10px", lg: "20px" },
-              borderRadius: "20px",
-              width: { lg: "40%", xs: "100%" },
+              right: "10px",
+              top: "10px",
+            }}
+            onClick={onClose}
+          >
+            <IconButton
+              sx={{
+                backgroundColor: "#ff00001f",
+              }}
+            >
+              <ClearOutlined
+                sx={{
+                  color: "red",
+                }}
+              />
+            </IconButton>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "5px",
             }}
           >
-            <Typography
-              sx={{
-                textAlign: "center",
-                color: "black",
-                fontWeight: "600",
-                fontSize: "20px",
-                marginBottom: { xs: "5px", lg: "15px" },
-              }}
-            >
-              Thông tin đăng ký Ký túc xá
-            </Typography>
-            <Box
-              sx={{
-                position: "absolute",
-                right: "10px",
-                top: "10px",
-              }}
-              onClick={onClose}
-            >
-              <IconButton
-                sx={{
-                  backgroundColor: "#ff00001f",
-                }}
-              >
-                <ClearOutlined
-                  sx={{
-                    color: "red",
-                  }}
-                />
-              </IconButton>
-            </Box>
             <Box
               sx={{
                 display: "flex",
@@ -195,288 +197,280 @@ const AddKTX = ({ open, onClose }) => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  gap: "5px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  width: "100%",
+                  flexDirection: { xs: "column", lg: "row" },
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: "100%",
-                    flexDirection: { xs: "column", lg: "row" },
-                  }}
-                >
-                  <Box>
-                    <Typography
-                      sx={{
-                        fontWeight: "600",
-                        textAlign: "center",
-                        fontSize: "15px",
-                      }}
-                    >
-                      Đối tượng ưu tiên xem xét duyệt:
-                    </Typography>
-                    <FormGroup
-                      sx={{
-                        "& .MuiFormControlLabel-root": {
-                          display: "flex",
-                          marginBottom: "2px",
-                          alignItems: "center",
-                        },
-                      }}
-                    >
-                      {priority?.map((item) => (
-                        <FormControlLabel
-                          key={item.id}
-                          control={
-                            <Checkbox
-                              id={`checkbox-${item.id}`}
-                              checked={selectedPriorities.includes(
-                                String(item.id)
-                              )}
-                              onChange={handleCheckboxChange}
-                              name={item.name}
-                              value={item.id}
-                            />
-                          }
-                          label={item.name}
-                          sx={{
-                            "& .MuiTypography-root": {
-                              fontSize: { xs: "11px", lg: "15px" }, // Kích thước chữ cho Label
-                            },
-
-                            marginBottom: "10px", // Giãn cách dưới mỗi checkbox
-                            "& span.Mui-checked": {
-                              color: "red",
-                            },
-                            "&x.MuiFormControlLabel-root": {
-                              display: "block",
-                            },
-                            // justifyContent: "center",
-                            // alignItems: "start",
-                          }}
-                        />
-                      ))}
-                    </FormGroup>
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    // justifyContent: "center",
-                    alignItems: "center",
-                    gap: "10px",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      color: "#333333",
-                      fontWeight: "700",
-                      fontSize: {
-                        xs: "11px",
-                        lg: "16px",
-                      },
-                    }}
-                  >
-                    Chọn cơ sở
-                  </Typography>
-                  <Select
-                    value={campusId}
-                    onChange={campusChange}
-                    displayEmpty
-                    sx={selectStyles}
-                    defaultValue="0"
-                  >
-                    <MenuItem value="0" disabled>
-                      Chọn cơ sở
-                    </MenuItem>
-
-                    {campuses?.map((campus, index) => (
-                      <MenuItem
-                        key={campus.id}
-                        value={campus.id}
-                        index={index}
-                        sx={{ fontSize: "15px" }}
-                      >
-                        {campus.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </Box>
                 <Box>
                   <Typography
                     sx={{
-                      color: "#333333",
-                      fontWeight: "700",
-                      fontSize: {
-                        xs: "11px",
-                        lg: "16px",
-                      },
-                    }}
-                  >
-                    Sinh viên tải minh chứng đối tượng ưu tiên tương ứng
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                    }}
-                  >
-                    <TextField
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        "& .MuiInputBase-input": {
-                          fontSize: { xs: "11px", lg: "15px" },
-                          backgroundColor: "white",
-                          color: "black",
-                          borderRadius: "8px",
-                          border: "3px solid #0085885a",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          transition: "all ease 0.4s",
-                          padding: { xs: "7px 14px", lg: "9px 14px" },
-
-                          "&:hover": {
-                            borderColor: "#008588",
-                          },
-                        },
-                        "& .MuiOutlinedInput-notchedOutline": {
-                          border: "none",
-                        },
-                        "& .MuiSvgIcon-root": {
-                          color: "green",
-                          backgroundSize: "cover",
-                        },
-                      }}
-                    />
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                    gap: "5px",
-                    margin: "10px 0",
-                    width: "100%",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      color: "#333333",
-                      fontWeight: "700",
-                      fontSize: {
-                        xs: "11px",
-                        lg: "16px",
-                      },
+                      fontWeight: "600",
                       textAlign: "center",
+                      fontSize: "15px",
                     }}
                   >
-                    Cơ sở Ký túc xá
+                    Đối tượng ưu tiên xem xét duyệt:
                   </Typography>
-                  <Grid container spacing={1}>
-                    <Grid item xs={12} lg={6}>
-                      <Typography
-                        component={Link}
-                        to="https://maps.app.goo.gl/8EDsaSgKmqXZFCqF6"
-                        target="_blank"
+                  <FormGroup
+                    sx={{
+                      "& .MuiFormControlLabel-root": {
+                        display: "flex",
+                        marginBottom: "2px",
+                        alignItems: "center",
+                      },
+                    }}
+                  >
+                    {priority?.map((item) => (
+                      <FormControlLabel
+                        key={item.id}
+                        control={
+                          <Checkbox
+                            id={`checkbox-${item.id}`}
+                            checked={selectedPriorities.includes(
+                              String(item.id)
+                            )}
+                            onChange={handleCheckboxChange}
+                            name={item.name}
+                            value={item.id}
+                          />
+                        }
+                        label={item.name}
                         sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          fontSize: { xs: "11px", lg: "15px" },
-                          color: "#008588",
-                          borderRadius: "8px",
-                          border: "3px solid #0085885a",
-                          transition: "all ease 0.4s",
-                          padding: { xs: "3px 14px", lg: "9px 14px" },
-                          "&:hover": {
-                            borderColor: "#008689",
-                            backgroundColor: "white",
-                            color: "red",
-                            boxShadow: "0 0 10px #008689",
+                          "& .MuiTypography-root": {
+                            fontSize: { xs: "11px", lg: "15px" }, // Kích thước chữ cho Label
                           },
-                        }}
-                      >
-                        Cơ sở 2 - KTX: Số 10, Đường số 12, KP3, P. An Khánh, TP.
-                        Thủ Đức, TP. HCM
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} lg={6}>
-                      <Typography
-                        component={Link}
-                        target="_blank"
-                        to="https://maps.app.goo.gl/vmQMjHXWWb5xgKQF9"
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          fontSize: { xs: "11px", lg: "15px" },
-                          color: "#008588",
-                          borderRadius: "8px",
-                          border: "3px solid #0085885a",
-                          transition: "all ease 0.4s",
-                          padding: { xs: "3px 14px", lg: "9px 14px" },
-                          "&:hover": {
-                            borderColor: "#008689",
-                            backgroundColor: "white",
+
+                          marginBottom: "10px", // Giãn cách dưới mỗi checkbox
+                          "& span.Mui-checked": {
                             color: "red",
-                            boxShadow: "0 0 10px #008689",
                           },
+                          "&x.MuiFormControlLabel-root": {
+                            display: "block",
+                          },
+                          // justifyContent: "center",
+                          // alignItems: "start",
                         }}
-                      >
-                        Cơ sở 3 - KTX: Số 70, Đường Tô Ký, P. Tân Chánh Hiệp, Q.
-                        12, TP. HCM
-                      </Typography>
-                    </Grid>
-                  </Grid>
+                      />
+                    ))}
+                  </FormGroup>
                 </Box>
               </Box>
-              <Button
-                onClick={handleRegisterDorm}
-                variant="contained"
+              <Box
                 sx={{
                   display: "flex",
-                  justifyContent: "center",
+                  // justifyContent: "center",
                   alignItems: "center",
-                  fontSize: "15px",
-                  backgroundColor: "#008588",
-                  color: "white",
-                  borderRadius: "8px",
-                  border: "3px solid #0085885a",
-                  transition: "all ease 0.4s",
-                  padding: { xs: "3px 14px", lg: "9px 14px" },
-
-                  "&:hover": {
-                    borderColor: "#008689",
-                    backgroundColor: "white",
-                    color: "#008689",
-                    boxShadow: "0 0 10px #008689",
-                  },
+                  gap: "10px",
                 }}
               >
                 <Typography
                   sx={{
-                    fontSize: { xs: "11px", lg: "15px" },
-                    fontWeight: "700px",
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: {
+                      xs: "11px",
+                      lg: "16px",
+                    },
                   }}
                 >
-                  Đăng ký Ký túc xá
+                  Chọn cơ sở
                 </Typography>
-              </Button>
+                <Select
+                  value={campusId}
+                  onChange={campusChange}
+                  displayEmpty
+                  sx={selectStyles}
+                  defaultValue="0"
+                >
+                  <MenuItem value="0" disabled>
+                    Chọn cơ sở
+                  </MenuItem>
+
+                  {campuses?.map((campus, index) => (
+                    <MenuItem
+                      key={campus.id}
+                      value={campus.id}
+                      index={index}
+                      sx={{ fontSize: "15px" }}
+                    >
+                      {campus.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: {
+                      xs: "11px",
+                      lg: "16px",
+                    },
+                  }}
+                >
+                  Sinh viên tải minh chứng đối tượng ưu tiên tương ứng
+                </Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                  }}
+                >
+                  <TextField
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      "& .MuiInputBase-input": {
+                        fontSize: { xs: "11px", lg: "15px" },
+                        backgroundColor: "white",
+                        color: "black",
+                        borderRadius: "8px",
+                        border: "3px solid #0085885a",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        transition: "all ease 0.4s",
+                        padding: { xs: "7px 14px", lg: "9px 14px" },
+
+                        "&:hover": {
+                          borderColor: "#008588",
+                        },
+                      },
+                      "& .MuiOutlinedInput-notchedOutline": {
+                        border: "none",
+                      },
+                      "& .MuiSvgIcon-root": {
+                        color: "green",
+                        backgroundSize: "cover",
+                      },
+                    }}
+                  />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  gap: "5px",
+                  margin: "10px 0",
+                  width: "100%",
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: "#333333",
+                    fontWeight: "700",
+                    fontSize: {
+                      xs: "11px",
+                      lg: "16px",
+                    },
+                    textAlign: "center",
+                  }}
+                >
+                  Cơ sở Ký túc xá
+                </Typography>
+                <Grid container spacing={1}>
+                  <Grid item xs={12} lg={6}>
+                    <Typography
+                      component={Link}
+                      to="https://maps.app.goo.gl/8EDsaSgKmqXZFCqF6"
+                      target="_blank"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontSize: { xs: "11px", lg: "15px" },
+                        color: "#008588",
+                        borderRadius: "8px",
+                        border: "3px solid #0085885a",
+                        transition: "all ease 0.4s",
+                        padding: { xs: "3px 14px", lg: "9px 14px" },
+                        "&:hover": {
+                          borderColor: "#008689",
+                          backgroundColor: "white",
+                          color: "red",
+                          boxShadow: "0 0 10px #008689",
+                        },
+                      }}
+                    >
+                      Cơ sở 2 - KTX: Số 10, Đường số 12, KP3, P. An Khánh, TP.
+                      Thủ Đức, TP. HCM
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} lg={6}>
+                    <Typography
+                      component={Link}
+                      target="_blank"
+                      to="https://maps.app.goo.gl/vmQMjHXWWb5xgKQF9"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontSize: { xs: "11px", lg: "15px" },
+                        color: "#008588",
+                        borderRadius: "8px",
+                        border: "3px solid #0085885a",
+                        transition: "all ease 0.4s",
+                        padding: { xs: "3px 14px", lg: "9px 14px" },
+                        "&:hover": {
+                          borderColor: "#008689",
+                          backgroundColor: "white",
+                          color: "red",
+                          boxShadow: "0 0 10px #008689",
+                        },
+                      }}
+                    >
+                      Cơ sở 3 - KTX: Số 70, Đường Tô Ký, P. Tân Chánh Hiệp, Q.
+                      12, TP. HCM
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </Box>
             </Box>
+            <Button
+              onClick={handleRegisterDorm}
+              variant="contained"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                fontSize: "15px",
+                backgroundColor: "#008588",
+                color: "white",
+                borderRadius: "8px",
+                border: "3px solid #0085885a",
+                transition: "all ease 0.4s",
+                padding: { xs: "3px 14px", lg: "9px 14px" },
+
+                "&:hover": {
+                  borderColor: "#008689",
+                  backgroundColor: "white",
+                  color: "#008689",
+                  boxShadow: "0 0 10px #008689",
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: "11px", lg: "15px" },
+                  fontWeight: "700px",
+                }}
+              >
+                Đăng ký Ký túc xá
+              </Typography>
+            </Button>
           </Box>
-        </Modal>
-      )}
+        </Box>
+      </Modal>
     </>
   );
 };

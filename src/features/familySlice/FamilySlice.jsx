@@ -65,8 +65,8 @@ export const addFamily = createAsyncThunk(
 
       const response = await axios.get(`${API_BASE_URL}/quanHeGiaDinh`, config);
       return {
-        message: message.data.body,
-        data: response.data.body,
+        message: message.data,
+        response: response.data.body,
       };
     } catch (error) {
       if (
@@ -103,8 +103,8 @@ export const updateFamily = createAsyncThunk(
 
       const response = await axios.get(`${API_BASE_URL}/quanHeGiaDinh`, config);
       return {
-        message: message.data.body,
-        data: response.data.body,
+        message: message.data,
+        response: response.data.body,
       };
     } catch (error) {
       if (
@@ -139,8 +139,8 @@ export const deleteFamily = createAsyncThunk(
       );
       const response = await axios.get(`${API_BASE_URL}/quanHeGiaDinh`, config);
       return {
-        message: message.data.body,
-        data: response.data.body,
+        message: message.data,
+        response: response.data.body,
       };
     } catch (error) {
       if (
@@ -199,6 +199,9 @@ const familySlice = createSlice({
       .addCase(getFamily.fulfilled, (state, action) => {
         state.loading = false;
         state.family = action.payload;
+        state.success = action.payload.success;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
       })
       .addCase(getFamily.rejected, (state, action) => {
         state.loading = false;
@@ -212,7 +215,10 @@ const familySlice = createSlice({
       .addCase(addFamily.fulfilled, (state, action) => {
         state.loading = false;
         state.addFamily = action.payload.message;
-        state.family = action.payload.data;
+        state.family = action.payload.response;
+        state.success = action.payload.message.success;
+        state.message = action.payload.message.message;
+        state.timestamp = action.payload.message.timestamp;
       })
       .addCase(addFamily.rejected, (state, action) => {
         state.loading = false;
@@ -225,7 +231,10 @@ const familySlice = createSlice({
       .addCase(updateFamily.fulfilled, (state, action) => {
         state.loading = false;
         state.updateFamily = action.payload.message;
-        state.family = action.payload.data;
+        state.family = action.payload.response;
+        state.success = action.payload.message.success;
+        state.message = action.payload.message.message;
+        state.timestamp = action.payload.message.timestamp;
       })
       .addCase(updateFamily.rejected, (state, action) => {
         state.loading = false;
@@ -238,7 +247,10 @@ const familySlice = createSlice({
       .addCase(deleteFamily.fulfilled, (state, action) => {
         state.loading = false;
         state.deleteFamily = action.payload.message;
-        state.family = action.payload.data;
+        state.family = action.payload.response;
+        state.success = action.payload.message.success;
+        state.message = action.payload.message.message;
+        state.timestamp = action.payload.message.timestamp;
       })
       .addCase(deleteFamily.rejected, (state, action) => {
         state.loading = false;
