@@ -18,7 +18,7 @@ const AvatarInfo = () => {
   const [preview, setPreview] = useState(null);
   const dispatch = useDispatch();
   const studentPhoto = useSelector(
-    (state) => state.profile.profile.body?.image
+    (state) => state.profile.summaryProfile.body?.image
   ); // Lấy ảnh hiện tại từ Redux store
 
   const handleFileChange = (event) => {

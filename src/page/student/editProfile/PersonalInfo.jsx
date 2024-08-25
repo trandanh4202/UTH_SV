@@ -82,7 +82,16 @@ const selectStyles = {
     borderColor: "#008588",
   },
 };
-
+const genders = [
+  {
+    id: true,
+    name: "Nam",
+  },
+  {
+    id: false,
+    name: "Nữ",
+  },
+];
 const validateOption = (value, options) => {
   return options.includes(value) ? value : "";
 };
@@ -142,8 +151,16 @@ const TextFieldWrapper = ({
   successAccess,
 }) => {
   // Xử lý thay đổi giá trị cho trường hợp loại ngày tháng
+
   const handleChange = (event) => {
-    onChange({ target: { name, value: event.target.value } });
+    const newValue = event.target.value;
+
+    if (name === "schoolEmail" && !newValue.endsWith("@ut.edu.vn")) {
+      alert("Email phải là @ut.edu.vn");
+      return;
+    }
+
+    onChange({ target: { name, value: newValue } });
   };
 
   return (
@@ -478,28 +495,15 @@ const PersonalInfo = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} lg={1.5}>
-                <Box
-                  sx={{ display: "flex", flexDirection: "column", gap: "2px" }}
-                >
-                  <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                    Giới tính
-                  </Typography>
-                  <Select
-                    name="gioiTinh"
-                    value={formData.gioiTinh}
-                    onChange={handleChange}
-                    displayEmpty
-                    successAccess={successAccess}
-                    sx={selectStyles}
-                  >
-                    <MenuItem value="">
-                      <em>Chọn giới tính</em>
-                    </MenuItem>
-                    <MenuItem value="false">Nam</MenuItem>
-                    <MenuItem value="true">Nữ</MenuItem>
-                    {/* <MenuItem value="other">Khác</MenuItem> */}
-                  </Select>
-                </Box>
+                <SelectField
+                  label="Giới tính"
+                  name="gioiTinh"
+                  value={formData.gioiTinh}
+                  onChange={handleChange}
+                  successAccess={successAccess}
+                  sx={selectStyles}
+                  options={genders}
+                />
               </Grid>
               <Grid item xs={12} lg={2}>
                 <Box
