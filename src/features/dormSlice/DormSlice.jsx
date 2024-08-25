@@ -54,7 +54,7 @@ export const cancelDorm = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const message = await axios.get(
+      const message = await axios.delete(
         `${API_BASE_URL}/dorm/cancel/${id}`,
         config
       );
