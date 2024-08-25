@@ -430,10 +430,10 @@ const PersonalInfo = () => {
   const messageAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.message
   );
-  // const successAccess = useSelector(
-  //   (state) => state.profile.getCheckUpdateProfile?.success
-  // );
-  const successAccess = true;
+  const successAccess = useSelector(
+    (state) => state.profile.getCheckUpdateProfile?.success
+  );
+  // const successAccess = true;
   return (
     <>
       <Box>

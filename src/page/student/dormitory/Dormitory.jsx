@@ -16,10 +16,9 @@ import {
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getReceipts } from "~/features/tuitionSlice/TuitionSlice";
 import AddKTX from "../../../components/addKTX/AddKTX";
-import { getDorm, getInforDorm } from "../../../features/dormSlice/DormSlice";
 import DeleteKTX from "../../../components/deleteKTX/DeleteKTX";
+import { getDorm, getInforDorm } from "../../../features/dormSlice/DormSlice";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -46,10 +45,6 @@ const Dormitory = () => {
   const handleRowClick = (index) => {
     setSelectedRow(index);
   };
-
-  useEffect(() => {
-    dispatch(getReceipts());
-  }, [dispatch]);
 
   const [modalKTXOpen, setModalKTXOpen] = useState(false);
 

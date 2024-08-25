@@ -49,6 +49,9 @@ const AvatarInfo = () => {
     (state) => state.profile.getCheckUpdateProfile?.success
   );
   const loadingAvatar = useSelector((state) => state.profile.loading);
+  const message = useSelector(
+    (state) => state.profile.getCheckUpdateProfile.message
+  );
   return (
     <Box
       sx={{
@@ -67,11 +70,7 @@ const AvatarInfo = () => {
             fontWeight: "600",
           }}
         >
-          Sinh viên chuẩn bị ảnh thẻ và cập nhật sau, ảnh sinh viên sẽ dùng làm
-          hồ sơ Đại học - Thẻ sinh viên. Ảnh áo sơ mi trắng hoặc đồng phục UTH,
-          phông nền trắng, tóc gọn gàng không che phủ mặt. Dung lượng ảnh dưới
-          1MB. Sinh viên vui lòng cập nhật đúng quy chuẩn hình ảnh, trường hợp
-          sai quy chuẩn sẽ bị khóa chức năng.
+          {message}
         </Typography>
       </Box>
       {loadingAvatar ? (

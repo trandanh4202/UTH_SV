@@ -346,7 +346,7 @@ const StudentCertificate = () => {
               </Grid>
             ))}
           </Grid>
-          <Grid
+          {/* <Grid
             sx={{
               padding: "10px 5px",
               backgroundColor: "white",
@@ -354,7 +354,7 @@ const StudentCertificate = () => {
             }}
             container
           >
-            {/* <Grid
+            <Grid
               item
               xs={12}
               sx={{
@@ -413,7 +413,7 @@ const StudentCertificate = () => {
                   </Typography>
                 </Button>
               </Box>
-            </Grid> */}
+            </Grid> 
             <TableContainer
               component={Paper}
               sx={{
@@ -568,7 +568,7 @@ const StudentCertificate = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Grid>
+          </Grid> */}
           <Grid
             sx={{
               padding: "10px 5px",
