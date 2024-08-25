@@ -307,9 +307,10 @@ const Cart = () => {
 
               {address?.map((item, index) => (
                 <MenuItem value={item.id} index={index} key={item.id}>
-                  <Typography variant="span">{item.PROVINCE_NAME}</Typography>
-                  <Typography variant="span">, {item.DISTRICT_NAME}</Typography>
+                  <Typography variant="span">{item.detail}</Typography>
                   <Typography variant="span">, {item.WARDS_NAME}</Typography>
+                  <Typography variant="span">, {item.DISTRICT_NAME}</Typography>
+                  <Typography variant="span">, {item.PROVINCE_NAME}</Typography>
                 </MenuItem>
               ))}
             </Select>
