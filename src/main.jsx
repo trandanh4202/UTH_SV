@@ -155,10 +155,10 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "test",
-  //   element: <Test />,
-  // },
+  {
+    path: "test",
+    element: <Test />,
+  },
 ]);
 
 const theme = createTheme({

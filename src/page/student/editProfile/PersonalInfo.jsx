@@ -24,6 +24,7 @@ import {
 } from "../../../features/profileSlice/ProfileSlice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { parse, format } from "date-fns";
 
 const inputStyles = {
   "& .MuiInputBase-input": {
@@ -84,11 +85,11 @@ const selectStyles = {
 };
 const genders = [
   {
-    id: true,
+    id: false,
     name: "Nam",
   },
   {
-    id: false,
+    id: true,
     name: "Nữ",
   },
 ];
@@ -112,7 +113,7 @@ const SelectField = ({
     </Typography>
     <Select
       name={name}
-      value={value || ""}
+      value={value !== undefined ? value : ""} // Đảm bảo giá trị false không bị hiểu là rỗng
       onChange={onChange}
       displayEmpty
       disabled={!successAccess ? !successAccess : disabled}
@@ -159,7 +160,7 @@ const TextFieldWrapper = ({
       alert("Email phải là @ut.edu.vn");
       return;
     }
-
+    console.log(name, newValue);
     onChange({ target: { name, value: newValue } });
   };
 
@@ -434,11 +435,13 @@ const PersonalInfo = () => {
   }, [dispatch, formData.dcllIdhuyen]);
   const handleChange = useCallback((e) => {
     const { name, value } = e.target;
+
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   }, []);
+  console.log(formData.gioiTinh);
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateProfile(formData)); // Dispatch the updateProfile action with formData
