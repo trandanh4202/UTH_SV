@@ -201,7 +201,7 @@ const PersonalInfo = () => {
   const [formData, setFormData] = useState({
     hoDem: "",
     ten: "",
-    gioiTinh: true,
+    gioiTinh: "",
     ngaySinh2: "",
     noiSinh: 0,
     noisinhIdhuyen: 0,
@@ -241,12 +241,13 @@ const PersonalInfo = () => {
   const messageUpdate = useSelector(
     (state) => state.profile.getUpdateProfile?.messageUpdate
   );
+  console.log(formData.gioiTinh);
   useEffect(() => {
     if (profile) {
       setFormData({
         hoDem: profile.hoDem || "",
         ten: profile.ten || "",
-        gioiTinh: profile.gioiTinh || true,
+        gioiTinh: profile.gioiTinh,
         ngaySinh2: profile.ngaySinh2 || "",
         noiSinh:
           validateOption(

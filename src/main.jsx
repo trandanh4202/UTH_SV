@@ -139,7 +139,7 @@ const router = createBrowserRouter([
             element: <Certification />,
           },
           {
-            path: "dorm",
+            path: "admindorm",
             element: <HandleDorm />,
           },
         ],

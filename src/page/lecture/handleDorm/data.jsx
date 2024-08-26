@@ -1,6 +1,6 @@
 export const registrations = [
   {
-    ID: 1,
+    id: 1, // Đổi 'ID' thành 'id'
     RegistrationCode: "KTX20230001",
     MSSV: "20196001",
     LastName: "Nguyễn Văn",
@@ -13,7 +13,7 @@ export const registrations = [
     Status: "Đã duyệt",
   },
   {
-    ID: 2,
+    id: 2,
     RegistrationCode: "KTX20230002",
     MSSV: "20196002",
     LastName: "Trần Thị",
@@ -26,7 +26,7 @@ export const registrations = [
     Status: "Chờ duyệt",
   },
   {
-    ID: 3,
+    id: 3,
     RegistrationCode: "KTX20230003",
     MSSV: "20196003",
     LastName: "Lê Hoàng",
@@ -39,7 +39,7 @@ export const registrations = [
     Status: "Đã từ chối",
   },
   {
-    ID: 4,
+    id: 4,
     RegistrationCode: "KTX20230004",
     MSSV: "20196004",
     LastName: "Phạm",
@@ -52,7 +52,7 @@ export const registrations = [
     Status: "Đã duyệt",
   },
   {
-    ID: 5,
+    id: 5,
     RegistrationCode: "KTX20230005",
     MSSV: "20196005",
     LastName: "Võ Thị",
@@ -65,7 +65,7 @@ export const registrations = [
     Status: "Chờ duyệt",
   },
   {
-    ID: 6,
+    id: 6,
     RegistrationCode: "KTX20230006",
     MSSV: "20196006",
     LastName: "Hoàng Văn",
@@ -78,7 +78,7 @@ export const registrations = [
     Status: "Đã duyệt",
   },
   {
-    ID: 7,
+    id: 7,
     RegistrationCode: "KTX20230007",
     MSSV: "20196007",
     LastName: "Đỗ",
@@ -91,7 +91,7 @@ export const registrations = [
     Status: "Đã từ chối",
   },
   {
-    ID: 8,
+    id: 8,
     RegistrationCode: "KTX20230008",
     MSSV: "20196008",
     LastName: "Ngô",
@@ -104,7 +104,7 @@ export const registrations = [
     Status: "Chờ duyệt",
   },
   {
-    ID: 9,
+    id: 9,
     RegistrationCode: "KTX20230009",
     MSSV: "20196009",
     LastName: "Bùi",
@@ -117,7 +117,7 @@ export const registrations = [
     Status: "Đã duyệt",
   },
   {
-    ID: 10,
+    id: 10,
     RegistrationCode: "KTX20230010",
     MSSV: "20196010",
     LastName: "Dương",
