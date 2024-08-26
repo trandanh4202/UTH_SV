@@ -87,7 +87,6 @@ export const cancelOrder = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log(id);
       const message = await axios.delete(
         `${API_BASE_URL}/order/cancel/${id}`,
         config

@@ -35,7 +35,6 @@ const AvatarInfo = () => {
 
   const handleUpload = () => {
     if (!selectedFile) {
-      console.error("No file selected");
       return;
     }
 

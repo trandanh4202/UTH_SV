@@ -155,7 +155,7 @@ const Cart = () => {
         })
       );
     } else {
-      console.warn(`Invalid size selected: ${newSize}`);
+      // console.warn(`Invalid size selected: ${newSize}`);
     }
   };
   const addCombo1 = () => {

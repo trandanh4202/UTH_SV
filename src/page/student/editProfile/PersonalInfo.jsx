@@ -163,7 +163,6 @@ const TextFieldWrapper = ({
       alert("Email phải là @ut.edu.vn");
       return;
     }
-    console.log(name, newValue);
     onChange({ target: { name, value: newValue } });
   };
 
@@ -241,7 +240,6 @@ const PersonalInfo = () => {
   const messageUpdate = useSelector(
     (state) => state.profile.getUpdateProfile?.messageUpdate
   );
-  console.log(formData.gioiTinh);
   useEffect(() => {
     if (profile) {
       setFormData({
@@ -447,7 +445,6 @@ const PersonalInfo = () => {
       [name]: value,
     }));
   }, []);
-  console.log(formData.gioiTinh);
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateProfile(formData)); // Dispatch the updateProfile action with formData
