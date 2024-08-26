@@ -247,44 +247,44 @@ const PersonalInfo = () => {
           validateOption(
             profile.noiSinh,
             provinces.map((province) => province.id)
-          ) || "",
+          ) || null,
         noisinhIdhuyen:
           validateOption(
             profile.noisinhIdhuyen,
             districtsByLocation.noiSinh.map((district) => district.id)
-          ) || "",
+          ) || null,
         noisinhIdphuongxa:
           validateOption(
             profile.noisinhIdphuongxa,
             wardsByLocation.noiSinh.map((ward) => ward.id)
-          ) || "",
+          ) || null,
         soCMND: profile.soCMND || "",
-        ngayCap: profile.ngayCap || "",
+        ngayCap: profile.ngayCap || null,
         email: profile.email || "",
         soDienThoai: profile.soDienThoai || "",
         soDienThoai2: profile.soDienThoai2 || "",
         quocTich: profile.quocTich || "",
         mabhxhYt: profile.mabhxhYt || "",
-        nguyenQuan: profile.nguyenQuan || "",
-        hkttIdhuyen: profile.hkttIdhuyen || "",
-        hkttIdtinh: profile.hkttIdtinh || "",
-        hkttIdphuongxa: profile.hkttIdphuongxa || "",
+        nguyenQuan: profile.nguyenQuan || null,
+        hkttIdhuyen: profile.hkttIdhuyen || null,
+        hkttIdtinh: profile.hkttIdtinh || null,
+        hkttIdphuongxa: profile.hkttIdphuongxa || null,
         hkttThonxom: profile.hkttThonxom || "",
-        dcllIdtinh: profile.dcllIdtinh || "",
-        dcllIdhuyen: profile.dcllIdhuyen || "",
-        dcllIdphuongxa: profile.dcllIdphuongxa || "",
+        dcllIdtinh: profile.dcllIdtinh || null,
+        dcllIdhuyen: profile.dcllIdhuyen || null,
+        dcllIdphuongxa: profile.dcllIdphuongxa || null,
         dcllSonha: profile.dcllSonha || "",
-        ngayVaoDoan: profile.ngayVaoDoan || "",
-        ngayVaoDang: profile.ngayVaoDang || "",
+        ngayVaoDoan: profile.ngayVaoDoan || null,
+        ngayVaoDang: profile.ngayVaoDang || null,
         height: profile.height || 0,
         weight: profile.weight || 0,
         schoolEmail: profile.schoolEmail || "",
-        iddanToc: profile.iddanToc || "",
-        idtonGiao: profile.idtonGiao || "",
-        idtinh: profile.idtinh || "",
-        idhuyen: profile.idhuyen || "",
-        idphuongXa: profile.idphuongXa || "",
-        idtinhCapCMND: profile.idtinhCapCMND || "",
+        iddanToc: profile.iddanToc || null,
+        idtonGiao: profile.idtonGiao || null,
+        idtinh: profile.idtinh || null,
+        idhuyen: profile.idhuyen || null,
+        idphuongXa: profile.idphuongXa || null,
+        idtinhCapCMND: profile.idtinhCapCMND || null,
       });
     }
   }, [profile]);

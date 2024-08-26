@@ -271,14 +271,14 @@ const InforDetail = () => {
                     <InfoField label="Tôn giáo: " value={profile?.tonGiao} />
                     <InfoField label="Quốc tịch: " value={profile?.quocTich} />
                   </Grid>
-                  <Grid container>
+                  {/* <Grid container>
                     <InfoField label="Khu vực: " value={profile?.khuVuc} />
                     <InfoField label="Đối tượng: " value={profile?.doiTuong} />
                     <InfoField
                       label="Đối tượng chính sách: "
                       value={profile?.doiTuongChinhSach}
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid container>
                     <InfoField
                       label="Ngày vào Đoàn: "
