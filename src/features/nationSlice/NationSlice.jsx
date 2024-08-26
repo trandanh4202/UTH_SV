@@ -9,11 +9,23 @@ const initialState = {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+export const getEthnicity = createAsyncThunk(
+  "nation/getEthnicity",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API_BASE_URL}/dantoc/getAll`);
+      return response.data.body;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getNation = createAsyncThunk(
   "nation/getNation",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/dantoc/getAll`);
+      const response = await axios.get(`${API_BASE_URL}/quocGia/getAll`);
       return response.data.body;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -27,6 +39,18 @@ const nationSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(getEthnicity.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getEthnicity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.ethnicity = action.payload;
+      })
+      .addCase(getEthnicity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
       .addCase(getNation.pending, (state) => {
         state.loading = true;
         state.error = null;

@@ -93,7 +93,7 @@ const AddKTX = ({ open, onClose }) => {
 
   const handleRegisterDorm = () => {
     const validObjectIds = selectedPriorities
-      .map(Number)
+      ?.map(Number)
       .filter((id) => !isNaN(id));
 
     // Tạo payload JSON

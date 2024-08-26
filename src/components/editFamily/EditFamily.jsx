@@ -104,7 +104,7 @@ const EditFamily = ({ open, onClose, editData }) => {
 
   const dispatch = useDispatch();
   const loading = useSelector((state) => state.family.loading || "");
-  const nations = useSelector((state) => state.nation.nations) || [];
+  const ethnicity = useSelector((state) => state.nation.ethnicity) || [];
   const religions = useSelector((state) => state.religion.religions) || [];
   const category = useSelector((state) => state.family.categoryFamily);
 
@@ -226,7 +226,7 @@ const EditFamily = ({ open, onClose, editData }) => {
                   <MenuItem value="0">
                     <em>Chọn dân tộc</em>
                   </MenuItem>
-                  {nations.map((nation) => (
+                  {nations?.map((nation) => (
                     <MenuItem key={nation.id} value={nation.id}>
                       {nation.tenDanToc}
                     </MenuItem>
@@ -244,7 +244,7 @@ const EditFamily = ({ open, onClose, editData }) => {
                   <MenuItem value="0">
                     <em>Chọn tôn giáo</em>
                   </MenuItem>
-                  {religions.map((religion) => (
+                  {religions?.map((religion) => (
                     <MenuItem key={religion.id} value={religion.id}>
                       {religion.tenTonGiao}
                     </MenuItem>

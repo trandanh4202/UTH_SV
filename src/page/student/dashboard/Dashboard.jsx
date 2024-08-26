@@ -185,7 +185,7 @@ const Dashboard = () => {
               className="mySwiper"
               onSlideChange={handleSlideChange}
             >
-              {categories.map((item) => (
+              {categories?.map((item) => (
                 <SwiperSlide key={item.id}>
                   <Box component={Link} to={`/newfeeds/${item.id}`}>
                     <Typography
@@ -216,7 +216,7 @@ const Dashboard = () => {
                 className="mySwiper"
                 loop={true}
               >
-                {newfeeds.map((article) => (
+                {newfeeds?.map((article) => (
                   <SwiperSlide key={article?.id}>
                     <Box component={Link} to={`/newfeeds/${id}/${article?.id}`}>
                       <Box sx={{ textAlign: "center" }}>

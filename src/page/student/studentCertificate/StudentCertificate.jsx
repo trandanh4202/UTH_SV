@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-key */
-import { CloudDownload, EditOutlined } from "@mui/icons-material";
+import { EditOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
-  CircularProgress,
   Container,
   Divider,
   Grid,
@@ -20,27 +19,22 @@ import {
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Swiper, SwiperSlide } from "swiper/react";
 import AddAddress from "../../../components/addAddress/AddAddress";
-import DeleteAddress from "../../../components/deleteAddress/DeleteAddress";
-import EditAddress from "../../../components/editAddress/EditAddress";
 import { getAddress } from "../../../features/addressSlice/AddressSlice";
 import { addToCart } from "../../../features/cartSlice/CartSlice";
 import { getAllOrder } from "../../../features/orderSlice/OrderSlice";
 import { getAllProduct } from "../../../features/productSlice/ProductSlice";
-import { getProvinceViettel } from "../../../features/viettelSlice/ViettelSlice";
-import Spinner from "../../../components/Spinner/Spinner";
 import StudentCertificatePopUp from "./StudentCertificatePopUp";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 
 // import required modules
-import { Pagination, Navigation, Autoplay } from "swiper/modules";
-import DeleteKTX from "../../../components/deleteKTX/DeleteKTX";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import DeleteStudentService from "../../../components/DeleteStudentService/DeleteStudentService";
 
 const formatDate = (dateString) => {
@@ -718,7 +712,7 @@ const StudentCertificate = () => {
                             fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
-                          {formatDate(row.orderDate)}
+                          {formatDate(row.createdAt)}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -729,7 +723,7 @@ const StudentCertificate = () => {
                             fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
-                          {row.lastHistoryOrder?.status}
+                          {row.status}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -740,7 +734,7 @@ const StudentCertificate = () => {
                             fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
-                          {formatDate(row.lastHistoryOrder?.date)}
+                          {formatDate(row.updatedAt)}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -791,7 +785,7 @@ const StudentCertificate = () => {
                             />
                           </IconButton>
 
-                          {row?.lastHistoryOrder?.statusCode === "NEW" && (
+                          {row?.statusCode === "NEW" && (
                             <DeleteStudentService item={row} />
                           )}
                         </TableCell>{" "}

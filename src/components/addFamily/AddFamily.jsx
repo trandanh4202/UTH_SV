@@ -9,7 +9,7 @@ import {
   Modal,
   Select,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -102,7 +102,7 @@ const AddFamily = ({ open, onClose }) => {
   const message = useSelector((state) => state.family.addFamily?.message);
   const status = useSelector((state) => state.family.addFamily?.status);
   const loading = useSelector((state) => state.family.loading || "");
-  const nations = useSelector((state) => state.nation.nations) || [];
+  const ethnicity = useSelector((state) => state.nation.ethnicity) || [];
   const religions = useSelector((state) => state.religion.religions) || [];
   const category = useSelector((state) => state.family.categoryFamily);
   const navigate = useNavigate();
@@ -236,7 +236,7 @@ const AddFamily = ({ open, onClose }) => {
                   <MenuItem value="0">
                     <em>Chọn dân tộc</em>
                   </MenuItem>
-                  {nations.map((nation) => (
+                  {nations?.map((nation) => (
                     <MenuItem key={nation.id} value={nation.id}>
                       {nation.tenDanToc}
                     </MenuItem>
@@ -255,7 +255,7 @@ const AddFamily = ({ open, onClose }) => {
                   <MenuItem value="0">
                     <em>Chọn tôn giáo</em>
                   </MenuItem>
-                  {religions.map((religion) => (
+                  {religions?.map((religion) => (
                     <MenuItem key={religion.id} value={religion.id}>
                       {religion.tenTonGiao}
                     </MenuItem>

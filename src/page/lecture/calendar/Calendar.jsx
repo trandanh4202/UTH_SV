@@ -278,7 +278,7 @@ const Calendar = () => {
                   >
                     Ca học
                   </TableCell>
-                  {days.map((day, index) => (
+                  {days?.map((day, index) => (
                     <TableCell
                       key={index}
                       align="center"
@@ -302,7 +302,7 @@ const Calendar = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {slots.map((slot, slotIndex) => (
+                {slots?.map((slot, slotIndex) => (
                   <React.Fragment key={slotIndex}>
                     <TableRow>
                       <TableCell
@@ -318,7 +318,7 @@ const Calendar = () => {
                         {slot.time}
                       </TableCell>
                     </TableRow>
-                    {slot.periods.map((period, periodIndex) => (
+                    {slot.periods?.map((period, periodIndex) => (
                       <TableRow
                         key={periodIndex}
                         sx={{
@@ -336,7 +336,7 @@ const Calendar = () => {
                         >
                           {period}
                         </TableCell>
-                        {days.map((day, dayIndex) => {
+                        {days?.map((day, dayIndex) => {
                           const relevantData = splitData.find(
                             (d) =>
                               d.thu === dayIndex + 2 &&

@@ -1,26 +1,36 @@
 import * as React from "react";
-import dayjs from "dayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateField } from "@mui/x-date-pickers/DateField";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useDemoData } from "@mui/x-data-grid-generator";
 
-export default function DateFieldValue() {
-  const [value, setValue] = React.useState(dayjs("2022-04-17"));
+const VISIBLE_FIELDS = ["name", "rating", "country", "dateCreated", "isAdmin"];
+
+export default function ControlledFilters() {
+  const { data } = useDemoData({
+    dataSet: "Employee",
+    visibleFields: VISIBLE_FIELDS,
+    rowLength: 100,
+  });
+
+  const [filterModel, setFilterModel] = React.useState({
+    items: [
+      {
+        field: "rating",
+        operator: ">",
+        value: "2.5",
+      },
+    ],
+  });
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DemoContainer components={["DateField", "DateField"]}>
-        <DateField
-          label="Uncontrolled field"
-          defaultValue={dayjs("2022-31-12")}
-        />
-        <DateField
-          label="Controlled field"
-          value={value}
-          onChange={(newValue) => setValue(newValue)}
-        />
-      </DemoContainer>
-    </LocalizationProvider>
+    <div style={{ height: 400, width: "100%" }}>
+      <DataGrid
+        {...data}
+        slots={{
+          toolbar: GridToolbar,
+        }}
+        filterModel={filterModel}
+        onFilterModelChange={(newFilterModel) => setFilterModel(newFilterModel)}
+      />
+    </div>
   );
 }

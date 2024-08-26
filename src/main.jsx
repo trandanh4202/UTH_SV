@@ -36,6 +36,7 @@ import EditProfile from "./page/student/editProfile/EditProfile";
 import Dormitory from "./page/student/dormitory/Dormitory";
 import StudentCertificate from "./page/student/studentCertificate/StudentCertificate";
 import Certification from "./page/student/certification/Certification";
+import HandleDorm from "./page/lecture/handleDorm/HandleDorm";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -136,6 +137,10 @@ const router = createBrowserRouter([
           {
             path: "certification",
             element: <Certification />,
+          },
+          {
+            path: "dorm",
+            element: <HandleDorm />,
           },
         ],
       },

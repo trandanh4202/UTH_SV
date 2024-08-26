@@ -339,7 +339,7 @@ const Program1 = () => {
                               }}
                             ></TableCell>
                           </TableRow>
-                          {semester.monTuChon.map((course) => (
+                          {semester.monTuChon?.map((course) => (
                             <TableRow
                               key={course.maHocPhan}
                               sx={{

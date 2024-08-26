@@ -75,7 +75,7 @@ const DashboardLecture = () => {
                 <InforGV />
               </Paper>
             </Grid>
-            {box.map((item, index) => (
+            {box?.map((item, index) => (
               <Grid key={index} item lg={6} xs={12}>
                 <Paper
                   sx={{
@@ -115,7 +115,7 @@ const DashboardLecture = () => {
                 setId(slide?.id);
               }}
             >
-              {categories.map((item) => (
+              {categories?.map((item) => (
                 <SwiperSlide key={item.id}>
                   <Box component={Link} to={`/newfeeds/${id}`}>
                     <Typography
@@ -146,7 +146,7 @@ const DashboardLecture = () => {
                 className="mySwiper"
                 loop={true}
               >
-                {newfeeds.map((article) => (
+                {newfeeds?.map((article) => (
                   <SwiperSlide key={article?.id}>
                     <Box component={Link} to={`/newfeeds/${id}/${article?.id}`}>
                       <Box sx={{ textAlign: "center" }}>
@@ -206,7 +206,7 @@ const DashboardLecture = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
-        {boxNav.map((item, index) => (
+        {boxNav?.map((item, index) => (
           <Grid key={index} item lg={1.5} xs={6}>
             <Paper
               sx={{

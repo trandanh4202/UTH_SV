@@ -118,7 +118,7 @@ const SelectField = ({
         <em>Chọn {label}</em>
       </MenuItem>
       {options &&
-        options.map((option) => (
+        options?.map((option) => (
           <MenuItem
             key={
               optionType === "province"

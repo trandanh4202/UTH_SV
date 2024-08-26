@@ -115,7 +115,7 @@ const StudentCertificatePopUp = ({ open, onClose, id }) => {
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Ngày đăng ký: {formatDate(item?.orderDate)}
+                Ngày đăng ký: {formatDate(item?.createdAt)}
               </Typography>
             </Box>
           </Box>
@@ -133,7 +133,7 @@ const StudentCertificatePopUp = ({ open, onClose, id }) => {
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Trạng thái: {item?.lastHistoryOrder?.status}
+                Trạng thái: {item?.status}
               </Typography>
             </Box>
           </Box>

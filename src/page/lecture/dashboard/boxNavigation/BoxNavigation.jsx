@@ -39,7 +39,7 @@ const BoxNavigation = ({ index, icon, title, to, status }) => {
       <Grid item xs={12} sx={{ padding: "10px 0" }}>
         <Typography
           sx={{
-            fontSize: "14px",
+            fontSize: "14px", 
             textAlign: "center",
             color: "rgb(102, 117, 128)",
             fontWeight: "700",

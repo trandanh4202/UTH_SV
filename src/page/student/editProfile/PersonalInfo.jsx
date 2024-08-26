@@ -25,6 +25,7 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { parse, format } from "date-fns";
+import { getEthnicity } from "../../../features/nationSlice/NationSlice";
 
 const inputStyles = {
   "& .MuiInputBase-input": {
@@ -135,6 +136,8 @@ const SelectField = ({
               ? option.tenDanToc
               : optionType === "tonGiao"
               ? option.tenTonGiao
+              : optionType === "quocTich"
+              ? option.tenQuocGia
               : option.name}
           </MenuItem>
         ))}
@@ -183,11 +186,13 @@ const TextFieldWrapper = ({
 
 const PersonalInfo = () => {
   const dispatch = useDispatch();
-  const ethnicity = useSelector((state) => state.nation.nations) || [];
+  const ethnicity = useSelector((state) => state.nation.ethnicity) || [];
   const religions = useSelector((state) => state.religion.religions) || [];
+  const nations = useSelector((state) => state.nation.nations) || [];
   useEffect(() => {
-    dispatch(getNation());
+    dispatch(getEthnicity());
     dispatch(getReligion());
+    dispatch(getNation());
     dispatch(getProvince()).then((action) => {
       setProvinces(action.payload);
     });
@@ -246,12 +251,12 @@ const PersonalInfo = () => {
         noiSinh:
           validateOption(
             profile.noiSinh,
-            provinces.map((province) => province.id)
+            provinces?.map((province) => province.id)
           ) || null,
         noisinhIdhuyen:
           validateOption(
             profile.noisinhIdhuyen,
-            districtsByLocation.noiSinh.map((district) => district.id)
+            districtsByLocation.noiSinh?.map((district) => district.id)
           ) || null,
         noisinhIdphuongxa:
           validateOption(
@@ -814,15 +819,14 @@ const PersonalInfo = () => {
                 <Box
                   sx={{ display: "flex", flexDirection: "column", gap: "2px" }}
                 >
-                  <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                    Quốc tịch
-                  </Typography>
-                  <TextFieldWrapper
+                  <SelectField
                     name="quocTich"
-                    value={formData.nation}
+                    value={formData.quocTich || ""}
                     onChange={handleChange}
+                    options={nations}
+                    label="Quóc tịch"
                     successAccess={successAccess}
-                    sx={inputStyles}
+                    optionType="quocTich"
                   />
                 </Box>
               </Grid>
