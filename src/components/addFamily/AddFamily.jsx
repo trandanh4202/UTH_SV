@@ -236,7 +236,7 @@ const AddFamily = ({ open, onClose }) => {
                   <MenuItem value="0">
                     <em>Chọn dân tộc</em>
                   </MenuItem>
-                  {nations?.map((nation) => (
+                  {ethnicity?.map((nation) => (
                     <MenuItem key={nation.id} value={nation.id}>
                       {nation.tenDanToc}
                     </MenuItem>
