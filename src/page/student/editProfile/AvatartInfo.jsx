@@ -24,6 +24,11 @@ const AvatarInfo = () => {
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      if (file.size > 1048576) {
+        // 1MB = 1048576 bytes
+        toast.error("Kích thước tệp không được vượt quá 1MB");
+        return;
+      }
       setSelectedFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
