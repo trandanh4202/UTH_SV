@@ -110,10 +110,10 @@ const TuitionTable = () => {
                       },
                     }}
                   >
-                    <MenuItem value="" disabled>
+                    <MenuItem value="null" disabled>
                       Chọn học kỳ
                     </MenuItem>
-                    <MenuItem value="0" sx={{ fontSize: "18px" }}>
+                    <MenuItem value="" sx={{ fontSize: "18px" }}>
                       Tất cả
                     </MenuItem>
                     {select?.map((item) => (

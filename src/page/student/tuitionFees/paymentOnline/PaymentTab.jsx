@@ -54,89 +54,94 @@ const PaymentTab = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data?.map((row) => (
-              <TableRow key={row.STT}>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgb(221, 221, 221)",
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    color: "rgb(102, 117, 128)",
-                  }}
-                >
-                  {row.STT}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgb(221, 221, 221)",
-                    fontWeight: "500",
-                    minWidth: "250px",
-                    fontSize: "14px",
-                    color: "rgb(102, 117, 128)",
-                  }}
-                >
-                  {row.MaNhomHocPhan}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgba(224, 224, 224, 1)",
-                    fontWeight: "500",
-                    minWidth: "250px",
-                    fontSize: "14px",
-                    color: "rgb(102, 117, 128)",
-                  }}
-                >
-                  {row.TenMonHocPhan}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    border: "1px solid rgba(224, 224, 224, 1)",
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    color: "rgb(102, 117, 128)",
-                  }}
-                >
-                  {row.TinChi}
-                </TableCell>
-                <TableCell
-                  align="left"
-                  sx={{
-                    border: "1px solid rgba(224, 224, 224, 1)",
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    color: "rgb(102, 117, 128)",
-                  }}
-                >
-                  {row.HocPhi}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgba(224, 224, 224, 1)",
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    color: "rgb(102, 117, 128)",
-                  }}
-                >
-                  {row.BatBuoc ? <CheckCircle sx={{ color: "#66e321" }} /> : ""}
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    border: "1px solid rgba(224, 224, 224, 1)",
-                    fontWeight: "500",
-                    fontSize: "14px",
-                    color: "rgb(102, 117, 128)",
-                  }}
-                >
-                  {row.SoTien}
-                </TableCell>
-              </TableRow>
-            ))}
+            {data &&
+              data?.map((row) => (
+                <TableRow key={row.STT}>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgb(221, 221, 221)",
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
+                    }}
+                  >
+                    {row.STT}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgb(221, 221, 221)",
+                      fontWeight: "500",
+                      minWidth: "250px",
+                      fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
+                    }}
+                  >
+                    {row.MaNhomHocPhan}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                      fontWeight: "500",
+                      minWidth: "250px",
+                      fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
+                    }}
+                  >
+                    {row.TenMonHocPhan}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
+                    }}
+                  >
+                    {row.TinChi}
+                  </TableCell>
+                  <TableCell
+                    align="left"
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
+                    }}
+                  >
+                    {row.HocPhi}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
+                    }}
+                  >
+                    {row.BatBuoc ? (
+                      <CheckCircle sx={{ color: "#66e321" }} />
+                    ) : (
+                      ""
+                    )}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      border: "1px solid rgba(224, 224, 224, 1)",
+                      fontWeight: "500",
+                      fontSize: "14px",
+                      color: "rgb(102, 117, 128)",
+                    }}
+                  >
+                    {row.SoTien}
+                  </TableCell>
+                </TableRow>
+              ))}
             <TableRow>
               <TableCell
                 colSpan={6}
