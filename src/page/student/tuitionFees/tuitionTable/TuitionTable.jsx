@@ -113,7 +113,7 @@ const TuitionTable = () => {
                     <MenuItem value="null" disabled>
                       Chọn học kỳ
                     </MenuItem>
-                    <MenuItem value="" sx={{ fontSize: "18px" }}>
+                    <MenuItem value="0" sx={{ fontSize: "18px" }}>
                       Tất cả
                     </MenuItem>
                     {select?.map((item) => (
