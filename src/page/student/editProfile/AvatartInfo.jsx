@@ -71,6 +71,26 @@ const AvatarInfo = () => {
         >
           {message}
         </Typography>
+        <Typography
+          sx={{
+            fontSize: "15px",
+            color: "red",
+            fontWeight: "600",
+          }}
+        >
+          Sinh viên chuẩn bị ảnh thẻ và cập nhật ảnh, ảnh sinh viên sẽ dùng làm
+          hồ sơ Đại học - Thẻ sinh viên.
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: "15px",
+            color: "red",
+            fontWeight: "600",
+          }}
+        >
+          Ảnh sơ mi áo trắng hoặc đồng phục UTH, phồng nền trắng tóc gọn gàng
+          không che phủ mặt. Dung lượng ảnh dưới 1mb
+        </Typography>
       </Box>
       {loadingAvatar ? (
         <Spinner />
