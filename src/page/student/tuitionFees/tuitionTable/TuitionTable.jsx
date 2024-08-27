@@ -116,7 +116,7 @@ const TuitionTable = () => {
                     <MenuItem value="0" sx={{ fontSize: "18px" }}>
                       Tất cả
                     </MenuItem>
-                    {select.map((item) => (
+                    {select?.map((item) => (
                       <MenuItem
                         key={item.id}
                         value={item.id}

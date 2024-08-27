@@ -124,7 +124,7 @@ const GeneralReceipts = () => {
             >
               <TableHead>
                 <TableRow>
-                  {tableCell.map((item) => (
+                  {tableCell?.map((item) => (
                     <TableCell
                       key={item}
                       align="center"

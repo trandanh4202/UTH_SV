@@ -37,7 +37,7 @@ const PaymentTab = ({ data }) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {tableCell.map((item) => (
+              {tableCell?.map((item) => (
                 <TableCell
                   key={item}
                   sx={{
@@ -54,7 +54,7 @@ const PaymentTab = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.map((row) => (
+            {data?.map((row) => (
               <TableRow key={row.STT}>
                 <TableCell
                   align="center"

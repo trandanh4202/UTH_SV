@@ -144,7 +144,7 @@ const ReceiptDetailPopup = ({
           <Table sx={{ minWidth: 500 }} aria-label="simple table" stickyHeader>
             <TableHead>
               <TableRow>
-                {tableCell.map((cell) => (
+                {tableCell?.map((cell) => (
                   <TableCell
                     key={cell}
                     align="center"

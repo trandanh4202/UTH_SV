@@ -63,7 +63,7 @@ const TuitionTab = ({ data }) => {
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {tableCell.map((item) => (
+              {tableCell?.map((item) => (
                 <TableCell
                   key={item}
                   sx={{
@@ -82,7 +82,7 @@ const TuitionTab = ({ data }) => {
           </TableHead>
           <TableBody>
             {data &&
-              data.map((row, index) => (
+              data?.map((row, index) => (
                 <TableRow key={index}>
                   <TableCell
                     align="center"
