@@ -197,7 +197,7 @@ const EditFamily = ({ open, onClose, editData }) => {
               <Grid item xs={6} lg={4}>
                 <TextField
                   label="Năm sinh"
-                  type={"number"}
+                  // type={"number"}
                   {...register("namSinh", {
                     required: "Năm sinh là bắt buộc",
                   })}

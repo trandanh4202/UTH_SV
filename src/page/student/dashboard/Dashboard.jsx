@@ -45,6 +45,7 @@ import UpdatePhone from "~/components/popupWarning/UpdatePhone";
 import { getTotalofWeek } from "~/features/calendarSlice/CalendarSlice";
 import { getSelect } from "~/features/programSlice/ProgramSlice";
 import Spinner from "../../../components/Spinner/Spinner";
+import { getImage } from "../../../features/profileSlice/ProfileSlice";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -103,6 +104,7 @@ const Dashboard = () => {
       dispatch(getSelect());
       dispatch(getTotalofWeek());
       dispatch(getCategoryNoti());
+      dispatch(getImage ());
     }
   }, [token, dispatch]);
 

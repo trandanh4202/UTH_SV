@@ -207,7 +207,6 @@ const AddFamily = ({ open, onClose }) => {
               <Grid item xs={6} lg={4}>
                 <TextField
                   label="Năm sinh"
-                  type={"number"}
                   {...register("namSinh", {
                     required: "Năm sinh là bắt buộc",
                   })}

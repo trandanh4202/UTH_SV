@@ -144,6 +144,39 @@ const SelectField = ({
     </Select>
   </Box>
 );
+const SelectFieldString = ({
+  name,
+  value,
+  onChange,
+  disabled,
+  options,
+  label,
+  successAccess,
+}) => (
+  <Box sx={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+    <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
+      {label}
+    </Typography>
+    <Select
+      name={name}
+      value={value !== undefined ? value : ""} // Đảm bảo giá trị false không bị hiểu là rỗng
+      onChange={onChange}
+      displayEmpty
+      disabled={!successAccess ? !successAccess : disabled}
+      sx={selectStyles}
+    >
+      <MenuItem value="">
+        <em>Chọn {label}</em>
+      </MenuItem>
+      {options &&
+        options?.map((option) => (
+          <MenuItem key={option.tenQuocGia} value={option.tenQuocGia}>
+            {option.tenQuocGia}
+          </MenuItem>
+        ))}
+    </Select>
+  </Box>
+);
 
 // Component TextFieldWrapper
 const TextFieldWrapper = ({
@@ -520,7 +553,7 @@ const PersonalInfo = () => {
                     value={formData.ngaySinh2} // Ensure this is in 'YYYY-MM-DD' format
                     onChange={handleChange}
                     label="Ngày sinh"
-                    type="date"
+                    // type="date"
                     successAccess={successAccess}
                     id="date-picker"
                   />
@@ -817,7 +850,7 @@ const PersonalInfo = () => {
                 <Box
                   sx={{ display: "flex", flexDirection: "column", gap: "2px" }}
                 >
-                  <SelectField
+                  <SelectFieldString
                     name="quocTich"
                     value={formData.quocTich || ""}
                     onChange={handleChange}
@@ -879,7 +912,7 @@ const PersonalInfo = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} lg={4}>
-                <Box
+                {/* <Box
                   sx={{ display: "flex", flexDirection: "column", gap: "2px" }}
                 >
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
@@ -892,7 +925,7 @@ const PersonalInfo = () => {
                     successAccess={successAccess}
                     sx={inputStyles}
                   />
-                </Box>
+                </Box> */}
               </Grid>
               <Grid item xs={12} lg={2}>
                 <Box

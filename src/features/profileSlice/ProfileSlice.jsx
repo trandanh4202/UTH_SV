@@ -80,6 +80,37 @@ export const getSummaryProfile = createAsyncThunk(
   }
 );
 
+export const getImage = createAsyncThunk(
+  "profile/getImage",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(`${API_BASE_URL}/user/image`, config);
+      localStorage.setItem("image", response.data.body);
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getCheckUpdateProfile = createAsyncThunk(
   "profile/getCheckUpdateProfile",
   async (_, { rejectWithValue }) => {
@@ -323,6 +354,22 @@ const profileSlice = createSlice({
         state.timestamp = action.payload.timestamp;
       })
       .addCase(getSummaryProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getImage.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getImage.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getImage = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(getImage.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

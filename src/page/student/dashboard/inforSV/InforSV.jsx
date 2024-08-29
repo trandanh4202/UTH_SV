@@ -34,7 +34,7 @@ const InfoField = ({ label, value }) => (
 const InforSV = () => {
   const profile = useSelector((state) => state.profile?.summaryProfile?.body);
   const loading = useSelector((state) => state.profile.loading);
-
+  const image = localStorage.getItem("image");
   return (
     <>
       <Box>
@@ -83,7 +83,7 @@ const InforSV = () => {
               >
                 <Box sx={{ borderRadius: "50%" }}>
                   <img
-                    src={profile.image || "./images/avatarDashboard.png"}
+                    src={image || "./images/avatarDashboard.png"}
                     alt="avatar"
                     style={{
                       width: "140px",

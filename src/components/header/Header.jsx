@@ -6,7 +6,7 @@ import {
   ReceiptLong,
   School,
   SupportAgent,
-  ViewHeadlineRounded
+  ViewHeadlineRounded,
 } from "@mui/icons-material";
 import {
   Accordion,
@@ -26,7 +26,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getMenu } from "~/features/menuSlice/MenuSlice";
-import { getSummaryProfile } from "../../features/profileSlice/ProfileSlice";
+import {
+  getImage,
+  getSummaryProfile,
+} from "../../features/profileSlice/ProfileSlice";
 import ChangePasswordPopup from "../changePassword/ChangePasswordPopup";
 import Cart from "./Cart";
 import logoHome from "/images/sv_logo_dashboard.png";
@@ -162,7 +165,7 @@ const Header = () => {
   ];
 
   const menu = role === "gv" ? menuFromStore : studentMenu;
-
+  const image = localStorage.getItem("image");
   return (
     <Box
       sx={{
@@ -372,11 +375,7 @@ const Header = () => {
                 >
                   <Avatar
                     alt="User Avatar"
-                    src={
-                      profile?.image
-                        ? profile?.image
-                        : "./images/avatarDashboard.png"
-                    }
+                    src={image ? image : "./images/avatarDashboard.png"}
                     sx={{
                       marginRight: 1,
                       display: { lg: "flex", xs: "none" },

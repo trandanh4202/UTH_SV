@@ -174,7 +174,7 @@ const FamilyProfile = () => {
                       }}
                     >
                       <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                        Năm sinh
+                        Ngày sinh
                       </Typography>
                       <TextField
                         name={`${member.id}`}
