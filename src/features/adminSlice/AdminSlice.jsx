@@ -7,7 +7,7 @@ const initialState = {
   loading: false,
   error: null,
 };
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_ADMIN_URL;
 
 export const getRoom = createAsyncThunk(
   "adminDorm/getRoom",
