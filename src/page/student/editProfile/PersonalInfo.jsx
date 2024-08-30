@@ -186,6 +186,7 @@ const TextFieldWrapper = ({
   label,
   type = "text",
   successAccess,
+  placeholder,
 }) => {
   // Xử lý thay đổi giá trị cho trường hợp loại ngày tháng
 
@@ -210,6 +211,7 @@ const TextFieldWrapper = ({
         onChange={handleChange}
         type={type}
         disabled={!successAccess}
+        placeholder={placeholder}
         sx={{ ...inputStyles, width: "100%" }} // Adjust `inputStyles` as needed
       />
     </Box>
@@ -554,6 +556,7 @@ const PersonalInfo = () => {
                     onChange={handleChange}
                     label="Ngày sinh"
                     // type="date"
+                    placeholder="Ví dụ: 04/02/2006"
                     successAccess={successAccess}
                     id="date-picker"
                   />
@@ -855,7 +858,7 @@ const PersonalInfo = () => {
                     value={formData.quocTich || ""}
                     onChange={handleChange}
                     options={nations}
-                    label="Quóc tịch"
+                    label="Quốc tịch"
                     successAccess={successAccess}
                     optionType="quocTich"
                   />

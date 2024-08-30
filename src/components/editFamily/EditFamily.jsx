@@ -140,7 +140,7 @@ const EditFamily = ({ open, onClose, editData }) => {
             boxShadow: 24,
             p: 4,
             borderRadius: "20px",
-            width: { xs: "80%", lg: "500px" },
+            width: { xs: "80%", lg: "50%" },
           }}
         >
           <Typography
@@ -163,7 +163,7 @@ const EditFamily = ({ open, onClose, editData }) => {
               gap: 2,
             }}
           >
-            <Grid container spacing={{ xs: 2, lg: "3" }}>
+            <Grid container spacing={{ xs: 2, lg: 3 }}>
               <Grid item xs={12} lg={5}>
                 <Select
                   label="Mối quan hệ"
@@ -196,13 +196,14 @@ const EditFamily = ({ open, onClose, editData }) => {
               </Grid>
               <Grid item xs={6} lg={4}>
                 <TextField
-                  label="Năm sinh"
+                  label="Ngày sinh"
                   // type={"number"}
-                  {...register("namSinh", {
-                    required: "Năm sinh là bắt buộc",
+                  {...register("ngaySinh", {
+                    required: "Ngày sinh là bắt buộc",
                   })}
-                  error={!!errors.namSinh}
-                  helperText={errors.namSinh?.message}
+                  placeholder="VD: 01/01/1980"
+                  error={!!errors.ngaySinh}
+                  helperText={errors.ngaySinh?.message}
                   fullWidth
                   sx={inputStyles}
                 />

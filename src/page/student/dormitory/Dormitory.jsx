@@ -17,7 +17,6 @@ import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AddKTX from "../../../components/addKTX/AddKTX";
-import DeleteKTX from "../../../components/deleteKTX/DeleteKTX";
 import { getDorm, getInforDorm } from "../../../features/dormSlice/DormSlice";
 import { toast } from "react-toastify";
 

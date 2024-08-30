@@ -83,7 +83,9 @@ const InforSV = () => {
               >
                 <Box sx={{ borderRadius: "50%" }}>
                   <img
-                    src={image || "./images/avatarDashboard.png"}
+                    src={
+                      image !== null ? image : "./images/avatarDashboard.png"
+                    }
                     alt="avatar"
                     style={{
                       width: "140px",
