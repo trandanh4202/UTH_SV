@@ -25,15 +25,10 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import { Container, Paper } from "@mui/material";
 
-function QuickSearchToolbar() {
+function QuickSearchToolbar({ onSearch }) {
   return (
-    <Box
-      sx={{
-        p: 0.5,
-        pb: 0,
-      }}
-    >
-      <GridToolbarQuickFilter />
+    <Box sx={{ p: 0.5, pb: 0 }}>
+      <GridToolbarQuickFilter onChange={(e) => onSearch(e.target.value)} />
     </Box>
   );
 }
@@ -44,8 +39,10 @@ export default function QuickFilteringCustomLogic() {
   const [isApproveAction, setIsApproveAction] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [denyReason, setDenyReason] = useState("");
+  const [pageIndex, setPageIndex] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [search, setSearch] = useState("");
   const dispatch = useDispatch();
-  const period = useSelector((state) => state.admin.getPeriod?.body);
   const approve = useSelector((state) => state.admin.getAllToApprove?.body);
 
   // Hàm mở popup xác nhận
@@ -61,29 +58,46 @@ export default function QuickFilteringCustomLogic() {
     setDenyReason("");
   };
 
-  // Hàm xử lý khi nhấn xác nhận "Duyệt"
+  // Hàm xử lý khi nhấn xác nhận "Duyệt" hoặc "Từ chối"
   const handleApprove = () => {
     if (isApproveAction) {
       dispatch(setApprove(selectedId)).then(() => {
-        dispatch(getAllToApprove());
+        fetchData();
         handleCloseDialog();
       });
     } else {
       dispatch(denyApprove({ id: selectedId, reason: denyReason })).then(() => {
-        dispatch(getAllToApprove());
+        fetchData();
         handleCloseDialog();
       });
     }
   };
 
-  const rows = approve?.map((item) => ({
-    id: item.id,
-    campusName: item.campus.name,
-    campusAddress: item.campus.address,
-    status: item.status,
-    createdAt: new Date(item.createdAt).toLocaleDateString(),
-    objects: item.objects.map((obj) => obj.name).join(", "),
-  }));
+  // Hàm gọi API với phân trang và tìm kiếm
+  const fetchData = () => {
+    const formData = {
+      pageIndex,
+      pageSize,
+      search,
+    };
+    dispatch(getAllToApprove(formData));
+  };
+
+  useEffect(() => {
+    dispatch(getRoom());
+    dispatch(getPeriod());
+    fetchData();
+  }, [dispatch, pageIndex, pageSize, search]);
+
+  // const rows = approve?.map((item) => ({
+  //   id: item.id,
+  //   campusName: item.campus.name,
+  //   campusAddress: item.campus.address,
+  //   status: item.status,
+  //   createdAt: new Date(item.createdAt).toLocaleDateString(),
+  //   objects: item.objects.map((obj) => obj.name).join(", "),
+  // }));
+  const rows = [];
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -119,12 +133,6 @@ export default function QuickFilteringCustomLogic() {
     },
   ];
 
-  useEffect(() => {
-    dispatch(getRoom());
-    dispatch(getAllToApprove());
-    dispatch(getPeriod());
-  }, [dispatch]);
-
   return (
     <Container>
       <Paper elevation={4} sx={{ padding: "20px", borderRadius: "10px" }}>
@@ -132,6 +140,12 @@ export default function QuickFilteringCustomLogic() {
           <DataGrid
             rows={rows}
             columns={columns}
+            pagination
+            pageSize={pageSize}
+            onPageSizeChange={(newSize) => setPageSize(newSize)}
+            onPageChange={(newPage) => setPageIndex(newPage)}
+            rowCount={approve?.totalCount}
+            paginationMode="server"
             slots={{ toolbar: QuickSearchToolbar }}
             sx={{
               "& .MuiDataGrid-cell": {
@@ -141,6 +155,11 @@ export default function QuickFilteringCustomLogic() {
               "& .MuiDataGrid-columnHeaderTitle": {
                 color: "red",
                 fontWeight: "bold",
+              },
+            }}
+            componentsProps={{
+              toolbar: {
+                onSearch: setSearch,
               },
             }}
           />

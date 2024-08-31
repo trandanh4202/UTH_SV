@@ -7,7 +7,7 @@ const initialState = {
   loading: false,
   error: null,
 };
-const API_BASE_URL = import.meta.env.VITE_API_BASE_ADMIN_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getRoom = createAsyncThunk(
   "adminDorm/getRoom",
@@ -75,7 +75,7 @@ export const createDorm = createAsyncThunk(
 );
 export const getAllToApprove = createAsyncThunk(
   "dorm/getAllToApprove",
-  async (id, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -87,8 +87,9 @@ export const getAllToApprove = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(
+      const response = await axios.post(
         `${API_BASE_URL}/dorm/getAllToApprove?periodId=1`,
+        formData,
         config
       );
 
@@ -99,7 +100,7 @@ export const getAllToApprove = createAsyncThunk(
         (error.response.status === 401 || error.response.status === 403)
       ) {
         // localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }

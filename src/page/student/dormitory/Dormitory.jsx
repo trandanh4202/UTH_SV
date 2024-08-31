@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddKTX from "../../../components/addKTX/AddKTX";
 import { getDorm, getInforDorm } from "../../../features/dormSlice/DormSlice";
 import { toast } from "react-toastify";
+import DeleteKTX from "../../../components/deleteKTX/DeleteKTX";
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
