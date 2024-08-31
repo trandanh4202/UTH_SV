@@ -193,10 +193,10 @@ const TextFieldWrapper = ({
   const handleChange = (event) => {
     const newValue = event.target.value;
 
-    if (name === "schoolEmail" && !newValue.endsWith("@ut.edu.vn")) {
-      alert("Email phải là @ut.edu.vn");
-      return;
-    }
+    // if (name === "schoolEmail" && !newValue.endsWith("@ut.edu.vn")) {
+    //   alert("Email phải là @ut.edu.vn");
+    //   return;
+    // }
     onChange({ target: { name, value: newValue } });
   };
 
@@ -915,7 +915,7 @@ const PersonalInfo = () => {
                 </Box>
               </Grid>
               <Grid item xs={12} lg={4}>
-                {/* <Box
+                <Box
                   sx={{ display: "flex", flexDirection: "column", gap: "2px" }}
                 >
                   <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
@@ -928,7 +928,7 @@ const PersonalInfo = () => {
                     successAccess={successAccess}
                     sx={inputStyles}
                   />
-                </Box> */}
+                </Box>
               </Grid>
               <Grid item xs={12} lg={2}>
                 <Box
