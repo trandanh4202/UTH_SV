@@ -288,7 +288,11 @@ const Dormitory = () => {
                           )
                         }
                       /> */}
-                      {row?.status !== "Hủy" ? <DeleteKTX item={row} /> : ""}
+                      {row?.statusCode === "APPROVE" ? (
+                        <DeleteKTX item={row} />
+                      ) : (
+                        ""
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -12,10 +12,10 @@ import {
   getAllToApprove,
   getPeriod,
   getRoom,
-  denyApprove,
+  getStatusDorm,
   setApprove,
 } from "../../../features/adminSlice/AdminSlice";
-import { HomeMaxOutlined, BlockOutlined } from "@mui/icons-material";
+import { CheckCircle, Cancel } from "@mui/icons-material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -23,89 +23,172 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { Container, Paper } from "@mui/material";
+import {
+  Container,
+  Paper,
+  FormControl,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
+  FormLabel,
+  Typography,
+} from "@mui/material";
+import { toast } from "react-toastify";
+import useDebounce from "../../../components/hooks/UseDebounce";
 
-function QuickSearchToolbar({ onSearch }) {
+const sortDorm = [
+  {
+    statusCode: "1",
+    status: "Thời gian đăng ký tăng dần",
+  },
+  {
+    statusCode: "2",
+    status: "Số lượng đối tượng giảm dần",
+  },
+];
+
+function QuickSearchToolbar({ searchValue, onSearchChange }) {
   return (
     <Box sx={{ p: 0.5, pb: 0 }}>
-      <GridToolbarQuickFilter onChange={(e) => onSearch(e.target.value)} />
+      <TextField
+        variant="outlined"
+        size="small"
+        placeholder="Tìm kiếm..."
+        value={searchValue}
+        onChange={onSearchChange}
+        sx={{ width: "100%" }}
+      />
     </Box>
   );
 }
 
 export default function QuickFilteringCustomLogic() {
-  const [data, setData] = useState({ rows: [], columns: [] });
   const [openDialog, setOpenDialog] = useState(false);
   const [isApproveAction, setIsApproveAction] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
   const [denyReason, setDenyReason] = useState("");
-  const [pageIndex, setPageIndex] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [approveNote, setApproveNote] = useState("");
+  const [paginationModel, setPaginationModel] = useState({
+    pageSize: 25,
+    page: 0,
+  });
   const [search, setSearch] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("WAIT_APPROVE");
+  const [selectedSort, setSelectedSort] = useState(2);
+  const loading = useSelector((state) => state.admin?.loading);
+  const message = useSelector((state) => state.admin?.message);
+  const timestamp = useSelector((state) => state.admin?.timestamp);
+  const success = useSelector((state) => state.admin?.success);
   const dispatch = useDispatch();
-  const approve = useSelector((state) => state.admin.getAllToApprove?.body);
 
-  // Hàm mở popup xác nhận
+  useEffect(() => {
+    if (!loading && timestamp) {
+      if (message && success) {
+        toast.success(message);
+      } else if (!success) {
+        toast.error(message);
+      }
+    }
+  }, [loading, message, success, timestamp]);
+
+  const approve = useSelector(
+    (state) => state.admin.getAllToApprove?.body || {}
+  );
+  const statusDorm = useSelector((state) => state.admin.getStatusDorm || []);
+
   const handleOpenDialog = (id, isApprove) => {
     setSelectedId(id);
     setIsApproveAction(isApprove);
     setOpenDialog(true);
   };
 
-  // Hàm đóng popup xác nhận
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setDenyReason("");
+    setApproveNote("");
   };
-
-  // Hàm xử lý khi nhấn xác nhận "Duyệt" hoặc "Từ chối"
+  const dataSearch = useDebounce(search, 1000);
   const handleApprove = () => {
-    if (isApproveAction) {
-      dispatch(setApprove(selectedId)).then(() => {
-        fetchData();
-        handleCloseDialog();
-      });
-    } else {
-      dispatch(denyApprove({ id: selectedId, reason: denyReason })).then(() => {
-        fetchData();
-        handleCloseDialog();
-      });
-    }
+    const formDataAprove = {
+      reason: isApproveAction ? approveNote : denyReason,
+      isApprove: isApproveAction,
+    };
+    const formDataGetAll = {
+      pageIndex: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
+      search,
+      status: selectedStatus,
+      sortOption: selectedSort,
+    };
+    dispatch(setApprove({ formDataAprove, formDataGetAll, id: selectedId }));
+    handleCloseDialog();
   };
 
-  // Hàm gọi API với phân trang và tìm kiếm
   const fetchData = () => {
     const formData = {
-      pageIndex,
-      pageSize,
-      search,
+      pageIndex: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
+      search: dataSearch,
+      status: selectedStatus,
+      sortOption: selectedSort,
     };
     dispatch(getAllToApprove(formData));
   };
 
   useEffect(() => {
+    fetchData();
+  }, [
+    paginationModel.page,
+    paginationModel.pageSize,
+    search,
+    selectedStatus,
+    selectedSort,
+  ]);
+
+  useEffect(() => {
     dispatch(getRoom());
     dispatch(getPeriod());
-    fetchData();
-  }, [dispatch, pageIndex, pageSize, search]);
+    dispatch(getStatusDorm());
+  }, [dispatch]);
 
-  // const rows = approve?.map((item) => ({
-  //   id: item.id,
-  //   campusName: item.campus.name,
-  //   campusAddress: item.campus.address,
-  //   status: item.status,
-  //   createdAt: new Date(item.createdAt).toLocaleDateString(),
-  //   objects: item.objects.map((obj) => obj.name).join(", "),
-  // }));
-  const rows = [];
+  const rows = approve.content?.map((item) => ({
+    id: item.id,
+    studentId: item.student?.code,
+    name: item.student?.name,
+    class: item.student?.className,
+    phoneNumber: item.student?.phone || "N/A",
+    email: item.student?.email || "N/A",
+    dormitory: item.campus?.name,
+    priorityNumber: item.objects?.length,
+    priorityDescription:
+      item.objects?.map((obj) => obj.name).join(", ") || "N/A",
+    registrationDate: item.createdAt
+      ? new Date(item.createdAt).toLocaleDateString()
+      : "N/A",
+    status: item.status,
+    reason: item.reason,
+    processDate: item.updatedAt
+      ? new Date(item.updatedAt).toLocaleDateString()
+      : "N/A",
+  }));
 
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "campusName", headerName: "Tên cơ sở", width: 150 },
-    { field: "campusAddress", headerName: "Địa chỉ", width: 300 },
+    { field: "studentId", headerName: "MSSV", width: 100 },
+    { field: "name", headerName: "Họ và tên", width: 200 },
+    { field: "class", headerName: "Lớp", width: 150 },
+    { field: "phoneNumber", headerName: "Số điện thoại", width: 150 },
+    { field: "email", headerName: "Email", width: 200 },
+    { field: "dormitory", headerName: "KTX đăng ký", width: 150 },
+    { field: "priorityNumber", headerName: "Số đối tượng ưu tiên", width: 150 },
+    {
+      field: "priorityDescription",
+      headerName: "Đối tượng ưu tiên dạng chữ",
+      width: 250,
+    },
+    { field: "registrationDate", headerName: "Ngày đăng ký", width: 150 },
     { field: "status", headerName: "Trạng thái", width: 150 },
-    { field: "createdAt", headerName: "Ngày tạo", width: 150 },
-    { field: "objects", headerName: "Đối tượng", width: 300 },
+    { field: "processDate", headerName: "Ngày xử lý", width: 150 },
+    { field: "reason", headerName: "Ghi chú", width: 150 },
     {
       field: "actions",
       headerName: "Hành động",
@@ -113,21 +196,18 @@ export default function QuickFilteringCustomLogic() {
       width: 150,
       getActions: (params) => [
         <GridActionsCellItem
-          icon={<HomeMaxOutlined />}
+          icon={<CheckCircle sx={{ fontSize: "20px" }} />}
           label="Duyệt"
           onClick={() => handleOpenDialog(params.id, true)}
-          disabled={params.row.status === "Đã duyệt"}
-          sx={{ color: "red", fontWeight: "bold" }}
+          disabled={params.row.status !== "Chờ duyệt"}
+          sx={{ color: "#008689", fontWeight: "bold", fontSize: "13px" }}
         />,
         <GridActionsCellItem
-          icon={<BlockOutlined />}
+          icon={<Cancel sx={{ fontSize: "20px" }} />}
           label="Từ chối"
           onClick={() => handleOpenDialog(params.id, false)}
-          disabled={
-            params.row.status === "Đã duyệt" ||
-            params.row.status === "Đã từ chối"
-          }
-          sx={{ color: "red", fontWeight: "bold" }}
+          disabled={params.row.status !== "Chờ duyệt"}
+          sx={{ color: "red", fontWeight: "bold", fontSize: "13px" }}
         />,
       ],
     },
@@ -135,36 +215,183 @@ export default function QuickFilteringCustomLogic() {
 
   return (
     <Container>
+      <Paper
+        elevation={4}
+        sx={{ padding: "20px", borderRadius: "10px", mb: 2 }}
+      >
+        <FormControl
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FormLabel
+            sx={{
+              fontSize: "15px",
+              fontWeight: "600",
+              color: "red",
+              "&.Mui-focused": { color: "red" },
+            }}
+          >
+            Chọn trạng thái của danh sách
+          </FormLabel>
+          <RadioGroup
+            aria-label="authMethod"
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            row
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {statusDorm.map((status) => (
+              <FormControlLabel
+                key={status.statusCode}
+                value={status.statusCode}
+                control={
+                  <Radio
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      "&.Mui-checked": { color: "#008689" },
+                      "&.Mui-checked + .MuiFormControlLabel-label ": {
+                        color: "#008689",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                      },
+                    }}
+                  />
+                }
+                sx={{
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                    color: "rgb(102, 117, 128)",
+                    fontWeight: "500",
+                  },
+                }}
+                label={status.status}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+        <FormControl
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FormLabel
+            sx={{
+              fontSize: "15px",
+              fontWeight: "600",
+              color: "red",
+              "&.Mui-focused": { color: "red" },
+            }}
+          >
+            Chọn cách sắp xếp danh sách
+          </FormLabel>
+          <RadioGroup
+            aria-label="sortMethod"
+            value={selectedSort}
+            onChange={(e) => setSelectedSort(e.target.value)}
+            row
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {sortDorm.map((status) => (
+              <FormControlLabel
+                key={status.statusCode}
+                value={status.statusCode}
+                control={
+                  <Radio
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      "&.Mui-checked": { color: "#008689" },
+                      "&.Mui-checked + .MuiFormControlLabel-label ": {
+                        color: "#008689",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                      },
+                    }}
+                  />
+                }
+                sx={{
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                    color: "rgb(102, 117, 128)",
+                    fontWeight: "500",
+                  },
+                }}
+                label={status.status}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+      </Paper>
       <Paper elevation={4} sx={{ padding: "20px", borderRadius: "10px" }}>
-        <Box sx={{ height: 400, width: "100%" }}>
+        <Box sx={{ height: "50vh", width: "100%" }}>
+          <QuickSearchToolbar
+            searchValue={search}
+            onSearchChange={(e) => setSearch(e.target.value)}
+          />
           <DataGrid
             rows={rows}
             columns={columns}
+            getRowId={(row) => row.id}
             pagination
-            pageSize={pageSize}
-            onPageSizeChange={(newSize) => setPageSize(newSize)}
-            onPageChange={(newPage) => setPageIndex(newPage)}
-            rowCount={approve?.totalCount}
             paginationMode="server"
-            slots={{ toolbar: QuickSearchToolbar }}
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            rowCount={approve.totalElements}
+            localeText={{
+              noRowsLabel: "Không có dữ liệu để xử lý",
+              MuiTablePagination: {
+                labelRowsPerPage: "Số dòng mỗi trang",
+              },
+            }}
             sx={{
               "& .MuiDataGrid-cell": {
-                color: "red",
+                color: "black",
                 fontWeight: "bold",
+                fontSize: "13px",
               },
               "& .MuiDataGrid-columnHeaderTitle": {
                 color: "red",
                 fontWeight: "bold",
+                fontSize: "15px",
               },
-            }}
-            componentsProps={{
-              toolbar: {
-                onSearch: setSearch,
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+                width: "10px",
+                height: "10px",
+                borderRadius: "10px",
+              },
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+                backgroundColor: "#008689",
+                borderRadius: "10px",
+              },
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: "#008950",
+                borderRadius: "10px",
+              },
+              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+                borderRadius: "10px",
               },
             }}
           />
+
           <Dialog open={openDialog} onClose={handleCloseDialog}>
-            <DialogTitle sx={{ color: "red", fontWeight: "bold" }}>
+            <DialogTitle
+              sx={{ color: "#008689", fontWeight: "bold", fontSize: "15px" }}
+            >
               {isApproveAction ? "Xác nhận duyệt" : "Xác nhận từ chối"}
             </DialogTitle>
             <DialogContent>
@@ -173,24 +400,26 @@ export default function QuickFilteringCustomLogic() {
                   ? "Bạn có chắc chắn muốn duyệt đơn đăng ký này không?"
                   : "Vui lòng nhập lý do từ chối."}
               </DialogContentText>
-              {!isApproveAction && (
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  label="Lý do từ chối"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value={denyReason}
-                  onChange={(e) => setDenyReason(e.target.value)}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      color: "red",
-                      fontWeight: "bold",
-                    },
-                  }}
-                />
-              )}
+              <TextField
+                autoFocus
+                margin="dense"
+                label={isApproveAction ? "Ghi chú" : "Lý do từ chối"}
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={isApproveAction ? approveNote : denyReason}
+                onChange={(e) =>
+                  isApproveAction
+                    ? setApproveNote(e.target.value)
+                    : setDenyReason(e.target.value)
+                }
+                sx={{
+                  "& .MuiInputBase-input": {
+                    color: "red",
+                    fontWeight: "bold",
+                  },
+                }}
+              />
             </DialogContent>
             <DialogActions>
               <Button
@@ -201,10 +430,38 @@ export default function QuickFilteringCustomLogic() {
               </Button>
               <Button
                 onClick={handleApprove}
-                disabled={!isApproveAction && !denyReason.trim()}
-                sx={{ color: "red", fontWeight: "bold" }}
+                disabled={
+                  (!isApproveAction && !denyReason.trim()) ||
+                  (isApproveAction && !approveNote.trim())
+                }
+                variant="contained"
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: "#008588",
+                  color: "white",
+                  borderRadius: "8px",
+                  border: "3px solid #0085885a",
+                  transition: "all ease 0.4s",
+                  padding: "0px",
+                  "&:hover": {
+                    borderColor: "#008689",
+                    backgroundColor: "white",
+                    color: "#008689",
+                    boxShadow: "0 0 10px #008689",
+                  },
+                }}
               >
-                Xác nhận
+                <Typography
+                  sx={{
+                    fontSize: { xs: "11px", lg: "15px" },
+                    fontWeight: "700px",
+                    padding: "5px",
+                  }}
+                >
+                  Xác nhận
+                </Typography>
               </Button>
             </DialogActions>
           </Dialog>

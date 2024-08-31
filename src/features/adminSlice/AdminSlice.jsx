@@ -88,7 +88,7 @@ export const getAllToApprove = createAsyncThunk(
         },
       };
       const response = await axios.post(
-        `${API_BASE_URL}/dorm/getAllToApprove?periodId=1`,
+        `${API_BASE_URL}/dorm/getAllAdmin`,
         formData,
         config
       );
@@ -106,6 +106,7 @@ export const getAllToApprove = createAsyncThunk(
     }
   }
 );
+
 export const getPeriod = createAsyncThunk(
   "dorm/getPeriod",
   async (_, { rejectWithValue }) => {
@@ -140,9 +141,8 @@ export const getPeriod = createAsyncThunk(
 );
 export const setApprove = createAsyncThunk(
   "dorm/setApprove",
-  async (id, { rejectWithValue }) => {
+  async ({ formDataAprove, formDataGetAll, id }, { rejectWithValue }) => {
     try {
-      console.log(id);
 
       const token = localStorage.getItem("account");
       if (!token) {
@@ -154,12 +154,17 @@ export const setApprove = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.put(
-        `${API_BASE_URL}/dorm/approve/${id}`,
+      const message = await axios.post(
+        `${API_BASE_URL}/dorm/approve?dormRegisterId=${id}`,
+        formDataAprove,
         config
       );
-
-      return response.data;
+      const response = await axios.post(
+        `${API_BASE_URL}/dorm/getAllAdmin`,
+        formDataGetAll,
+        config
+      );
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -172,24 +177,25 @@ export const setApprove = createAsyncThunk(
     }
   }
 );
-export const denyApprove = createAsyncThunk(
-  "dorm/denyApprove",
-  async ({ id, reason }, { rejectWithValue }) => {
+export const getStatusDorm = createAsyncThunk(
+  "admin/getStatusDorm",
+  async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
         throw new Error("No token found");
       }
 
+      // Không cần thiết lập 'Content-Type' cho FormData, Axios sẽ tự động thiết lập
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-      console.log(reason);
-      const response = await axios.put(
-        `${API_BASE_URL}/dorm/deny/${id}`,
-        { reason: reason },
+
+      // Gửi yêu cầu POST với formData
+      const response = await axios.get(
+        `${API_BASE_URL}/dorm/getStatus`,
         config
       );
 
@@ -199,13 +205,14 @@ export const denyApprove = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // Xử lý lỗi ủy quyền
       }
+
       return rejectWithValue(error.message);
     }
   }
 );
+
 const adminSlice = createSlice({
   name: "adminDorm",
   initialState,
@@ -278,27 +285,27 @@ const adminSlice = createSlice({
       })
       .addCase(setApprove.fulfilled, (state, action) => {
         state.loading = false;
-        state.message = action.payload.message;
-        state.success = action.payload.success;
-        state.timestamp = action.payload.timestamp;
-        state.setApprove = action.payload;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.getAllToApprove = action.payload.response;
       })
       .addCase(setApprove.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || action.error.message;
+        state.error = action.payload.message || action.error.message;
       })
-      .addCase(denyApprove.pending, (state) => {
+      .addCase(getStatusDorm.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(denyApprove.fulfilled, (state, action) => {
+      .addCase(getStatusDorm.fulfilled, (state, action) => {
         state.loading = false;
         state.message = action.payload.message;
         state.success = action.payload.success;
         state.timestamp = action.payload.timestamp;
-        state.denyApprove = action.payload;
+        state.getStatusDorm = action.payload;
       })
-      .addCase(denyApprove.rejected, (state, action) => {
+      .addCase(getStatusDorm.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });
