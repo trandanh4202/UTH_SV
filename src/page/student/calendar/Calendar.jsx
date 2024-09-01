@@ -71,7 +71,7 @@ const generateDatesForCurrentWeek = (currentDate) => {
   const dates = [];
   const startOfWeekDate = startOfWeek(currentDate, { weekStartsOn: 1 }); // Thứ hai là ngày bắt đầu tuần
 
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i <= 7; i++) {
     const date = addDays(startOfWeekDate, i);
     dates.push(format(date, "dd/MM/yyyy"));
   }
@@ -82,7 +82,6 @@ const Calendar = () => {
   const { days, slots } = timetableData;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [splitData, setSplitData] = useState([]);
-
   const handleNextWeek = () => {
     const nextWeek = new Date(currentDate);
     nextWeek.setDate(nextWeek.getDate() + 7);
@@ -107,7 +106,7 @@ const Calendar = () => {
   };
 
   const dispatch = useDispatch();
-  const formattedDate = currentDate.toISOString().substr(0, 10);
+  const formattedDate = format(currentDate, "yyyy-MM-dd");
 
   useEffect(() => {
     dispatch(getCalendar({ date: formattedDate }));
@@ -144,11 +143,11 @@ const Calendar = () => {
             <TextField
               id="date-picker"
               type="date"
-              value={currentDate.toISOString().substr(0, 10)}
+              value={format(currentDate, "yyyy-MM-dd")} // Sử dụng `date-fns` để định dạng lại
               onChange={handleDateChange}
-              InputLabelProps={{
-                shrink: true,
-              }}
+              // InputLabelProps={{
+              //   shrink: true,
+              // }}
               sx={{
                 "& .MuiInputBase-input": {
                   borderBottom: "2px solid rgb(51, 181, 229)",
@@ -475,7 +474,7 @@ const Calendar = () => {
                                       }}
                                     >
                                       <Typography
-                                        // component={Link} 
+                                        // component={Link}
                                         sx={{
                                           fontSize: "13px",
                                           fontWeight: "600",
