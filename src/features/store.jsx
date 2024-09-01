@@ -47,5 +47,5 @@ export const store = configureStore({
     dorm: dormReducer,
     admin: adminReducer,
   },
-  // devTools: false,
+  devTools: false,
 });

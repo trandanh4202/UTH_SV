@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAllToApprove,
+  getCampus,
   getPeriod,
   getRoom,
   getStatusDorm,
@@ -75,6 +76,7 @@ export default function QuickFilteringCustomLogic() {
   const [search, setSearch] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("WAIT_APPROVE");
   const [selectedSort, setSelectedSort] = useState(2);
+  const [selectedCampus, setSelectedCampus] = useState(1);
   const loading = useSelector((state) => state.admin?.loading);
   const message = useSelector((state) => state.admin?.message);
   const timestamp = useSelector((state) => state.admin?.timestamp);
@@ -95,7 +97,7 @@ export default function QuickFilteringCustomLogic() {
     (state) => state.admin.getAllToApprove?.body || {}
   );
   const statusDorm = useSelector((state) => state.admin.getStatusDorm || []);
-
+  const campusDorm = useSelector((state) => state.admin.getCampus?.body);
   const handleOpenDialog = (id, isApprove) => {
     setSelectedId(id);
     setIsApproveAction(isApprove);
@@ -131,6 +133,7 @@ export default function QuickFilteringCustomLogic() {
       search: dataSearch,
       status: selectedStatus,
       sortOption: selectedSort,
+      campusId: selectedCampus,
     };
     dispatch(getAllToApprove(formData));
   };
@@ -143,12 +146,14 @@ export default function QuickFilteringCustomLogic() {
     search,
     selectedStatus,
     selectedSort,
+    selectedCampus,
   ]);
 
   useEffect(() => {
     dispatch(getRoom());
     dispatch(getPeriod());
     dispatch(getStatusDorm());
+    dispatch(getCampus());
   }, [dispatch]);
 
   const rows = approve.content?.map((item) => ({
@@ -249,7 +254,7 @@ export default function QuickFilteringCustomLogic() {
               justifyContent: "center",
             }}
           >
-            {statusDorm.map((status) => (
+            {statusDorm?.map((status) => (
               <FormControlLabel
                 key={status.statusCode}
                 value={status.statusCode}
@@ -307,7 +312,7 @@ export default function QuickFilteringCustomLogic() {
               justifyContent: "center",
             }}
           >
-            {sortDorm.map((status) => (
+            {sortDorm?.map((status) => (
               <FormControlLabel
                 key={status.statusCode}
                 value={status.statusCode}
@@ -333,6 +338,64 @@ export default function QuickFilteringCustomLogic() {
                   },
                 }}
                 label={status.status}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+        <FormControl
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FormLabel
+            sx={{
+              fontSize: "15px",
+              fontWeight: "600",
+              color: "red",
+              "&.Mui-focused": { color: "red" },
+            }}
+          >
+            Chọn cơ sở duyệt
+          </FormLabel>
+          <RadioGroup
+            aria-label="campusMethod"
+            value={selectedCampus}
+            onChange={(e) => setSelectedCampus(e.target.value)}
+            row
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {campusDorm?.map((campus) => (
+              <FormControlLabel
+                key={campus.id}
+                value={campus.id}
+                control={
+                  <Radio
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      "&.Mui-checked": { color: "#008689" },
+                      "&.Mui-checked + .MuiFormControlLabel-label ": {
+                        color: "#008689",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                      },
+                    }}
+                  />
+                }
+                sx={{
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                    color: "rgb(102, 117, 128)",
+                    fontWeight: "500",
+                  },
+                }}
+                label={campus.name}
               />
             ))}
           </RadioGroup>

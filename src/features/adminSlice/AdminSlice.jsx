@@ -143,7 +143,6 @@ export const setApprove = createAsyncThunk(
   "dorm/setApprove",
   async ({ formDataAprove, formDataGetAll, id }, { rejectWithValue }) => {
     try {
-
       const token = localStorage.getItem("account");
       if (!token) {
         throw new Error("No token found");
@@ -196,6 +195,41 @@ export const getStatusDorm = createAsyncThunk(
       // Gửi yêu cầu POST với formData
       const response = await axios.get(
         `${API_BASE_URL}/dorm/getStatus`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi ủy quyền
+      }
+
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const getCampus = createAsyncThunk(
+  "admin/getCampus",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      // Không cần thiết lập 'Content-Type' cho FormData, Axios sẽ tự động thiết lập
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Gửi yêu cầu POST với formData
+      const response = await axios.get(
+        `${API_BASE_URL}/dorm/getCampus`,
         config
       );
 
@@ -306,6 +340,21 @@ const adminSlice = createSlice({
         state.getStatusDorm = action.payload;
       })
       .addCase(getStatusDorm.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getCampus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCampus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
+        state.getCampus = action.payload;
+      })
+      .addCase(getCampus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });
