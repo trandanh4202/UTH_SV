@@ -575,7 +575,7 @@ const Calendar = () => {
                                         GV: {relevantData.giangVien}
                                       </Typography>
                                     </Box>
-                                    <Box
+                                    {/* <Box
                                       sx={{
                                         display: "flex",
                                         justifyContent: "center",
@@ -600,7 +600,7 @@ const Calendar = () => {
                                       >
                                         Lớp học trực tuyến
                                       </Typography>
-                                    </Box>
+                                    </Box> */}
                                   </Box>
                                 </Box>
                               )}
