@@ -49,10 +49,10 @@ const Certification = () => {
       <Box
         sx={{
           display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: "start",
           gap: "50px",
           marginTop: "50px",
+          flexDirection: { lg: "row", xs: "column" },
         }}
       >
         {certification?.map((c) => (
@@ -62,19 +62,20 @@ const Certification = () => {
               alignItems: "center",
               justifyContent: "center",
               flexDirection: "column",
+              gap: "5px",
             }}
           >
             <Box>
               <Typography
                 sx={{
                   textAlign: "center",
-                  fontSize: "20px",
+                  fontSize: { xs: "13px", lg: "20px" },
                   fontWeight: "600",
                   whiteSpace: "2",
                   backgroundColor: "#008689",
                   color: "white",
                   boxShadow: "0 0 10px #008689",
-                  padding: "5px",
+                  padding: { xs: "3px", lg: "5px" },
                 }}
               >
                 {c.name}
