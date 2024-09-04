@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getCheckUpdateProfile } from "../../../features/profileSlice/ProfileSlice";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 const EditProfile = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -35,6 +36,7 @@ const EditProfile = () => {
   const success = useSelector((state) => state.profile?.success);
   const message = useSelector((state) => state.profile?.message);
   const timestamp = useSelector((state) => state.profile?.timestamp);
+
   useEffect(() => {
     if (!loading) {
       if (success && timestamp) {

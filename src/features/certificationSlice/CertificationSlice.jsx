@@ -6,7 +6,8 @@ const initialState = {
   loading: false,
   error: null,
 };
-const API_BASE_URL = "https://ts24.ut.edu.vn/api/getdatanhaphoc.php";
+const API_BASE_URL =
+  "https://uth-api-online-nh.ut.edu.vn/api/getdatanhaphoc.php";
 
 export const getCertification = createAsyncThunk(
   "certification/getCertification",
@@ -17,7 +18,7 @@ export const getCertification = createAsyncThunk(
         throw new Error("No token found");
       }
       const response = await axios.get(
-        `https://ts24.ut.edu.vn/api/getdatanhaphoc.php?token=${token}`
+        `https://uth-api-online-nh.ut.edu.vn/api/getdatanhaphoc.php?token=${token}`
       );
 
       return response.data.data;

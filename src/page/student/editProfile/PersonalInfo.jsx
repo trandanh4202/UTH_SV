@@ -622,8 +622,8 @@ const PersonalInfo = () => {
                   sx={{ display: "flex", flexDirection: "column", gap: "2px" }}
                 >
                   <SelectField
-                    name="idphuongxa"
-                    value={formData.idphuongxa || ""}
+                    name="idphuongXa"
+                    value={formData.idphuongXa || ""}
                     onChange={handleChange}
                     disabled={!formData.idhuyen}
                     options={wardsByLocation.queQuan}
@@ -840,8 +840,8 @@ const PersonalInfo = () => {
               </Grid>
               <Grid item xs={12} lg={2}>
                 <SelectField
-                  name="tinhCapCMND"
-                  value={formData.tinhCapCMND || ""}
+                  name="idtinhCapCMND"
+                  value={formData.idtinhCapCMND }
                   onChange={handleChange}
                   options={provinces}
                   label="Tỉnh cấp"
