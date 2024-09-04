@@ -59,7 +59,7 @@ const ChangePasswordPopup = ({ open, onClose }) => {
     if (isPasswordChanged && message) {
       if (status === 200) {
         toast.success(message);
-        localStorage.clear();
+        // localStorage.clear();
 
         setTimeout(() => {
           navigate("/");

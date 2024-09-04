@@ -12,17 +12,17 @@ const Certification = () => {
   const navigate = useNavigate();
   const success = useSelector((state) => state.profile.getCheckCourse?.body);
 
-  useEffect(() => {
-    if (!success) {
-      // Đặt thời gian chờ (ví dụ: 1000ms = 1 giây)
-      const timer = setTimeout(() => {
-        navigate("/dashboard");
-      }, 500); // Thời gian chờ là 1 giây
+  // useEffect(() => {
+  //   if (!success) {
+  //     // Đặt thời gian chờ (ví dụ: 1000ms = 1 giây)
+  //     const timer = setTimeout(() => {
+  //       navigate("/dashboard");
+  //     }, 500); // Thời gian chờ là 1 giây
 
-      // Dọn dẹp setTimeout khi component unmount hoặc `success` thay đổi
-      return () => clearTimeout(timer);
-    }
-  }, [navigate, success]);
+  //     // Dọn dẹp setTimeout khi component unmount hoặc `success` thay đổi
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [navigate, success]);
   useEffect(() => {
     dispatch(getCertification());
     dispatch(getCheckCourse());

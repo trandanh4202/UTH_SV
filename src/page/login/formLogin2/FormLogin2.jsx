@@ -101,7 +101,7 @@ const FormLogin2 = () => {
     if (isPasswordChanged && resetPasswordMessage) {
       if (resetPasswordStatus === 200) {
         toast.success(resetPasswordMessage);
-        localStorage.clear();
+        // localStorage.clear();
 
         setTimeout(() => {
           window.location.reload();

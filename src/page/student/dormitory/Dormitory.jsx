@@ -36,6 +36,7 @@ const tableCell = [
   "Ngày yêu cầu",
   "Trạng thái",
   "Ngày xử lý",
+  "Ghi chú",
   "Thao tác",
 ];
 
@@ -102,7 +103,7 @@ const Dormitory = () => {
                 Đăng ký Ký túc xá
               </Typography>
             </Box>
-            <Box>
+            {/* <Box>
               <Button
                 variant="contained"
                 onClick={handleModalKTXOpen}
@@ -133,7 +134,7 @@ const Dormitory = () => {
                   Đăng ký KTX
                 </Typography>
               </Button>
-            </Box>
+            </Box> */}
           </Box>
           <TableContainer
             component={Paper}
@@ -269,6 +270,17 @@ const Dormitory = () => {
                       }}
                     >
                       {formatDate(row?.updatedAt)}
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+
+                        fontWeight: "500",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {row?.reason}
                     </TableCell>
                     <TableCell
                       align="center"
