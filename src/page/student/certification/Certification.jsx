@@ -4,18 +4,28 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCertification } from "../../../features/certificationSlice/CertificationSlice";
 import { useNavigate } from "react-router-dom";
+import { getCheckCourse } from "../../../features/profileSlice/ProfileSlice";
 
 const Certification = () => {
   const dispatch = useDispatch();
-  const courses = useSelector((state) => state.profile.profile.body?.khoaHoc);
+  // const courses = useSelector((state) => state.profile.profile.body?.khoaHoc);
   const navigate = useNavigate();
+  const success = useSelector((state) => state.profile.getCheckCourse?.body);
+
   useEffect(() => {
-    if (courses !== 2024) {
-      navigate("/dashboard");
+    if (!success) {
+      // Đặt thời gian chờ (ví dụ: 1000ms = 1 giây)
+      const timer = setTimeout(() => {
+        navigate("/dashboard");
+      }, 500); // Thời gian chờ là 1 giây
+
+      // Dọn dẹp setTimeout khi component unmount hoặc `success` thay đổi
+      return () => clearTimeout(timer);
     }
-  }, [navigate, courses]);
+  }, [navigate, success]);
   useEffect(() => {
     dispatch(getCertification());
+    dispatch(getCheckCourse());
   }, [dispatch]);
   const certification = useSelector(
     (state) => state.certification.certification

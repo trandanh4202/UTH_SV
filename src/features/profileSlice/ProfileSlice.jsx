@@ -314,6 +314,38 @@ export const getUpdateProfile = createAsyncThunk(
     }
   }
 );
+export const getCheckCourse = createAsyncThunk(
+  "profile/getCheckCourse",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        `${API_BASE_URL}/user/checkKhoaHoc`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const profileSlice = createSlice({
   name: "profile",
@@ -466,6 +498,21 @@ const profileSlice = createSlice({
         state.timestamp = action.payload.timestamp;
       })
       .addCase(getCheckUpdateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getCheckCourse.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCheckCourse.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getCheckCourse = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(getCheckCourse.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
