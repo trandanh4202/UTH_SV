@@ -17,9 +17,7 @@ const AvatarInfo = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const dispatch = useDispatch();
-  const studentPhoto = useSelector(
-    (state) => state.profile.summaryProfile.body?.image
-  ); // Lấy ảnh hiện tại từ Redux store
+  const studentPhoto = localStorage.getItem("image");
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];

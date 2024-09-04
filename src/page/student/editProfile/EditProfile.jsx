@@ -36,7 +36,6 @@ const EditProfile = () => {
   const success = useSelector((state) => state.profile?.success);
   const message = useSelector((state) => state.profile?.message);
   const timestamp = useSelector((state) => state.profile?.timestamp);
-
   useEffect(() => {
     if (!loading) {
       if (success && timestamp) {
@@ -50,6 +49,7 @@ const EditProfile = () => {
   const successFamily = useSelector((state) => state.family?.success);
   const messageFamily = useSelector((state) => state.family?.message);
   const timestampFamily = useSelector((state) => state.family?.timestamp);
+  const navigation = useNavigate();
   useEffect(() => {
     if (!loadingFamily) {
       if (successFamily && timestampFamily) {

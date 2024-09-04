@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { parse, format } from "date-fns";
 import { getEthnicity } from "../../../features/nationSlice/NationSlice";
+import { useNavigate } from "react-router-dom";
 
 const inputStyles = {
   "& .MuiInputBase-input": {
@@ -196,7 +197,7 @@ const TextFieldWrapper = ({
     // if (name === "schoolEmail" && !newValue.endsWith("@ut.edu.vn")) {
     //   alert("Email phải là @ut.edu.vn");
     //   return;
-    // }  
+    // }
     onChange({ target: { name, value: newValue } });
   };
 
@@ -480,10 +481,29 @@ const PersonalInfo = () => {
       [name]: value,
     }));
   }, []);
+  const [update, setUpdate] = useState(false);
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(updateProfile(formData)); // Dispatch the updateProfile action with formData
+    setUpdate(true);
   };
+  const navigate = useNavigate();
+  const loading = useSelector((state) => state.profile.updateProfile?.loading);
+  const success = useSelector((state) => state.profile.updateProfile?.success);
+  const timestamp = useSelector(
+    (state) => state.profile.updateProfile?.timestamp
+  );
+  useEffect(() => {
+    if (!loading && update) {
+      if (success && timestamp) {
+        setTimeout(() => {
+          navigate("/infordetail");
+        }, 1000);
+      } else if (!success) {
+        navigate("/");
+      }
+    }
+  }, [loading, navigate, success, timestamp, update]);
 
   const messageAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.message
@@ -841,7 +861,7 @@ const PersonalInfo = () => {
               <Grid item xs={12} lg={2}>
                 <SelectField
                   name="idtinhCapCMND"
-                  value={formData.idtinhCapCMND }
+                  value={formData.idtinhCapCMND}
                   onChange={handleChange}
                   options={provinces}
                   label="Tỉnh cấp"

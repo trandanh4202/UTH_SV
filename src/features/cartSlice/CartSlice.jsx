@@ -30,8 +30,8 @@ export const getCart = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -64,8 +64,8 @@ export const addToCart = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -101,8 +101,8 @@ export const updateCart = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -135,8 +135,8 @@ export const deleteCart = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
-        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }

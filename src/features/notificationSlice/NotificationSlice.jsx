@@ -59,7 +59,7 @@ export const getNewfeedsById = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        // localStorage.clear();
+        localStorage.clear();
         window.location.href = "/"; // Chuyển hướng người dùng về trang login nếu không được phép truy cập
       }
       return rejectWithValue(error.message);

@@ -333,18 +333,22 @@ const InforDetail = () => {
                   <Grid container>
                     <InfoField
                       label="Hộ khẩu thường trú: "
-                      value={` ${profile?.hkttPhuongXa || ""}, ${
-                        profile?.hkttHuyen || ""
-                      }, ${profile?.hkttTinh || ""}`}
+                      value={` ${profile?.hkttThonxom || ""},${
+                        profile?.hkttPhuongXa || ""
+                      }, ${profile?.hkttHuyen || ""}, ${
+                        profile?.hkttTinh || ""
+                      }`}
                       column={12}
                     />
                   </Grid>
                   <Grid container>
                     <InfoField
                       label="Địa chỉ liên lạc: "
-                      value={` ${profile?.hkttPhuongXa || ""}, ${
-                        profile?.dcllHuyen || ""
-                      }, ${profile?.dcllTinh || ""}`}
+                      value={` ${profile?.dcllSonha || ""},${
+                        profile?.hkttPhuongXa || ""
+                      }, ${profile?.dcllHuyen || ""}, ${
+                        profile?.dcllTinh || ""
+                      }`}
                       column={12}
                     />
                   </Grid>
@@ -390,9 +394,7 @@ const InforDetail = () => {
                     <Box key={index}>
                       <Grid container>
                         <InfoField
-                          label={`Họ tên ${
-                            item?.quanHe === "Cha" ? "Cha" : "Mẹ"
-                          }: `}
+                          label={`Họ tên ${item?.quanHe}: `}
                           value={item?.hoTen}
                           column="4"
                         />
