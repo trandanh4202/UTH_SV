@@ -11,7 +11,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const getRoom = createAsyncThunk(
   "adminDorm/getRoom",
-  async (_, { rejectWithValue }) => {
+  async ({ campusId }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -23,7 +23,10 @@ export const getRoom = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`${API_BASE_URL}/dorm/getRoom`, config);
+      const response = await axios.get(
+        `${API_BASE_URL}/dorm/getRoom?campusId=${campusId}`,
+        config
+      );
 
       return response.data;
     } catch (error) {
@@ -31,8 +34,8 @@ export const getRoom = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -66,8 +69,8 @@ export const createDorm = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -99,8 +102,8 @@ export const getAllToApprove = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -132,8 +135,8 @@ export const getPeriod = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -153,7 +156,7 @@ export const setApprove = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const message = await axios.post(
+      const message = await axios.put(
         `${API_BASE_URL}/dorm/approve?dormRegisterId=${id}`,
         formDataAprove,
         config
@@ -169,8 +172,8 @@ export const setApprove = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }

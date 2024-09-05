@@ -16,7 +16,7 @@ const Certification = () => {
     if (!isCheck) {
       setTimeout(() => {
         navigate("/dashboard");
-      }, 500); // Thời gian chờ là 1 giây
+      }, 1500); // Thời gian chờ là 1 giây
     }
   }, [navigate, isCheck]);
   useEffect(() => {

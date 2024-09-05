@@ -31,8 +31,8 @@ export const getAllOrder = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -66,8 +66,8 @@ export const createOrder = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -99,8 +99,41 @@ export const cancelOrder = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const finishOrder = createAsyncThunk(
+  "order/finishOrder",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const message = await axios.put(
+        `${API_BASE_URL}/order/finish/${id}`,
+        {},
+        config
+      );
+      const response = await axios.get(`${API_BASE_URL}/order/getAll`, config);
+
+      return { message: message.data, response: response.data };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -132,8 +165,8 @@ export const getAllToShip = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -165,8 +198,8 @@ export const getAllToHandle = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -198,8 +231,8 @@ export const getDetailOrder = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -231,8 +264,8 @@ export const getAllToDeliverWithoutShip = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -253,7 +286,7 @@ export const getAllToApprove = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(
+      const response = await axios.post(
         `${API_BASE_URL}/order/getAllToApprove`,
         config
       );
@@ -264,8 +297,8 @@ export const getAllToApprove = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -297,14 +330,158 @@ export const getAllApprove = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
   }
 );
+export const setApprove = createAsyncThunk(
+  "order/setApprove",
+  async ({ formDataAprove, formDataGetAll, id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
 
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const message = await axios.put(
+        `${API_BASE_URL}/order/approve/${id}`,
+        formDataAprove,
+        config
+      );
+      const message2 = await axios.put(
+        `${API_BASE_URL}/order/handle?orderId=${id}`,
+        { shipCode: "", shipFee: 0 },
+        config
+      );
+      const response = await axios.post(
+        `${API_BASE_URL}/order/getAllAdmin`,
+        formDataGetAll,
+        config
+      );
+      return { message: message.data, response: response.data };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const getCampus = createAsyncThunk(
+  "order/getCampus",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      // Không cần thiết lập 'Content-Type' cho FormData, Axios sẽ tự động thiết lập
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Gửi yêu cầu POST với formData
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getCampus`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi ủy quyền
+      }
+
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const getAllAdmin = createAsyncThunk(
+  "order/getAllAdmin",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.post(
+        `${API_BASE_URL}/order/getAllAdmin`,
+        formData,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const getStatusUniform = createAsyncThunk(
+  "admin/getStatusUniform",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      // Không cần thiết lập 'Content-Type' cho FormData, Axios sẽ tự động thiết lập
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Gửi yêu cầu POST với formData
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getStatus`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi ủy quyền
+      }
+
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const getEstimateTotalAmount = createAsyncThunk(
   "order/getEstimateTotalAmount",
   async (formData, { rejectWithValue }) => {
@@ -330,8 +507,8 @@ export const getEstimateTotalAmount = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -368,6 +545,21 @@ const orderSlice = createSlice({
         state.timestamp = action.payload.message.timestamp;
       })
       .addCase(cancelOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(finishOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(finishOrder.fulfilled, (state, action) => {
+        state.loading = false;
+        state.order = action.payload.response;
+        state.success = action.payload.message.success;
+        state.message = action.payload.message.message;
+        state.timestamp = action.payload.message.timestamp;
+      })
+      .addCase(finishOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
@@ -473,6 +665,66 @@ const orderSlice = createSlice({
         state.timestamp = action.payload.timestamp;
       })
       .addCase(getDetailOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getAllAdmin.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getAllAdmin.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getAllAdmin = action.payload;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(getAllAdmin.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getStatusUniform.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getStatusUniform.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getStatusUniform = action.payload;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(getStatusUniform.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(setApprove.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(setApprove.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.getAllAdmin = action.payload.response;
+      })
+      .addCase(setApprove.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.message || action.error.message;
+      })
+      .addCase(getCampus.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCampus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
+        state.getCampus = action.payload;
+      })
+      .addCase(getCampus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

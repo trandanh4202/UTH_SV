@@ -1,52 +1,37 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable react/jsx-key */
-import * as React from "react";
 import Box from "@mui/material/Box";
-import {
-  DataGrid,
-  GridToolbarQuickFilter,
-  GridActionsCellItem,
-} from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import * as React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { Cancel, CheckCircle } from "@mui/icons-material";
 import {
-  getAllToApprove,
-  getCampus,
-  getPeriod,
-  getRoom,
-  getStatusDorm,
-  setApprove,
-} from "../../../features/adminSlice/AdminSlice";
-import { CheckCircle, Cancel } from "@mui/icons-material";
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Paper,
+  Radio,
+  RadioGroup,
+  Typography,
+} from "@mui/material";
+import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import {
-  Container,
-  Paper,
-  FormControl,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
-  FormLabel,
-  Typography,
-} from "@mui/material";
 import { toast } from "react-toastify";
 import useDebounce from "../../../components/hooks/UseDebounce";
-
-const sortDorm = [
-  {
-    statusCode: "1",
-    status: "Thời gian đăng ký tăng dần",
-  },
-  {
-    statusCode: "2",
-    status: "Số lượng đối tượng giảm dần",
-  },
-];
+import {
+  getAllAdmin,
+  getCampus,
+  getStatusUniform,
+  setApprove,
+} from "../../../features/orderSlice/OrderSlice";
 
 function QuickSearchToolbar({ searchValue, onSearchChange }) {
   return (
@@ -63,7 +48,7 @@ function QuickSearchToolbar({ searchValue, onSearchChange }) {
   );
 }
 
-export default function QuickFilteringCustomLogic() {
+const HandleUniform = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [isApproveAction, setIsApproveAction] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -74,13 +59,13 @@ export default function QuickFilteringCustomLogic() {
     page: 0,
   });
   const [search, setSearch] = useState("");
-  const [selectedStatus, setSelectedStatus] = useState("WAIT_APPROVE");
+  const [selectedStatus, setSelectedStatus] = useState("NEW");
   const [selectedSort, setSelectedSort] = useState(2);
   const [selectedCampus, setSelectedCampus] = useState(1);
-  const loading = useSelector((state) => state.admin?.loading);
-  const message = useSelector((state) => state.admin?.message);
-  const timestamp = useSelector((state) => state.admin?.timestamp);
-  const success = useSelector((state) => state.admin?.success);
+  const loading = useSelector((state) => state.order?.loading);
+  const message = useSelector((state) => state.order?.message);
+  const timestamp = useSelector((state) => state.order?.timestamp);
+  const success = useSelector((state) => state.order?.success);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -94,12 +79,12 @@ export default function QuickFilteringCustomLogic() {
   }, [loading, message, success, timestamp]);
 
   const approve = useSelector(
-    (state) => state.admin.getAllToApprove?.body || {}
+    (state) => state.order.getAllAdmin?.body?.content || []
   );
   const statusDorm = useSelector(
-    (state) => state.admin.getStatusDorm?.body || []
+    (state) => state.order.getStatusUniform?.body || []
   );
-  const campusDorm = useSelector((state) => state.admin.getCampus?.body);
+  const campusUni = useSelector((state) => state.order.getCampus?.body);
   const handleOpenDialog = (id, isApprove) => {
     setSelectedId(id);
     setIsApproveAction(isApprove);
@@ -120,44 +105,39 @@ export default function QuickFilteringCustomLogic() {
     const formDataGetAll = {
       pageIndex: paginationModel.page + 1,
       pageSize: paginationModel.pageSize,
-      search,
+      search: dataSearch,
       status: selectedStatus,
-      sortOption: selectedSort,
+      campusId: selectedCampus,
     };
     dispatch(setApprove({ formDataAprove, formDataGetAll, id: selectedId }));
     handleCloseDialog();
   };
 
-  const fetchData = () => {
+  useEffect(() => {
     const formData = {
       pageIndex: paginationModel.page + 1,
       pageSize: paginationModel.pageSize,
       search: dataSearch,
       status: selectedStatus,
-      sortOption: selectedSort,
+      // sortOption: selectedSort,
       campusId: selectedCampus,
     };
-    dispatch(getAllToApprove(formData));
-  };
-
-  useEffect(() => {
-    fetchData();
+    dispatch(getAllAdmin(formData));
   }, [
+    dispatch,
     paginationModel.page,
     paginationModel.pageSize,
-    search,
+    dataSearch,
     selectedStatus,
-    selectedSort,
     selectedCampus,
   ]);
 
   useEffect(() => {
-    dispatch(getPeriod());
-    dispatch(getStatusDorm());
+    dispatch(getStatusUniform());
     dispatch(getCampus());
   }, [dispatch]);
 
-  const rows = approve.content?.map((item) => ({
+  const rows = approve?.map((item) => ({
     id: item.id,
     studentId: item.student?.code,
     name: item.student?.name,
@@ -165,10 +145,7 @@ export default function QuickFilteringCustomLogic() {
     ngaySinh: item.student?.ngaySinh,
     phoneNumber: item.student?.phone || "N/A",
     email: item.student?.email || "N/A",
-    dormitory: item.campus?.name,
-    priorityNumber: item.objects?.length,
-    priorityDescription:
-      item.objects?.map((obj) => obj.name).join(", ") || "N/A",
+
     registrationDate: item.createdAt
       ? new Date(item.createdAt).toLocaleDateString()
       : "N/A",
@@ -186,13 +163,6 @@ export default function QuickFilteringCustomLogic() {
     { field: "ngaySinh", headerName: "Ngày sinh", width: 150 },
     { field: "phoneNumber", headerName: "Số điện thoại", width: 150 },
     { field: "email", headerName: "Email", width: 200 },
-    { field: "dormitory", headerName: "KTX đăng ký", width: 150 },
-    { field: "priorityNumber", headerName: "Số đối tượng ưu tiên", width: 150 },
-    {
-      field: "priorityDescription",
-      headerName: "Đối tượng ưu tiên dạng chữ",
-      width: 250,
-    },
     { field: "registrationDate", headerName: "Ngày đăng ký", width: 150 },
     { field: "status", headerName: "Trạng thái", width: 150 },
     { field: "processDate", headerName: "Ngày xử lý", width: 150 },
@@ -285,64 +255,7 @@ export default function QuickFilteringCustomLogic() {
             ))}
           </RadioGroup>
         </FormControl>
-        <FormControl
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <FormLabel
-            sx={{
-              fontSize: "15px",
-              fontWeight: "600",
-              color: "red",
-              "&.Mui-focused": { color: "red" },
-            }}
-          >
-            Chọn cách sắp xếp danh sách
-          </FormLabel>
-          <RadioGroup
-            aria-label="sortMethod"
-            value={selectedSort}
-            onChange={(e) => setSelectedSort(e.target.value)}
-            row
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {sortDorm?.map((status) => (
-              <FormControlLabel
-                key={status.statusCode}
-                value={status.statusCode}
-                control={
-                  <Radio
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      "&.Mui-checked": { color: "#008689" },
-                      "&.Mui-checked + .MuiFormControlLabel-label ": {
-                        color: "#008689",
-                        fontSize: "15px",
-                        fontWeight: "700",
-                      },
-                    }}
-                  />
-                }
-                sx={{
-                  "& .MuiFormControlLabel-label": {
-                    fontSize: "15px",
-                    color: "rgb(102, 117, 128)",
-                    fontWeight: "500",
-                  },
-                }}
-                label={status.status}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
+
         <FormControl
           sx={{
             display: "flex",
@@ -371,7 +284,7 @@ export default function QuickFilteringCustomLogic() {
               justifyContent: "center",
             }}
           >
-            {campusDorm?.map((campus) => (
+            {campusUni?.map((campus) => (
               <FormControlLabel
                 key={campus.id}
                 value={campus.id}
@@ -396,7 +309,7 @@ export default function QuickFilteringCustomLogic() {
                     fontWeight: "500",
                   },
                 }}
-                label={campus.name}
+                label={`Cơ sở ${campus.id}`}
               />
             ))}
           </RadioGroup>
@@ -535,4 +448,6 @@ export default function QuickFilteringCustomLogic() {
       </Paper>
     </Container>
   );
-}
+};
+
+export default HandleUniform;

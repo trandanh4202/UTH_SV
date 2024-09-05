@@ -1,15 +1,12 @@
 /* eslint-disable react/prop-types */
-import { DeleteOutline } from "@mui/icons-material";
+import { TaskAltOutlined } from "@mui/icons-material";
 import { Box, Button, IconButton, Modal, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
-import { deleteAddress } from "../../features/addressSlice/AddressSlice";
-import { cancelDorm } from "../../features/dormSlice/DormSlice";
-import { cancelOrder } from "../../features/orderSlice/OrderSlice";
+import { finishOrder } from "../../features/orderSlice/OrderSlice";
 
-const DeleteStudentService = ({ item }) => {
+const FinishService = ({ item }) => {
   const [deleteStudentServicePopUpOpen, setDeleteStudentServicePopUpOpen] =
     useState(false);
   // const [selectedAddress, setSelectedAddress] = useState(null);
@@ -25,7 +22,7 @@ const DeleteStudentService = ({ item }) => {
 
   const handleDeleteConfirm = () => {
     // if (selectedAddress) {
-    dispatch(cancelOrder(item?.id));
+    dispatch(finishOrder(item?.id));
     setDeleteStudentServicePopUpOpen(false); // Đóng pop-up sau khi xác nhận
     // }
   };
@@ -53,7 +50,7 @@ const DeleteStudentService = ({ item }) => {
           },
         }}
       >
-        <DeleteOutline sx={{ fontSize: { xs: "15px", lg: "20px" } }} />
+        <TaskAltOutlined sx={{ fontSize: { xs: "15px", lg: "20px" } }} />
       </IconButton>
 
       <Modal open={deleteStudentServicePopUpOpen} onClose={handleDeleteCancel}>
@@ -76,10 +73,21 @@ const DeleteStudentService = ({ item }) => {
               marginBottom: "20px",
               color: "black",
               fontWeight: "600",
-              fontSize: "20px",
+              fontSize: { xs: "11px", lg: "15px" },
             }}
           >
-            Hủy đăng ký
+            Xác nhận hoàn thành đăng ký
+          </Typography>
+          <Typography
+            sx={{
+              textAlign: "center",
+              marginBottom: "20px",
+              color: "black",
+              fontWeight: "600",
+              fontSize: { xs: "11px", lg: "13px" },
+            }}
+          >
+            Sinh viên xác nhận hoàn thành khi nhận đủ danh sách đăng ký
           </Typography>
           <Box
             sx={{
@@ -144,4 +152,4 @@ const DeleteStudentService = ({ item }) => {
   );
 };
 
-export default DeleteStudentService;
+export default FinishService;

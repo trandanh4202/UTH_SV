@@ -4,6 +4,10 @@ import {
   Box,
   Button,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Grid,
   IconButton,
@@ -25,7 +29,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import AddAddress from "../../../components/addAddress/AddAddress";
 import { getAddress } from "../../../features/addressSlice/AddressSlice";
 import { addToCart } from "../../../features/cartSlice/CartSlice";
-import { getAllOrder } from "../../../features/orderSlice/OrderSlice";
+import {
+  finishOrder,
+  getAllOrder,
+} from "../../../features/orderSlice/OrderSlice";
 import { getAllProduct } from "../../../features/productSlice/ProductSlice";
 import StudentCertificatePopUp from "./StudentCertificatePopUp";
 
@@ -36,6 +43,7 @@ import "swiper/css/pagination";
 // import required modules
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import DeleteStudentService from "../../../components/DeleteStudentService/DeleteStudentService";
+import FinishService from "../../../components/FinishService/FinishService";
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
@@ -72,6 +80,18 @@ const StudentCertificate = () => {
 
   const handleRowClick = (index) => {
     setSelectedRow(index);
+  };
+  const [openModalFinish, setOpenModalFinish] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+
+  const handleFinishClick = (orderId) => {
+    setSelectedOrderId(orderId);
+    setOpenModal(true);
+  };
+  const handleConfirmFinish = () => {
+    // Call API with the order ID
+    dispatch(finishOrder());
+    setOpenModal(false);
   };
 
   useEffect(() => {
@@ -276,7 +296,7 @@ const StudentCertificate = () => {
               </Swiper>
             </Grid>
             {products?.map((product) => (
-              <Grid item lg={3} xs={12}>
+              <Grid item lg={3} xs={6}>
                 <Paper
                   elevation={4}
                   sx={{
@@ -745,7 +765,7 @@ const StudentCertificate = () => {
                             fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
-                          {row.cancelReason}
+                          {row.reason}
                         </TableCell>
                         <TableCell
                           align="center"
@@ -759,6 +779,12 @@ const StudentCertificate = () => {
                             fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
+                          {row?.statusCode === "NEW" && (
+                            <DeleteStudentService item={row} />
+                          )}
+                          {row?.statusCode === "WAIT_SHIPPING" && (
+                            <FinishService item={row} />
+                          )}
                           <IconButton
                             onClick={() => handleCloseDetailPopUp(row)} // Sử dụng callback để truyền tham số
                             variant="contained"
@@ -784,13 +810,10 @@ const StudentCertificate = () => {
                               sx={{ fontSize: { xs: "15px", lg: "20px" } }}
                             />
                           </IconButton>
-
-                          {row?.statusCode === "NEW" && (
-                            <DeleteStudentService item={row} />
-                          )}
-                        </TableCell>{" "}
+                        </TableCell>
                       </TableRow>
                     ))}
+
                   <StudentCertificatePopUp
                     open={openModal}
                     onClose={() => setOpenModal(false)}

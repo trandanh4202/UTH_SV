@@ -66,6 +66,70 @@ export const getNewfeedsById = createAsyncThunk(
     }
   }
 );
+export const getPopup = createAsyncThunk(
+  "noti/getPopup",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/notification/getPopup`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const getNote = createAsyncThunk(
+  "noti/getNote",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/notification/getNote`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const notificationSlice = createSlice({
   name: "noti",
@@ -106,6 +170,31 @@ const notificationSlice = createSlice({
         state.content = action.payload;
       })
       .addCase(getNewfeedsById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+
+      .addCase(getPopup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getPopup.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getPopup = action.payload;
+      })
+      .addCase(getPopup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getNote.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getNote.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getNote = action.payload;
+      })
+      .addCase(getNote.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

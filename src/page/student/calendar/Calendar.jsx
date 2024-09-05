@@ -599,32 +599,32 @@ const Calendar = () => {
                                         GV: {relevantData.giangVien}
                                       </Typography>
                                     </Box>
-                                    {/* <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                      }}
-                                    >
-                                      <Typography
+                                      <Box
                                         sx={{
-                                          fontSize: "15px",
-                                          fontWeight: "600",
-                                          color: "#da1d2d",
-                                          "&:hover": {
-                                            color: "#037C7F",
-                                            // transform:''
-                                            transition: "all 0.3s ease",
-                                          },
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          gap: "5px",
                                         }}
-                                        target={"_blank"}
-                                        to={relevantData.link}
-                                        component={Link}
                                       >
-                                        Lớp học trực tuyến
-                                      </Typography>
-                                    </Box> */}
+                                        <Typography
+                                          sx={{
+                                            fontSize: "15px",
+                                            fontWeight: "600",
+                                            color: "#da1d2d",
+                                            "&:hover": {
+                                              color: "#037C7F",
+                                              // transform:''
+                                              transition: "all 0.3s ease",
+                                            },
+                                          }}
+                                          target={"_blank"}
+                                          to={relevantData.link}
+                                          component={Link}
+                                        >
+                                          Link Học liệu số
+                                        </Typography>
+                                      </Box>
                                   </Box>
                                 </Box>
                               )}

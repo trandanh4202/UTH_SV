@@ -46,6 +46,11 @@ import { getTotalofWeek } from "~/features/calendarSlice/CalendarSlice";
 import { getSelect } from "~/features/programSlice/ProgramSlice";
 import Spinner from "../../../components/Spinner/Spinner";
 import { getImage } from "../../../features/profileSlice/ProfileSlice";
+import {
+  getNote,
+  getPopup,
+} from "../../../features/notificationSlice/NotificationSlice";
+import PopupNoti from "../../../components/PopupNoti/PopupNoti";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -104,22 +109,24 @@ const Dashboard = () => {
       dispatch(getSelect());
       dispatch(getTotalofWeek());
       dispatch(getCategoryNoti());
-      dispatch(getImage ());
+      dispatch(getImage());
     }
   }, [token, dispatch]);
 
   const total = useSelector((state) => state.calendar?.total);
+  const notiCount = useSelector((state) => state.notification.getNote?.body);
+
   const categories = useSelector((state) => state.notification?.category);
   const newfeeds = useSelector((state) => state.notification?.newfeeds.content);
   const loadingNews = useSelector((state) => state.notification.loading);
   const box = [
     {
       title: "Nhắc nhở mới, chưa xem",
-      count: 0,
+      count: notiCount?.length,
       icon: <NotificationAdd sx={{ fontSize: "20px" }} />,
       backgroundColor: "white",
       color: "rgb(102, 117, 128)",
-      to: "",
+      to: "/notedetail",
     },
     {
       title: "Lịch học trong tuần",
@@ -135,7 +142,9 @@ const Dashboard = () => {
       dispatch(getNewfeeds({ id }));
     }
   }, [dispatch, id]);
-
+  useEffect(() => {
+    dispatch(getNote());
+  }, [dispatch]);
   const handleSlideChange = (swiper) => {
     const slideIndex = swiper.realIndex; // Lấy chỉ số thực của slide
     const slide = categories[slideIndex]; // Lấy đối tượng slide từ categories dựa vào chỉ số
@@ -143,6 +152,7 @@ const Dashboard = () => {
   };
   return (
     <Container>
+      <PopupNoti />
       <UpdatePhone />
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>
         <Grid item lg={7} xs={12}>

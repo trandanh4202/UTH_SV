@@ -37,6 +37,8 @@ import Dormitory from "./page/student/dormitory/Dormitory";
 import StudentCertificate from "./page/student/studentCertificate/StudentCertificate";
 import Certification from "./page/student/certification/Certification";
 import HandleDorm from "./page/lecture/handleDorm/HandleDorm";
+import HandleUniform from "./page/lecture/handleUniform/HandleUniform";
+import Note from "./page/student/note/Note";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -141,6 +143,14 @@ const router = createBrowserRouter([
           {
             path: "admindorm",
             element: <HandleDorm />,
+          },
+          {
+            path: "adminuniform",
+            element: <HandleUniform />,
+          },
+          {
+            path: "notedetail",
+            element: <Note />,
           },
         ],
       },
