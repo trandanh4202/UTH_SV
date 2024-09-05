@@ -637,7 +637,7 @@ const Calendar = () => {
                 ))}
               </TableBody>
             </Table>
-            {!loading && (
+            {loading && (
               <Box
                 sx={{
                   background: "#c1d3d3",
