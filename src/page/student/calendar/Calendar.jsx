@@ -18,6 +18,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getCalendar } from "~/features/calendarSlice/CalendarSlice";
+import Spinner from "../../../components/Spinner/Spinner";
 
 const timetableData = {
   days: ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"],
@@ -82,35 +83,58 @@ const Calendar = () => {
   const { days, slots } = timetableData;
   const [currentDate, setCurrentDate] = useState(new Date());
   const [splitData, setSplitData] = useState([]);
+  const [timeoutId, setTimeoutId] = useState(null); // State to hold the timeout ID
+  const dispatch = useDispatch();
+  const formattedDate = format(currentDate, "yyyy-MM-dd");
+
+  // Function to handle debounce for API calls
+  const debounceFetch = (date) => {
+    // Clear existing timeout if exists
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Set new timeout for 1 second
+    const newTimeoutId = setTimeout(() => {
+      dispatch(getCalendar({ date: format(date, "yyyy-MM-dd") }));
+    }, 1000); // 1000 milliseconds = 1 second
+
+    // Update the state with the new timeout ID
+    setTimeoutId(newTimeoutId);
+  };
+
+  // Handle changing to next week
   const handleNextWeek = () => {
     const nextWeek = new Date(currentDate);
     nextWeek.setDate(nextWeek.getDate() + 7);
     setCurrentDate(nextWeek);
+    debounceFetch(nextWeek); // Call debounce function
   };
-  const token = localStorage.getItem("account");
+
+  // Handle changing to previous week
   const handlePrevWeek = () => {
     const prevWeek = new Date(currentDate);
     prevWeek.setDate(prevWeek.getDate() - 7);
     setCurrentDate(prevWeek);
+    debounceFetch(prevWeek); // Call debounce function
   };
 
   const handleToday = () => {
     setCurrentDate(new Date());
+    debounceFetch(new Date()); // Call debounce function
   };
 
   const handleDateChange = (event) => {
     const selectedDate = new Date(event.target.value);
     if (!isNaN(selectedDate.getTime())) {
       setCurrentDate(selectedDate);
+      debounceFetch(selectedDate); // Call debounce function
     }
   };
 
-  const dispatch = useDispatch();
-  const formattedDate = format(currentDate, "yyyy-MM-dd");
-
   useEffect(() => {
-    dispatch(getCalendar({ date: formattedDate }));
-  }, [dispatch, formattedDate]);
+    debounceFetch(currentDate); // Initial fetch when component mounts
+  }, [currentDate]); // Only call when currentDate changes
 
   const calendar = useSelector((state) => state.calendar?.calendar);
 
@@ -123,7 +147,7 @@ const Calendar = () => {
   const formatTime = (time) => {
     return time.slice(0, 5);
   };
-
+  const loading = useSelector((state) => state.calendar?.loading);
   return (
     <>
       <Container>
@@ -233,7 +257,6 @@ const Calendar = () => {
               // overflow: "hidden",
               borderTopRightRadius: "20px",
               maxHeight: "75vh",
-
               "&::-webkit-scrollbar": {
                 width: "10px",
                 height: "10px",
@@ -251,6 +274,7 @@ const Calendar = () => {
                 backgroundColor: "#f1f1f1",
                 borderRadius: "10px",
               },
+              position: "relative",
             }}
           >
             <Table
@@ -613,6 +637,21 @@ const Calendar = () => {
                 ))}
               </TableBody>
             </Table>
+            {!loading && (
+              <Box
+                sx={{
+                  background: "#c1d3d3",
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                }}
+              >
+                <Spinner />
+              </Box>
+            )}
           </TableContainer>
         </Paper>
       </Container>
