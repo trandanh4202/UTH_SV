@@ -152,8 +152,8 @@ const InforDetail = () => {
                       column={6}
                     />
                     <InfoField
-                      label="Lớp: "
-                      value={profile?.lopHoc}
+                      // label="Lớp: "
+                      // value={profile?.lopHoc}
                       column={6}
                     />
                   </Grid>
