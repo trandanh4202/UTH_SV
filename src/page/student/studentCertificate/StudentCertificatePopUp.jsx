@@ -34,7 +34,14 @@ const formatCurrency = (number) => {
     })
   );
 };
-const tableCell = ["STT", "Mã", "Nội dung thu", "Thanh toán", "Số lượng"];
+const tableCell = [
+  "STT",
+  "Mã",
+  "Nội dung thu",
+  "Thanh toán",
+  "Số lượng",
+  "Kích cở",
+];
 const StudentCertificatePopUp = ({ open, onClose, id }) => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -239,6 +246,16 @@ const StudentCertificatePopUp = ({ open, onClose, id }) => {
                         }}
                       >
                         {row?.quantity}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "600",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {row?.productOptionValue?.name}
                       </TableCell>
                     </TableRow>
                   ))}
