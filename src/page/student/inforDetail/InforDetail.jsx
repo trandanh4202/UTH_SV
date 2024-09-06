@@ -151,11 +151,11 @@ const InforDetail = () => {
                       value={profile?.maSinhVien}
                       column={6}
                     />
-                    <InfoField
-                      // label="Lớp: "
-                      // value={profile?.khoaHoc}
+                    {/* <InfoField
+                      label="Khóa học: "
+                      value={profile?.khoaHoc}
                       column={6}
-                    />
+                    /> */}
                   </Grid>
                   <Grid container>
                     <InfoField
