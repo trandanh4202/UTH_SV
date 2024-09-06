@@ -118,8 +118,8 @@ export default function QuickFilteringCustomLogic() {
       isApprove: isApproveAction,
     };
     const formDataGetAll = {
-      pageIndex: paginationModel.page + 1,
-      pageSize: paginationModel.pageSize,
+      pageIndex: 1,
+      pageSize: 20,
       search,
       status: selectedStatus,
       sortOption: selectedSort,
@@ -130,8 +130,8 @@ export default function QuickFilteringCustomLogic() {
 
   const fetchData = () => {
     const formData = {
-      pageIndex: paginationModel.page + 1,
-      pageSize: paginationModel.pageSize,
+      pageIndex: 1,
+      pageSize: 20,
       search: dataSearch,
       status: selectedStatus,
       sortOption: selectedSort,
@@ -412,11 +412,7 @@ export default function QuickFilteringCustomLogic() {
             rows={rows}
             columns={columns}
             getRowId={(row) => row.id}
-            pagination
-            paginationMode="server"
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rowCount={approve.totalElements}
+            hideFooter
             localeText={{
               noRowsLabel: "Không có dữ liệu để xử lý",
               MuiTablePagination: {

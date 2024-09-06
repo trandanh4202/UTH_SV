@@ -103,8 +103,8 @@ const HandleUniform = () => {
       isApprove: isApproveAction,
     };
     const formDataGetAll = {
-      pageIndex: paginationModel.page + 1,
-      pageSize: paginationModel.pageSize,
+      pageIndex: 1,
+      pageSize: 20,
       search: dataSearch,
       status: selectedStatus,
       campusId: selectedCampus,
@@ -115,8 +115,8 @@ const HandleUniform = () => {
 
   useEffect(() => {
     const formData = {
-      pageIndex: paginationModel.page + 1,
-      pageSize: paginationModel.pageSize,
+      pageIndex: 1,
+      pageSize: 20,
       search: dataSearch,
       status: selectedStatus,
       // sortOption: selectedSort,
@@ -325,11 +325,12 @@ const HandleUniform = () => {
             rows={rows}
             columns={columns}
             getRowId={(row) => row.id}
-            pagination
-            paginationMode="server"
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rowCount={approve.totalElements}
+            // pagination
+            // paginationMode="server"
+            // paginationModel={paginationModel}
+            // onPaginationModelChange={setPaginationModel}
+            // rowCount={approve.totalElements}
+            hideFooter
             localeText={{
               noRowsLabel: "Không có dữ liệu để xử lý",
               MuiTablePagination: {
