@@ -119,7 +119,7 @@ export default function QuickFilteringCustomLogic() {
     };
     const formDataGetAll = {
       pageIndex: 1,
-      pageSize: 20,
+      pageSize: 300,
       search,
       status: selectedStatus,
       sortOption: selectedSort,
@@ -131,7 +131,7 @@ export default function QuickFilteringCustomLogic() {
   const fetchData = () => {
     const formData = {
       pageIndex: 1,
-      pageSize: 20,
+      pageSize: 300,
       search: dataSearch,
       status: selectedStatus,
       sortOption: selectedSort,
