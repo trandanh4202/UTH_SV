@@ -78,9 +78,7 @@ const HandleUniform = () => {
     }
   }, [loading, message, success, timestamp]);
 
-  const approve = useSelector(
-    (state) => state.order.getAllAdmin?.body?.content || []
-  );
+  const approve = useSelector((state) => state.order.getAllAdmin?.body || []);
   const statusDorm = useSelector(
     (state) => state.order.getStatusUniform?.body || []
   );
