@@ -151,11 +151,11 @@ const InforDetail = () => {
                       value={profile?.maSinhVien}
                       column={6}
                     />
-                    <InfoField
+                    {/* <InfoField
                       // label="Lớp: "
                       // value={profile?.lopHoc}
                       column={6}
-                    />
+                    /> */}
                   </Grid>
                   <Grid container>
                     <InfoField
