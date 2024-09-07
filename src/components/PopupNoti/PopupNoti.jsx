@@ -25,7 +25,7 @@ const PopupNoti = ({ open }) => {
     if (success && content.length >= 1) {
       // Initialize modals based on read status from localStorage
       const initialOpenModals = content.map(
-        (item) => !readPopups.includes(item.id) // Assuming each item has a unique 'id'
+        (item) => !readPopups.includes(item.ngayTao) // Assuming 'ngayTao' is unique for each popup
       );
       setOpenModals(initialOpenModals);
     } else {
@@ -34,15 +34,15 @@ const PopupNoti = ({ open }) => {
   }, [success, content]);
 
   // Handle popup close for each modal by index
-  const handleModalClose = (index, id) => {
+  const handleModalClose = (index, ngayTao) => {
     setOpenModals((prev) =>
       prev.map((isOpen, i) => (i === index ? false : isOpen))
     );
 
     // Save the read popup id to localStorage
     const readPopups = JSON.parse(localStorage.getItem("readPopups")) || [];
-    if (!readPopups.includes(id)) {
-      readPopups.push(id);
+    if (!readPopups.includes(ngayTao)) {
+      readPopups.push(ngayTao);
       localStorage.setItem("readPopups", JSON.stringify(readPopups));
     }
   };
@@ -53,7 +53,7 @@ const PopupNoti = ({ open }) => {
         <Modal
           key={index}
           open={openModals[index] || false} // Use state from openModals array
-          onClose={() => handleModalClose(index, item.id)} // Pass item id to handleModalClose
+          onClose={() => handleModalClose(index, item.ngayTao)} // Pass 'ngayTao' to handleModalClose
         >
           <Box
             sx={{
@@ -128,7 +128,7 @@ const PopupNoti = ({ open }) => {
                 }}
               >
                 <Button
-                  onClick={() => handleModalClose(index, item.id)} // Close specific modal
+                  onClick={() => handleModalClose(index, item.ngayTao)} // Close specific modal
                   variant="contained"
                   sx={{
                     display: "flex",
