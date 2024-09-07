@@ -577,6 +577,7 @@ const Calendar = () => {
                                         Phòng: {relevantData.tenPhong}
                                       </Typography>
                                     </Box>
+
                                     <Box
                                       sx={{
                                         display: "flex",
@@ -585,46 +586,24 @@ const Calendar = () => {
                                         gap: "5px",
                                       }}
                                     >
-                                      <img
-                                        src="./images/people.svg"
-                                        alt="giangvien"
-                                      />
                                       <Typography
                                         sx={{
-                                          fontSize: "13px",
+                                          fontSize: "15px",
                                           fontWeight: "600",
-                                          color: "black",
+                                          color: "#da1d2d",
+                                          "&:hover": {
+                                            color: "#037C7F",
+                                            // transform:''
+                                            transition: "all 0.3s ease",
+                                          },
                                         }}
+                                        target={"_blank"}
+                                        to={relevantData.link}
+                                        component={Link}
                                       >
-                                        GV: {relevantData.giangVien}
+                                        Link Học liệu số
                                       </Typography>
                                     </Box>
-                                      <Box
-                                        sx={{
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
-                                          gap: "5px",
-                                        }}
-                                      >
-                                        <Typography
-                                          sx={{
-                                            fontSize: "15px",
-                                            fontWeight: "600",
-                                            color: "#da1d2d",
-                                            "&:hover": {
-                                              color: "#037C7F",
-                                              // transform:''
-                                              transition: "all 0.3s ease",
-                                            },
-                                          }}
-                                          target={"_blank"}
-                                          to={relevantData.link}
-                                          component={Link}
-                                        >
-                                          Link Học liệu số
-                                        </Typography>
-                                      </Box>
                                   </Box>
                                 </Box>
                               )}
