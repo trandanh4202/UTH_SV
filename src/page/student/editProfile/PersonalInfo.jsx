@@ -498,12 +498,12 @@ const PersonalInfo = () => {
       if (success && timestamp) {
         setTimeout(() => {
           navigate("/infordetail");
-        }, 1000);
+        }, 3000);
       } else if (!success) {
         navigate("/");
       }
     }
-  }, [loading, navigate, success, timestamp, update]);
+  }, [loading, navigate, success, timestamp, update, setTimeout]);
 
   const messageAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.message
