@@ -16,27 +16,35 @@ const PopupNoti = ({ open }) => {
     (state) => state.notification.getPopup || {}
   );
 
-  // State to control popup open status
-  const [deleteStudentServicePopUpOpen, setDeleteStudentServicePopUpOpen] =
-    useState(false);
+  // State to control each popup's open status
+  const [openModals, setOpenModals] = useState([]);
 
-  // Effect to handle popup open status based on API response
+  // Get read popups from localStorage
   useEffect(() => {
+    const readPopups = JSON.parse(localStorage.getItem("readPopups")) || [];
     if (success && content.length >= 1) {
-      setDeleteStudentServicePopUpOpen(true);
+      // Initialize modals based on read status from localStorage
+      const initialOpenModals = content.map(
+        (item) => !readPopups.includes(item.id) // Assuming each item has a unique 'id'
+      );
+      setOpenModals(initialOpenModals);
     } else {
-      setDeleteStudentServicePopUpOpen(false);
+      setOpenModals([]);
     }
   }, [success, content]);
 
-  // Handle popup close
-  const handleDeleteCancel = () => {
-    setDeleteStudentServicePopUpOpen(false);
-  };
+  // Handle popup close for each modal by index
+  const handleModalClose = (index, id) => {
+    setOpenModals((prev) =>
+      prev.map((isOpen, i) => (i === index ? false : isOpen))
+    );
 
-  // Handle confirm action (can be extended as needed)
-  const handleDeleteConfirm = () => {
-    setDeleteStudentServicePopUpOpen(false);
+    // Save the read popup id to localStorage
+    const readPopups = JSON.parse(localStorage.getItem("readPopups")) || [];
+    if (!readPopups.includes(id)) {
+      readPopups.push(id);
+      localStorage.setItem("readPopups", JSON.stringify(readPopups));
+    }
   };
 
   return (
@@ -44,8 +52,8 @@ const PopupNoti = ({ open }) => {
       {content.map((item, index) => (
         <Modal
           key={index}
-          open={deleteStudentServicePopUpOpen}
-          onClose={handleDeleteCancel}
+          open={openModals[index] || false} // Use state from openModals array
+          onClose={() => handleModalClose(index, item.id)} // Pass item id to handleModalClose
         >
           <Box
             sx={{
@@ -120,7 +128,7 @@ const PopupNoti = ({ open }) => {
                 }}
               >
                 <Button
-                  onClick={handleDeleteCancel}
+                  onClick={() => handleModalClose(index, item.id)} // Close specific modal
                   variant="contained"
                   sx={{
                     display: "flex",

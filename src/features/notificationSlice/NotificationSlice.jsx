@@ -80,10 +80,12 @@ export const getPopup = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
+
       const response = await axios.get(
         `${API_BASE_URL}/notification/getPopup`,
         config
       );
+      localStorage.setItem("popup", response.data.body);
 
       return response.data;
     } catch (error) {
