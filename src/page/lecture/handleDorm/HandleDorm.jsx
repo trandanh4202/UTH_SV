@@ -157,7 +157,7 @@ export default function QuickFilteringCustomLogic() {
     dispatch(getCampus());
   }, [dispatch]);
 
-  const rows = approve.content?.map((item) => ({
+  const rows = approve?.map((item) => ({
     id: item.id,
     studentId: item.student?.code,
     name: item.student?.name,
