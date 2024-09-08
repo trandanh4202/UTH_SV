@@ -94,7 +94,7 @@ export default function QuickFilteringCustomLogic() {
   }, [loading, message, success, timestamp]);
 
   const approve = useSelector(
-    (state) => state.admin.getAllToApprove?.body || {}
+    (state) => state.admin.getAllToApprove?.body || []
   );
   const statusDorm = useSelector(
     (state) => state.admin.getStatusDorm?.body || []
@@ -178,6 +178,7 @@ export default function QuickFilteringCustomLogic() {
       ? new Date(item.updatedAt).toLocaleDateString()
       : "N/A",
   }));
+  // const rows = [];
 
   const columns = [
     { field: "studentId", headerName: "MSSV", width: 100 },
