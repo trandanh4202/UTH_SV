@@ -101,8 +101,8 @@ const HandleUniform = () => {
       isApprove: isApproveAction,
     };
     const formDataGetAll = {
-      pageIndex: 1,
-      pageSize: 20,
+      pageIndex: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
       search: dataSearch,
       status: selectedStatus,
       campusId: selectedCampus,
@@ -113,8 +113,8 @@ const HandleUniform = () => {
 
   useEffect(() => {
     const formData = {
-      pageIndex: 1,
-      pageSize: 20,
+      pageIndex: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
       search: dataSearch,
       status: selectedStatus,
       // sortOption: selectedSort,
@@ -135,7 +135,7 @@ const HandleUniform = () => {
     dispatch(getCampus());
   }, [dispatch]);
 
-  const rows = approve?.map((item) => ({
+  const rows = approve?.content?.map((item) => ({
     id: item.id,
     studentId: item.student?.code,
     name: item.student?.name,
@@ -323,12 +323,12 @@ const HandleUniform = () => {
             rows={rows}
             columns={columns}
             getRowId={(row) => row.id}
-            // pagination
-            // paginationMode="server"
-            // paginationModel={paginationModel}
-            // onPaginationModelChange={setPaginationModel}
-            // rowCount={approve.totalElements}
-            hideFooter
+            pagination
+            paginationMode="server"
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            rowCount={approve.totalElements}
+            // hideFooter
             localeText={{
               noRowsLabel: "Không có dữ liệu để xử lý",
               MuiTablePagination: {

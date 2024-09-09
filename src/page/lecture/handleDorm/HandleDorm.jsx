@@ -118,8 +118,8 @@ export default function QuickFilteringCustomLogic() {
       isApprove: isApproveAction,
     };
     const formDataGetAll = {
-      pageIndex: 1,
-      pageSize: 300,
+      pageIndex: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
       search,
       status: selectedStatus,
       sortOption: selectedSort,
@@ -130,8 +130,8 @@ export default function QuickFilteringCustomLogic() {
 
   const fetchData = () => {
     const formData = {
-      pageIndex: 1,
-      pageSize: 300,
+      pageIndex: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
       search: dataSearch,
       status: selectedStatus,
       sortOption: selectedSort,
@@ -145,7 +145,7 @@ export default function QuickFilteringCustomLogic() {
   }, [
     paginationModel.page,
     paginationModel.pageSize,
-    search,
+    dataSearch,
     selectedStatus,
     selectedSort,
     selectedCampus,
@@ -157,7 +157,7 @@ export default function QuickFilteringCustomLogic() {
     dispatch(getCampus());
   }, [dispatch]);
 
-  const rows = approve?.map((item) => ({
+  const rows = approve?.content?.map((item) => ({
     id: item.id,
     studentId: item.student?.code,
     name: item.student?.name,
