@@ -27,6 +27,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { parse, format } from "date-fns";
 import { getEthnicity } from "../../../features/nationSlice/NationSlice";
 import { useNavigate } from "react-router-dom";
+import { getHospital } from "../../../features/hospitalSlice/HospitalSlice";
 
 const inputStyles = {
   "& .MuiInputBase-input": {
@@ -139,6 +140,8 @@ const SelectField = ({
               ? option.tenTonGiao
               : optionType === "quocTich"
               ? option.tenQuocGia
+              : optionType === "hospital"
+              ? option.name + ` - Mã KCB BĐ ` + option.code
               : option.name}
           </MenuItem>
         ))}
@@ -224,10 +227,14 @@ const PersonalInfo = () => {
   const ethnicity = useSelector((state) => state.nation.ethnicity) || [];
   const religions = useSelector((state) => state.religion.religions) || [];
   const nations = useSelector((state) => state.nation.nations) || [];
+  const hospital =
+    useSelector((state) => state.hospital.getHospital?.body) || [];
+
   useEffect(() => {
     dispatch(getEthnicity());
     dispatch(getReligion());
     dispatch(getNation());
+    dispatch(getHospital());
     dispatch(getProvince()).then((action) => {
       setProvinces(action.payload);
     });
@@ -248,6 +255,7 @@ const PersonalInfo = () => {
     soDienThoai2: "",
     quocTich: "",
     mabhxhYt: "",
+    hospitalId: null,
     nguyenQuan: "",
     hkttIdhuyen: 0,
     hkttIdtinh: 0,
@@ -283,21 +291,9 @@ const PersonalInfo = () => {
         ten: profile.ten || "",
         gioiTinh: profile.gioiTinh,
         ngaySinh2: profile.ngaySinh2 || "",
-        noiSinh:
-          validateOption(
-            profile.noiSinh,
-            provinces?.map((province) => province.id)
-          ) || null,
-        noisinhIdhuyen:
-          validateOption(
-            profile.noisinhIdhuyen,
-            districtsByLocation.noiSinh?.map((district) => district.id)
-          ) || null,
-        noisinhIdphuongxa:
-          validateOption(
-            profile.noisinhIdphuongxa,
-            wardsByLocation.noiSinh.map((ward) => ward.id)
-          ) || null,
+        noiSinh: profile.noiSinh || null,
+        noisinhIdhuyen: profile.noisinhIdhuyen || null,
+        noisinhIdphuongxa: profile.noisinhIdphuongxa || null,
         soCMND: profile.soCMND || "",
         ngayCap: profile.ngayCap || null,
         email: profile.email || "",
@@ -305,6 +301,7 @@ const PersonalInfo = () => {
         soDienThoai2: profile.soDienThoai2 || "",
         quocTich: profile.quocTich || "",
         mabhxhYt: profile.mabhxhYt || "",
+        hospitalId: profile.hospitalId || "",
         nguyenQuan: profile.nguyenQuan || null,
         hkttIdhuyen: profile.hkttIdhuyen || null,
         hkttIdtinh: profile.hkttIdtinh || null,
@@ -353,13 +350,13 @@ const PersonalInfo = () => {
           queQuan: action.payload,
         }));
         // Chỉ cập nhật nếu giá trị thực sự thay đổi
-        if (formData.idhuyen !== 0 || formData.idphuongxa !== 0) {
-          setFormData((prev) => ({
-            ...prev,
-            idhuyen: 0,
-            idphuongxa: 0,
-          }));
-        }
+        // if (formData.idhuyen !== 0 || formData.idphuongxa !== 0) {
+        //   setFormData((prev) => ({
+        //     ...prev,
+        //     idhuyen: 0,
+        //     idphuongxa: 0,
+        //   }));
+        // }
       });
     }
   }, [dispatch, formData.idtinh]);
@@ -371,10 +368,10 @@ const PersonalInfo = () => {
           ...prev,
           queQuan: action.payload,
         }));
-        setFormData((prev) => ({
-          ...prev,
-          idphuongxa: 0,
-        }));
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   idphuongxa: 0,
+        // }));
       });
     }
   }, [dispatch, formData.idhuyen]);
@@ -387,11 +384,11 @@ const PersonalInfo = () => {
           ...prev,
           noiSinh: action.payload,
         }));
-        setFormData((prev) => ({
-          ...prev,
-          noisinhIdhuyen: 0,
-          noisinhIdphuongxa: 0,
-        }));
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   noisinhIdhuyen: 0,
+        //   noisinhIdphuongxa: 0,
+        // }));
       });
     }
   }, [dispatch, formData.noiSinh]);
@@ -403,10 +400,10 @@ const PersonalInfo = () => {
           ...prev,
           noiSinh: action.payload,
         }));
-        setFormData((prev) => ({
-          ...prev,
-          noisinhIdphuongxa: 0,
-        }));
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   noisinhIdphuongxa: 0,
+        // }));
       });
     }
   }, [dispatch, formData.noisinhIdhuyen]);
@@ -419,11 +416,11 @@ const PersonalInfo = () => {
           ...prev,
           hktt: action.payload,
         }));
-        setFormData((prev) => ({
-          ...prev,
-          hkttIdhuyen: 0,
-          hkttIdphuongxa: 0,
-        }));
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   hkttIdhuyen: 0,
+        //   hkttIdphuongxa: 0,
+        // }));
       });
     }
   }, [dispatch, formData.hkttIdtinh]);
@@ -435,10 +432,10 @@ const PersonalInfo = () => {
           ...prev,
           hktt: action.payload,
         }));
-        setFormData((prev) => ({
-          ...prev,
-          hkttIdphuongxa: 0,
-        }));
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   hkttIdphuongxa: 0,
+        // }));
       });
     }
   }, [dispatch, formData.hkttIdhuyen]);
@@ -450,11 +447,11 @@ const PersonalInfo = () => {
           ...prev,
           dcll: action.payload,
         }));
-        setFormData((prev) => ({
-          ...prev,
-          dcllIdhuyen: 0,
-          dcllIdphuongxa: 0,
-        }));
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   dcllIdhuyen: 0,
+        //   dcllIdphuongxa: 0,
+        // }));
       });
     }
   }, [dispatch, formData.dcllIdtinh]);
@@ -466,10 +463,10 @@ const PersonalInfo = () => {
           ...prev,
           dcll: action.payload,
         }));
-        setFormData((prev) => ({
-          ...prev,
-          dcllIdphuongxa: 0,
-        }));
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   dcllIdphuongxa: 0,
+        // }));
       });
     }
   }, [dispatch, formData.dcllIdhuyen]);
@@ -1029,6 +1026,18 @@ const PersonalInfo = () => {
                     sx={inputStyles}
                   />
                 </Box>
+              </Grid>
+              <Grid item xs={12} lg={6}>
+                <SelectField
+                  label="Vui long đăng ký nơi khám chữa bệnh ban đầu"
+                  name="hospitalId"
+                  value={formData.hospitalId}
+                  onChange={handleChange}
+                  successAccess={successAccess}
+                  sx={selectStyles}
+                  options={hospital}
+                  optionType="hospital"
+                />
               </Grid>
             </Grid>
             <Box

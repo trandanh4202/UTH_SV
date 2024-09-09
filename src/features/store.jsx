@@ -21,6 +21,7 @@ import viettelReducer from "./viettelSlice/ViettelSlice";
 import certificationReducer from "./certificationSlice/CertificationSlice";
 import dormReducer from "./dormSlice/DormSlice";
 import adminReducer from "./adminSlice/AdminSlice";
+import hospitalReducer from "./hospitalSlice/HospitalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -46,6 +47,7 @@ export const store = configureStore({
     certification: certificationReducer,
     dorm: dormReducer,
     admin: adminReducer,
+    hospital: hospitalReducer,
   },
   // devTools: false,
 });

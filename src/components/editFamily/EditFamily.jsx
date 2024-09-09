@@ -198,12 +198,12 @@ const EditFamily = ({ open, onClose, editData }) => {
                 <TextField
                   label="Ngày sinh"
                   // type={"number"}
-                  {...register("ngaySinh", {
+                  {...register("namSinh", {
                     required: "Ngày sinh là bắt buộc",
                   })}
                   placeholder="VD: 01/01/1980"
-                  error={!!errors.ngaySinh}
-                  helperText={errors.ngaySinh?.message}
+                  error={!!errors.namSinh}
+                  helperText={errors.namSinh?.message}
                   fullWidth
                   sx={inputStyles}
                 />
