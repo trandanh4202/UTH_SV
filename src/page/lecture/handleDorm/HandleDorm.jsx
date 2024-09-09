@@ -413,7 +413,12 @@ export default function QuickFilteringCustomLogic() {
             rows={rows}
             columns={columns}
             getRowId={(row) => row.id}
-            hideFooter
+            // hideFooter
+            pagination
+            paginationMode="server"
+            paginationModel={paginationModel}
+            onPaginationModelChange={setPaginationModel}
+            rowCount={approve.totalElements}
             localeText={{
               noRowsLabel: "Không có dữ liệu để xử lý",
               MuiTablePagination: {
