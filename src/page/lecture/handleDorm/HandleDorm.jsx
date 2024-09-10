@@ -37,6 +37,7 @@ import {
 import { toast } from "react-toastify";
 import useDebounce from "../../../components/hooks/UseDebounce";
 import { format } from "date-fns";
+import Spinner from "../../../components/Spinner/Spinner";
 
 const sortDorm = [
   {
@@ -414,7 +415,9 @@ export default function QuickFilteringCustomLogic() {
             searchValue={search}
             onSearchChange={(e) => setSearch(e.target.value)}
           />
-          {!loading && (
+          {loading ? (
+            <Spinner />
+          ) : (
             <DataGrid
               rows={rows}
               columns={columns}
