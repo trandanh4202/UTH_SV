@@ -181,28 +181,27 @@ export default function QuickFilteringCustomLogic() {
   // const rows = [];
 
   const columns = [
-    { field: "studentId", headerName: "MSSV", width: 100 },
+    { field: "studentId", headerName: "MSSV" },
     { field: "name", headerName: "Họ và tên", width: 200 },
-    { field: "class", headerName: "Lớp", width: 150 },
-    { field: "ngaySinh", headerName: "Ngày sinh", width: 150 },
-    { field: "phoneNumber", headerName: "Số điện thoại", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
-    { field: "dormitory", headerName: "KTX đăng ký", width: 150 },
-    { field: "priorityNumber", headerName: "Số đối tượng ưu tiên", width: 150 },
+    { field: "class", headerName: "Lớp" },
+    { field: "ngaySinh", headerName: "Ngày sinh" },
+    { field: "phoneNumber", headerName: "Số điện thoại" },
+    { field: "email", headerName: "Email" },
+    { field: "dormitory", headerName: "KTX đăng ký" },
+    { field: "priorityNumber", headerName: "Số đối tượng ưu tiên" },
     {
       field: "priorityDescription",
       headerName: "Đối tượng ưu tiên dạng chữ",
-      width: 250,
     },
-    { field: "registrationDate", headerName: "Ngày đăng ký", width: 150 },
-    { field: "status", headerName: "Trạng thái", width: 150 },
-    { field: "processDate", headerName: "Ngày xử lý", width: 150 },
-    { field: "reason", headerName: "Ghi chú", width: 150 },
+    { field: "registrationDate", headerName: "Ngày đăng ký" },
+    { field: "status", headerName: "Trạng thái" },
+    { field: "processDate", headerName: "Ngày xử lý" },
+    { field: "reason", headerName: "Ghi chú" },
     {
       field: "actions",
       headerName: "Hành động",
       type: "actions",
-      width: 150,
+
       getActions: (params) => [
         <GridActionsCellItem
           icon={<CheckCircle sx={{ fontSize: "20px" }} />}
@@ -223,186 +222,189 @@ export default function QuickFilteringCustomLogic() {
   ];
 
   return (
-    <Container>
-      <Paper
-        elevation={4}
-        sx={{ padding: "20px", borderRadius: "10px", mb: 2 }}
-      >
-        <FormControl
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+    <>
+      <Container>
+        <Paper
+          elevation={4}
+          sx={{ padding: "20px", borderRadius: "10px", mb: 2 }}
         >
-          <FormLabel
-            sx={{
-              fontSize: "15px",
-              fontWeight: "600",
-              color: "red",
-              "&.Mui-focused": { color: "red" },
-            }}
-          >
-            Chọn trạng thái của danh sách
-          </FormLabel>
-          <RadioGroup
-            aria-label="authMethod"
-            value={selectedStatus}
-            onChange={(e) => setSelectedStatus(e.target.value)}
-            row
+          <FormControl
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {statusDorm?.map((status) => (
-              <FormControlLabel
-                key={status.statusCode}
-                value={status.statusCode}
-                control={
-                  <Radio
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      "&.Mui-checked": { color: "#008689" },
-                      "&.Mui-checked + .MuiFormControlLabel-label ": {
-                        color: "#008689",
-                        fontSize: "15px",
-                        fontWeight: "700",
-                      },
-                    }}
-                  />
-                }
-                sx={{
-                  "& .MuiFormControlLabel-label": {
-                    fontSize: "15px",
-                    color: "rgb(102, 117, 128)",
-                    fontWeight: "500",
-                  },
-                }}
-                label={status.status}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
-        <FormControl
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <FormLabel
-            sx={{
-              fontSize: "15px",
-              fontWeight: "600",
-              color: "red",
-              "&.Mui-focused": { color: "red" },
-            }}
-          >
-            Chọn cách sắp xếp danh sách
-          </FormLabel>
-          <RadioGroup
-            aria-label="sortMethod"
-            value={selectedSort}
-            onChange={(e) => setSelectedSort(e.target.value)}
-            row
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {sortDorm?.map((status) => (
-              <FormControlLabel
-                key={status.statusCode}
-                value={status.statusCode}
-                control={
-                  <Radio
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      "&.Mui-checked": { color: "#008689" },
-                      "&.Mui-checked + .MuiFormControlLabel-label ": {
-                        color: "#008689",
-                        fontSize: "15px",
-                        fontWeight: "700",
-                      },
-                    }}
-                  />
-                }
-                sx={{
-                  "& .MuiFormControlLabel-label": {
-                    fontSize: "15px",
-                    color: "rgb(102, 117, 128)",
-                    fontWeight: "500",
-                  },
-                }}
-                label={status.status}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
-        <FormControl
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <FormLabel
-            sx={{
-              fontSize: "15px",
-              fontWeight: "600",
-              color: "red",
-              "&.Mui-focused": { color: "red" },
-            }}
-          >
-            Chọn cơ sở duyệt
-          </FormLabel>
-          <RadioGroup
-            aria-label="campusMethod"
-            value={selectedCampus}
-            onChange={(e) => setSelectedCampus(e.target.value)}
-            row
+            <FormLabel
+              sx={{
+                fontSize: "15px",
+                fontWeight: "600",
+                color: "red",
+                "&.Mui-focused": { color: "red" },
+              }}
+            >
+              Chọn trạng thái của danh sách
+            </FormLabel>
+            <RadioGroup
+              aria-label="authMethod"
+              value={selectedStatus}
+              onChange={(e) => setSelectedStatus(e.target.value)}
+              row
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {statusDorm?.map((status) => (
+                <FormControlLabel
+                  key={status.statusCode}
+                  value={status.statusCode}
+                  control={
+                    <Radio
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        "&.Mui-checked": { color: "#008689" },
+                        "&.Mui-checked + .MuiFormControlLabel-label ": {
+                          color: "#008689",
+                          fontSize: "15px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  }
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                      color: "rgb(102, 117, 128)",
+                      fontWeight: "500",
+                    },
+                  }}
+                  label={status.status}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+          <FormControl
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            {campusDorm?.map((campus) => (
-              <FormControlLabel
-                key={campus.id}
-                value={campus.id}
-                control={
-                  <Radio
-                    sx={{
-                      width: 30,
-                      height: 30,
-                      "&.Mui-checked": { color: "#008689" },
-                      "&.Mui-checked + .MuiFormControlLabel-label ": {
-                        color: "#008689",
-                        fontSize: "15px",
-                        fontWeight: "700",
-                      },
-                    }}
-                  />
-                }
-                sx={{
-                  "& .MuiFormControlLabel-label": {
-                    fontSize: "15px",
-                    color: "rgb(102, 117, 128)",
-                    fontWeight: "500",
-                  },
-                }}
-                label={campus.name}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
-      </Paper>
+            <FormLabel
+              sx={{
+                fontSize: "15px",
+                fontWeight: "600",
+                color: "red",
+                "&.Mui-focused": { color: "red" },
+              }}
+            >
+              Chọn cách sắp xếp danh sách
+            </FormLabel>
+            <RadioGroup
+              aria-label="sortMethod"
+              value={selectedSort}
+              onChange={(e) => setSelectedSort(e.target.value)}
+              row
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {sortDorm?.map((status) => (
+                <FormControlLabel
+                  key={status.statusCode}
+                  value={status.statusCode}
+                  control={
+                    <Radio
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        "&.Mui-checked": { color: "#008689" },
+                        "&.Mui-checked + .MuiFormControlLabel-label ": {
+                          color: "#008689",
+                          fontSize: "15px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  }
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                      color: "rgb(102, 117, 128)",
+                      fontWeight: "500",
+                    },
+                  }}
+                  label={status.status}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+          <FormControl
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FormLabel
+              sx={{
+                fontSize: "15px",
+                fontWeight: "600",
+                color: "red",
+                "&.Mui-focused": { color: "red" },
+              }}
+            >
+              Chọn cơ sở duyệt
+            </FormLabel>
+            <RadioGroup
+              aria-label="campusMethod"
+              value={selectedCampus}
+              onChange={(e) => setSelectedCampus(e.target.value)}
+              row
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {campusDorm?.map((campus) => (
+                <FormControlLabel
+                  key={campus.id}
+                  value={campus.id}
+                  control={
+                    <Radio
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        "&.Mui-checked": { color: "#008689" },
+                        "&.Mui-checked + .MuiFormControlLabel-label ": {
+                          color: "#008689",
+                          fontSize: "15px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  }
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                      color: "rgb(102, 117, 128)",
+                      fontWeight: "500",
+                    },
+                  }}
+                  label={campus.name}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </Paper>
+      </Container>
+
       <Paper elevation={4} sx={{ padding: "20px", borderRadius: "10px" }}>
         <Box sx={{ height: "50vh", width: "100%" }}>
           <QuickSearchToolbar
@@ -535,6 +537,6 @@ export default function QuickFilteringCustomLogic() {
           </Dialog>
         </Box>
       </Paper>
-    </Container>
+    </>
   );
 }
