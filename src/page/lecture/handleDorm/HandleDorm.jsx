@@ -36,6 +36,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import useDebounce from "../../../components/hooks/UseDebounce";
+import { format } from "date-fns";
 
 const sortDorm = [
   {
@@ -47,7 +48,12 @@ const sortDorm = [
     status: "Số lượng đối tượng giảm dần",
   },
 ];
-
+const formatDate = (dateString) => {
+  if (!dateString) return ""; // Handle null or undefined dateString
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ""; // Handle invalid date strings
+  return format(date, "dd/MM/yyyy");
+};
 function QuickSearchToolbar({ searchValue, onSearchChange }) {
   return (
     <Box sx={{ p: 0.5, pb: 0 }}>
@@ -162,22 +168,19 @@ export default function QuickFilteringCustomLogic() {
     studentId: item.student?.code,
     name: item.student?.name,
     class: item.student?.className,
-    ngaySinh: item.student?.ngaySinh,
+    ngaySinh: formatDate(item.student?.ngaySinh),
     phoneNumber: item.student?.phone || "N/A",
     email: item.student?.email || "N/A",
     dormitory: item.campus?.name,
     priorityNumber: item.objects?.length,
     priorityDescription:
       item.objects?.map((obj) => obj.name).join(", ") || "N/A",
-    registrationDate: item.createdAt
-      ? new Date(item.createdAt).toLocaleDateString()
-      : "N/A",
+    registrationDate: formatDate(item.createdAt), // Sử dụng hàm formatDate
     status: item.status,
     reason: item.reason,
-    processDate: item.updatedAt
-      ? new Date(item.updatedAt).toLocaleDateString()
-      : "N/A",
+    processDate: formatDate(item.updatedAt), // Sử dụng hàm formatDate
   }));
+
   // const rows = [];
 
   const columns = [
@@ -194,7 +197,7 @@ export default function QuickFilteringCustomLogic() {
       headerName: "Đối tượng ưu tiên dạng chữ",
     },
     { field: "registrationDate", headerName: "Ngày đăng ký" },
-    { field: "status", headerName: "Trạng thái" },
+    { field: "status", headerName: "Trạng thái", width: 200 },
     { field: "processDate", headerName: "Ngày xử lý" },
     { field: "reason", headerName: "Ghi chú" },
     {
@@ -411,52 +414,55 @@ export default function QuickFilteringCustomLogic() {
             searchValue={search}
             onSearchChange={(e) => setSearch(e.target.value)}
           />
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            getRowId={(row) => row.id}
-            // hideFooter
-            pagination
-            paginationMode="server"
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rowCount={approve.totalElements}
-            localeText={{
-              noRowsLabel: "Không có dữ liệu để xử lý",
-              MuiTablePagination: {
-                labelRowsPerPage: "Số dòng mỗi trang",
-              },
-            }}
-            sx={{
-              "& .MuiDataGrid-cell": {
-                color: "black",
-                fontWeight: "bold",
-                fontSize: "13px",
-              },
-              "& .MuiDataGrid-columnHeaderTitle": {
-                color: "red",
-                fontWeight: "bold",
-                fontSize: "15px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-                width: "10px",
-                height: "10px",
-                borderRadius: "10px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-                backgroundColor: "#008689",
-                borderRadius: "10px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover": {
-                backgroundColor: "#008950",
-                borderRadius: "10px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
-                backgroundColor: "#f1f1f1",
-                borderRadius: "10px",
-              },
-            }}
-          />
+          {!loading && (
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              getRowId={(row) => row.id}
+              // hideFooter
+              pagination
+              paginationMode="server"
+              paginationModel={paginationModel}
+              onPaginationModelChange={setPaginationModel}
+              rowCount={approve.totalElements}
+              localeText={{
+                noRowsLabel: "Không có dữ liệu để xử lý",
+                MuiTablePagination: {
+                  labelRowsPerPage: "Số dòng mỗi trang",
+                },
+              }}
+              sx={{
+                "& .MuiDataGrid-cell": {
+                  color: "black",
+                  fontWeight: "bold",
+                  fontSize: "13px",
+                },
+                "& .MuiDataGrid-columnHeaderTitle": {
+                  color: "red",
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                },
+                "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
+                  width: "10px",
+                  height: "10px",
+                  borderRadius: "10px",
+                },
+                "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
+                  backgroundColor: "#008689",
+                  borderRadius: "10px",
+                },
+                "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover":
+                  {
+                    backgroundColor: "#008950",
+                    borderRadius: "10px",
+                  },
+                "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
+                  backgroundColor: "#f1f1f1",
+                  borderRadius: "10px",
+                },
+              }}
+            />
+          )}
 
           <Dialog open={openDialog} onClose={handleCloseDialog}>
             <DialogTitle
