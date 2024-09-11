@@ -20,7 +20,9 @@ export const getProvinceViettel = createAsyncThunk(
         throw new Error("No token found");
       }
 
-      const response = await axios.get("/viettelapi/listProvince");
+      const response = await axios.get(
+        "https://partner.viettelpost.vn/v2/categories/listProvince"
+      );
 
       return response.data;
     } catch (error) {
@@ -51,7 +53,7 @@ export const getDistrictViettel = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `/viettelapi/listDistrict?provinceId=${provinceId}`,
+        `https://partner.viettelpost.vn/v2/categories/listDistrict?provinceId=${provinceId}`,
         config
       );
 
@@ -84,7 +86,7 @@ export const getWardViettel = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `/viettelapi/listWards?districtId=${districtId}`,
+        `https://partner.viettelpost.vn/v2/categories/listWards?districtId=${districtId}`,
         config
       );
 
