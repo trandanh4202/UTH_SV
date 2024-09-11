@@ -203,22 +203,44 @@ const Cart = () => {
   };
 
   const handleCreateOrder = async () => {
-    if (!selectedShipping) {
-      toast.error("Vui lòng chọn dịch vụ vận chuyển.");
-      return;
-    }
+    // Kiểm tra nếu campus là 1, 2, hoặc 3
+    if (campus === 1 || campus === 2 || campus === 3) {
+      // Lấy giá trị từ API getEstimateTotalAmount cho đơn hàng tại các campus 1, 2, hoặc 3
+      const estimatedTotal = total?.[0]?.total; // Giả định lấy giá đầu tiên, bạn có thể điều chỉnh logic lấy giá trị này nếu cần
 
-    const formData = {
-      addressId: campus,
-      isShip: true,
-      shipServiceCode: selectedShipping, // Sử dụng serviceCode từ lựa chọn
-    };
+      // Tạo formData sử dụng estimatedTotal
+      const formData = {
+        addressId: campus,
+        isShip: false,
+        shipServiceCode: null, // Không cần mã dịch vụ vận chuyển khi không có giao hàng
+      };
 
-    try {
-      await dispatch(createOrder(formData));
-      dispatch(getCart());
-    } catch (error) {
-      toast.error("Đăng ký thất bại. Vui lòng thử lại.");
+      try {
+        await dispatch(createOrder(formData));
+        dispatch(getCart());
+      } catch (error) {
+        toast.error("Đăng ký thất bại. Vui lòng thử lại.");
+      }
+    } else {
+      // Trường hợp không phải campus 1, 2, hoặc 3
+      if (!selectedShipping) {
+        toast.error("Vui lòng chọn dịch vụ vận chuyển.");
+        return;
+      }
+
+      // Tạo formData sử dụng selectedShipping
+      const formData = {
+        addressId: campus,
+        isShip: true,
+        shipServiceCode: selectedShipping, // Sử dụng serviceCode từ lựa chọn
+      };
+
+      try {
+        await dispatch(createOrder(formData));
+        dispatch(getCart());
+      } catch (error) {
+        toast.error("Đăng ký thất bại. Vui lòng thử lại.");
+      }
     }
   };
 
@@ -530,13 +552,7 @@ const Cart = () => {
                 ))}
               </Grid>
 
-              <Grid
-                container
-                sx={{
-                  margin: "20px 0",
-                }}
-                spacing={2}
-              >
+              <Grid container sx={{ margin: "20px 0" }} spacing={2}>
                 <Grid item xs={8}>
                   <Typography
                     sx={{
@@ -553,70 +569,79 @@ const Cart = () => {
                   </Typography>
                 </Grid>
                 <Grid item xs={4}>
-                  <Typography
-                    sx={{
-                      color: "#333333",
-                      fontWeight: "700",
-                      fontSize: {
-                        xs: "14px",
-                        lg: "16px",
-                      },
-                      textAlign: "center",
-                    }}
-                  >
-                    {selectedTotal ? formatCurrency(selectedTotal) : ""}
-                  </Typography>
-                  <FormControl component="fieldset" sx={{ marginTop: "20px" }}>
-                    <FormLabel
-                      component="legend"
+                  {campus === 1 || campus === 2 || campus === 3 ? (
+                    // Hiển thị giá trực tiếp cho campus 1, 2, 3
+                    <Typography
                       sx={{
-                        color: "red",
-                        fontSize: "15px",
+                        color: "#333333",
+                        fontWeight: "700",
+                        fontSize: {
+                          xs: "14px",
+                          lg: "16px",
+                        },
+                        textAlign: "center",
                       }}
                     >
-                      Chọn phương thức vận chuyển Viettel Post
-                    </FormLabel>
-                    <RadioGroup
-                      value={selectedShipping}
-                      onChange={handleShippingChange}
+                      {formatCurrency(total?.[0]?.total || 0)}{" "}
+                      {/* Hiển thị giá đầu tiên từ API */}
+                    </Typography>
+                  ) : (
+                    // Hiển thị chọn phương thức vận chuyển Viettel Post cho các campus khác
+                    <FormControl
+                      component="fieldset"
+                      sx={{ marginTop: "20px" }}
                     >
-                      {total?.map((item) => (
-                        <FormControlLabel
-                          key={item.serviceCode}
-                          value={item.serviceCode}
-                          control={
-                            <Radio
-                              sx={{
-                                width: 30,
-                                height: 30,
-
-                                "&.Mui-checked": { color: "#008689" },
-                                "&.Mui-checked + .MuiFormControlLabel-label ": {
-                                  color: "#008689",
-                                  fontSize: "14px",
-                                  fontWeight: "700",
-                                },
-                              }}
-                            />
-                          }
-                          sx={{
-                            "& .MuiFormControlLabel-label": {
-                              fontSize: "15px",
-                              color: "rgb(102, 117, 128)",
-                              fontWeight: "500",
-                            },
-                          }}
-                          label={`${formatCurrency(item.total)} 
-                          (Đã bao gồm phí dịch vụ ${formatCurrency(
-                            item.additionalFee
-                          )})
-                          - ${item.service} `}
-                        />
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
+                      <FormLabel
+                        component="legend"
+                        sx={{
+                          color: "red",
+                          fontSize: "15px",
+                        }}
+                      >
+                        Chọn phương thức vận chuyển Viettel Post
+                      </FormLabel>
+                      <RadioGroup
+                        value={selectedShipping}
+                        onChange={handleShippingChange}
+                      >
+                        {total?.map((item) => (
+                          <FormControlLabel
+                            key={item.serviceCode}
+                            value={item.serviceCode}
+                            control={
+                              <Radio
+                                sx={{
+                                  width: 30,
+                                  height: 30,
+                                  "&.Mui-checked": { color: "#008689" },
+                                  "&.Mui-checked + .MuiFormControlLabel-label":
+                                    {
+                                      color: "#008689",
+                                      fontSize: "14px",
+                                      fontWeight: "700",
+                                    },
+                                }}
+                              />
+                            }
+                            sx={{
+                              "& .MuiFormControlLabel-label": {
+                                fontSize: "15px",
+                                color: "rgb(102, 117, 128)",
+                                fontWeight: "500",
+                              },
+                            }}
+                            label={`${formatCurrency(item.total)} 
+              (Đã bao gồm phí dịch vụ ${formatCurrency(
+                item.additionalFee
+              )}) - ${item.service}`}
+                          />
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  )}
                 </Grid>
               </Grid>
+
               <Grid container spacing={2}>
                 {/* {carts.product.} */}
                 <Grid item lg={5} xs={6}>

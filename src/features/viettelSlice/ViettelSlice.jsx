@@ -19,9 +19,14 @@ export const getProvinceViettel = createAsyncThunk(
       if (!token) {
         throw new Error("No token found");
       }
-
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
       const response = await axios.get(
-        "https://partner.viettelpost.vn/v2/categories/listProvince"
+        "https://uth-api-boot.ut.edu.vn/api/v1/viettelpost/tinh",
+        config
       );
 
       return response.data;
@@ -49,11 +54,11 @@ export const getDistrictViettel = createAsyncThunk(
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       };
       const response = await axios.get(
-        `https://partner.viettelpost.vn/v2/categories/listDistrict?provinceId=${provinceId}`,
+        `https://uth-api-boot.ut.edu.vn/api/v1/viettelpost/huyen?provinceId=${provinceId}`,
         config
       );
 
@@ -82,11 +87,11 @@ export const getWardViettel = createAsyncThunk(
 
       const config = {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       };
       const response = await axios.get(
-        `https://partner.viettelpost.vn/v2/categories/listWards?districtId=${districtId}`,
+        `https://uth-api-boot.ut.edu.vn/api/v1/viettelpost/xa?districtId=${districtId}`,
         config
       );
 

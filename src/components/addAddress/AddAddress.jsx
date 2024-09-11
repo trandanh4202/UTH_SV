@@ -205,9 +205,9 @@ const AddAddress = ({ open, onClose }) => {
     (state) => state.address.addAddressMessage?.status
   );
 
-  const provinces = useSelector((state) => state.viettel.province.data);
-  const districts = useSelector((state) => state.viettel.district.data) || [];
-  const wards = useSelector((state) => state.viettel.ward?.data) || [];
+  const provinces = useSelector((state) => state.viettel.province.body);
+  const districts = useSelector((state) => state.viettel.district.body) || [];
+  const wards = useSelector((state) => state.viettel.ward?.body) || [];
   const loading = useSelector((state) => state.viettel.loading);
 
   useEffect(() => {
