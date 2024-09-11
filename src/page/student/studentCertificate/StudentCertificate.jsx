@@ -577,8 +577,8 @@ const StudentCertificate = () => {
                               gap: "10px",
                             }}
                           >
-                            <DeleteAddress item={item} />
-                            <EditAddress editData={item} />
+                            {/* <DeleteAddress item={item} /> */}
+                            {/* <EditAddress editData={item} /> */}
                           </Box>
                         </TableCell>
                       </TableRow>
