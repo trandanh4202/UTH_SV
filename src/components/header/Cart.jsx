@@ -4,14 +4,19 @@ import {
   Button,
   CircularProgress,
   Drawer,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   Grid,
   IconButton,
   MenuItem,
+  Radio,
+  RadioGroup,
   Select,
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
@@ -115,6 +120,7 @@ const Cart = () => {
   const [size, setSize] = useState("");
   const [campus, setCampus] = useState(1);
   const dispatch = useDispatch();
+  const [isShip, setIsShip] = useState(false);
 
   const toggleDrawerCart = (newOpen) => () => {
     setOpenDrawerCart(newOpen);
@@ -123,7 +129,19 @@ const Cart = () => {
       dispatch(getAddress());
     }
   };
-
+  const loadingOrder = useSelector((state) => state.order?.loading);
+  const messageOrder = useSelector((state) => state.order?.message);
+  const successOrder = useSelector((state) => state.order?.success);
+  const timestampOrder = useSelector((state) => state.order?.timestamp);
+  useEffect(() => {
+    if (!loadingOrder) {
+      if (timestampOrder && successOrder) {
+        toast.success(messageOrder);
+      } else if (!successOrder) {
+        toast.error(messageOrder);
+      }
+    }
+  }, [loadingOrder, messageOrder, successOrder, timestampOrder]);
   const carts = useSelector((state) => state.cart.cart?.body?.carts);
   const address = useSelector((state) => state.address.address?.body);
   const loadingCart = useSelector((state) => state.cart?.loading);
@@ -143,7 +161,6 @@ const Cart = () => {
     handleSizeChange(item, newSize);
   };
   const handleSizeChange = (item, newSize) => {
-    // Kiểm tra xem newSize có nằm trong các giá trị hợp lệ không
     const validOptions = item.product.options?.map((option) => option.id);
     if (validOptions.includes(newSize)) {
       setSize(newSize);
@@ -154,10 +171,9 @@ const Cart = () => {
           optionId: newSize,
         })
       );
-    } else {
-      // console.warn(`Invalid size selected: ${newSize}`);
     }
   };
+
   const addCombo1 = () => {
     dispatch(addToCart({ productId: 6 }));
   };
@@ -167,39 +183,62 @@ const Cart = () => {
   };
 
   const changeCampus = (e) => {
-    setCampus(e.target.value);
+    const selectedValue = e.target.value;
+    setCampus(selectedValue);
+    console.log(selectedValue);
+    // Kiểm tra nếu chọn id là 1, 2, hoặc 3 thì không tính phí và không giao hàng
+    if (selectedValue === 1 || selectedValue === 2 || selectedValue === 3) {
+      setIsShip(false); // Không giao hàng
+    } else {
+      setIsShip(true); // Giao hàng
+    }
   };
+
+  const [selectedShipping, setSelectedShipping] = useState(null); // State để lưu lựa chọn dịch vụ vận chuyển
+  const total = useSelector(
+    (state) => state.order.getEstimateTotalAmount?.body
+  );
+  const handleShippingChange = (event) => {
+    setSelectedShipping(event.target.value);
+  };
+
   const handleCreateOrder = async () => {
+    if (!selectedShipping) {
+      toast.error("Vui lòng chọn dịch vụ vận chuyển.");
+      return;
+    }
+
     const formData = {
       addressId: campus,
-      isShip: false,
-      shipServiceCode: null,
+      isShip: true,
+      shipServiceCode: selectedShipping, // Sử dụng serviceCode từ lựa chọn
     };
 
     try {
       await dispatch(createOrder(formData));
-
       dispatch(getCart());
     } catch (error) {
       toast.error("Đăng ký thất bại. Vui lòng thử lại.");
     }
   };
 
+  // Tính tổng tiền từ dịch vụ vận chuyển đã chọn
+  const selectedTotal = total?.find(
+    (item) => item.serviceCode === selectedShipping
+  )?.total;
+
   useEffect(() => {
+    // Chỉ gọi API khi Drawer được mở lần đầu tiên và hasFetchedEstimate là false
     if (openDrawerCart && !loadingCart) {
       const formData = {
-        addressId: campus, // Sử dụng addressId từ address nếu có
-        isShip: false,
-        shipServiceCode: "1", // Bạn có thể điều chỉnh mã dịch vụ này tùy theo nhu cầu
+        addressId: campus,
+        isShip: isShip,
+        shipServiceCode: isShip ? null : "1",
       };
 
       dispatch(getEstimateTotalAmount(formData));
     }
-  }, [dispatch, openDrawerCart, campus, address, loadingCart]);
-
-  const total = useSelector(
-    (state) => state.order.getEstimateTotalAmount?.body
-  );
+  }, [dispatch, openDrawerCart, campus, isShip, loadingCart]);
 
   return (
     <>
@@ -278,6 +317,7 @@ const Cart = () => {
               justifyContent: "center",
               flexDirection: "column",
               gap: "5px",
+              margin: "15px 0",
             }}
           >
             <Typography
@@ -497,7 +537,7 @@ const Cart = () => {
                 }}
                 spacing={2}
               >
-                <Grid item xs={9}>
+                <Grid item xs={8}>
                   <Typography
                     sx={{
                       color: "#333333",
@@ -509,10 +549,10 @@ const Cart = () => {
                       textAlign: "right",
                     }}
                   >
-                    Tổng cộng
+                    Tổng cộng:
                   </Typography>
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={4}>
                   <Typography
                     sx={{
                       color: "#333333",
@@ -524,8 +564,57 @@ const Cart = () => {
                       textAlign: "center",
                     }}
                   >
-                    {total?.map((item) => formatCurrency(item?.total))}
+                    {selectedTotal ? formatCurrency(selectedTotal) : ""}
                   </Typography>
+                  <FormControl component="fieldset" sx={{ marginTop: "20px" }}>
+                    <FormLabel
+                      component="legend"
+                      sx={{
+                        color: "red",
+                        fontSize: "15px",
+                      }}
+                    >
+                      Chọn phương thức vận chuyển Viettel Post
+                    </FormLabel>
+                    <RadioGroup
+                      value={selectedShipping}
+                      onChange={handleShippingChange}
+                    >
+                      {total?.map((item) => (
+                        <FormControlLabel
+                          key={item.serviceCode}
+                          value={item.serviceCode}
+                          control={
+                            <Radio
+                              sx={{
+                                width: 30,
+                                height: 30,
+
+                                "&.Mui-checked": { color: "#008689" },
+                                "&.Mui-checked + .MuiFormControlLabel-label ": {
+                                  color: "#008689",
+                                  fontSize: "14px",
+                                  fontWeight: "700",
+                                },
+                              }}
+                            />
+                          }
+                          sx={{
+                            "& .MuiFormControlLabel-label": {
+                              fontSize: "15px",
+                              color: "rgb(102, 117, 128)",
+                              fontWeight: "500",
+                            },
+                          }}
+                          label={`${formatCurrency(item.total)} 
+                          (Đã bao gồm phí dịch vụ ${formatCurrency(
+                            item.additionalFee
+                          )})
+                          - ${item.service} `}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
                 </Grid>
               </Grid>
               <Grid container spacing={2}>

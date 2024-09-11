@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDetailOrder } from "../../../features/orderSlice/OrderSlice";
 import Spinner from "../../../components/Spinner/Spinner";
+import { Link } from "react-router-dom";
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
   const date = new Date(dateString);
@@ -40,7 +41,8 @@ const tableCell = [
   "Nội dung thu",
   "Thanh toán",
   "Số lượng",
-  "Kích cở",
+  "Lựa chọn",
+  "Mã vận đơn",
 ];
 const StudentCertificatePopUp = ({ open, onClose, id }) => {
   const dispatch = useDispatch();
@@ -104,7 +106,7 @@ const StudentCertificatePopUp = ({ open, onClose, id }) => {
               <Typography
                 sx={{ color: "#0c6fbe", fontWeight: "700", fontSize: "16px" }}
               >
-                Tổng cộng: {formatCurrency(item?.productFee)}
+                Tổng cộng: {formatCurrency(item?.total)}
               </Typography>
             </Box>
           </Box>
@@ -194,7 +196,6 @@ const StudentCertificatePopUp = ({ open, onClose, id }) => {
                 <Spinner />
               ) : (
                 <>
-                  {" "}
                   {item?.orderDetails?.map((row, index) => (
                     <TableRow key={row.maKhoanThuKhac}>
                       <TableCell
@@ -256,6 +257,21 @@ const StudentCertificatePopUp = ({ open, onClose, id }) => {
                         }}
                       >
                         {row?.productOptionValue?.name}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontWeight: "600",
+                          fontSize: "15px",
+                        }}
+                      >
+                        <Typography
+                          component={Link}
+                          to="https://viettelpost.com.vn/"
+                        >
+                          {row?.shipCode}
+                        </Typography>
                       </TableCell>
                     </TableRow>
                   ))}

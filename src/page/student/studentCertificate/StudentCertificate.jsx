@@ -44,6 +44,9 @@ import "swiper/css/pagination";
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import DeleteStudentService from "../../../components/DeleteStudentService/DeleteStudentService";
 import FinishService from "../../../components/FinishService/FinishService";
+import Spinner from "../../../components/Spinner/Spinner";
+import DeleteAddress from "../../../components/deleteAddress/DeleteAddress";
+import EditAddress from "../../../components/editAddress/EditAddress";
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
@@ -159,19 +162,6 @@ const StudentCertificate = () => {
     }
   }, [loadingCart, messageCart, successCart, timestampCart]);
 
-  const loadingOrder = useSelector((state) => state.order?.loading);
-  const messageOrder = useSelector((state) => state.order?.message);
-  const successOrder = useSelector((state) => state.order?.success);
-  const timestampOrder = useSelector((state) => state.order?.timestamp);
-  useEffect(() => {
-    if (!loadingOrder) {
-      if (timestampOrder && successOrder) {
-        toast.success(messageOrder);
-      } else if (!successOrder) {
-        toast.error(messageOrder);
-      }
-    }
-  }, [loadingOrder, messageOrder, successOrder, timestampOrder]);
   return (
     <Box>
       <Container sx={{}}>
@@ -375,7 +365,7 @@ const StudentCertificate = () => {
               </Grid>
             ))}
           </Grid>
-          {/* <Grid
+          <Grid
             sx={{
               padding: "10px 5px",
               backgroundColor: "white",
@@ -442,7 +432,7 @@ const StudentCertificate = () => {
                   </Typography>
                 </Button>
               </Box>
-            </Grid> 
+            </Grid>
             <TableContainer
               component={Paper}
               sx={{
@@ -510,7 +500,7 @@ const StudentCertificate = () => {
                             border: "1px solid rgb(221, 221, 221)",
 
                             fontWeight: "500",
-                            fontSize:{xs:'11px',lg:'14px'}
+                            fontSize: { xs: "11px", lg: "14px" },
                           }}
                         >
                           {index + 1}
@@ -597,7 +587,7 @@ const StudentCertificate = () => {
                 </TableBody>
               </Table>
             </TableContainer>
-          </Grid> */}
+          </Grid>
           <Grid
             sx={{
               padding: "10px 5px",
