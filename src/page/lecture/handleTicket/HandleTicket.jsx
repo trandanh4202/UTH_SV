@@ -6,7 +6,7 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Cancel, CheckCircle, EditOutlined } from "@mui/icons-material";
+import { Cancel, CheckCircle } from "@mui/icons-material";
 import {
   Container,
   FormControl,
@@ -32,7 +32,6 @@ import {
   getStatusUniform,
   setApprove,
 } from "../../../features/orderSlice/OrderSlice";
-import StudentCertificatePopUp from "./StudentCertificatePopUp";
 
 function QuickSearchToolbar({ searchValue, onSearchChange }) {
   return (
@@ -49,7 +48,7 @@ function QuickSearchToolbar({ searchValue, onSearchChange }) {
   );
 }
 
-const HandleUniform = () => {
+const HandleTicket = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [isApproveAction, setIsApproveAction] = useState(true);
   const [selectedId, setSelectedId] = useState(null);
@@ -88,10 +87,6 @@ const HandleUniform = () => {
     setSelectedId(id);
     setIsApproveAction(isApprove);
     setOpenDialog(true);
-  };
-  const handleOpenDetailPopUp = (id) => {
-    setId(id);
-    setOpenModal(true); // Sửa open thành openModal
   };
 
   const handleCloseDialog = () => {
@@ -158,13 +153,6 @@ const HandleUniform = () => {
       ? new Date(item.updatedAt).toLocaleDateString()
       : "N/A",
   }));
-  const [openModal, setOpenModal] = useState(false);
-  const [id, setId] = useState("");
-
-  const handleCloseDetailPopUp = (id) => {
-    setId(id);
-    setOpenModal(true);
-  };
 
   const columns = [
     { field: "studentId", headerName: "MSSV", width: 100 },
@@ -197,147 +185,134 @@ const HandleUniform = () => {
           disabled={params.row.status !== "Chờ duyệt"}
           sx={{ color: "red", fontWeight: "bold", fontSize: "13px" }}
         />,
-        <GridActionsCellItem
-          icon={<EditOutlined sx={{ fontSize: "20px" }} />}
-          label="Chi tiết"
-          onClick={() => handleOpenDetailPopUp(params.id)} // Sử dụng hàm đã sửa
-          sx={{ color: "blue", fontWeight: "bold", fontSize: "13px" }}
-        />,
       ],
     },
   ];
 
   return (
-    <>
-      <StudentCertificatePopUp
-        open={openModal} // Sử dụng openModal đã được khai báo
-        onClose={() => setOpenModal(false)}
-        id={id}
-      />
-      <Container>
-        <Paper
-          elevation={4}
-          sx={{ padding: "20px", borderRadius: "10px", mb: 2 }}
+    <Container>
+      <Paper
+        elevation={4}
+        sx={{ padding: "20px", borderRadius: "10px", mb: 2 }}
+      >
+        <FormControl
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <FormControl
+          <FormLabel
+            sx={{
+              fontSize: "15px",
+              fontWeight: "600",
+              color: "red",
+              "&.Mui-focused": { color: "red" },
+            }}
+          >
+            Chọn trạng thái của danh sách
+          </FormLabel>
+          <RadioGroup
+            aria-label="authMethod"
+            value={selectedStatus}
+            onChange={(e) => setSelectedStatus(e.target.value)}
+            row
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <FormLabel
-              sx={{
-                fontSize: "15px",
-                fontWeight: "600",
-                color: "red",
-                "&.Mui-focused": { color: "red" },
-              }}
-            >
-              Chọn trạng thái của danh sách
-            </FormLabel>
-            <RadioGroup
-              aria-label="authMethod"
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-              row
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {statusDorm?.map((status) => (
-                <FormControlLabel
-                  key={status.statusCode}
-                  value={status.statusCode}
-                  control={
-                    <Radio
-                      sx={{
-                        width: 30,
-                        height: 30,
-                        "&.Mui-checked": { color: "#008689" },
-                        "&.Mui-checked + .MuiFormControlLabel-label ": {
-                          color: "#008689",
-                          fontSize: "15px",
-                          fontWeight: "700",
-                        },
-                      }}
-                    />
-                  }
-                  sx={{
-                    "& .MuiFormControlLabel-label": {
-                      fontSize: "15px",
-                      color: "rgb(102, 117, 128)",
-                      fontWeight: "500",
-                    },
-                  }}
-                  label={status.status}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
+            {statusDorm?.map((status) => (
+              <FormControlLabel
+                key={status.statusCode}
+                value={status.statusCode}
+                control={
+                  <Radio
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      "&.Mui-checked": { color: "#008689" },
+                      "&.Mui-checked + .MuiFormControlLabel-label ": {
+                        color: "#008689",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                      },
+                    }}
+                  />
+                }
+                sx={{
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                    color: "rgb(102, 117, 128)",
+                    fontWeight: "500",
+                  },
+                }}
+                label={status.status}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
 
-          <FormControl
+        <FormControl
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <FormLabel
+            sx={{
+              fontSize: "15px",
+              fontWeight: "600",
+              color: "red",
+              "&.Mui-focused": { color: "red" },
+            }}
+          >
+            Chọn cơ sở duyệt
+          </FormLabel>
+          <RadioGroup
+            aria-label="campusMethod"
+            value={selectedCampus}
+            onChange={(e) => setSelectedCampus(e.target.value)}
+            row
             sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
             }}
           >
-            <FormLabel
-              sx={{
-                fontSize: "15px",
-                fontWeight: "600",
-                color: "red",
-                "&.Mui-focused": { color: "red" },
-              }}
-            >
-              Chọn cơ sở duyệt
-            </FormLabel>
-            <RadioGroup
-              aria-label="campusMethod"
-              value={selectedCampus}
-              onChange={(e) => setSelectedCampus(e.target.value)}
-              row
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {campusUni?.map((campus) => (
-                <FormControlLabel
-                  key={campus.id}
-                  value={campus.id}
-                  control={
-                    <Radio
-                      sx={{
-                        width: 30,
-                        height: 30,
-                        "&.Mui-checked": { color: "#008689" },
-                        "&.Mui-checked + .MuiFormControlLabel-label ": {
-                          color: "#008689",
-                          fontSize: "15px",
-                          fontWeight: "700",
-                        },
-                      }}
-                    />
-                  }
-                  sx={{
-                    "& .MuiFormControlLabel-label": {
-                      fontSize: "15px",
-                      color: "rgb(102, 117, 128)",
-                      fontWeight: "500",
-                    },
-                  }}
-                  label={`Cơ sở ${campus.id}`}
-                />
-              ))}
-            </RadioGroup>
-          </FormControl>
-        </Paper>
-      </Container>
+            {campusUni?.map((campus) => (
+              <FormControlLabel
+                key={campus.id}
+                value={campus.id}
+                control={
+                  <Radio
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      "&.Mui-checked": { color: "#008689" },
+                      "&.Mui-checked + .MuiFormControlLabel-label ": {
+                        color: "#008689",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                      },
+                    }}
+                  />
+                }
+                sx={{
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                    color: "rgb(102, 117, 128)",
+                    fontWeight: "500",
+                  },
+                }}
+                label={`Cơ sở ${campus.id}`}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+      </Paper>
       <Paper elevation={4} sx={{ padding: "20px", borderRadius: "10px" }}>
         <Box sx={{ height: "50vh", width: "100%" }}>
           <QuickSearchToolbar
@@ -353,6 +328,7 @@ const HandleUniform = () => {
             paginationModel={paginationModel}
             onPaginationModelChange={setPaginationModel}
             rowCount={approve.totalElements}
+            // hideFooter
             localeText={{
               noRowsLabel: "Không có dữ liệu để xử lý",
               MuiTablePagination: {
@@ -469,8 +445,8 @@ const HandleUniform = () => {
           </Dialog>
         </Box>
       </Paper>
-    </>
+    </Container>
   );
 };
 
-export default HandleUniform;
+export default HandleTicket;

@@ -39,6 +39,7 @@ import Certification from "./page/student/certification/Certification";
 import HandleDorm from "./page/lecture/handleDorm/HandleDorm";
 import HandleUniform from "./page/lecture/handleUniform/HandleUniform";
 import Note from "./page/student/note/Note";
+import HandleTicket from "./page/lecture/handleTicket/HandleTicket";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -147,6 +148,10 @@ const router = createBrowserRouter([
           {
             path: "adminuniform",
             element: <HandleUniform />,
+          },
+          {
+            path: "adminticket",
+            element: <HandleTicket />,
           },
           {
             path: "notedetail",

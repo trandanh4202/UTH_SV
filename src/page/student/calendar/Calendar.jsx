@@ -277,346 +277,7 @@ const Calendar = () => {
               position: "relative",
             }}
           >
-            <Table
-              sx={{
-                minWidth: 650,
-              }}
-              stickyHeader
-              aria-label="curriculum table"
-            >
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      border: "1px solid rgba(224, 224, 224, 1)",
-                      fontSize: "15px",
-                      // fontWeight: "600",
-                      textAlign: "center",
-                      width: "12.5%",
-                      borderTopLeftRadius: "20px",
-                      color: "white",
-                      background: "#008689",
-                    }}
-                    colSpan={2}
-                  >
-                    Ca học
-                  </TableCell>
-                  {days.map((day, index) => (
-                    <TableCell
-                      key={index}
-                      align="center"
-                      sx={{
-                        border: "1px solid rgba(224, 224, 224, 1)",
-                        fontSize: "15px",
-                        fontWeight: "600",
-                        // width: "12.5%",
-                        ...(index === days.length - 1 && {
-                          borderTopRightRadius: "20px",
-                        }),
-                        color: "white",
-                        background: "#008689",
-                      }}
-                    >
-                      {day}
-                      <br />
-                      {dates[index]}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {slots.map((slot, slotIndex) => (
-                  <React.Fragment key={slotIndex}>
-                    <TableRow>
-                      <TableCell
-                        rowSpan={slot.periods.length + 1}
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          backgroundColor: "#008689",
-                          color: "white",
-                          fontWeight: "600",
-                          fontSize: "15px",
-                        }}
-                      >
-                        {slot.time}
-                      </TableCell>
-                    </TableRow>
-                    {slot.periods.map((period, periodIndex) => (
-                      <TableRow
-                        key={periodIndex}
-                        sx={{
-                          verticalAlign: "top",
-                        }}
-                      >
-                        <TableCell
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-                            backgroundColor: "#008689",
-                            color: "white",
-                            fontWeight: "600",
-                            fontSize: "15px",
-                          }}
-                        >
-                          {period}
-                        </TableCell>
-                        {days.map((day, dayIndex) => {
-                          const relevantData = splitData.find(
-                            (d) =>
-                              d.thu === dayIndex + 2 &&
-                              getPeriodSlot(d.tuTiet) === period
-                          );
-                          return (
-                            <TableCell
-                              key={dayIndex}
-                              sx={{
-                                order: "1px solid rgba(224, 224, 224, 1)",
-                                padding: "5px",
-                                minHeight: "150px",
-                                // minWidth: "135px",
-                                border: "1px solid rgba(224, 224, 224, 1)",
-                                // display: "flex",
-                              }}
-                            >
-                              {relevantData && (
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    backgroundColor: relevantData.isTamNgung
-                                      ? "rgba(234, 70, 67, 0.05)"
-                                      : "rgba(72, 128, 255, 0.05)",
-                                  }}
-                                >
-                                  {/* <Divider
-                                    sx={{
-                                      width: "2px",
-                                      borderWidth: "5px",
-                                      borderColor: relevantData.isTamNgung
-                                        ? "rgba(234, 70, 67, 1)"
-                                        : "rgba(72, 128, 255, 1)",
-                                      borderRadius: "5px",
-                                    }}
-                                  /> */}
-                                  <Box
-                                    sx={{
-                                      borderRadius: "5px",
-                                      borderLeft: `10px solid ${
-                                        relevantData.isTamNgung
-                                          ? "rgba(234, 70, 67, 1)"
-                                          : "rgba(72, 128, 255, 1)"
-                                      }`,
-
-                                      padding: "5px",
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      alignItems: "start",
-                                      position: "relative",
-                                      gap: "5px",
-                                    }}
-                                  >
-                                    {relevantData.isTamNgung && (
-                                      <Box
-                                        sx={{
-                                          position: "absolute",
-                                          left: "-6px",
-                                          top: "-5px",
-                                          zIndex: 1,
-                                          overflow: "hidden",
-                                          width: "100%",
-                                          height: "100%",
-                                          textAlign: "right",
-                                        }}
-                                      >
-                                        <Box
-                                          sx={{
-                                            fontSize: "16px",
-                                            fontWeight: 700,
-                                            color: "#fff",
-                                            textAlign: "center",
-                                            lineHeight: "20px",
-                                            transform: "rotate(-45deg)",
-                                            WebkitTransform: "rotate(-45deg)",
-                                            width: "132px",
-                                            padding: "5px 0",
-                                            display: "block",
-                                            background:
-                                              "linear-gradient(#f14f3f 0, #cb4335 100%)",
-                                            boxShadow:
-                                              "0 3px 10px -5px rgba(0, 0, 0, 1)",
-                                            textShadow:
-                                              "1px 1px 2px rgba(0, 0, 0, 0.25)",
-                                            position: "absolute",
-                                            top: "23px",
-                                            left: "-28px",
-                                            "&::before": {
-                                              borderBottom:
-                                                "3px solid transparent",
-                                              borderTop: "3px solid #a3362a",
-                                              content: "''",
-                                              position: "absolute",
-                                              top: "100%",
-                                              zIndex: -1,
-                                              borderLeft: "3px solid #a3362a",
-                                              borderRight:
-                                                "3px solid transparent",
-                                              left: "0",
-                                            },
-                                            "&::after": {
-                                              right: "0",
-                                              borderLeft:
-                                                "3px solid transparent",
-                                              borderRight: "3px solid #a3362a",
-                                              borderBottom:
-                                                "3px solid transparent",
-                                              borderTop: "3px solid #a3362a",
-                                              content: "''",
-                                              position: "absolute",
-                                              top: "100%",
-                                              zIndex: -1,
-                                            },
-                                          }}
-                                        >
-                                          Tạm ngưng
-                                        </Box>
-                                      </Box>
-                                    )}
-                                    <Typography
-                                      // component={Link}
-                                      sx={{
-                                        fontSize: "14px",
-                                        color: "#037C7F",
-                                        fontWeight: "700",
-                                      }}
-                                    >
-                                      {relevantData.tenMonHoc}
-                                    </Typography>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                      }}
-                                    >
-                                      <Typography
-                                        // component={Link}
-                                        sx={{
-                                          fontSize: "13px",
-                                          fontWeight: "600",
-                                          color: "black",
-                                        }}
-                                      >
-                                        {relevantData.maLopHocPhan}
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                      }}
-                                    >
-                                      <img
-                                        src="./images/book-blank.svg"
-                                        alt="time"
-                                        style={{ color: "#008689" }}
-                                      />
-                                      <Typography
-                                        sx={{
-                                          fontSize: "13px",
-                                          fontWeight: "600",
-                                          color: "black",
-                                        }}
-                                      >
-                                        Tiết:{""} {relevantData.tuTiet} -{" "}
-                                        {relevantData.denTiet}
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                      }}
-                                    >
-                                      <img
-                                        src="./images/clock-desk.svg"
-                                        alt="time"
-                                      />
-                                      <Typography
-                                        sx={{
-                                          fontSize: "13px",
-                                          fontWeight: "600",
-                                          color: "black",
-                                        }}
-                                      >
-                                        {formatTime(relevantData.tuGio)} -{" "}
-                                        {formatTime(relevantData.denGio)}
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                      }}
-                                    >
-                                      <img
-                                        src="./images/door-closed.svg"
-                                        alt="phong"
-                                      />
-                                      <Typography
-                                        sx={{
-                                          fontSize: "13px",
-                                          color: "black",
-                                          fontWeight: "600",
-                                        }}
-                                      >
-                                        Phòng: {relevantData.tenPhong}
-                                      </Typography>
-                                    </Box>
-
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                      }}
-                                    >
-                                      <Typography
-                                        sx={{
-                                          fontSize: "15px",
-                                          fontWeight: "600",
-                                          color: "#da1d2d",
-                                          "&:hover": {
-                                            color: "#037C7F",
-                                            // transform:''
-                                            transition: "all 0.3s ease",
-                                          },
-                                        }}
-                                        target={"_blank"}
-                                        to={relevantData.link}
-                                        component={Link}
-                                      >
-                                        Link Học liệu số
-                                      </Typography>
-                                    </Box>
-                                  </Box>
-                                </Box>
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    ))}
-                  </React.Fragment>
-                ))}
-              </TableBody>
-            </Table>
-            {loading && (
+            {loading ? (
               <Box
                 sx={{
                   background: "#c1d3d3",
@@ -630,6 +291,347 @@ const Calendar = () => {
               >
                 <Spinner />
               </Box>
+            ) : (
+              <Table
+                sx={{
+                  minWidth: 650,
+                }}
+                stickyHeader
+                aria-label="curriculum table"
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      sx={{
+                        border: "1px solid rgba(224, 224, 224, 1)",
+                        fontSize: "15px",
+                        // fontWeight: "600",
+                        textAlign: "center",
+                        width: "12.5%",
+                        borderTopLeftRadius: "20px",
+                        color: "white",
+                        background: "#008689",
+                      }}
+                      colSpan={2}
+                    >
+                      Ca học
+                    </TableCell>
+                    {days.map((day, index) => (
+                      <TableCell
+                        key={index}
+                        align="center"
+                        sx={{
+                          border: "1px solid rgba(224, 224, 224, 1)",
+                          fontSize: "15px",
+                          fontWeight: "600",
+                          // width: "12.5%",
+                          ...(index === days.length - 1 && {
+                            borderTopRightRadius: "20px",
+                          }),
+                          color: "white",
+                          background: "#008689",
+                        }}
+                      >
+                        {day}
+                        <br />
+                        {dates[index]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {slots.map((slot, slotIndex) => (
+                    <React.Fragment key={slotIndex}>
+                      <TableRow>
+                        <TableCell
+                          rowSpan={slot.periods.length + 1}
+                          sx={{
+                            border: "1px solid rgba(224, 224, 224, 1)",
+                            backgroundColor: "#008689",
+                            color: "white",
+                            fontWeight: "600",
+                            fontSize: "15px",
+                          }}
+                        >
+                          {slot.time}
+                        </TableCell>
+                      </TableRow>
+                      {slot.periods.map((period, periodIndex) => (
+                        <TableRow
+                          key={periodIndex}
+                          sx={{
+                            verticalAlign: "top",
+                          }}
+                        >
+                          <TableCell
+                            sx={{
+                              border: "1px solid rgba(224, 224, 224, 1)",
+                              backgroundColor: "#008689",
+                              color: "white",
+                              fontWeight: "600",
+                              fontSize: "15px",
+                            }}
+                          >
+                            {period}
+                          </TableCell>
+                          {days.map((day, dayIndex) => {
+                            const relevantData = splitData.find(
+                              (d) =>
+                                d.thu === dayIndex + 2 &&
+                                getPeriodSlot(d.tuTiet) === period
+                            );
+                            return (
+                              <TableCell
+                                key={dayIndex}
+                                sx={{
+                                  order: "1px solid rgba(224, 224, 224, 1)",
+                                  padding: "5px",
+                                  minHeight: "150px",
+                                  // minWidth: "135px",
+                                  border: "1px solid rgba(224, 224, 224, 1)",
+                                  // display: "flex",
+                                }}
+                              >
+                                {relevantData && (
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      backgroundColor: relevantData.isTamNgung
+                                        ? "rgba(234, 70, 67, 0.05)"
+                                        : "rgba(72, 128, 255, 0.05)",
+                                    }}
+                                  >
+                                    {/* <Divider
+                                    sx={{
+                                      width: "2px",
+                                      borderWidth: "5px",
+                                      borderColor: relevantData.isTamNgung
+                                        ? "rgba(234, 70, 67, 1)"
+                                        : "rgba(72, 128, 255, 1)",
+                                      borderRadius: "5px",
+                                    }}
+                                  /> */}
+                                    <Box
+                                      sx={{
+                                        borderRadius: "5px",
+                                        borderLeft: `10px solid ${
+                                          relevantData.isTamNgung
+                                            ? "rgba(234, 70, 67, 1)"
+                                            : "rgba(72, 128, 255, 1)"
+                                        }`,
+
+                                        padding: "5px",
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        alignItems: "start",
+                                        position: "relative",
+                                        gap: "5px",
+                                      }}
+                                    >
+                                      {relevantData.isTamNgung && (
+                                        <Box
+                                          sx={{
+                                            position: "absolute",
+                                            left: "-6px",
+                                            top: "-5px",
+                                            zIndex: 1,
+                                            overflow: "hidden",
+                                            width: "100%",
+                                            height: "100%",
+                                            textAlign: "right",
+                                          }}
+                                        >
+                                          <Box
+                                            sx={{
+                                              fontSize: "16px",
+                                              fontWeight: 700,
+                                              color: "#fff",
+                                              textAlign: "center",
+                                              lineHeight: "20px",
+                                              transform: "rotate(-45deg)",
+                                              WebkitTransform: "rotate(-45deg)",
+                                              width: "132px",
+                                              padding: "5px 0",
+                                              display: "block",
+                                              background:
+                                                "linear-gradient(#f14f3f 0, #cb4335 100%)",
+                                              boxShadow:
+                                                "0 3px 10px -5px rgba(0, 0, 0, 1)",
+                                              textShadow:
+                                                "1px 1px 2px rgba(0, 0, 0, 0.25)",
+                                              position: "absolute",
+                                              top: "23px",
+                                              left: "-28px",
+                                              "&::before": {
+                                                borderBottom:
+                                                  "3px solid transparent",
+                                                borderTop: "3px solid #a3362a",
+                                                content: "''",
+                                                position: "absolute",
+                                                top: "100%",
+                                                zIndex: -1,
+                                                borderLeft: "3px solid #a3362a",
+                                                borderRight:
+                                                  "3px solid transparent",
+                                                left: "0",
+                                              },
+                                              "&::after": {
+                                                right: "0",
+                                                borderLeft:
+                                                  "3px solid transparent",
+                                                borderRight:
+                                                  "3px solid #a3362a",
+                                                borderBottom:
+                                                  "3px solid transparent",
+                                                borderTop: "3px solid #a3362a",
+                                                content: "''",
+                                                position: "absolute",
+                                                top: "100%",
+                                                zIndex: -1,
+                                              },
+                                            }}
+                                          >
+                                            Tạm ngưng
+                                          </Box>
+                                        </Box>
+                                      )}
+                                      <Typography
+                                        // component={Link}
+                                        sx={{
+                                          fontSize: "14px",
+                                          color: "#037C7F",
+                                          fontWeight: "700",
+                                        }}
+                                      >
+                                        {relevantData.tenMonHoc}
+                                      </Typography>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          gap: "5px",
+                                        }}
+                                      >
+                                        <Typography
+                                          // component={Link}
+                                          sx={{
+                                            fontSize: "13px",
+                                            fontWeight: "600",
+                                            color: "black",
+                                          }}
+                                        >
+                                          {relevantData.maLopHocPhan}
+                                        </Typography>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          gap: "5px",
+                                        }}
+                                      >
+                                        <img
+                                          src="./images/book-blank.svg"
+                                          alt="time"
+                                          style={{ color: "#008689" }}
+                                        />
+                                        <Typography
+                                          sx={{
+                                            fontSize: "13px",
+                                            fontWeight: "600",
+                                            color: "black",
+                                          }}
+                                        >
+                                          Tiết:{""} {relevantData.tuTiet} -{" "}
+                                          {relevantData.denTiet}
+                                        </Typography>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          gap: "5px",
+                                        }}
+                                      >
+                                        <img
+                                          src="./images/clock-desk.svg"
+                                          alt="time"
+                                        />
+                                        <Typography
+                                          sx={{
+                                            fontSize: "13px",
+                                            fontWeight: "600",
+                                            color: "black",
+                                          }}
+                                        >
+                                          {formatTime(relevantData.tuGio)} -{" "}
+                                          {formatTime(relevantData.denGio)}
+                                        </Typography>
+                                      </Box>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          gap: "5px",
+                                        }}
+                                      >
+                                        <img
+                                          src="./images/door-closed.svg"
+                                          alt="phong"
+                                        />
+                                        <Typography
+                                          sx={{
+                                            fontSize: "13px",
+                                            color: "black",
+                                            fontWeight: "600",
+                                          }}
+                                        >
+                                          Phòng: {relevantData.tenPhong}
+                                        </Typography>
+                                      </Box>
+
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          justifyContent: "center",
+                                          alignItems: "center",
+                                          gap: "5px",
+                                        }}
+                                      >
+                                        <Typography
+                                          sx={{
+                                            fontSize: "15px",
+                                            fontWeight: "600",
+                                            color: "#da1d2d",
+                                            "&:hover": {
+                                              color: "#037C7F",
+                                              // transform:''
+                                              transition: "all 0.3s ease",
+                                            },
+                                          }}
+                                          target={"_blank"}
+                                          to={relevantData.link}
+                                          component={Link}
+                                        >
+                                          Link Học liệu số
+                                        </Typography>
+                                      </Box>
+                                    </Box>
+                                  </Box>
+                                )}
+                              </TableCell>
+                            );
+                          })}
+                        </TableRow>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </TableContainer>
         </Paper>
