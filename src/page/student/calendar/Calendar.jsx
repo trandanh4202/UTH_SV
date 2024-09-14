@@ -136,7 +136,7 @@ const Calendar = () => {
     debounceFetch(currentDate); // Initial fetch when component mounts
   }, [currentDate]); // Only call when currentDate changes
 
-  const calendar = useSelector((state) => state.calendar?.calendar);
+  const calendar = useSelector((state) => state.calendar.calendar) || [];
 
   useEffect(() => {
     const updatedData = splitIntoSlots(calendar);
@@ -147,7 +147,7 @@ const Calendar = () => {
   const formatTime = (time) => {
     return time.slice(0, 5);
   };
-  const loading = useSelector((state) => state.calendar?.loading);
+  const loading = useSelector((state) => state.calendar.loading);
   return (
     <>
       <Container>
