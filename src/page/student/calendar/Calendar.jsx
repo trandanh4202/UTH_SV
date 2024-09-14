@@ -97,7 +97,7 @@ const Calendar = () => {
     // Set new timeout for 1 second
     const newTimeoutId = setTimeout(() => {
       dispatch(getCalendar({ date: format(date, "yyyy-MM-dd") }));
-    }, 1000); // 1000 milliseconds = 1 second
+    }, 500); // 1000 milliseconds = 1 second
 
     // Update the state with the new timeout ID
     setTimeoutId(newTimeoutId);
