@@ -186,7 +186,6 @@ const HandleUniform = () => {
       : "N/A",
     status: item.status,
     reason: item.reason,
-    isShip: item.isShip,
     processDate: item.updatedAt
       ? new Date(item.updatedAt).toLocaleDateString()
       : "N/A",
@@ -215,7 +214,6 @@ const HandleUniform = () => {
     { field: "status", headerName: "Trạng thái", width: 150 },
     { field: "processDate", headerName: "Ngày xử lý", width: 150 },
     { field: "reason", headerName: "Ghi chú", width: 150 },
-    { field: "isShip", headerName: "ship", width: 150 },
 
     {
       field: "actions",
