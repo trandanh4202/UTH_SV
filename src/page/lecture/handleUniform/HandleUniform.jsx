@@ -52,10 +52,12 @@ const HandleUniform = () => {
   const [denyReason, setDenyReason] = useState("");
   const [approveNote, setApproveNote] = useState("");
   const [paginationModel, setPaginationModel] = useState({
-    pageSize: 25,
-    page: 0,
+    pageSize: 10, // Số phần tử mỗi trang
+    page: 0, // Trang bắt đầu
   });
-  const [search, setSearch] = useState("");
+
+  const [search, setSearch] = useState(""); // State cho giá trị tìm kiếm
+  const dataSearch = useDebounce(search, 1000); // Debounce giá trị tìm kiếm
   const [selectedStatus, setSelectedStatus] = useState("NEW");
   const [selectedSort, setSelectedSort] = useState(2);
   const [selectedCampus, setSelectedCampus] = useState(1);
@@ -63,7 +65,9 @@ const HandleUniform = () => {
   const message = useSelector((state) => state.order?.message);
   const timestamp = useSelector((state) => state.order?.timestamp);
   const success = useSelector((state) => state.order?.success);
-  const totalElements = useSelector((state) => state.order?.totalElements || 0); // Tổng số phần tử cho phân trang
+  const totalElements = useSelector(
+    (state) => state.order?.getAllAdmin?.body?.totalElements || 0
+  ); // Tổng số phần tử cho phân trang
   const dispatch = useDispatch();
   const link = useSelector((state) => state.order.printToShip?.body);
 
@@ -115,7 +119,6 @@ const HandleUniform = () => {
   };
 
   const [selectedIsShip, setSelectedIsShip] = useState(false);
-  const dataSearch = useDebounce(search, 1000);
 
   const handleApprove = () => {
     const formDataAprove = {
@@ -145,25 +148,18 @@ const HandleUniform = () => {
     }
   };
 
+  // Gọi API getAllAdmin khi giá trị tìm kiếm thay đổi
   useEffect(() => {
     const formData = {
-      pageIndex: paginationModel.page + 1,
+      pageIndex: paginationModel.page + 1, // Thêm 1 nếu API sử dụng index bắt đầu từ 1
       pageSize: paginationModel.pageSize,
-      search: dataSearch,
-      status: selectedStatus,
-      campusId: selectedIsShip ? null : selectedCampus,
-      isShip: selectedIsShip,
+      search: dataSearch, // Sử dụng giá trị tìm kiếm đã debounce
+      status: null,
+      campusId: null,
+      isShip: null,
     };
     dispatch(getAllAdmin(formData));
-  }, [
-    dispatch,
-    paginationModel.page,
-    paginationModel.pageSize,
-    dataSearch,
-    selectedStatus,
-    selectedCampus,
-    selectedIsShip,
-  ]);
+  }, [dispatch, paginationModel.page, paginationModel.pageSize, dataSearch]);
 
   useEffect(() => {
     dispatch(getStatusUniform());
@@ -177,6 +173,7 @@ const HandleUniform = () => {
     class: item.student?.className,
     ngaySinh: item.student?.ngaySinh,
     phoneNumber: item.student?.phone || "N/A",
+    groupProductDto: item.groupProductDto?.name,
     email: item.student?.email || "N/A",
     registrationDate: item.createdAt
       ? new Date(item.createdAt).toLocaleDateString()
@@ -243,6 +240,8 @@ const HandleUniform = () => {
           elevation={4}
           sx={{ padding: "20px", borderRadius: "10px", mb: 2 }}
         >
+          {/* Ô tìm kiếm */}
+
           <FormControl
             sx={{
               display: "flex",
@@ -385,6 +384,14 @@ const HandleUniform = () => {
               />
             </RadioGroup>
           </FormControl>
+          <TextField
+            label="Tìm kiếm"
+            variant="outlined"
+            fullWidth
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{ marginBottom: 2 }}
+          />
         </Paper>
       </Container>
       <Paper elevation={4} sx={{ padding: "20px", borderRadius: "10px" }}>
@@ -417,7 +424,11 @@ const HandleUniform = () => {
                 >
                   Số điện thoại
                 </TableCell>
-
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Loại đăng ký
+                </TableCell>
                 <TableCell
                   sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
                 >
@@ -503,7 +514,17 @@ const HandleUniform = () => {
                       {row.phoneNumber}
                     </Typography>
                   </TableCell>
-
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.groupProductDto}
+                    </Typography>
+                  </TableCell>
                   <TableCell sx={{ color: "black" }}>
                     <Typography
                       sx={{
@@ -618,14 +639,13 @@ const HandleUniform = () => {
 
         {/* Phân trang */}
         <TablePagination
-          component="div"
-          count={totalElements}
-          page={paginationModel.page}
-          onPageChange={handlePageChange}
-          rowsPerPage={paginationModel.pageSize}
-          onRowsPerPageChange={handlePageSizeChange}
-          rowsPerPageOptions={[10, 25, 50]}
-          labelRowsPerPage="Số dòng mỗi trang"
+          count={totalElements} // Số lượng tổng các phần tử từ API
+          page={paginationModel.page} // Trang hiện tại
+          onPageChange={handlePageChange} // Hàm xử lý thay đổi trang
+          rowsPerPage={paginationModel.pageSize} // Số dòng trên mỗi trang
+          onRowsPerPageChange={handlePageSizeChange} // Hàm xử lý thay đổi số dòng trên mỗi trang
+          rowsPerPageOptions={[10, 25, 50]} // Tùy chọn số dòng mỗi trang
+          labelRowsPerPage="Số dòng mỗi trang" // Nhãn số dòng mỗi trang
           labelDisplayedRows={({ from, to, count }) =>
             `${from}–${to} trong số ${count !== -1 ? count : `hơn ${to}`}`
           }
@@ -645,6 +665,7 @@ const HandleUniform = () => {
             },
           }}
         />
+
         <Dialog open={openConfirmDialog} onClose={handleConfirmClose}>
           <DialogTitle
             sx={{ color: "#008689", fontWeight: "bold", fontSize: "15px" }}
