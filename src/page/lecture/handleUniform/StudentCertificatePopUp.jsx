@@ -88,7 +88,7 @@ const StudentCertificatePopUp = ({ open, onClose, id }) => {
         </Box>
         <Box
           sx={{
-            display: "flex",
+            dưplay: "flex",
             justifyContent: "space-between",
             alignItems: { xs: "start", lg: "center" },
           }}

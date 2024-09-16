@@ -6,7 +6,12 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Cancel, CheckCircle, EditOutlined } from "@mui/icons-material";
+import {
+  Cancel,
+  CheckCircle,
+  EditOutlined,
+  PrintOutlined,
+} from "@mui/icons-material";
 import {
   Container,
   FormControl,
@@ -30,6 +35,7 @@ import {
   getAllAdmin,
   getCampus,
   getStatusUniform,
+  printToShip,
   setApprove,
 } from "../../../features/orderSlice/OrderSlice";
 import StudentCertificatePopUp from "./StudentCertificatePopUp";
@@ -68,6 +74,7 @@ const HandleUniform = () => {
   const timestamp = useSelector((state) => state.order?.timestamp);
   const success = useSelector((state) => state.order?.success);
   const dispatch = useDispatch();
+  const link = useSelector((state) => state.order.printToShip?.body);
 
   useEffect(() => {
     if (!loading && timestamp) {
@@ -78,7 +85,11 @@ const HandleUniform = () => {
       }
     }
   }, [loading, message, success, timestamp]);
-
+  useEffect(() => {
+    if (link) {
+      window.open(link, "_blank"); // Mở link trong tab mới
+    }
+  }, [link]);
   const approve = useSelector((state) => state.order.getAllAdmin?.body || []);
   const statusDorm = useSelector(
     (state) => state.order.getStatusUniform?.body || []
@@ -93,12 +104,20 @@ const HandleUniform = () => {
     setId(id);
     setOpenModal(true); // Sửa open thành openModal
   };
-
+  const handlePrintToShip = (id) => {
+    console.log("Received ID:", id); // Kiểm tra giá trị của ID
+    if (id) {
+      dispatch(printToShip(id));
+    } else {
+      console.error("ID is undefined!");
+    }
+  };
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setDenyReason("");
     setApproveNote("");
   };
+  const [selectedIsShip, setSelectedIsShip] = useState(false);
   const dataSearch = useDebounce(search, 1000);
   const handleApprove = () => {
     const formDataAprove = {
@@ -110,10 +129,22 @@ const HandleUniform = () => {
       pageSize: paginationModel.pageSize,
       search: dataSearch,
       status: selectedStatus,
-      campusId: selectedCampus,
+      campusId: selectedIsShip ? null : selectedCampus,
+      isShip: selectedIsShip,
     };
     dispatch(setApprove({ formDataAprove, formDataGetAll, id: selectedId }));
     handleCloseDialog();
+  };
+
+  const handleCampusChange = (event) => {
+    const value = event.target.value;
+    if (value === "true") {
+      setSelectedIsShip(true);
+      setSelectedCampus(null);
+    } else {
+      setSelectedIsShip(false);
+      setSelectedCampus(value);
+    }
   };
 
   useEffect(() => {
@@ -122,8 +153,8 @@ const HandleUniform = () => {
       pageSize: paginationModel.pageSize,
       search: dataSearch,
       status: selectedStatus,
-      // sortOption: selectedSort,
-      campusId: selectedCampus,
+      campusId: selectedIsShip ? null : selectedCampus, // campusId là null khi isShip = true
+      isShip: selectedIsShip,
     };
     dispatch(getAllAdmin(formData));
   }, [
@@ -133,6 +164,7 @@ const HandleUniform = () => {
     dataSearch,
     selectedStatus,
     selectedCampus,
+    selectedIsShip,
   ]);
 
   useEffect(() => {
@@ -160,11 +192,16 @@ const HandleUniform = () => {
   }));
   const [openModal, setOpenModal] = useState(false);
   const [id, setId] = useState("");
-
   const handleCloseDetailPopUp = (id) => {
     setId(id);
     setOpenModal(true);
   };
+  const isShip = [
+    {
+      id: true,
+      name: "Ship",
+    },
+  ];
 
   const columns = [
     { field: "studentId", headerName: "MSSV", width: 100 },
@@ -201,6 +238,13 @@ const HandleUniform = () => {
           icon={<EditOutlined sx={{ fontSize: "20px" }} />}
           label="Chi tiết"
           onClick={() => handleOpenDetailPopUp(params.id)} // Sử dụng hàm đã sửa
+          sx={{ color: "blue", fontWeight: "bold", fontSize: "13px" }}
+        />,
+
+        <GridActionsCellItem
+          icon={<PrintOutlined sx={{ fontSize: "20px" }} />}
+          label="In vận đơn"
+          onClick={() => handlePrintToShip(params.id)} // Sử dụng hàm đã sửa
           sx={{ color: "blue", fontWeight: "bold", fontSize: "13px" }}
         />,
       ],
@@ -297,8 +341,8 @@ const HandleUniform = () => {
             </FormLabel>
             <RadioGroup
               aria-label="campusMethod"
-              value={selectedCampus}
-              onChange={(e) => setSelectedCampus(e.target.value)}
+              value={selectedIsShip ? "true" : selectedCampus}
+              onChange={handleCampusChange}
               row
               sx={{
                 display: "flex",
@@ -332,6 +376,34 @@ const HandleUniform = () => {
                     },
                   }}
                   label={`Cơ sở ${campus.id}`}
+                />
+              ))}
+              {isShip?.map((ship) => (
+                <FormControlLabel
+                  key={ship.id}
+                  value="true" // Giá trị "true" để xác định ship
+                  control={
+                    <Radio
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        "&.Mui-checked": { color: "#008689" },
+                        "&.Mui-checked + .MuiFormControlLabel-label ": {
+                          color: "#008689",
+                          fontSize: "15px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  }
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                      color: "rgb(102, 117, 128)",
+                      fontWeight: "500",
+                    },
+                  }}
+                  label={`${ship.name}`}
                 />
               ))}
             </RadioGroup>

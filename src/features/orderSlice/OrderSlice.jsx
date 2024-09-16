@@ -337,6 +337,7 @@ export const getAllApprove = createAsyncThunk(
     }
   }
 );
+
 export const setApprove = createAsyncThunk(
   "order/setApprove",
   async ({ formDataAprove, formDataGetAll, id }, { rejectWithValue }) => {
@@ -375,6 +376,40 @@ export const setApprove = createAsyncThunk(
         // localStorage.clear();
         // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const printToShip = createAsyncThunk(
+  "order/printToShip",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      // Không cần thiết lập 'Content-Type' cho FormData, Axios sẽ tự động thiết lập
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      // Gửi yêu cầu POST với formData
+      const response = await axios.get(
+        `${API_BASE_URL}/order/printToShip/${id}`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi ủy quyền
+      }
+
       return rejectWithValue(error.message);
     }
   }
@@ -448,7 +483,7 @@ export const getAllAdmin = createAsyncThunk(
   }
 );
 export const getStatusUniform = createAsyncThunk(
-  "admin/getStatusUniform",
+  "order/getStatusUniform",
   async (_, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
@@ -709,7 +744,18 @@ const orderSlice = createSlice({
         state.timestamp = action.payload.message.timestamp;
         state.getAllAdmin = action.payload.response;
       })
-      .addCase(setApprove.rejected, (state, action) => {
+      .addCase(printToShip.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(printToShip.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
+        state.printToShip = action.payload;
+      })
+      .addCase(printToShip.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.message || action.error.message;
       })
