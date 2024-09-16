@@ -357,11 +357,54 @@ export const setApprove = createAsyncThunk(
         formDataAprove,
         config
       );
-      const message2 = await axios.put(
-        `${API_BASE_URL}/order/handle?orderId=${id}`,
-        { shipCode: "", shipFee: 0 },
+      // const message2 = await axios.put(
+      //   `${API_BASE_URL}/order/handle?orderId=${id}`,
+      //   { shipCode: "", shipFee: 0 },
+      //   config
+      // );
+      const response = await axios.post(
+        `${API_BASE_URL}/order/getAllAdmin`,
+        formDataGetAll,
         config
       );
+      return { message: message.data, response: response.data };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const handleOrder = createAsyncThunk(
+  "order/handle",
+  async ({ formDataGetAll, id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const message = await axios.put(
+        `${API_BASE_URL}/order/handle?orderId=${id}`,
+        {},
+        config
+      );
+      // const message2 = await axios.put(
+      //   `${API_BASE_URL}/order/handle?orderId=${id}`,
+      //   { shipCode: "", shipFee: 0 },
+      //   config
+      // );
       const response = await axios.post(
         `${API_BASE_URL}/order/getAllAdmin`,
         formDataGetAll,
@@ -738,6 +781,17 @@ const orderSlice = createSlice({
         state.error = null;
       })
       .addCase(setApprove.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.getAllAdmin = action.payload.response;
+      })
+      .addCase(handleOrder.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(handleOrder.fulfilled, (state, action) => {
         state.loading = false;
         state.message = action.payload.message.message;
         state.success = action.payload.message.success;

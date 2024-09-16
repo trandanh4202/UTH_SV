@@ -1,17 +1,4 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-/* eslint-disable react/jsx-key */
 import Box from "@mui/material/Box";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
-import * as React from "react";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import {
-  Cancel,
-  CheckCircle,
-  EditOutlined,
-  PrintOutlined,
-} from "@mui/icons-material";
 import {
   Container,
   FormControl,
@@ -21,39 +8,42 @@ import {
   Radio,
   RadioGroup,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  TablePagination,
 } from "@mui/material";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import TextField from "@mui/material/TextField";
+import * as React from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  BookmarkAddOutlined,
+  Cancel,
+  CheckCircle,
+  EditOutlined,
+  PrintOutlined,
+} from "@mui/icons-material";
 import { toast } from "react-toastify";
 import useDebounce from "../../../components/hooks/UseDebounce";
 import {
   getAllAdmin,
   getCampus,
   getStatusUniform,
+  handleOrder,
   printToShip,
   setApprove,
 } from "../../../features/orderSlice/OrderSlice";
 import StudentCertificatePopUp from "./StudentCertificatePopUp";
-
-function QuickSearchToolbar({ searchValue, onSearchChange }) {
-  return (
-    <Box sx={{ p: 0.5, pb: 0 }}>
-      <TextField
-        variant="outlined"
-        size="small"
-        placeholder="Tìm kiếm..."
-        value={searchValue}
-        onChange={onSearchChange}
-        sx={{ width: "100%" }}
-      />
-    </Box>
-  );
-}
 
 const HandleUniform = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -73,6 +63,7 @@ const HandleUniform = () => {
   const message = useSelector((state) => state.order?.message);
   const timestamp = useSelector((state) => state.order?.timestamp);
   const success = useSelector((state) => state.order?.success);
+  const totalElements = useSelector((state) => state.order?.totalElements || 0); // Tổng số phần tử cho phân trang
   const dispatch = useDispatch();
   const link = useSelector((state) => state.order.printToShip?.body);
 
@@ -85,40 +76,47 @@ const HandleUniform = () => {
       }
     }
   }, [loading, message, success, timestamp]);
+
   useEffect(() => {
     if (link) {
-      window.open(link, "_blank"); // Mở link trong tab mới
+      window.open(link, "_blank");
     }
   }, [link]);
+
   const approve = useSelector((state) => state.order.getAllAdmin?.body || []);
   const statusDorm = useSelector(
     (state) => state.order.getStatusUniform?.body || []
   );
   const campusUni = useSelector((state) => state.order.getCampus?.body);
+
   const handleOpenDialog = (id, isApprove) => {
     setSelectedId(id);
     setIsApproveAction(isApprove);
     setOpenDialog(true);
   };
+
   const handleOpenDetailPopUp = (id) => {
     setId(id);
-    setOpenModal(true); // Sửa open thành openModal
+    setOpenModal(true);
   };
+
   const handlePrintToShip = (id) => {
-    console.log("Received ID:", id); // Kiểm tra giá trị của ID
     if (id) {
       dispatch(printToShip(id));
     } else {
       console.error("ID is undefined!");
     }
   };
+
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setDenyReason("");
     setApproveNote("");
   };
+
   const [selectedIsShip, setSelectedIsShip] = useState(false);
   const dataSearch = useDebounce(search, 1000);
+
   const handleApprove = () => {
     const formDataAprove = {
       reason: isApproveAction ? approveNote : denyReason,
@@ -153,7 +151,7 @@ const HandleUniform = () => {
       pageSize: paginationModel.pageSize,
       search: dataSearch,
       status: selectedStatus,
-      campusId: selectedIsShip ? null : selectedCampus, // campusId là null khi isShip = true
+      campusId: selectedIsShip ? null : selectedCampus,
       isShip: selectedIsShip,
     };
     dispatch(getAllAdmin(formData));
@@ -180,86 +178,63 @@ const HandleUniform = () => {
     ngaySinh: item.student?.ngaySinh,
     phoneNumber: item.student?.phone || "N/A",
     email: item.student?.email || "N/A",
-
     registrationDate: item.createdAt
       ? new Date(item.createdAt).toLocaleDateString()
       : "N/A",
     status: item.status,
+    statusCode: item.statusCode,
     reason: item.reason,
     processDate: item.updatedAt
       ? new Date(item.updatedAt).toLocaleDateString()
       : "N/A",
+    isShip: item.isShip,
   }));
+
   const [openModal, setOpenModal] = useState(false);
   const [id, setId] = useState("");
-  const handleCloseDetailPopUp = (id) => {
-    setId(id);
-    setOpenModal(true);
+
+  // Hàm xử lý thay đổi trang
+  const handlePageChange = (event, newPage) => {
+    setPaginationModel((prev) => ({ ...prev, page: newPage }));
   };
-  const isShip = [
-    {
-      id: true,
-      name: "Ship",
-    },
-  ];
 
-  const columns = [
-    { field: "studentId", headerName: "MSSV", width: 100 },
-    { field: "name", headerName: "Họ và tên", width: 200 },
-    { field: "class", headerName: "Lớp", width: 150 },
-    { field: "ngaySinh", headerName: "Ngày sinh", width: 150 },
-    { field: "phoneNumber", headerName: "Số điện thoại", width: 150 },
-    { field: "email", headerName: "Email", width: 200 },
-    { field: "registrationDate", headerName: "Ngày đăng ký", width: 150 },
-    { field: "status", headerName: "Trạng thái", width: 150 },
-    { field: "processDate", headerName: "Ngày xử lý", width: 150 },
-    { field: "reason", headerName: "Ghi chú", width: 150 },
+  // Hàm xử lý thay đổi số dòng trên mỗi trang
+  const handlePageSizeChange = (event) => {
+    setPaginationModel({
+      pageSize: parseInt(event.target.value, 10),
+      page: 0, // Reset về trang đầu khi thay đổi số dòng trên mỗi trang
+    });
+  };
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+  const [confirmOrderId, setConfirmOrderId] = useState(null);
 
-    {
-      field: "actions",
-      headerName: "Hành động",
-      type: "actions",
-      width: 150,
-      getActions: (params) => [
-        <GridActionsCellItem
-          icon={<CheckCircle sx={{ fontSize: "20px" }} />}
-          label="Duyệt"
-          onClick={() => handleOpenDialog(params.id, true)}
-          disabled={params.row.status !== "Chờ duyệt"}
-          sx={{ color: "#008689", fontWeight: "bold", fontSize: "13px" }}
-        />,
-        <GridActionsCellItem
-          icon={<Cancel sx={{ fontSize: "20px" }} />}
-          label="Từ chối"
-          onClick={() => handleOpenDialog(params.id, false)}
-          disabled={params.row.status !== "Chờ duyệt"}
-          sx={{ color: "red", fontWeight: "bold", fontSize: "13px" }}
-        />,
-        <GridActionsCellItem
-          icon={<EditOutlined sx={{ fontSize: "20px" }} />}
-          label="Chi tiết"
-          onClick={() => handleOpenDetailPopUp(params.id)} // Sử dụng hàm đã sửa
-          sx={{ color: "blue", fontWeight: "bold", fontSize: "13px" }}
-        />,
+  const handleConfirmOpen = (id) => {
+    setConfirmOrderId(id);
+    setOpenConfirmDialog(true);
+  };
 
-        <GridActionsCellItem
-          icon={<PrintOutlined sx={{ fontSize: "20px" }} />}
-          label="In vận đơn"
-          onClick={() => handlePrintToShip(params.id)} // Sử dụng hàm đã sửa
-          sx={{ color: "blue", fontWeight: "bold", fontSize: "13px" }}
-          disabled={
-            params.row.status !== "Đã đăng ký thành công" &&
-            params.row.isShip !== true
-          }
-        />,
-      ],
-    },
-  ];
+  const handleConfirmClose = () => {
+    setOpenConfirmDialog(false);
+    setConfirmOrderId(null);
+  };
+
+  const handleConfirmOrder = () => {
+    const formDataGetAll = {
+      pageIndex: paginationModel.page + 1,
+      pageSize: paginationModel.pageSize,
+      search: dataSearch,
+      status: selectedStatus,
+      campusId: selectedIsShip ? null : selectedCampus,
+      isShip: selectedIsShip,
+    };
+    dispatch(handleOrder({ formDataGetAll, id: confirmOrderId }));
+    handleConfirmClose();
+  };
 
   return (
     <>
       <StudentCertificatePopUp
-        open={openModal} // Sử dụng openModal đã được khai báo
+        open={openModal}
         onClose={() => setOpenModal(false)}
         id={id}
       />
@@ -383,168 +358,421 @@ const HandleUniform = () => {
                   label={`Cơ sở ${campus.id}`}
                 />
               ))}
-              {isShip?.map((ship) => (
-                <FormControlLabel
-                  key={ship.id}
-                  value="true" // Giá trị "true" để xác định ship
-                  control={
-                    <Radio
-                      sx={{
-                        width: 30,
-                        height: 30,
-                        "&.Mui-checked": { color: "#008689" },
-                        "&.Mui-checked + .MuiFormControlLabel-label ": {
-                          color: "#008689",
-                          fontSize: "15px",
-                          fontWeight: "700",
-                        },
-                      }}
-                    />
-                  }
-                  sx={{
-                    "& .MuiFormControlLabel-label": {
-                      fontSize: "15px",
-                      color: "rgb(102, 117, 128)",
-                      fontWeight: "500",
-                    },
-                  }}
-                  label={`${ship.name}`}
-                />
-              ))}
+              <FormControlLabel
+                value="true"
+                control={
+                  <Radio
+                    sx={{
+                      width: 30,
+                      height: 30,
+                      "&.Mui-checked": { color: "#008689" },
+                      "&.Mui-checked + .MuiFormControlLabel-label ": {
+                        color: "#008689",
+                        fontSize: "15px",
+                        fontWeight: "700",
+                      },
+                    }}
+                  />
+                }
+                sx={{
+                  "& .MuiFormControlLabel-label": {
+                    fontSize: "15px",
+                    color: "rgb(102, 117, 128)",
+                    fontWeight: "500",
+                  },
+                }}
+                label="Ship"
+              />
             </RadioGroup>
           </FormControl>
         </Paper>
       </Container>
       <Paper elevation={4} sx={{ padding: "20px", borderRadius: "10px" }}>
-        <Box sx={{ height: "50vh", width: "100%" }}>
-          <QuickSearchToolbar
-            searchValue={search}
-            onSearchChange={(e) => setSearch(e.target.value)}
-          />
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            getRowId={(row) => row.id}
-            pagination
-            paginationMode="server"
-            paginationModel={paginationModel}
-            onPaginationModelChange={setPaginationModel}
-            rowCount={approve.totalElements}
-            localeText={{
-              noRowsLabel: "Không có dữ liệu để xử lý",
-              MuiTablePagination: {
-                labelRowsPerPage: "Số dòng mỗi trang",
-              },
-            }}
-            sx={{
-              "& .MuiDataGrid-cell": {
-                color: "black",
-                fontWeight: "bold",
-                fontSize: "13px",
-              },
-              "& .MuiDataGrid-columnHeaderTitle": {
-                color: "red",
-                fontWeight: "bold",
-                fontSize: "15px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar": {
-                width: "10px",
-                height: "10px",
-                borderRadius: "10px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb": {
-                backgroundColor: "#008689",
-                borderRadius: "10px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover": {
-                backgroundColor: "#008950",
-                borderRadius: "10px",
-              },
-              "& .MuiDataGrid-virtualScroller::-webkit-scrollbar-track": {
-                backgroundColor: "#f1f1f1",
-                borderRadius: "10px",
-              },
-            }}
-          />
-
-          <Dialog open={openDialog} onClose={handleCloseDialog}>
-            <DialogTitle
-              sx={{ color: "#008689", fontWeight: "bold", fontSize: "15px" }}
-            >
-              {isApproveAction ? "Xác nhận duyệt" : "Xác nhận từ chối"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText sx={{ color: "red", fontWeight: "bold" }}>
-                {isApproveAction
-                  ? "Bạn có chắc chắn muốn duyệt đơn đăng ký này không?"
-                  : "Vui lòng nhập lý do từ chối."}
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                label={isApproveAction ? "Ghi chú" : "Lý do từ chối"}
-                type="text"
-                fullWidth
-                variant="outlined"
-                value={isApproveAction ? approveNote : denyReason}
-                onChange={(e) =>
-                  isApproveAction
-                    ? setApproveNote(e.target.value)
-                    : setDenyReason(e.target.value)
-                }
-                sx={{
-                  "& .MuiInputBase-input": {
-                    color: "red",
-                    fontWeight: "bold",
-                  },
-                }}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={handleCloseDialog}
-                sx={{ color: "red", fontWeight: "bold" }}
-              >
-                Hủy
-              </Button>
-              <Button
-                onClick={handleApprove}
-                disabled={
-                  (!isApproveAction && !denyReason.trim()) ||
-                  (isApproveAction && !approveNote.trim())
-                }
-                variant="contained"
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: "#008588",
-                  color: "white",
-                  borderRadius: "8px",
-                  border: "3px solid #0085885a",
-                  transition: "all ease 0.4s",
-                  padding: "0px",
-                  "&:hover": {
-                    borderColor: "#008689",
-                    backgroundColor: "white",
-                    color: "#008689",
-                    boxShadow: "0 0 10px #008689",
-                  },
-                }}
-              >
-                <Typography
-                  sx={{
-                    fontSize: { xs: "11px", lg: "15px" },
-                    fontWeight: "700px",
-                    padding: "5px",
-                  }}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
                 >
-                  Xác nhận
-                </Typography>
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Box>
+                  MSSV
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Họ và tên
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Lớp
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Ngày sinh
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Số điện thoại
+                </TableCell>
+
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Ngày đăng ký
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Trạng thái
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Ngày xử lý
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Ghi chú
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Hành động
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows?.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.studentId}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.name}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.class}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.ngaySinh}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.phoneNumber}
+                    </Typography>
+                  </TableCell>
+
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.registrationDate}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.status}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.processDate}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.reason}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    {/* Nút "Hủy" chỉ có ở trạng thái NEW */}
+                    {row.statusCode === "NEW" && (
+                      <Button
+                        startIcon={<Cancel />}
+                        onClick={() => handleOpenDialog(row.id, false)}
+                        sx={{
+                          color: "#008689",
+                          fontWeight: "bold",
+                          fontSize: "13px",
+                        }}
+                      ></Button>
+                    )}
+                    {/* Nút "Xác nhận" có ở trạng thái NEW và Đã duyệt */}
+                    {(row.statusCode === "NEW" ||
+                      row.statusCode === "APPROVE") && (
+                      <Button
+                        startIcon={<CheckCircle />}
+                        onClick={() => handleOpenDialog(row.id, true)}
+                        sx={{
+                          color: "#008689",
+                          fontWeight: "bold",
+                          fontSize: "13px",
+                        }}
+                      ></Button>
+                    )}
+                    {row.statusCode === "APPROVED" && (
+                      <Button
+                        startIcon={<BookmarkAddOutlined />}
+                        onClick={() => handleConfirmOpen(row.id)}
+                        sx={{
+                          color: "#008689",
+                          fontWeight: "bold",
+                          fontSize: "13px",
+                        }}
+                      >
+                        Xác nhận bước 2
+                      </Button>
+                    )}
+                    {/* Nút "In vận đơn" có ở trạng thái Đăng ký thành công và isShip = true */}
+                    {row.statusCode === "WAIT_SHIPPING" && row.isShip && (
+                      <Button
+                        startIcon={<PrintOutlined />}
+                        onClick={() => handlePrintToShip(row.id)}
+                        sx={{
+                          color: "#008689",
+                          fontWeight: "bold",
+                          fontSize: "13px",
+                        }}
+                      ></Button>
+                    )}
+                    {/* Nút "Chi tiết" cho tất cả các trạng thái */}
+                    <Button
+                      startIcon={<EditOutlined />}
+                      onClick={() => handleOpenDetailPopUp(row.id)}
+                      sx={{
+                        color: "#008689",
+                        fontWeight: "bold",
+                        fontSize: "13px",
+                      }}
+                    ></Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        {/* Phân trang */}
+        <TablePagination
+          component="div"
+          count={totalElements}
+          page={paginationModel.page}
+          onPageChange={handlePageChange}
+          rowsPerPage={paginationModel.pageSize}
+          onRowsPerPageChange={handlePageSizeChange}
+          rowsPerPageOptions={[10, 25, 50]}
+          labelRowsPerPage="Số dòng mỗi trang"
+          labelDisplayedRows={({ from, to, count }) =>
+            `${from}–${to} trong số ${count !== -1 ? count : `hơn ${to}`}`
+          }
+          sx={{
+            "& .MuiTablePagination-root": {
+              fontSize: "16px", // Tăng kích thước font tổng thể
+            },
+            "& .MuiTablePagination-toolbar": {
+              fontSize: "16px", // Tăng kích thước font cho toolbar
+            },
+            "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
+              {
+                fontSize: "16px", // Tăng kích thước font cho các label và số hàng hiển thị
+              },
+            "& .MuiTablePagination-input": {
+              fontSize: "16px", // Tăng kích thước font cho input chọn số dòng trên mỗi trang
+            },
+          }}
+        />
+        <Dialog open={openConfirmDialog} onClose={handleConfirmClose}>
+          <DialogTitle
+            sx={{ color: "#008689", fontWeight: "bold", fontSize: "15px" }}
+          >
+            Xác nhận chuyển trạng thái
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ color: "red", fontWeight: "bold" }}>
+              Bạn có chắc chắn muốn chuyển trạng thái đơn hàng này không?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleConfirmClose}
+              sx={{ color: "red", fontWeight: "bold" }}
+            >
+              Hủy
+            </Button>
+            <Button
+              onClick={handleConfirmOrder}
+              variant="contained"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#008588",
+                color: "white",
+                borderRadius: "8px",
+                border: "3px solid #0085885a",
+                transition: "all ease 0.4s",
+                padding: "0px",
+                "&:hover": {
+                  borderColor: "#008689",
+                  backgroundColor: "white",
+                  color: "#008689",
+                  boxShadow: "0 0 10px #008689",
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: "11px", lg: "15px" },
+                  fontWeight: "700px",
+                  padding: "5px",
+                }}
+              >
+                Xác nhận
+              </Typography>
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <DialogTitle
+            sx={{ color: "#008689", fontWeight: "bold", fontSize: "15px" }}
+          >
+            {isApproveAction ? "Xác nhận duyệt" : "Xác nhận từ chối"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ color: "red", fontWeight: "bold" }}>
+              {isApproveAction
+                ? "Bạn có chắc chắn muốn duyệt đơn đăng ký này không?"
+                : "Vui lòng nhập lý do từ chối."}
+            </DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              label={isApproveAction ? "Ghi chú" : "Lý do từ chối"}
+              type="text"
+              fullWidth
+              variant="outlined"
+              value={isApproveAction ? approveNote : denyReason}
+              onChange={(e) =>
+                isApproveAction
+                  ? setApproveNote(e.target.value)
+                  : setDenyReason(e.target.value)
+              }
+              sx={{
+                "& .MuiInputBase-input": {
+                  color: "red",
+                  fontWeight: "bold",
+                },
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={handleCloseDialog}
+              sx={{ color: "red", fontWeight: "bold" }}
+            >
+              Hủy
+            </Button>
+            <Button
+              onClick={handleApprove}
+              disabled={
+                (!isApproveAction && !denyReason.trim()) ||
+                (isApproveAction && !approveNote.trim())
+              }
+              variant="contained"
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                backgroundColor: "#008588",
+                color: "white",
+                borderRadius: "8px",
+                border: "3px solid #0085885a",
+                transition: "all ease 0.4s",
+                padding: "0px",
+                "&:hover": {
+                  borderColor: "#008689",
+                  backgroundColor: "white",
+                  color: "#008689",
+                  boxShadow: "0 0 10px #008689",
+                },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { xs: "11px", lg: "15px" },
+                  fontWeight: "700px",
+                  padding: "5px",
+                }}
+              >
+                Xác nhận
+              </Typography>
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
     </>
   );
