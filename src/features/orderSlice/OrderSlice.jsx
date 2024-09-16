@@ -383,7 +383,7 @@ export const setApprove = createAsyncThunk(
 
 export const handleOrder = createAsyncThunk(
   "order/handle",
-  async ({ formDataGetAll, id }, { rejectWithValue }) => {
+  async ({ formDataAprove, id }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -407,7 +407,7 @@ export const handleOrder = createAsyncThunk(
       // );
       const response = await axios.post(
         `${API_BASE_URL}/order/getAllAdmin`,
-        formDataGetAll,
+        formDataAprove,
         config
       );
       return { message: message.data, response: response.data };
@@ -476,6 +476,41 @@ export const getCampus = createAsyncThunk(
       // Gửi yêu cầu POST với formData
       const response = await axios.get(
         `${API_BASE_URL}/order/getCampus`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi ủy quyền
+      }
+
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const getGroup = createAsyncThunk(
+  "order/getGroup",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      // Không cần thiết lập 'Content-Type' cho FormData, Axios sẽ tự động thiết lập
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Gửi yêu cầu POST với formData
+      const response = await axios.get(
+        `${API_BASE_URL}/order/getGroup`,
         config
       );
 
@@ -825,6 +860,21 @@ const orderSlice = createSlice({
         state.getCampus = action.payload;
       })
       .addCase(getCampus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getGroup.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getGroup.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
+        state.getGroup = action.payload;
+      })
+      .addCase(getGroup.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

@@ -38,6 +38,7 @@ import useDebounce from "../../../components/hooks/UseDebounce";
 import {
   getAllAdmin,
   getCampus,
+  getGroup,
   getStatusUniform,
   handleOrder,
   printToShip,
@@ -136,6 +137,12 @@ const HandleUniform = () => {
     dispatch(setApprove({ formDataAprove, formDataGetAll, id: selectedId }));
     handleCloseDialog();
   };
+  const [selectedGroup, setSelectedGroup] = useState(1);
+
+  const handleGroupChange = (event) => {
+    const value = event.target.value;
+    setSelectedGroup(value);
+  };
 
   const handleCampusChange = (event) => {
     const value = event.target.value;
@@ -154,18 +161,29 @@ const HandleUniform = () => {
       pageIndex: paginationModel.page + 1, // Thêm 1 nếu API sử dụng index bắt đầu từ 1
       pageSize: paginationModel.pageSize,
       search: dataSearch, // Sử dụng giá trị tìm kiếm đã debounce
-      status: null,
-      campusId: null,
-      isShip: null,
+      status: selectedStatus,
+      campusId: selectedCampus,
+      groupId: selectedGroup,
+      isShip: selectedIsShip,
     };
     dispatch(getAllAdmin(formData));
-  }, [dispatch, paginationModel.page, paginationModel.pageSize, dataSearch]);
+  }, [
+    dispatch,
+    paginationModel.page,
+    paginationModel.pageSize,
+    dataSearch,
+    selectedIsShip,
+    selectedCampus,
+    selectedStatus,
+    selectedGroup,
+  ]);
 
   useEffect(() => {
     dispatch(getStatusUniform());
     dispatch(getCampus());
+    dispatch(getGroup());
   }, [dispatch]);
-
+  const group = useSelector((state) => state.order.getGroup?.body);
   const rows = approve?.content?.map((item) => ({
     id: item.id,
     studentId: item.student?.code,
@@ -173,7 +191,7 @@ const HandleUniform = () => {
     class: item.student?.className,
     ngaySinh: item.student?.ngaySinh,
     phoneNumber: item.student?.phone || "N/A",
-    groupProductDto: item.groupProductDto?.name,
+    groupName: item.groupName,
     email: item.student?.email || "N/A",
     registrationDate: item.createdAt
       ? new Date(item.createdAt).toLocaleDateString()
@@ -223,6 +241,7 @@ const HandleUniform = () => {
       status: selectedStatus,
       campusId: selectedIsShip ? null : selectedCampus,
       isShip: selectedIsShip,
+      groupId: selectedGroup,
     };
     dispatch(handleOrder({ formDataGetAll, id: confirmOrderId }));
     handleConfirmClose();
@@ -384,6 +403,64 @@ const HandleUniform = () => {
               />
             </RadioGroup>
           </FormControl>
+          <FormControl
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FormLabel
+              sx={{
+                fontSize: "15px",
+                fontWeight: "600",
+                color: "red",
+                "&.Mui-focused": { color: "red" },
+              }}
+            >
+              Chọn cơ sở duyệt
+            </FormLabel>
+            <RadioGroup
+              aria-label="campusMethod"
+              value={selectedGroup}
+              onChange={handleGroupChange}
+              row
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {group?.map((gr) => (
+                <FormControlLabel
+                  key={gr.id}
+                  value={gr.id}
+                  control={
+                    <Radio
+                      sx={{
+                        width: 30,
+                        height: 30,
+                        "&.Mui-checked": { color: "#008689" },
+                        "&.Mui-checked + .MuiFormControlLabel-label ": {
+                          color: "#008689",
+                          fontSize: "15px",
+                          fontWeight: "700",
+                        },
+                      }}
+                    />
+                  }
+                  sx={{
+                    "& .MuiFormControlLabel-label": {
+                      fontSize: "15px",
+                      color: "rgb(102, 117, 128)",
+                      fontWeight: "500",
+                    },
+                  }}
+                  label={gr.name}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
           <TextField
             label="Tìm kiếm"
             variant="outlined"
@@ -522,7 +599,7 @@ const HandleUniform = () => {
                         fontWeight: "600",
                       }}
                     >
-                      {row.groupProductDto}
+                      {row.groupName}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ color: "black" }}>
