@@ -191,6 +191,7 @@ const HandleUniform = () => {
     class: item.student?.className,
     ngaySinh: item.student?.ngaySinh,
     phoneNumber: item.student?.phone || "N/A",
+    address: item?.address || "N/A",
     groupName: item.groupName,
     email: item.student?.email || "N/A",
     registrationDate: item.createdAt
@@ -504,6 +505,11 @@ const HandleUniform = () => {
                 <TableCell
                   sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
                 >
+                  Địa chỉ
+                </TableCell>
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
                   Loại đăng ký
                 </TableCell>
                 <TableCell
@@ -600,6 +606,17 @@ const HandleUniform = () => {
                       }}
                     >
                       {row.groupName}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
+                      {row.address}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ color: "black" }}>

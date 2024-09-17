@@ -2,6 +2,7 @@
 import {
   Box,
   Button,
+  Divider,
   Grid,
   MenuItem,
   Select,
@@ -978,6 +979,28 @@ const PersonalInfo = () => {
                     sx={inputStyles}
                   />
                 </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider
+                  orientation="vertical"
+                  sx={{
+                    height: "1px",
+                    border: "1px solid red",
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography
+                  sx={{
+                    fontSize: "15px",
+                    color: "red",
+                    fontWeight: "600",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Thẻ BHYT từ 01/10/2024 - 31/12/2025 ( 15 tháng). Thẻ BHTN từ
+                  01/11/2024 - 01/11/2028 ( 4 năm).
+                </Typography>
               </Grid>
               <Grid item xs={12} lg={2}>
                 <Box
