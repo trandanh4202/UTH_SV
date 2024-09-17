@@ -191,8 +191,9 @@ const HandleUniform = () => {
     class: item.student?.className,
     ngaySinh: item.student?.ngaySinh,
     phoneNumber: item.student?.phone || "N/A",
-    address: item?.address || "N/A",
     groupName: item.groupName,
+    address: item?.address || "N/A",
+
     email: item.student?.email || "N/A",
     registrationDate: item.createdAt
       ? new Date(item.createdAt).toLocaleDateString()
@@ -605,7 +606,7 @@ const HandleUniform = () => {
                         fontWeight: "600",
                       }}
                     >
-                      {row.groupName}
+                      {row.address}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ color: "black" }}>
@@ -616,7 +617,7 @@ const HandleUniform = () => {
                         fontWeight: "600",
                       }}
                     >
-                      {row.address}
+                      {row.groupName}
                     </Typography>
                   </TableCell>
                   <TableCell sx={{ color: "black" }}>
