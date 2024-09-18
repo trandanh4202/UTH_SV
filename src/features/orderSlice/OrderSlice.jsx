@@ -383,7 +383,7 @@ export const setApprove = createAsyncThunk(
 
 export const handleOrder = createAsyncThunk(
   "order/handle",
-  async ({ formDataAprove, id }, { rejectWithValue }) => {
+  async ({ formDataGetAll, id }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -407,7 +407,7 @@ export const handleOrder = createAsyncThunk(
       // );
       const response = await axios.post(
         `${API_BASE_URL}/order/getAllAdmin`,
-        formDataAprove,
+        formDataGetAll,
         config
       );
       return { message: message.data, response: response.data };

@@ -416,7 +416,7 @@ const HandleUniform = () => {
                 "&.Mui-focused": { color: "red" },
               }}
             >
-              Chọn cơ sở duyệt
+              Chọn phân loại
             </FormLabel>
             <RadioGroup
               aria-label="campusMethod"
