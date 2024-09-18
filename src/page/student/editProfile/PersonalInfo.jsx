@@ -270,7 +270,7 @@ const PersonalInfo = () => {
     ngayVaoDang: "",
     height: 0,
     weight: 0,
-    schoolEmail: "",
+    // schoolEmail: "",
     iddanToc: 0,
     idtonGiao: 0,
     idtinh: 0,
@@ -316,7 +316,7 @@ const PersonalInfo = () => {
         ngayVaoDang: profile.ngayVaoDang || null,
         height: profile.height || 0,
         weight: profile.weight || 0,
-        schoolEmail: profile.schoolEmail || "",
+        // schoolEmail: profile.schoolEmail || "",
         iddanToc: profile.iddanToc || null,
         idtonGiao: profile.idtonGiao || null,
         idtinh: profile.idtinh || null,
@@ -943,7 +943,7 @@ const PersonalInfo = () => {
                     name="schoolEmail"
                     value={formData.schoolEmail}
                     onChange={handleChange}
-                    successAccess={successAccess}
+                    successAccess={!successAccess}
                     sx={inputStyles}
                   />
                 </Box>

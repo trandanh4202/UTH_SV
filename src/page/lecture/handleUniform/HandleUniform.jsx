@@ -61,7 +61,7 @@ const HandleUniform = () => {
   const dataSearch = useDebounce(search, 1000); // Debounce giá trị tìm kiếm
   const [selectedStatus, setSelectedStatus] = useState("NEW");
   const [selectedSort, setSelectedSort] = useState(2);
-  const [selectedCampus, setSelectedCampus] = useState(1);
+  const [selectedCampus, setSelectedCampus] = useState();
   const loading = useSelector((state) => state.order?.loading);
   const message = useSelector((state) => state.order?.message);
   const timestamp = useSelector((state) => state.order?.timestamp);
@@ -195,15 +195,11 @@ const HandleUniform = () => {
     address: item?.address || "N/A",
 
     email: item.student?.email || "N/A",
-    registrationDate: item.createdAt
-      ? new Date(item.createdAt).toLocaleDateString()
-      : "N/A",
+    registrationDate: item?.createdAt,
     status: item.status,
     statusCode: item.statusCode,
     reason: item.reason,
-    processDate: item.updatedAt
-      ? new Date(item.updatedAt).toLocaleDateString()
-      : "N/A",
+    processDate: item.updatedAt,
     isShip: item.isShip,
   }));
 
