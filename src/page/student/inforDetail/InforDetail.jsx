@@ -352,7 +352,7 @@ const InforDetail = () => {
                     <InfoField
                       label="Địa chỉ liên lạc: "
                       value={` ${profile?.dcllSonha || ""},${
-                        profile?.hkttPhuongXa || ""
+                        profile?.dcllPhuongXa || ""
                       }, ${profile?.dcllHuyen || ""}, ${
                         profile?.dcllTinh || ""
                       }`}
