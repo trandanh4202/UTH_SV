@@ -24,7 +24,7 @@ const FamilyProfile = () => {
     dispatch(getFamily());
   }, [dispatch]);
 
-  const family = useSelector((state) => state.family.family);
+  const family = useSelector((state) => state.family?.family);
   const [modalOpen, setModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [addMode, setAddMode] = useState(false);

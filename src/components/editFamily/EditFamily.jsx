@@ -118,14 +118,33 @@ const EditFamily = ({ open, onClose, editData }) => {
       Object.keys(editData).forEach((field) => {
         setValue(field, editData[field]);
       });
+      console.log(editData);
     } else {
       reset(); // Đặt lại form nếu không có dữ liệu chỉnh sửa
     }
   }, [editData, setValue, reset]);
   const onSubmit = async (data) => {
-    await dispatch(updateFamily({ formData: data, id: editData.id }));
-    onClose(); // Đóng modal sau khi hoàn thành
+    // Create formData object with only required fields
+    const formData = {
+      hoTen: data.hoTen,
+      namSinh: data.namSinh,
+      ngheNghiep: data.ngheNghiep,
+      quocTich: data.quocTich,
+      hoKhau: data.hoKhau,
+      hienNay: data.hienNay,
+      soDienThoai: data.soDienThoai,
+      iddanToc: data.iddanToc,
+      idtonGiao: data.idtonGiao,
+      idquanHe: data.idquanHe,
+    };
+
+    // Dispatch the update action, passing the formData and the member's id
+    await dispatch(updateFamily({ formData, id: editData.id }));
+
+    // Close the modal after successful submission
+    onClose();
   };
+
 
   return (
     <>
