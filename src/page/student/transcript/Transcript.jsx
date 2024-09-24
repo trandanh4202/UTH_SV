@@ -148,9 +148,14 @@ const Transcript = () => {
             <Tabs
               value={selectedTab}
               onChange={handleChangeTab}
-              textColor="primary"
-              indicatorColor="primary"
+              // textColor="primary"
+              // indicatorColor="primary"
               aria-label="tabs"
+              sx={{
+                "& .MuiTabs-indicator": {
+                  backgroundColor: "#008689",
+                },
+              }}
             >
               <Tab
                 sx={{
@@ -452,21 +457,6 @@ const Transcript = () => {
                     <TableHead>
                       <TableRow>
                         <TableCell
-                          colSpan={12}
-                          sx={{
-                            fontWeight: "700",
-                            border: "1px solid rgb(221, 221, 221)",
-                            fontSize: "14px",
-                            textAlign: "center",
-                            backgroundColor: "#008689",
-                            color: "white",
-                          }}
-                        >
-                          KẾT QUẢ MÔN HỌC ĐIỀU KIỆN
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell
                           sx={{
                             fontWeight: "700",
                             border: "1px solid rgb(221, 221, 221)",
@@ -574,7 +564,6 @@ const Transcript = () => {
               <Paper
                 elevation={12}
                 sx={{
-                  margin: { xs: "20px 0", lg: "50px 0" },
                   padding: "10px",
                 }}
               >
@@ -602,21 +591,6 @@ const Transcript = () => {
                 >
                   <Table stickyHeader sx={{}}>
                     <TableHead>
-                      <TableRow>
-                        <TableCell
-                          colSpan={12}
-                          sx={{
-                            fontWeight: "700",
-                            border: "1px solid rgb(221, 221, 221)",
-                            fontSize: "14px",
-                            textAlign: "center",
-                            backgroundColor: "#008689",
-                            color: "white",
-                          }}
-                        >
-                          CHUẨN ĐẦU RA
-                        </TableCell>
-                      </TableRow>
                       <TableRow>
                         <TableCell
                           sx={{
