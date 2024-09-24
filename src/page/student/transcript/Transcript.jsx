@@ -17,6 +17,10 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getTranscript } from "~/features/transcriptSlice/TranscriptSlice";
 import Spinner from "../../../components/Spinner/Spinner";
+import {
+  getCert,
+  getKetQuaDauVao,
+} from "../../../features/transcriptSlice/TranscriptSlice";
 
 const columns = [
   {
@@ -41,6 +45,38 @@ const columns = [
   { field: "isDat", headerName: "Đạt", align: "center" },
   { field: "ghiChu", headerName: "Ghi chú", align: "center" },
 ];
+const columnsDK = [
+  {
+    field: "loaiChungChi",
+    headerName: "Loại chứng chỉ",
+    align: "center",
+    minWidth: "220px",
+  },
+  {
+    field: "theoQuyDinh",
+    headerName: "Theo quy định",
+    align: "left",
+    minWidth: "200px",
+  },
+  { field: "daNop", headerName: "Đã nộp", align: "center" },
+  { field: "xacNhan", headerName: "Xác nhận", align: "center" },
+];
+const columnsAV = [
+  {
+    field: "tenDot",
+    headerName: "Tên đợt",
+    align: "center",
+    minWidth: "220px",
+  },
+  {
+    field: "tenNhom",
+    headerName: "Tên nhóm",
+    align: "left",
+    minWidth: "200px",
+  },
+  { field: "diemSo", headerName: "Điểm số", align: "center" },
+  { field: "ghiChu", headerName: "Ghi chú", align: "center" },
+];
 const formatNumberFields = [
   "diemTBThuongKy",
   "diemThi",
@@ -60,17 +96,325 @@ const Transcript = () => {
   };
 
   const transcript = useSelector((state) => state.transcript?.transcript);
+  const cert = useSelector((state) => state.transcript?.getCert);
+  const ketQuaDauVao = useSelector(
+    (state) => state.transcript?.getKetQuaDauVao
+  );
+
   const loading = useSelector((state) => state.transcript?.loading);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getTranscript());
+    dispatch(getCert());
+    dispatch(getKetQuaDauVao());
   }, [dispatch]);
 
   return (
     <Box>
-      <Container sx={{ minHeight: "500px" }}>
+      <Container sx={{ minHeight: "100px" }}>
+        <Paper
+          elevation={12}
+          sx={{
+            padding: "10px",
+          }}
+        >
+          <TableContainer
+            sx={{
+              "&::-webkit-scrollbar": {
+                width: "10px",
+                height: "10px",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#008689",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: "#008950",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+                borderRadius: "10px",
+              },
+            }}
+            variant="outlined"
+          >
+            <Table stickyHeader sx={{}}>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    colSpan={12}
+                    sx={{
+                      fontWeight: "700",
+                      border: "1px solid rgb(221, 221, 221)",
+                      fontSize: "14px",
+                      textAlign: "center",
+                      backgroundColor: "#008689",
+                      color: "white",
+                    }}
+                  >
+                    KẾT QUẢ MÔN HỌC ĐIỀU KIỆN
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      fontWeight: "700",
+                      border: "1px solid rgb(221, 221, 221)",
+                      fontSize: "14px",
+                      textAlign: "center",
+                      backgroundColor: "#008689",
+                      color: "white",
+                    }}
+                  >
+                    STT
+                  </TableCell>
+                  {columnsAV.map((column) => (
+                    <TableCell
+                      key={column.field}
+                      sx={{
+                        fontWeight: "700",
+                        border: "1px solid rgb(221, 221, 221)",
+                        fontSize: "14px",
+                        textAlign: "center",
+                        minWidth: column.minWidth,
+                        backgroundColor: "#008689",
+                        color: "white",
+                      }}
+                    >
+                      {column.headerName}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <TableBody>
+                  {ketQuaDauVao?.map((c, idC) => (
+                    <React.Fragment key={idC}>
+                      <TableRow key={idC} sx={{ backgroundColor: "#ffffff" }}>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {idC + 1}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.tenDot}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.tenNhom}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.diemSo}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.ghiChu}
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              )}
+            </Table>
+          </TableContainer>
+        </Paper>
+        <Paper
+          elevation={12}
+          sx={{
+            margin: { xs: "20px 0", lg: "50px 0" },
+            padding: "10px",
+          }}
+        >
+          <TableContainer
+            sx={{
+              "&::-webkit-scrollbar": {
+                width: "10px",
+                height: "10px",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                backgroundColor: "#008689",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-thumb:hover": {
+                backgroundColor: "#008950",
+                borderRadius: "10px",
+              },
+              "&::-webkit-scrollbar-track": {
+                backgroundColor: "#f1f1f1",
+                borderRadius: "10px",
+              },
+            }}
+            variant="outlined"
+          >
+            <Table stickyHeader sx={{}}>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    colSpan={12}
+                    sx={{
+                      fontWeight: "700",
+                      border: "1px solid rgb(221, 221, 221)",
+                      fontSize: "14px",
+                      textAlign: "center",
+                      backgroundColor: "#008689",
+                      color: "white",
+                    }}
+                  >
+                    CHUẨN ĐẦU RA
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      fontWeight: "700",
+                      border: "1px solid rgb(221, 221, 221)",
+                      fontSize: "14px",
+                      textAlign: "center",
+                      backgroundColor: "#008689",
+                      color: "white",
+                    }}
+                  >
+                    STT
+                  </TableCell>
+                  {columnsDK.map((column) => (
+                    <TableCell
+                      key={column.field}
+                      sx={{
+                        fontWeight: "700",
+                        border: "1px solid rgb(221, 221, 221)",
+                        fontSize: "14px",
+                        textAlign: "center",
+                        minWidth: column.minWidth,
+                        backgroundColor: "#008689",
+                        color: "white",
+                      }}
+                    >
+                      {column.headerName}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              {loading ? (
+                <Spinner />
+              ) : (
+                <TableBody>
+                  {cert?.map((c, idC) => (
+                    <React.Fragment key={idC}>
+                      <TableRow key={idC} sx={{ backgroundColor: "#ffffff" }}>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {idC + 1}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.tenLChungChi}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.tenChungChi}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.isCompleted ? (
+                            <CheckCircle
+                              sx={{
+                                color: "green",
+                              }}
+                            />
+                          ) : (
+                            ""
+                          )}
+                        </TableCell>
+                        <TableCell
+                          sx={{
+                            border: "1px solid rgb(221, 221, 221)",
+                            color: "rgb(102, 117, 128)",
+                            fontSize: "14px",
+                            fontWeight: "500",
+                            textAlign: "center",
+                          }}
+                        >
+                          {c.isCompleted ? "Hoàn thành" : ""}
+                        </TableCell>
+                      </TableRow>
+                    </React.Fragment>
+                  ))}
+                </TableBody>
+              )}
+            </Table>
+          </TableContainer>
+        </Paper>  
         <Paper
           elevation={12}
           sx={{

@@ -22,7 +22,76 @@ export const getTranscript = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.get(`${API_BASE_URL}/hoctap/bangdiem`, config);
+      const response = await axios.get(
+        `${API_BASE_URL}/hoctap/bangdiem`,
+        config
+      );
+
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getCert = createAsyncThunk(
+  "transcript/getCert",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/hoctap/getChungChi`,
+        config
+      );
+
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getKetQuaDauVao = createAsyncThunk(
+  "transcript/getKetQuaDauVao",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/hoctap/getKetQuaDauVao`,
+        config
+      );
 
       return response.data.body;
     } catch (error) {
@@ -53,6 +122,30 @@ const transcriptSlice = createSlice({
         state.transcript = action.payload;
       })
       .addCase(getTranscript.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getCert.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCert.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getCert = action.payload;
+      })
+      .addCase(getCert.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getKetQuaDauVao.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getKetQuaDauVao.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getKetQuaDauVao = action.payload;
+      })
+      .addCase(getKetQuaDauVao.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

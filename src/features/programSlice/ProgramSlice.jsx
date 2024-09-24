@@ -186,6 +186,7 @@ const programSlice = createSlice({
         state.loading = false;
         state.error = action.payload || action.error.message;
       })
+
       .addCase(getSelect.pending, (state) => {
         state.loading = true;
         state.error = null;

@@ -40,6 +40,7 @@ import HandleDorm from "./page/lecture/handleDorm/HandleDorm";
 import HandleUniform from "./page/lecture/handleUniform/HandleUniform";
 import Note from "./page/student/note/Note";
 import HandleTicket from "./page/lecture/handleTicket/HandleTicket";
+import Graduation from "./page/student/graduation/Graduation";
 
 // Function to check if the user is authenticated
 const isAuthenticated = () => !!localStorage.getItem("account");
@@ -156,6 +157,10 @@ const router = createBrowserRouter([
           {
             path: "notedetail",
             element: <Note />,
+          },
+          {
+            path: "Graduation",
+            element: <Graduation />,
           },
         ],
       },
