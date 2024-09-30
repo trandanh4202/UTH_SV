@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Spinner from "../../../../components/Spinner/Spinner";
+import { useEffect } from "react";
 
 const InfoField = ({ label, value }) => (
   <Grid item xs={6}>
@@ -34,7 +35,11 @@ const InfoField = ({ label, value }) => (
 const InforSV = () => {
   const profile = useSelector((state) => state.profile?.summaryProfile?.body);
   const loading = useSelector((state) => state.profile.loading);
-  const image = localStorage.getItem("image");
+  const imageFromRedux = useSelector((state) => state.profile.getImage?.body);
+  const imageFromLocalStorage = localStorage.getItem("image");
+
+  // Kiểm tra nếu image từ Redux store tồn tại, thì dùng nó, nếu không thì lấy từ localStorage
+  const image = imageFromRedux ? imageFromRedux : imageFromLocalStorage;
   return (
     <>
       <Box>

@@ -185,7 +185,6 @@ const Cart = () => {
   const changeCampus = (e) => {
     const selectedValue = e.target.value;
     setCampus(selectedValue);
-    console.log(selectedValue);
     // Kiểm tra nếu chọn id là 1, 2, hoặc 3 thì không tính phí và không giao hàng
     if (selectedValue === 1 || selectedValue === 2 || selectedValue === 3) {
       setIsShip(false); // Không giao hàng

@@ -49,5 +49,5 @@ export const store = configureStore({
     admin: adminReducer,
     hospital: hospitalReducer,
   },
-  // devTools: false,
+  devTools: false,
 });

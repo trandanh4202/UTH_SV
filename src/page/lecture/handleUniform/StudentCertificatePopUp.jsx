@@ -46,7 +46,6 @@ const tableCell = [
 ];
 const StudentCertificatePopUp = ({ open, onClose, id }) => {
   const dispatch = useDispatch();
-  console.log(id);
   useEffect(() => {
     if (open) dispatch(getDetailOrder(id));
   }, [dispatch, open, id]);

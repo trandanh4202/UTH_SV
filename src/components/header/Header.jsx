@@ -165,7 +165,14 @@ const Header = () => {
   ];
 
   const menu = role === "gv" ? menuFromStore : studentMenu;
-  const image = localStorage.getItem("image");
+  // const image = localStorage.getItem("image");
+  const imageFromRedux = useSelector((state) => state.profile.getImage?.body);
+  const imageFromLocalStorage = localStorage.getItem("image");
+
+  // Kiểm tra nếu image từ Redux store tồn tại, thì dùng nó, nếu không thì lấy từ localStorage
+  const image = imageFromRedux ? imageFromRedux : imageFromLocalStorage;
+
+  
   return (
     <Box
       sx={{

@@ -144,7 +144,76 @@ export const getCheckUpdateProfile = createAsyncThunk(
     }
   }
 );
+export const getCheckUpdateBHYT = createAsyncThunk(
+  "profile/getCheckUpdateBHYT",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
 
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        `${API_BASE_URL}/user/checkBHYT`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const updateBHYT = createAsyncThunk(
+  "profile/updateBHYT",
+  async (maBHYT, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.put(
+        `${API_BASE_URL}/user/updateBHYT?maBHYT=${maBHYT.updatebhyt}`,
+        {},
+        config
+      );
+      const response2 = await axios.get(
+        `${API_BASE_URL}/user/checkBHYT`,
+        config
+      );
+
+      return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // Xử lý lỗi token hết hạn
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const uploadAvatar = createAsyncThunk(
   "profile/uploadAvatar",
   async (formData, { rejectWithValue }) => {
@@ -486,6 +555,7 @@ const profileSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+
       .addCase(getCheckUpdateProfile.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -498,6 +568,37 @@ const profileSlice = createSlice({
         state.timestamp = action.payload.timestamp;
       })
       .addCase(getCheckUpdateProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getCheckUpdateBHYT.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCheckUpdateBHYT.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getCheckUpdateBHYT = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(getCheckUpdateBHYT.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateBHYT.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateBHYT.fulfilled, (state, action) => {
+        state.loading = false;
+        state.updateBHYT = action.payload;
+        state.success = action.payload.success;
+        state.status = action.payload.status;
+        state.message = action.payload.message;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(updateBHYT.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       })

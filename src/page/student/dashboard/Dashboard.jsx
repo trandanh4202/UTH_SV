@@ -51,6 +51,7 @@ import {
   getPopup,
 } from "../../../features/notificationSlice/NotificationSlice";
 import PopupNoti from "../../../components/PopupNoti/PopupNoti";
+import UpdateBHYT from "../../../components/popupWarning/UpdateBHYT";
 const formatDate = (dateString) => {
   if (!dateString) return "";
   return format(new Date(dateString), "dd/MM/yyyy");
@@ -145,6 +146,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getNote());
   }, [dispatch]);
+
   const handleSlideChange = (swiper) => {
     const slideIndex = swiper.realIndex; // Lấy chỉ số thực của slide
     const slide = categories[slideIndex]; // Lấy đối tượng slide từ categories dựa vào chỉ số
@@ -152,6 +154,7 @@ const Dashboard = () => {
   };
   return (
     <Container>
+      <UpdateBHYT />
       <PopupNoti />
       <UpdatePhone />
       <Grid container spacing={2} sx={{ marginBottom: "20px" }}>

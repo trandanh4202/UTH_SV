@@ -118,7 +118,6 @@ const EditFamily = ({ open, onClose, editData }) => {
       Object.keys(editData).forEach((field) => {
         setValue(field, editData[field]);
       });
-      console.log(editData);
     } else {
       reset(); // Đặt lại form nếu không có dữ liệu chỉnh sửa
     }

@@ -36,20 +36,22 @@ const EditProfile = () => {
   const success = useSelector((state) => state.profile?.success);
   const message = useSelector((state) => state.profile?.message);
   const timestamp = useSelector((state) => state.profile?.timestamp);
+  const navigation = useNavigate();
+
   useEffect(() => {
     if (!loading) {
-      if (success && timestamp) {
+      if (success && timestamp && message) {
         toast.success(message);
+      
       } else if (!success) {
         toast.error(message);
       }
     }
-  }, [loading, message, success, timestamp]);
+  }, [loading, message, success, timestamp, navigation]);
   const loadingFamily = useSelector((state) => state.family?.loading);
   const successFamily = useSelector((state) => state.family?.success);
   const messageFamily = useSelector((state) => state.family?.message);
   const timestampFamily = useSelector((state) => state.family?.timestamp);
-  const navigation = useNavigate();
   useEffect(() => {
     if (!loadingFamily) {
       if (successFamily && timestampFamily) {

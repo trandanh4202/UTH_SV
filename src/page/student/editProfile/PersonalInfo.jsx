@@ -485,23 +485,6 @@ const PersonalInfo = () => {
     dispatch(updateProfile(formData)); // Dispatch the updateProfile action with formData
     setUpdate(true);
   };
-  const navigate = useNavigate();
-  const loading = useSelector((state) => state.profile.updateProfile?.loading);
-  const success = useSelector((state) => state.profile.updateProfile?.success);
-  const timestamp = useSelector(
-    (state) => state.profile.updateProfile?.timestamp
-  );
-  useEffect(() => {
-    if (!loading && update) {
-      if (success && timestamp) {
-        setTimeout(() => {
-          navigate("/infordetail");
-        }, 3000);
-      } else if (!success) {
-        navigate("/");
-      }
-    }
-  }, [loading, navigate, success, timestamp, update, setTimeout]);
 
   const messageAccess = useSelector(
     (state) => state.profile.getCheckUpdateProfile?.message
