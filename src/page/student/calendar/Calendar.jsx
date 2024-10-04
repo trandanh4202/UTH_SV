@@ -617,7 +617,7 @@ const Calendar = () => {
                                             to={data.link}
                                             component={Link}
                                           >
-                                            Link Học liệu số
+                                            Link học liệu số
                                           </Typography>
                                         </Box>
                                       </Box>
