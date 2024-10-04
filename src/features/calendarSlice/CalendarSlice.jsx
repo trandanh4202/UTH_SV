@@ -43,6 +43,40 @@ export const getCalendar = createAsyncThunk(
   }
 );
 
+export const getCalendarDemo = createAsyncThunk(
+  "calendar/getCalendarDemo",
+  async ({ date }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        `${API_BASE_URL}/lichhoc/tuanDemo?date=${date}`,
+        config
+      );
+
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        localStorage.clear();
+        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getTotalofWeek = createAsyncThunk(
   "calendar/getTotalofWeek",
   async (_, { rejectWithValue }) => {
@@ -92,6 +126,18 @@ const calendarSlice = createSlice({
         state.calendar = action.payload;
       })
       .addCase(getCalendar.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(getCalendarDemo.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCalendarDemo.fulfilled, (state, action) => {
+        state.loading = false;
+        state.calendarDemo = action.payload;
+      })
+      .addCase(getCalendarDemo.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       })

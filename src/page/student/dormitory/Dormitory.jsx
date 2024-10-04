@@ -103,7 +103,7 @@ const Dormitory = () => {
                 Đăng ký Ký túc xá
               </Typography>
             </Box>
-            {/* <Box>
+            <Box>
               <Button
                 variant="contained"
                 onClick={handleModalKTXOpen}
@@ -134,7 +134,7 @@ const Dormitory = () => {
                   Đăng ký KTX
                 </Typography>
               </Button>
-            </Box> */}
+            </Box>
           </Box>
           <TableContainer
             component={Paper}

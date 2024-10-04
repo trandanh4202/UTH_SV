@@ -22,6 +22,8 @@ import certificationReducer from "./certificationSlice/CertificationSlice";
 import dormReducer from "./dormSlice/DormSlice";
 import adminReducer from "./adminSlice/AdminSlice";
 import hospitalReducer from "./hospitalSlice/HospitalSlice";
+import graduationAdminReducer from "./graduationAdminSlice/GraduationAdminSlice";
+import graduationReducer from "./graduationSlice/GraduationSlice";
 
 export const store = configureStore({
   reducer: {
@@ -48,6 +50,8 @@ export const store = configureStore({
     dorm: dormReducer,
     admin: adminReducer,
     hospital: hospitalReducer,
+    graduationAdmin: graduationAdminReducer,
+    graduation: graduationReducer,
   },
-  devTools: false,
+  // devTools: false,
 });
