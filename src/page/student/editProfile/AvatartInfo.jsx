@@ -43,7 +43,6 @@ const AvatarInfo = () => {
 
     const formData = new FormData();
     formData.append("avatar", selectedFile);
-
     dispatch(uploadAvatar(formData));
   };
 

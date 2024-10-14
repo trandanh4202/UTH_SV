@@ -9,6 +9,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { updateChungChi } from "../../features/graduationSlice/GraduationSlice";
 
 const inputStyles = {
   "& .MuiInputBase-root": {
@@ -44,52 +46,74 @@ const inputStyles = {
   },
 };
 
-const AddCert = ({ open, onClose, chungChiList, handleSubmit1 }) => {
+const UpdateCert = ({ open, onClose, idCertUpdate, semester }) => {
   // State quản lý dữ liệu form
   const [formData, setFormData] = useState({
-    chuanDauRa: null,
     ngayCap: "",
     nguoiCap: "",
     soHieu: "",
     soVaoSo: "",
     noiCap: "",
     soSeri: "",
-    fileChungChi: null,
   });
+
+  // State quản lý file chứng chỉ riêng biệt
+  const [fileChungChi, setFileChungChi] = useState(null);
 
   // Reset lại form khi popup được mở
   useEffect(() => {
     if (open) {
       setFormData({
-        chuanDauRa: "",
         ngayCap: "",
         nguoiCap: "",
         soHieu: "",
         soVaoSo: "",
         noiCap: "",
         soSeri: "",
-        fileChungChi: null,
       });
+      setFileChungChi(null); // Reset file chứng chỉ
     }
   }, [open]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    setFormData({
-      ...formData,
-      [name]: files ? files[0] : value,
-    });
+    if (files) {
+      setFileChungChi(files[0]); // Lưu file chứng chỉ vào state riêng
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    }
   };
-
+  const dispatch = useDispatch();
   const handleSave = () => {
-    if (!formData.fileChungChi) {
+    if (!fileChungChi) {
       alert("File chứng chỉ là bắt buộc");
       return;
     }
-    handleSubmit1({
-      ...formData,
-      idchungchi: formData.chuanDauRa,
+
+    const jsonPayload = JSON.stringify({
+      ngayCap: formData.ngayCap,
+      nguoiCap: formData.nguoiCap,
+      soHieu: formData.soHieu,
+      soVaoSo: formData.soVaoSo,
+      noiCap: formData.noiCap,
+      soSeri: formData.soSeri,
     });
+
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append(
+      "chungChi",
+      new Blob([jsonPayload], { type: "application/json" })
+    );
+    formDataToSubmit.append("minhChung", fileChungChi);
+
+    // Gửi dữ liệu lên server qua redux
+    dispatch(
+      updateChungChi({ idCertUpdate, formData: formDataToSubmit, semester })
+    );
+
     onClose(); // Đóng popup sau khi lưu
   };
 
@@ -117,7 +141,7 @@ const AddCert = ({ open, onClose, chungChiList, handleSubmit1 }) => {
             fontSize: "20px",
           }}
         >
-          Thêm chứng chỉ
+          Cập nhật chứng chỉ
         </Typography>
         <Box
           sx={{
@@ -127,7 +151,7 @@ const AddCert = ({ open, onClose, chungChiList, handleSubmit1 }) => {
           }}
         >
           <Grid container spacing={{ xs: 2, lg: 3 }}>
-            <Grid item xs={12} lg={5}>
+            {/* <Grid item xs={12} lg={5}>
               <Select
                 name="chuanDauRa"
                 value={formData.chuanDauRa}
@@ -145,7 +169,7 @@ const AddCert = ({ open, onClose, chungChiList, handleSubmit1 }) => {
                   </MenuItem>
                 ))}
               </Select>
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} lg={7}>
               <TextField
                 label="Ngày cấp"
@@ -243,4 +267,4 @@ const AddCert = ({ open, onClose, chungChiList, handleSubmit1 }) => {
   );
 };
 
-export default AddCert;
+export default UpdateCert;

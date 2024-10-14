@@ -99,7 +99,7 @@ const Calendar = () => {
     const newTimeoutId = setTimeout(() => {
       dispatch(getCalendar({ date: format(date, "yyyy-MM-dd") }));
     }, 500); // 1000 milliseconds = 1 second
-    dispatch(getCalendarDemo({ date: format(date, "yyyy-MM-dd") }));
+    // dispatch(getD({ date: format(date, "yyyy-MM-dd") }));
     // Update the state with the new timeout ID
     setTimeoutId(newTimeoutId);
   };
@@ -137,8 +137,8 @@ const Calendar = () => {
     debounceFetch(currentDate); // Initial fetch when component mounts
   }, [currentDate]); // Only call when currentDate changes
 
-  const calendar = useSelector((state) => state.calendar.calendarDemo) || [];
-  // const calendar = useSelector((state) => state.calendar.calendar) || [];
+  // const calendar = useSelector((state) => state.calendar.calendarDemo) || [];
+  const calendar = useSelector((state) => state.calendar.calendar) || [];
 
   useEffect(() => {
     const updatedData = splitIntoSlots(calendar);

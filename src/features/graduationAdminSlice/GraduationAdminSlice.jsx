@@ -2,11 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  adminGraduation: [],
-  // : [],
+  adminGraduation: {},
+  getXTNStatus: {},
+  getXTNDetail: {},
+  getAdminDotXTN: {},
+  getFile: {},
+  getXTN: {},
+  approveXTN: {},
+  // : {},
   loading: false,
   error: null,
-  getAllToApprove: [],
+  getAllToApprove: {},
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -31,6 +37,45 @@ export const getXTN = createAsyncThunk(
       );
 
       return response.data;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const approveXTN = createAsyncThunk(
+  "adminGraduation/approve/${id}",
+  async ({ id, formData }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const message = await axios.put(
+        `${API_BASE_URL}/xtn/approve/${id}`,
+        formData,
+        config
+      );
+
+      const response = await axios.post(
+        `${API_BASE_URL}/xtn/getXTN`,
+        {},
+        config
+      );
+
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -79,13 +124,13 @@ export const getXTNStatus = createAsyncThunk(
 
 export const getXTNDetail = createAsyncThunk(
   "adminGraduation/getXTNDetail",
-  async ({ id }, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
         throw new Error("No token found");
       }
-
+      console.log(id);
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -112,7 +157,7 @@ export const getXTNDetail = createAsyncThunk(
 
 export const getFile = createAsyncThunk(
   "adminGraduation/getFile",
-  async ({ id }, { rejectWithValue }) => {
+  async (id, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -254,6 +299,22 @@ const graduationAdminSlice = createSlice({
         state.getXTN = action.payload;
       })
       .addCase(getXTN.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || action.error.message;
+      })
+      .addCase(approveXTN.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(approveXTN.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.approveXTN = action.payload.message;
+        state.getXTN = action.payload.response;
+      })
+      .addCase(approveXTN.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || action.error.message;
       });

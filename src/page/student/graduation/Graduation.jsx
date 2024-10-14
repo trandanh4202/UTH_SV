@@ -21,7 +21,13 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../components/Spinner/Spinner";
-import { CheckCircle, EditOutlined, UploadFile } from "@mui/icons-material";
+import {
+  CheckCircle,
+  CloudUpload,
+  EditOutlined,
+  UploadFile,
+  Visibility,
+} from "@mui/icons-material";
 
 import { toast } from "react-toastify";
 import FinishService from "../../../components/FinishService/FinishService";
@@ -37,6 +43,8 @@ import {
 import { format } from "date-fns";
 import CertificateModal from "./CertificateModal";
 import AddCert from "../../../components/addCert/AddCert";
+import ViewDetailCer from "../../../components/viewDetailCer/ViewDetailCer";
+import UpdateCert from "../../../components/updateCert/UpdateCert";
 
 const inputStyles = {
   "& .MuiInputBase-input": {
@@ -110,11 +118,11 @@ const columnsDK = [
   },
   { field: "daNop", headerName: "Đã nộp", align: "center" },
   { field: "xacNhan", headerName: "Xác nhận", align: "center" },
-  {
-    field: "chungChiNgoai",
-    headerName: "Tải Chứng chỉ ngoài",
-    align: "center",
-  },
+  // {
+  //   field: "chungChiNgoai",
+  //   headerName: "Tải Chứng chỉ ngoài",
+  //   align: "center",
+  // },
 ];
 // Component TextFieldWrapper
 
@@ -123,6 +131,54 @@ const formatDate = (dateString) => {
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return ""; // Handle invalid date strings
   return format(date, "dd/MM/yyyy");
+};
+const tableCellBody = {
+  border: "1px solid rgb(221, 221, 221)",
+  color: "rgb(102, 117, 128)",
+  fontSize: "14px",
+  fontWeight: "500",
+  textAlign: "center",
+};
+const CustomTable = ({
+  columns,
+  rows,
+  renderRow,
+  loading,
+  customize,
+  customizeCert,
+}) => {
+  const tableCellStyle = {
+    fontWeight: "700",
+    border: "1px solid rgba(224, 224, 224, 1)",
+    fontSize: { xs: "13px", lg: "15px" },
+    textAlign: "center",
+    backgroundColor: "#008689", // Màu nền cho header
+    color: "white",
+  };
+
+  return (
+    <TableContainer component={Paper}>
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            {columns.map((column, index) => (
+              <TableCell key={index} sx={tableCellStyle}>
+                {column}
+              </TableCell>
+            ))}
+            {customize && <TableCell sx={tableCellStyle}>Cập nhật</TableCell>}
+          </TableRow>
+        </TableHead>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <TableBody>
+            {rows.map((row, index) => renderRow(row, index))}
+          </TableBody>
+        )}
+      </Table>
+    </TableContainer>
+  );
 };
 const TextFieldWrapper = ({
   name,
@@ -162,6 +218,7 @@ const TextFieldWrapper = ({
     </Box>
   );
 };
+
 const tableCell = [
   "STT",
   "Tên đợt",
@@ -180,39 +237,48 @@ const Graduation = () => {
   const profile = useSelector(
     (state) => state.graduation.xetTotNghiepInfo?.body
   );
-  const receipts = useSelector((state) => state.graduation?.xetTotNghiep?.body);
+  const receipts = useSelector((state) => state.graduation.xetTotNghiep?.body);
 
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const cert = useSelector((state) => state.graduation?.getCert);
+  const cert = useSelector((state) => state.graduation.getCert?.body);
   const [semester, setSemester] = useState(0);
   const [formDataFile, setFormDataFile] = useState([]); // Lưu trữ file chứng chỉ ngoài
   const [ids, setIds] = useState([]); // Khởi tạo ids là mảng rỗng
   const [selectedChungChiList, setSelectedChungChiList] = useState([]);
+  const [openModalDetail, setOpenModalDetail] = useState(false);
+  const [selectedCertId, setSelectedCertId] = useState(null);
+  const [currentCert, setCurrentCert] = useState(null); // Quản lý chứng chỉ hiện tại
+  const [idCertUpdate, setIdCertUpdate] = useState(null);
+  const certUpdated =
+    useSelector((state) => state.graduation.xetTotNghiep.body?.chungChi) || [];
+  const handleOpenCertModal = (id) => {
+    setSelectedCertId(id); // Lưu id của phiếu đăng ký thành công
+    setOpenModalDetail(true); // Mở modal
+  };
 
+  const handleCloseModal = () => {
+    setOpenModalDetail(false); // Đóng modal
+    setSelectedCertId(null); // Xóa id khi đóng modal
+  };
   const successAccess = false;
 
-  const handleOpenModal = (chungChiList) => {
-    setSelectedChungChiList(chungChiList); // Truyền danh sách chứng chỉ vào modal
+  const handleOpenModal = (chungChiList, cert) => {
+    setSelectedChungChiList(chungChiList);
+    setCurrentCert(cert); // Cập nhật chứng chỉ hiện tại
     setOpenModal(true);
   };
-  const genders = [
-    {
-      id: false,
-      name: "Nam",
-    },
-    {
-      id: true,
-      name: "Nữ",
-    },
-  ];
-
+  const handleOpenModalUpdateCert = (id) => {
+    setIdCertUpdate(id);
+    setOpenModalUpdateCert(true);
+  };
   useEffect(() => {
     dispatch(getCert());
-    dispatch(xetTotNghiep());
+    dispatch(xetTotNghiep(semester));
     dispatch(xetTotNghiepInfo());
     dispatch(getDotXetTotNghiep());
-  }, [dispatch]);
+    // dispatch()
+  }, [dispatch, semester]);
   useEffect(() => {
     // Nếu danh sách đợt xét không rỗng, tự động chọn đợt xét đầu tiên
     if (select && select.length > 0) {
@@ -246,6 +312,8 @@ const Graduation = () => {
   const [certificates, setCertificates] = useState([]); // Danh sách chứng chỉ
 
   const [openModal, setOpenModal] = useState(false);
+  const [openModalUpdateCert, setOpenModalUpdateCert] = useState(false);
+
   const handleAddCert = (newCert) => {
     setCertificates((prevCertificates) => {
       // Kiểm tra xem chứng chỉ đã tồn tại chưa
@@ -265,7 +333,6 @@ const Graduation = () => {
     });
   };
 
-  console.log(certificates);
   const handleSubmit = (e) => {
     e.preventDefault();
     const chungchiList = certificates.map((cert) => ({
@@ -277,30 +344,102 @@ const Graduation = () => {
       noiCap: cert.noiCap,
       soSeri: cert.soSeri,
     }));
+
     const proofs = certificates.map((cert) => cert.fileChungChi); // Danh sách file ảnh
+
     // Tạo payload JSON
     const jsonPayload = JSON.stringify({
-      chungChi: {
-        email,
-        phone,
-        chungChiList: chungchiList, // Danh sách thông tin chứng chỉ
-      },
-      proofs: proofs,
+      email,
+      phone,
+      chungChiList: chungchiList, // Danh sách thông tin chứng chỉ
     });
 
-    // Tạo FormData và thêm JSON vào như một Blob
     const formData = new FormData();
+
+    // Append các giá trị vào FormData
     formData.append(
-      "form",
+      "chungChi",
       new Blob([jsonPayload], { type: "application/json" })
     );
 
-    console.log("danh", formData);
+    // Append each file without index
+    proofs.forEach((proof) => {
+      formData.append("proofs", proof); // Append mỗi file vào cùng khóa "proofs"
+    });
 
-    // console.log(formData); // Xử lý gửi form qua API
+    formData.append("idDot", semester);
+
+    // Dispatch form data for API submission
     dispatch(dangKyXetTotNghiep({ formData, semester }));
-    // toast.success("Đăng ký thành công");
   };
+  const columnsCert = [
+    "STT",
+    "Tên chứng chỉ",
+    "Ngày cấp",
+    "Người cấp",
+    "Số hiệu",
+    "Số vào sổ",
+    "Nơi cấp",
+    "Số seri",
+    "Xem chi tiết",
+  ];
+  const columnsHistory = [
+    "STT",
+    "Tên đợt",
+    "Ngày yêu cầu",
+    "Trạng thái",
+    "Ngày xử lý",
+    "Ghi chú",
+  ];
+  const genders = [
+    {
+      id: false,
+      name: "Nam",
+    },
+    {
+      id: true,
+      name: "Nữ",
+    },
+  ];
+  const personalFields = [
+    { name: "maSinhVien", label: "Mã số sinh viên", lg: 2 },
+    { name: "hoDem", label: "Họ đệm", lg: 3 },
+    { name: "ten", label: "Tên", lg: 2 },
+    { name: "lopHoc", label: "Lớp", lg: 1.5 },
+    {
+      name: "gioiTinh",
+      label: "Giới tính",
+      lg: 1.5,
+      type: "select",
+      options: genders,
+    },
+    {
+      name: "ngaySinh2",
+      label: "Ngày sinh",
+      lg: 2,
+      placeholder: "Ví dụ: 04/02/2006",
+    },
+    { name: "danToc", label: "Dân tộc", lg: 2 },
+    { name: "tonGiao", label: "Tôn giáo", lg: 2 },
+    { name: "queQuanTinh", label: "Quê quán Tỉnh (CCCD)", lg: 2 },
+    { name: "noiSinhTinh", label: "Nơi sinh Tỉnh", lg: 2 },
+    { name: "soCMND", label: "Căn cước công dân", lg: 2 },
+    { name: "quocTich", label: "Quốc tịch", lg: 2, options: nations },
+    { name: "email", label: "Email cá nhân", lg: 4 },
+    {
+      name: "schoolEmail",
+      label: "Email liên lạc khác",
+      lg: 4,
+      editable: true,
+    },
+    { name: "soDienThoai", label: "Số điện thoại", lg: 2 },
+    {
+      name: "soDienThoaiKhac",
+      label: "SĐT liên lạc khác",
+      lg: 2,
+      editable: true,
+    },
+  ];
   return (
     <Container>
       <Paper
@@ -379,275 +518,34 @@ const Graduation = () => {
             {profile && (
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={4}>
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <TextFieldWrapper
-                        name="maSinhVien"
-                        value={profile.maSinhVien}
-                        // onChange={handleChange}
-                        successAccess={successAccess}
-                        label="Mã số sinh viên"
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={3}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <TextFieldWrapper
-                        name="hoDem"
-                        value={profile?.hoDem}
-                        // onChange={handleChange}
-                        label="Họ đệm"
-                        successAccess={successAccess}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <TextFieldWrapper
-                        name="ten"
-                        value={profile.ten}
-                        // onChange={handleChange}
-                        successAccess={successAccess}
-                        label="Tên"
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={1.5}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <TextFieldWrapper
-                        name="lopHoc"
-                        value={profile.lopHoc}
-                        // onChange={handleChange}
-                        successAccess={successAccess}
-                        label="Lớp"
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={1.5}>
-                    <TextFieldWrapper
-                      label="Giới tính"
-                      name="gioiTinh"
-                      value={profile.gioiTinh ? "Nam" : "Nữ"}
-                      // onChange={handleChange}
-                      successAccess={successAccess}
-                      sx={selectStyles}
-                      options={genders}
-                    />
-                  </Grid>
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <TextFieldWrapper
-                        name="ngaySinh2"
-                        value={profile.ngaySinh2} // Ensure this is in 'YYYY-MM-DD' format
-                        // onChange={handleChange}
-                        label="Ngày sinh"
-                        // type="date"
-                        placeholder="Ví dụ: 04/02/2006"
-                        successAccess={successAccess}
-                        id="date-picker"
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={2}>
-                    <TextFieldWrapper
-                      name="iddanToc"
-                      value={profile.danToc}
-                      // onChange={handleChange}
-                      label="Dân tộc"
-                    />
-                  </Grid>
-                  <Grid item xs={12} lg={2}>
-                    <TextFieldWrapper
-                      name="idtonGiao"
-                      value={profile.tonGiao}
-                      // onChange={handleChange}
-                      label="Tôn giáo"
-                    />
-                  </Grid>
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <TextFieldWrapper
-                        name="idtinh"
-                        value={profile.queQuanTinh || ""}
-                        // onChange={handleChange}
-                        // options={provinces}
-                        label="Quê quán Tỉnh (CCCD)"
-                      />
-                    </Box>
-                  </Grid>
-
-                  <Grid item xs={12} lg={2}>
-                    <TextFieldWrapper
-                      name="noiSinh"
-                      value={profile.noiSinhTinh || ""}
-                      // onChange={handleChange}
-                      // options={provinces}
-                      label="Nơi sinh Tỉnh"
-                      successAccess={successAccess}
-                      optionType="province"
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                        Căn cước công dân
-                      </Typography>
-                      <TextFieldWrapper
-                        name="soCMND"
-                        value={profile.soCMND || ""}
-                        // onChange={handleChange}
-                        successAccess={successAccess}
-                        sx={inputStyles}
-                      />
-                    </Box>
-                  </Grid>
-
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <TextFieldWrapper
-                        name="quocTich"
-                        value={profile.quocTich || ""}
-                        // onChange={handleChange}
-                        options={nations}
-                        label="Quốc tịch"
-                        successAccess={successAccess}
-                        optionType="quocTich"
-                      />
-                    </Box>
-                  </Grid>
-
-                  <Grid item xs={12} lg={4}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                        Email cá nhân
-                      </Typography>
-                      <TextFieldWrapper
-                        name="email"
-                        value={profile.email}
-                        // onChange={handleChange}
-                        successAccess={successAccess}
-                        sx={inputStyles}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={4}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                        Email liên lạc khác
-                      </Typography>
-                      <TextFieldWrapper
-                        name="schoolEmail"
-                        value={email}
-                        // onChange={handleChange}
-                        onChange={(e) => setEmail(e.target.value)}
-                        successAccess={!successAccess}
-                        sx={inputStyles}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                        Số điện thoại
-                      </Typography>
-                      <TextFieldWrapper
-                        name="soDienThoai"
-                        value={profile.soDienThoai}
-                        // onChange={handleChange}
-
-                        successAccess={successAccess}
-                        sx={inputStyles}
-                      />
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} lg={2}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "2px",
-                      }}
-                    >
-                      <Typography sx={{ fontSize: "13px", fontWeight: "500" }}>
-                        SĐT liên lạc khác
-                      </Typography>
-                      <TextFieldWrapper
-                        name="soDienThoaiKhac"
-                        value={phone}
-                        // onChange={handleChange}
-                        successAccess={!successAccess}
-                        onChange={(e) => setPhone(e.target.value)}
-                        sx={inputStyles}
-                      />
-                    </Box>
-                  </Grid>
+                  {personalFields.map((field, index) => (
+                    <Grid item xs={12} lg={field.lg} key={index}>
+                      {field.name === "schoolEmail" ? (
+                        <TextFieldWrapper
+                          name="schoolEmail"
+                          value={email} // Sử dụng state `email`
+                          label="Email liên lạc khác"
+                          successAccess={true} // Luôn cho phép chỉnh sửa
+                          onChange={(e) => setEmail(e.target.value)} // Cập nhật giá trị của state `email`
+                        />
+                      ) : field.name === "soDienThoaiKhac" ? (
+                        <TextFieldWrapper
+                          name="soDienThoaiKhac"
+                          value={phone} // Sử dụng state `phone`
+                          label="SĐT liên lạc khác"
+                          successAccess={true} // Luôn cho phép chỉnh sửa
+                          onChange={(e) => setPhone(e.target.value)} // Cập nhật giá trị của state `phone`
+                        />
+                      ) : (
+                        <TextFieldWrapper
+                          name={field.name}
+                          value={profile[field.name] || ""} // Giá trị từ `profile`
+                          label={field.label}
+                          successAccess={false}
+                        />
+                      )}
+                    </Grid>
+                  ))}
                 </Grid>
 
                 <Paper
@@ -709,6 +607,22 @@ const Graduation = () => {
                               {column.headerName}
                             </TableCell>
                           ))}
+                          {!receipts && (
+                            <TableCell
+                              // key={}
+                              sx={{
+                                fontWeight: "700",
+                                border: "1px solid rgb(221, 221, 221)",
+                                fontSize: "14px",
+                                textAlign: "center",
+                                // minWidth: column.minWidth,
+                                backgroundColor: "#008689",
+                                color: "white",
+                              }}
+                            >
+                              Chứng chỉ ngoài
+                            </TableCell>
+                          )}
                         </TableRow>
                       </TableHead>
                       {loading ? (
@@ -784,64 +698,53 @@ const Graduation = () => {
                                 >
                                   {c.isCompleted ? "Hoàn thành" : ""}
                                 </TableCell>{" "}
-                                <TableCell
-                                  sx={{
-                                    border: "1px solid rgb(221, 221, 221)",
-                                    color: "rgb(102, 117, 128)",
-                                    fontSize: "14px",
-                                    fontWeight: "500",
-                                    textAlign: "center",
-                                  }}
-                                >
-                                  {/* {c.isCompleted ? (
-                                    ""
-                                  ) : (
-                                    <TextField
-                                      type="file"
-                                      accept="image/*"
-                                      onChange={(e) =>
-                                        handleFileChange(e, c.idChungChi)
-                                      } // Truyền idChungChi vào
-                                      style={{ marginBottom: "20px" }}
+                                {!receipts && c.isCompleted && (
+                                  <TableCell
+                                    sx={{
+                                      border: "1px solid rgb(221, 221, 221)",
+                                      color: "rgb(102, 117, 128)",
+                                      fontSize: "14px",
+                                      fontWeight: "500",
+                                      textAlign: "center",
+                                      display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <IconButton
+                                      onClick={() =>
+                                        handleOpenModal(c.chungChiList)
+                                      }
+                                      variant="contained"
                                       sx={{
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        "& .MuiInputBase-input": {
-                                          fontSize: "15px",
+                                        fontSize: "15px",
+                                        backgroundColor: "#008588",
+                                        color: "white",
+                                        borderRadius: "8px",
+                                        border: "3px solid #0085885a",
+                                        transition: "all ease 0.4s",
+                                        "&:hover": {
+                                          borderColor: "#008689",
                                           backgroundColor: "white",
-                                          color: "black",
-                                          borderRadius: "8px",
-                                          border: "3px solid #0085885a",
-                                          display: "flex",
-                                          justifyContent: "center",
-                                          alignItems: "center",
-                                          transition: "all ease 0.4s",
-
-                                          "&:hover": {
-                                            borderColor: "#008588",
-                                          },
-                                        },
-                                        "& .MuiOutlinedInput-notchedOutline": {
-                                          border: "none",
-                                        },
-                                        "& .MuiSvgIcon-root": {
-                                          color: "green",
-                                          backgroundSize: "cover",
+                                          color: "red",
+                                          boxShadow: "0 0 10px #008689",
                                         },
                                       }}
-                                    />
-                                  )} */}
-                                  {c.isCompleted ? (
-                                    ""
-                                  ) : (
-                                    <UploadFile
-                                      onClick={() =>
-                                        handleOpenModal(c.chungChiList)
-                                      }
-                                    />
-                                  )}
-                                </TableCell>
+                                    >
+                                      <CloudUpload
+                                        sx={{
+                                          fontSize: {
+                                            xs: "15px",
+                                            lg: "20px",
+                                          },
+                                        }}
+                                      />
+                                    </IconButton>
+                                  </TableCell>
+                                )}
                               </TableRow>
                             </React.Fragment>
                           ))}
@@ -851,49 +754,145 @@ const Graduation = () => {
                             handleSubmit1={handleAddCert}
                             chungChiList={selectedChungChiList} // Truyền danh sách chứng chỉ vào modal
                           />
+                          <UpdateCert
+                            open={openModalUpdateCert}
+                            onClose={() => setOpenModalUpdateCert(false)}
+                            // handleSubmit1={handleAddCert}
+                            idCertUpdate={idCertUpdate} // Truyền danh sách chứng chỉ vào modal
+                            semester={semester}
+                          />
                         </TableBody>
                       )}
                     </Table>
                   </TableContainer>
                 </Paper>
-                <Box
-                  sx={{
-                    marginTop: "20px",
-                    width: "100%",
-                    textAlign: "center",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <Button
-                    type="submit"
-                    variant="contained"
+                {!receipts && (
+                  <Box
                     sx={{
+                      marginTop: "20px",
+                      width: "100%",
+                      textAlign: "center",
                       display: "flex",
                       justifyContent: "center",
                       alignItems: "center",
-                      fontSize: "15px",
-                      backgroundColor: "#008588",
-                      color: "white",
-                      borderRadius: "8px",
-                      border: "3px solid #0085885a",
-                      transition: "all ease 0.4s",
-
-                      "&:hover": {
-                        borderColor: "#008689",
-                        backgroundColor: "white",
-                        color: "#008689",
-                        bolghadow: "0 0 10px #008689",
-                      },
                     }}
                   >
-                    ĐĂNG KÝ
-                  </Button>
-                </Box>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontSize: "15px",
+                        backgroundColor: "#008588",
+                        color: "white",
+                        borderRadius: "8px",
+                        border: "3px solid #0085885a",
+                        transition: "all ease 0.4s",
+
+                        "&:hover": {
+                          borderColor: "#008689",
+                          backgroundColor: "white",
+                          color: "#008689",
+                          bolghadow: "0 0 10px #008689",
+                        },
+                      }}
+                    >
+                      ĐĂNG KÝ
+                    </Button>
+                  </Box>
+                )}
               </form>
             )}
           </Box>
+          {/* Sử dụng CustomTable để hiển thị danh sách chứng chỉ */}
+          <Box
+            sx={{
+              margin: "15px 0",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Box sx={{ display: "flex" }}>
+              <Divider
+                orientation="vertical"
+                sx={{
+                  color: "red",
+                  border: "3px solid",
+                  height: "20px",
+                  marginRight: "5px",
+                }}
+              />
+              <Typography
+                sx={{ color: "#008588", fontWeight: "700", fontSize: "20px" }}
+              >
+                Chứng chỉ đã nộp
+              </Typography>
+            </Box>
+          </Box>
+          <CustomTable
+            columns={columnsCert}
+            rows={certUpdated}
+            loading={loading}
+            customize={
+              receipts?.statusId === 1 || receipts?.statusId === 3 ? (
+                <TableCell>Cập nhật</TableCell>
+              ) : null
+            }
+            renderRow={(cert, index) => (
+              <TableRow key={index}>
+                <TableCell sx={tableCellBody}>{index + 1}</TableCell>
+                <TableCell sx={tableCellBody}>{cert.tenChungChi}</TableCell>
+                <TableCell sx={tableCellBody}>
+                  {formatDate(cert.ngayCap)}
+                </TableCell>
+                <TableCell sx={tableCellBody}>{cert.nguoiCap}</TableCell>
+                <TableCell sx={tableCellBody}>{cert.soHieu}</TableCell>
+                <TableCell sx={tableCellBody}>{cert.soVaoSo}</TableCell>
+                <TableCell sx={tableCellBody}>{cert.noiCap}</TableCell>
+                <TableCell sx={tableCellBody}>{cert.soSeri}</TableCell>
+                <TableCell sx={tableCellBody}>
+                  <IconButton onClick={() => handleOpenCertModal(cert.id)}>
+                    <Visibility />
+                  </IconButton>
+                </TableCell>
+                {receipts?.statusId === 1 || receipts?.statusId === 3 ? (
+                  <TableCell sx={tableCellBody}>
+                    <IconButton
+                      onClick={() => handleOpenModalUpdateCert(cert.id)}
+                      variant="contained"
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        fontSize: "15px",
+                        backgroundColor: "#008588",
+                        color: "white",
+                        borderRadius: "8px",
+                        border: "3px solid #0085885a",
+                        transition: "all ease 0.4s",
+                        "&:hover": {
+                          borderColor: "#008689",
+                          backgroundColor: "white",
+                          color: "red",
+                          boxShadow: "0 0 10px #008689",
+                        },
+                      }}
+                    >
+                      <CloudUpload
+                        sx={{
+                          fontSize: { xs: "15px", lg: "20px" },
+                        }}
+                      />
+                    </IconButton>
+                  </TableCell>
+                ) : null}
+              </TableRow>
+            )}
+          />
+
           <Grid
             sx={{
               padding: "10px 5px",
@@ -927,148 +926,33 @@ const Graduation = () => {
                 </Typography>
               </Box>
             </Box>
-            <TableContainer
-              component={Paper}
-              sx={{
-                maxHeight: "78vh",
-                "&::-webkit-scrollbar": {
-                  width: "10px",
-                  height: "10px",
-                  borderRadius: "10px",
-                },
-                "&::-webkit-scrollbar-thumb": {
-                  backgroundColor: "#008689",
-                  borderRadius: "10px",
-                },
-                "&::-webkit-scrollbar-thumb:hover": {
-                  backgroundColor: "#008950",
-                  borderRadius: "10px",
-                },
-                "&::-webkit-scrollbar-track": {
-                  backgroundColor: "#f1f1f1",
-                  borderRadius: "10px",
-                },
-              }}
-            >
-              <Table
-                sx={{ minWidth: 650 }}
-                aria-label="simple table"
-                stickyHeader
-              >
-                <TableHead>
-                  <TableRow>
-                    {tableCell?.map((item) => (
-                      <TableCell
-                        key={item}
-                        align="center"
-                        sx={{
-                          border: "1px solid rgba(224, 224, 224, 1)",
-                          backgroundColor: "#008689",
-                          color: "white",
-                          fontWeight: "600",
-                          fontSize: { xs: "13px", lg: "15px" },
-                        }}
-                      >
-                        {item}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {receipts &&
-                    receipts?.map((row, index) => (
-                      <TableRow
-                        key={row.id}
-                        // sx={{
-                        //   cursor: "pointer",
-                        //   backgroundColor:
-                        //     selectedRow === index ? "#006b89x" : "inherit",
-                        // }}
-                        // onClick={() => handleRowClick(index)}
-                      >
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgb(221, 221, 221)",
-
-                            fontWeight: "500",
-                            fontSize: { xs: "11px", lg: "14px" },
-                          }}
-                        >
-                          {index + 1}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-
-                            fontWeight: "500",
-                            fontSize: { xs: "11px", lg: "14px" },
-                          }}
-                        >
-                          {row.tenDot}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-
-                            fontWeight: "500",
-                            fontSize: { xs: "11px", lg: "14px" },
-                          }}
-                        >
-                          {formatDate(row.createdAt)}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-
-                            fontWeight: "500",
-                            fontSize: { xs: "11px", lg: "14px" },
-                          }}
-                        >
-                          {row.status}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-
-                            fontWeight: "500",
-                            fontSize: { xs: "11px", lg: "14px" },
-                          }}
-                        >
-                          {formatDate(row.updatedAt)}
-                        </TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-
-                            fontWeight: "500",
-                            fontSize: { xs: "11px", lg: "14px" },
-                          }}
-                        ></TableCell>
-                        <TableCell
-                          align="center"
-                          sx={{
-                            border: "1px solid rgba(224, 224, 224, 1)",
-
-                            fontWeight: "500",
-                            fontSize: { xs: "11px", lg: "14px" },
-                          }}
-                        >
-                          {row.note}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
+            <CustomTable
+              columns={columnsHistory}
+              rows={receipts ? [receipts] : []}
+              loading={loading}
+              renderRow={(receipt, index) => (
+                <TableRow key={index}>
+                  <TableCell sx={tableCellBody}>{index + 1}</TableCell>
+                  <TableCell sx={tableCellBody}>{receipt.tenDot}</TableCell>
+                  <TableCell sx={tableCellBody}>
+                    {formatDate(receipt.createdAt)}
+                  </TableCell>
+                  <TableCell sx={tableCellBody}>{receipt.status}</TableCell>
+                  <TableCell sx={tableCellBody}>
+                    {formatDate(receipt.updatedAt)}
+                  </TableCell>
+                  <TableCell sx={tableCellBody}>{receipt.note}</TableCell>
+                </TableRow>
+              )}
+            />
           </Grid>
         </Box>
       </Paper>
+      <ViewDetailCer
+        open={openModalDetail}
+        onClose={handleCloseModal}
+        certId={selectedCertId}
+      />
     </Container>
   );
 };

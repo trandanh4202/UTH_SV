@@ -1,56 +1,44 @@
-import Box from "@mui/material/Box";
+import { ChangeCircleOutlined, EditOutlined } from "@mui/icons-material";
 import {
-  Container,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
-  Paper,
-  Radio,
-  RadioGroup,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Button,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
-  TablePagination,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
   MenuItem,
+  Paper,
+  Radio,
+  RadioGroup,
   Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TablePagination,
+  TableRow,
+  TextField,
+  Typography,
 } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  BookmarkAddOutlined,
-  Cancel,
-  CheckCircle,
-  EditOutlined,
-  PrintOutlined,
-} from "@mui/icons-material";
 import { toast } from "react-toastify";
-import {
-  getCampus,
-  getGroup,
-  getStatusUniform,
-  handleOrder,
-  printToShip,
-} from "../../../features/orderSlice/OrderSlice";
 import useDebounce from "../../../components/hooks/UseDebounce";
 import {
+  approveXTN,
   getAdminDotXTN,
   getXTN,
   getXTNStatus,
 } from "../../../features/graduationAdminSlice/GraduationAdminSlice";
 
 import { format } from "date-fns";
+import Viewcert from "../../../components/viewCert/ViewCert";
 
 const formatDate = (dateString) => {
   if (!dateString) return ""; // Handle null or undefined dateString
@@ -59,21 +47,19 @@ const formatDate = (dateString) => {
   return format(date, "dd/MM/yyyy");
 };
 const HandleGraduation = () => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [isApproveAction, setIsApproveAction] = useState(true);
-  const [selectedId, setSelectedId] = useState(null);
-  const [denyReason, setDenyReason] = useState("");
-  const [approveNote, setApproveNote] = useState("");
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 10, // Số phần tử mỗi trang
     page: 0, // Trang bắt đầu
   });
-
   const [search, setSearch] = useState(""); // State cho giá trị tìm kiếm
   const dataSearch = useDebounce(search, 1000); // Debounce giá trị tìm kiếm
-  const [selectedStatus, setSelectedStatus] = useState("NEW");
-  const [selectedSort, setSelectedSort] = useState(2);
-  const [selectedCampus, setSelectedCampus] = useState();
+  const [selectedStatus, setSelectedStatus] = useState(1);
+  const [selectedStatusApprove, setSelectedStatusApprove] = useState(1);
+
+  const [id, setId] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [note, setNote] = useState("");
+  const [openStatusDialog, setOpenStatusDialog] = useState(false);
 
   const approve = useSelector(
     (state) => state.graduationAdmin.getXTN?.body || []
@@ -81,15 +67,17 @@ const HandleGraduation = () => {
   const statusGraduation = useSelector(
     (state) => state.graduationAdmin.getXTNStatus?.body || []
   );
+  const totalElements = useSelector(
+    (state) => state.order?.getAllAdmin?.body?.totalElements || 0
+  );
+  const link = useSelector((state) => state.order.printToShip?.body);
+
   const loading = useSelector((state) => state.graduationAdmin?.loading);
   const message = useSelector((state) => state.graduationAdmin?.message);
   const timestamp = useSelector((state) => state.graduationAdmin?.timestamp);
   const success = useSelector((state) => state.graduationAdmin?.success);
-  const totalElements = useSelector(
-    (state) => state.order?.getAllAdmin?.body?.totalElements || 0
-  ); // Tổng số phần tử cho phân trang
+
   const dispatch = useDispatch();
-  const link = useSelector((state) => state.order.printToShip?.body);
 
   useEffect(() => {
     if (!loading && timestamp) {
@@ -107,76 +95,33 @@ const HandleGraduation = () => {
     }
   }, [link]);
 
-  const handleOpenDialog = (id, isApprove) => {
-    setSelectedId(id);
-    setIsApproveAction(isApprove);
-    setOpenDialog(true);
-  };
-
   const handleOpenDetailPopUp = (id) => {
     setId(id);
     setOpenModal(true);
   };
 
-  const handlePrintToShip = (id) => {
-    if (id) {
-      dispatch(printToShip(id));
-    } else {
-      console.error("ID is undefined!");
-    }
-  };
-
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setDenyReason("");
-    setApproveNote("");
-  };
-
-  const [selectedIsShip, setSelectedIsShip] = useState(false);
-
-  const handleApprove = () => {
-    const formDataAprove = {
-      reason: isApproveAction ? approveNote : denyReason,
-      isApprove: isApproveAction,
-    };
-    const formDataGetAll = {
-      pageIndex: paginationModel.page + 1,
-      pageSize: paginationModel.pageSize,
-      search: dataSearch,
-      status: selectedStatus,
-      campusId: selectedIsShip ? null : selectedCampus,
-      isShip: selectedIsShip,
-    };
-    // dispatch(setApprove({ formDataAprove, formDataGetAll, id: selectedId }));
-    handleCloseDialog();
-  };
+  const periodXTN = useSelector(
+    (state) => state.graduationAdmin.getAdminDotXTN?.body
+  );
   const [selectedGroup, setSelectedGroup] = useState(1);
-
+  useEffect(() => {
+    // Nếu danh sách đợt xét không rỗng, tự động chọn đợt xét đầu tiên
+    if (periodXTN && periodXTN.length > 0) {
+      setSelectedGroup(periodXTN[0].id); // Chọn đợt xét đầu tiên trong danh sách
+    }
+  }, [periodXTN]);
   const handleGroupChange = (event) => {
     const value = event.target.value;
     setSelectedGroup(value);
-  };
-
-  const handleCampusChange = (event) => {
-    const value = event.target.value;
-    if (value === "true") {
-      setSelectedIsShip(true);
-      setSelectedCampus(null);
-    } else {
-      setSelectedIsShip(false);
-      setSelectedCampus(value);
-    }
   };
 
   useEffect(() => {
     const formData = {
       pageIndex: paginationModel.page + 1, // Thêm 1 nếu API sử dụng index bắt đầu từ 1
       pageSize: paginationModel.pageSize,
-      // search: dataSearch, // Sử dụng giá trị tìm kiếm đã debounce
-      // status: selectedStatus,
-      // campusId: selectedCampus,
+      search: dataSearch, // Sử dụng giá trị tìm kiếm đã debounce
+      statusId: selectedStatus,
       // groupId: selectedGroup,
-      // isShip: selectedIsShip,
       idDot: 59,
     };
     dispatch(getXTN(formData));
@@ -185,8 +130,6 @@ const HandleGraduation = () => {
     paginationModel.page,
     paginationModel.pageSize,
     dataSearch,
-    selectedIsShip,
-    selectedCampus,
     selectedStatus,
     selectedGroup,
   ]);
@@ -195,9 +138,7 @@ const HandleGraduation = () => {
     dispatch(getAdminDotXTN());
     dispatch(getXTNStatus());
   }, [dispatch]);
-  const periodXTN = useSelector(
-    (state) => state.graduationAdmin.getAdminDotXTN?.body
-  );
+
   const rows = approve?.content?.map((item) => ({
     id: item.id,
     studentId: item.student?.code,
@@ -205,17 +146,16 @@ const HandleGraduation = () => {
     class: item.student?.className,
     ngaySinh: item.student?.ngaySinh,
     phoneNumber: item.student?.phone || "N/A",
+    phoneNumber2: item?.phone,
     email: item.student?.email || "N/A",
+    email2: item?.email,
     createdAt: item?.createdAt,
     status: item.status,
-    statusId: item.statusId,
-    reason: item.reason,
     updatedAt: item.updatedAt,
-    isShip: item.isShip,
+    reason: item.reason,
   }));
 
-  const [openModal, setOpenModal] = useState(false);
-  const [id, setId] = useState("");
+  // modal xem chi tiet phieu dang ky
 
   // Hàm xử lý thay đổi trang
   const handlePageChange = (event, newPage) => {
@@ -229,41 +169,27 @@ const HandleGraduation = () => {
       page: 0, // Reset về trang đầu khi thay đổi số dòng trên mỗi trang
     });
   };
-  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [confirmOrderId, setConfirmOrderId] = useState(null);
-
-  const handleConfirmOpen = (id) => {
-    setConfirmOrderId(id);
-    setOpenConfirmDialog(true);
+  // chuyển trạng thái
+  const handleOpenStatusDialog = (id) => {
+    setId(id);
+    setOpenStatusDialog(true);
   };
-
-  const handleConfirmClose = () => {
-    setOpenConfirmDialog(false);
-    setConfirmOrderId(null);
+  const handleCloseStatusDialog = () => {
+    setOpenStatusDialog(false);
+    setSelectedStatusApprove(1);
+    setNote("");
   };
-
-  const handleConfirmOrder = () => {
-    const formDataGetAll = {
-      pageIndex: paginationModel.page + 1,
-      pageSize: paginationModel.pageSize,
-      search: dataSearch,
-      status: selectedStatus,
-      campusId: selectedIsShip ? null : selectedCampus,
-      isShip: selectedIsShip,
-      groupId: selectedGroup,
+  const handleConfirmChangeStatus = () => {
+    const formData = {
+      idTrangThai: selectedStatusApprove,
+      note: note,
     };
-    dispatch(handleOrder({ formDataGetAll, id: confirmOrderId }));
-    handleConfirmClose();
+    dispatch(approveXTN({ id, formData }));
+    handleCloseStatusDialog();
   };
 
   return (
     <>
-      {/* <StudentCertificatePopUp
-        open={openModal}
-        onClose={() => setOpenModal(false)}
-        id={id}
-      /> */}
-
       <Container>
         <Paper
           elevation={4}
@@ -428,7 +354,11 @@ const HandleGraduation = () => {
                 >
                   Số điện thoại
                 </TableCell>
-
+                <TableCell
+                  sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
+                >
+                  Số điện thoại 2
+                </TableCell>
                 <TableCell
                   sx={{ color: "red", fontSize: "16px", fontWeight: "bold" }}
                 >
@@ -522,6 +452,17 @@ const HandleGraduation = () => {
                         fontWeight: "600",
                       }}
                     >
+                      {row.phoneNumber2}
+                    </Typography>
+                  </TableCell>
+                  <TableCell sx={{ color: "black" }}>
+                    <Typography
+                      sx={{
+                        color: "rgb(117, 117, 117)",
+                        fontSize: { xs: "10px", lg: "15px" },
+                        fontWeight: "600",
+                      }}
+                    >
                       {formatDate(row.createdAt)}
                     </Typography>
                   </TableCell>
@@ -562,56 +503,19 @@ const HandleGraduation = () => {
 
                   <TableCell>
                     {/* Nút "Hủy" chỉ có ở trạng thái NEW */}
-                    {row.statusCode === "NEW" && (
-                      <Button
-                        startIcon={<Cancel />}
-                        onClick={() => handleOpenDialog(row.id, false)}
-                        sx={{
-                          color: "#008689",
-                          fontWeight: "bold",
-                          fontSize: "13px",
-                        }}
-                      ></Button>
-                    )}
-                    {/* Nút "Xác nhận" có ở trạng thái NEW và Đã duyệt */}
-                    {(row.statusCode === "NEW" ||
-                      row.statusCode === "APPROVE") && (
-                      <Button
-                        startIcon={<CheckCircle />}
-                        onClick={() => handleOpenDialog(row.id, true)}
-                        sx={{
-                          color: "#008689",
-                          fontWeight: "bold",
-                          fontSize: "13px",
-                        }}
-                      ></Button>
-                    )}
-                    {row.statusCode === "APPROVED" && (
-                      <Button
-                        startIcon={<BookmarkAddOutlined />}
-                        onClick={() => handleConfirmOpen(row.id)}
-                        sx={{
-                          color: "#008689",
-                          fontWeight: "bold",
-                          fontSize: "13px",
-                        }}
-                      >
-                        Xác nhận bước 2
-                      </Button>
-                    )}
-                    {/* Nút "In vận đơn" có ở trạng thái Đăng ký thành công và isShip = true */}
-                    {row.statusCode === "WAIT_SHIPPING" && row.isShip && (
-                      <Button
-                        startIcon={<PrintOutlined />}
-                        onClick={() => handlePrintToShip(row.id)}
-                        sx={{
-                          color: "#008689",
-                          fontWeight: "bold",
-                          fontSize: "13px",
-                        }}
-                      ></Button>
-                    )}
+
                     {/* Nút "Chi tiết" cho tất cả các trạng thái */}
+
+                    <Button
+                      startIcon={<ChangeCircleOutlined />}
+                      onClick={() => handleOpenStatusDialog(row.id)}
+                      sx={{
+                        color: "#008689",
+                        fontWeight: "bold",
+                        fontSize: "13px",
+                      }}
+                    ></Button>
+
                     <Button
                       startIcon={<EditOutlined />}
                       onClick={() => handleOpenDetailPopUp(row.id)}
@@ -625,6 +529,11 @@ const HandleGraduation = () => {
                 </TableRow>
               ))}
             </TableBody>
+            <Viewcert
+              open={openModal}
+              onClose={() => setOpenModal(false)}
+              id={id}
+            />
           </Table>
         </TableContainer>
 
@@ -657,131 +566,49 @@ const HandleGraduation = () => {
           }}
         />
 
-        <Dialog open={openConfirmDialog} onClose={handleConfirmClose}>
-          <DialogTitle
-            sx={{ color: "#008689", fontWeight: "bold", fontSize: "15px" }}
-          >
-            Xác nhận chuyển trạng thái
+        <Dialog open={openStatusDialog} onClose={handleCloseStatusDialog}>
+          <DialogTitle sx={{ color: "#008689", fontWeight: "bold" }}>
+            Thay đổi trạng thái
           </DialogTitle>
           <DialogContent>
-            <DialogContentText sx={{ color: "red", fontWeight: "bold" }}>
-              Bạn có chắc chắn muốn chuyển trạng thái đơn hàng này không?
+            <DialogContentText sx={{ color: "black" }}>
+              Vui lòng chọn trạng thái và nhập ghi chú nếu cần.
             </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={handleConfirmClose}
-              sx={{ color: "red", fontWeight: "bold" }}
-            >
-              Hủy
-            </Button>
-            <Button
-              onClick={handleConfirmOrder}
-              variant="contained"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#008588",
-                color: "white",
-                borderRadius: "8px",
-                border: "3px solid #0085885a",
-                transition: "all ease 0.4s",
-                padding: "0px",
-                "&:hover": {
-                  borderColor: "#008689",
-                  backgroundColor: "white",
-                  color: "#008689",
-                  boxShadow: "0 0 10px #008689",
-                },
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: { xs: "11px", lg: "15px" },
-                  fontWeight: "700px",
-                  padding: "5px",
-                }}
+            <FormControl fullWidth sx={{ marginBottom: 2 }}>
+              <Select
+                value={selectedStatusApprove}
+                onChange={(e) => setSelectedStatusApprove(e.target.value)}
+                displayEmpty
               >
-                Xác nhận
-              </Typography>
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle
-            sx={{ color: "#008689", fontWeight: "bold", fontSize: "15px" }}
-          >
-            {isApproveAction ? "Xác nhận duyệt" : "Xác nhận từ chối"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText sx={{ color: "red", fontWeight: "bold" }}>
-              {isApproveAction
-                ? "Bạn có chắc chắn muốn duyệt đơn đăng ký này không?"
-                : "Vui lòng nhập lý do từ chối."}
-            </DialogContentText>
+                <MenuItem value="">
+                  <em>Chọn trạng thái</em>
+                </MenuItem>
+                {statusGraduation.map((status) => (
+                  <MenuItem key={status.id} value={status.id}>
+                    {status.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
-              autoFocus
-              margin="dense"
-              label={isApproveAction ? "Ghi chú" : "Lý do từ chối"}
-              type="text"
+              label="Ghi chú"
+              value={note}
+              onChange={(e) => setNote(e.target.value)}
               fullWidth
-              variant="outlined"
-              value={isApproveAction ? approveNote : denyReason}
-              onChange={(e) =>
-                isApproveAction
-                  ? setApproveNote(e.target.value)
-                  : setDenyReason(e.target.value)
-              }
-              sx={{
-                "& .MuiInputBase-input": {
-                  color: "red",
-                  fontWeight: "bold",
-                },
-              }}
+              multiline
+              rows={4}
             />
           </DialogContent>
           <DialogActions>
-            <Button
-              onClick={handleCloseDialog}
-              sx={{ color: "red", fontWeight: "bold" }}
-            >
+            <Button onClick={handleCloseStatusDialog} sx={{ color: "red" }}>
               Hủy
             </Button>
             <Button
-              onClick={handleApprove}
-              disabled={
-                (!isApproveAction && !denyReason.trim()) ||
-                (isApproveAction && !approveNote.trim())
-              }
+              onClick={handleConfirmChangeStatus}
               variant="contained"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: "#008588",
-                color: "white",
-                borderRadius: "8px",
-                border: "3px solid #0085885a",
-                transition: "all ease 0.4s",
-                padding: "0px",
-                "&:hover": {
-                  borderColor: "#008689",
-                  backgroundColor: "white",
-                  color: "#008689",
-                  boxShadow: "0 0 10px #008689",
-                },
-              }}
+              sx={{ backgroundColor: "#008588", color: "white" }}
             >
-              <Typography
-                sx={{
-                  fontSize: { xs: "11px", lg: "15px" },
-                  fontWeight: "700px",
-                  padding: "5px",
-                }}
-              >
-                Xác nhận
-              </Typography>
+              Xác nhận
             </Button>
           </DialogActions>
         </Dialog>

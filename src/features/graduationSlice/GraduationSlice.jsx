@@ -2,19 +2,21 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  program: [],
-  select: [],
-  learningResults: [],
-  learningProgress: [],
-  courses: [],
   loading: false,
   error: null,
+  message: "",
+  getFileCert: {},
+  getCert: {},
+  dangKyXetTotNghiep: {},
+  xetTotNghiepInfo: {},
+  getDotXetTotNghiep: {},
+  xetTotNghiep: {},
 };
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export const xetTotNghiep = createAsyncThunk(
   "XTN/xetTotNghiep",
-  async (_, { rejectWithValue }) => {
+  async (semester, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("account");
       if (!token) {
@@ -27,7 +29,7 @@ export const xetTotNghiep = createAsyncThunk(
         },
       };
       const response = await axios.get(
-        `${API_BASE_URL}/xetTotNghiep/xetTotNghiep`,
+        `${API_BASE_URL}/xetTotNghiep/xetTotNghiep?idDot=${semester}`,
         config
       );
       return response.data;
@@ -36,8 +38,8 @@ export const xetTotNghiep = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -68,8 +70,8 @@ export const getDotXetTotNghiep = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -99,8 +101,8 @@ export const xetTotNghiepInfo = createAsyncThunk(
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
@@ -120,12 +122,16 @@ export const dangKyXetTotNghiep = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       };
-      const response = await axios.post(
+      const message = await axios.post(
         `${API_BASE_URL}/xetTotNghiep/xetTotNghiep?idDot=${semester}`,
         formData,
         config
       );
-      return response.data;
+      const response = await axios.get(
+        `${API_BASE_URL}/xetTotNghiep/xetTotNghiep?idDot=${semester}`,
+        config
+      );
+      return { message: message.data, response: response.data };
     } catch (error) {
       if (
         error.response &&
@@ -158,20 +164,124 @@ export const getCert = createAsyncThunk(
         config
       );
 
-      return response.data.body;
+      return response.data;
     } catch (error) {
       if (
         error.response &&
         (error.response.status === 401 || error.response.status === 403)
       ) {
-        localStorage.clear();
-        window.location.href = "/"; // Chuyển hướng người dùng về trang login
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
       }
       return rejectWithValue(error.message);
     }
   }
 );
 
+export const getFileCert = createAsyncThunk(
+  "XTN/getFileCert",
+  async (id, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/xetTotNghiep/getFile/${id}`,
+        config
+      );
+
+      return response.data.body;
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const updateXetTotNghiep = createAsyncThunk(
+  "XTN/updateXetTotNghiep",
+  async ({ formData, semester, id }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const message = await axios.put(
+        `${API_BASE_URL}/xetTotNghiep/updateXetTotNghiep/${id}`,
+        formData,
+        config
+      );
+      const response = await axios.get(
+        `${API_BASE_URL}/xetTotNghiep/xetTotNghiep?idDot=${semester}`,
+        config
+      );
+      return { message: message.data, response: response.data };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const updateChungChi = createAsyncThunk(
+  "XTN/updateChungChi",
+  async ({ idCertUpdate, formData, semester }, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("account");
+      if (!token) {
+        throw new Error("No token found");
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const message = await axios.put(
+        `${API_BASE_URL}/xetTotNghiep/updateChungChi/${idCertUpdate}`,
+        formData,
+        config
+      );
+      const response = await axios.get(
+        `${API_BASE_URL}/xetTotNghiep/xetTotNghiep?idDot=${semester}`,
+        config
+      );
+      return { message: message.data, response: response.data };
+    } catch (error) {
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        // localStorage.clear();
+        // window.location.href = "/"; // Chuyển hướng người dùng về trang login
+      }
+      return rejectWithValue(error.message);
+    }
+  }
+);
 const graduationSlice = createSlice({
   name: "XTN",
   initialState,
@@ -230,9 +340,10 @@ const graduationSlice = createSlice({
       .addCase(dangKyXetTotNghiep.fulfilled, (state, action) => {
         state.loading = false;
         state.dangKyXetTotNghiep = action.payload;
-        state.message = action.payload.message;
-        state.success = action.payload.success;
-        state.timestamp = action.payload.timestamp;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.xetTotNghiep = action.payload.response;
       })
       .addCase(dangKyXetTotNghiep.rejected, (state, action) => {
         state.loading = false;
@@ -250,6 +361,53 @@ const graduationSlice = createSlice({
         state.timestamp = action.payload.timestamp;
       })
       .addCase(getCert.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(getFileCert.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getFileCert.fulfilled, (state, action) => {
+        state.loading = false;
+        state.getFileCert = action.payload;
+        state.message = action.payload.message;
+        state.success = action.payload.success;
+        state.timestamp = action.payload.timestamp;
+      })
+      .addCase(getFileCert.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateXetTotNghiep.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateXetTotNghiep.fulfilled, (state, action) => {
+        state.loading = false;
+        state.xetTotNghiep = action.payload.response;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.updateXetTotNghiep = action.payload.message;
+      })
+      .addCase(updateXetTotNghiep.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateChungChi.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateChungChi.fulfilled, (state, action) => {
+        state.loading = false;
+        state.xetTotNghiep = action.payload.response;
+        state.message = action.payload.message.message;
+        state.success = action.payload.message.success;
+        state.timestamp = action.payload.message.timestamp;
+        state.updateChungChi = action.payload.message;
+      })
+      .addCase(updateChungChi.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
